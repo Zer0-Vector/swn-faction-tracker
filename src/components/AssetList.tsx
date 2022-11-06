@@ -37,7 +37,7 @@ export default function AssetList() {
             const name = pa.nickname ? `${pa.nickname} (${pa.name})` : pa.name;
             return (
               <Accordion key={index} expanded={expanded} onChange={handleSelectAsset(pa)}>
-                <AccordionSummary sx={{ backgroundColor: expanded ? "primary.main" : "inherit" }}>{name}</AccordionSummary>
+                <AccordionSummary sx={{ backgroundColor: expanded ? "action.selected" : "inherit" }}>{name}</AccordionSummary>
                 <AccordionDetails><AssetDetails asset={pa} /></AccordionDetails>
               </Accordion>
             );
