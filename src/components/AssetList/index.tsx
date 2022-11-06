@@ -8,7 +8,7 @@ type AssetListProps = {
 export default function AssetList({}: AssetListProps) {
   return (
     <>
-      <Typography variant="h3">Assets</Typography>
+      <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
     </>
   );
 }
