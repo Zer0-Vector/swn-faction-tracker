@@ -44,21 +44,27 @@ export const THEME = createTheme({
     },
     h1: {
       fontSize: "2.5rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
     },
     h2: {
       fontSize: "2.25rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
     },
     h3: {
       fontSize: "2rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
     },
     h4: {
       fontSize: "1.75rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
     },
     h5: {
       fontSize: "1.5rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
     },
     h6: {
       fontSize: "1.25rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
     },
     subtitle1: {
       fontSize: "2.25rem"
