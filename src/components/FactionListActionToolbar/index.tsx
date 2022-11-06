@@ -3,7 +3,7 @@ import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import AddFactionDialog from "../AddFactionDialog";
 import ListActionToolbar from "../ListActionToolbar";
-import RemoveFactionDialog from "../RemoveFactionDialog";
+import ConfirmDialog from "../ConfirmDialog";
 
 export default function FactionListActionToolbar() {
   const { controller } = useContext(GameContext);
@@ -30,9 +30,11 @@ export default function FactionListActionToolbar() {
         onClose={() => setAddOpen(false)}
         onCreate={v => controller.addFaction(v)}
       />
-      <RemoveFactionDialog 
+      <ConfirmDialog 
+        title="Confirm Delete Faction"
+        message={`Delete faction "${uiState.selectedFaction}"`}
+        buttonText="Remove"
         open={removeOpen}
-        factionName={uiState.selectedFaction}
         onClose={() => setRemoveOpen(false)}
         onConfirm={handleRemove}
       />
