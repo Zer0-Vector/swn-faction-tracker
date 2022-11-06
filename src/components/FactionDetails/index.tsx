@@ -1,11 +1,7 @@
 import React from "react";
 
-type FactionDetailsProps = {
-  
-}
-
-export default function FactionDetails({}: FactionDetailsProps) {
+export default function FactionDetails() {
   return (
-    <></>
+    <><p>details!</p></>
   );
 }

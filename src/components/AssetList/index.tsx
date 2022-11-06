@@ -1,11 +1,7 @@
-import Typography from "@mui/material/Typography";
 import React from "react";
+import Typography from "@mui/material/Typography";
 
-type AssetListProps = {
-
-}
-
-export default function AssetList({}: AssetListProps) {
+export default function AssetList() {
   return (
     <>
       <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
