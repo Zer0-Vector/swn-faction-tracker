@@ -1,22 +1,20 @@
 import React, { useContext } from "react";
-import AssetList from "../AssetList";
 import { GameContext } from "../../contexts/GameContext";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-import FactionDetails from "../FactionDetails";
-import { UiStateContext } from "../../contexts/UiStateContext";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import EditableNameText from "../EditableNameText";
 import HealthDisplay from "../HealthDisplay";
-import EditableStatText from "../EditableStatText";
-import ActionsButton from "./ActionsButton";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import FactionStatSummary from "../FactionStatSummary";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);
-  const { state: uiState, controller: uiControl } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController} = useContext(UiStateContext);
+  const theme = useTheme();
   
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -28,16 +26,21 @@ export default function FactionList(): JSX.Element {
   const getSelectFactionHandler = (name: string) => (
     () => {
       if (uiState.selectedFaction === name) {
-        uiControl.selectFaction(null);
+        handleClearSelection();
       } else {
         console.log("Selecting faction: ", name);
-        uiControl.selectFaction(name);
+        uiController.selectFaction(name);
       }
     }
   );
 
   const getEditNameHandler = (name: string) => (
-    (val: string) => controller.updateFactionName(name, val)
+    (val: string) => {
+      controller.updateFactionName(name, val);
+      if (uiState.selectedFaction === name) {
+        uiController.selectFaction(val);
+      }
+    }
   );
 
   const getEditHpHandler = (name: string) => (
@@ -52,38 +55,27 @@ export default function FactionList(): JSX.Element {
 
   const handleClearSelection = () => {
     console.log("Clearing faction selection");
-    uiControl.selectFaction(null);
+    uiController.selectFaction(null);
   };
 
   const ItemColumn = styled(Box)(({ theme }) => ({
     padding: theme.spacing(1),
   }));
 
-  const getOnRemoveHandler = (name: string) => (
-    () => {
-      controller.removeFaction(name);
-    }
-  );
-
   return (
-    <DragDropContext onDragEnd={handleDragEnd} onBeforeDragStart={handleClearSelection}>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
           <ClickAwayListener onClickAway={handleClearSelection}>
             <Stack
-              direction="column"
-              spacing={1}
+              spacing={2}
               sx={{
-                marginTop: "2rem",
-                marginX: "2rem",
-                padding: "1rem",
-                backgroundColor: snapshot.isDraggingOver ? "#555" : "inherit",
+                backgroundColor: snapshot.isDraggingOver ? "background.default" : "inherit",
               }}
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
               {state.factionOrder.map((name: string, index: number) => {
-                const bgColor = (index % 2 === 0) ? "#444" : "#333";
                 const faction = state.factions[name];
                 return (
                   <Draggable
@@ -96,27 +88,31 @@ export default function FactionList(): JSX.Element {
                         ref={itemProvided.innerRef}
                         {...itemProvided.draggableProps}
                       >
-                        <Box sx={{ display: "flex", width: "100%" }}>
-                          <ItemColumn sx={{
+                        <Box
+                          onClick={getSelectFactionHandler(name)}
+                          sx={{
+                            display: "flex",
+                            width: "100%",
+                            backgroundColor: name === uiState.selectedFaction ? theme.palette.primary.main : "inherit"
+                          }}
+                        >
+                          <ItemColumn 
+                            sx={{
                               maxWidth: "50px",
                               display: "flex",
-                              // flexDirection: "column",
                               alignItems: "center",
                               justifyContent: "center",
                             }}
-                            onClick={getSelectFactionHandler(name)}
                             {...itemProvided.dragHandleProps}
                           >
                             <DragHandleIcon />
                           </ItemColumn>
-                          <ItemColumn sx={{ flexGrow: 1, minWidth: "300px", width: "70%" }}>
-                            <EditableNameText updateValue={getEditNameHandler(name)} variant="h2">
+                          <ItemColumn sx={{ flexGrow: 1, display: "flex" }}>
+                            <EditableNameText updateValue={getEditNameHandler(name)} variant="h2" sx={{ fontSize: "2rem"}}>
                               {name}
                             </EditableNameText>
                           </ItemColumn>
                           <ItemColumn sx={{
-                            minWidth: "16rem",
-                            width: "17rem",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between"
@@ -128,39 +124,16 @@ export default function FactionList(): JSX.Element {
                             />
                           </ItemColumn>
                           <ItemColumn sx={{
-                              minWidth: "150px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center"
-                            }}>
-                              <EditableStatText updateValue={val => controller.updateForce(name, +val)}>
-                                {faction.stats.force.toString()}
-                              </EditableStatText> / 
-                              <EditableStatText updateValue={val => controller.updateCunning(name, +val)}>
-                                {faction.stats.cunning.toString()}
-                              </EditableStatText> /
-                              <EditableStatText updateValue={val => controller.updateWealth(name, +val)}>
-                                {faction.stats.wealth.toString()}
-                              </EditableStatText>
-                            </ItemColumn>
-                            <ItemColumn>
-                              <ActionsButton onRemove={getOnRemoveHandler(name)} />
-                            </ItemColumn>
-                          </Box>
-                        {name === uiState.selectedFaction ? (
-                          <Box sx={{
                             display: "flex",
-                            flexDirection: "column",
                             alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "100%",
-                            backgroundColor: itemSnapshot.isDragging ? "#AAA" : (name === uiState.selectedFaction ? "darkgreen" : bgColor),
-                            padding: "0.25rem",
                           }}>
-                            <FactionDetails />
-                            <AssetList />
-                          </Box>
-                        ): null}
+                            <FactionStatSummary
+                              {...faction.stats}
+                              factionName={name}
+                              fontSize="2rem"
+                             />
+                          </ItemColumn>
+                        </Box>
                       </Box>
                     )}
                   </Draggable>
