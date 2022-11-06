@@ -40,7 +40,9 @@ function App() {
       },
       background: {
         default: "#282c34",
-        paper: "#383c44"
+        paper: "#383c44",
+        paper2: "#484c54",
+        paper3: "#50546c",
       }
     },
     typography: {
@@ -48,16 +50,25 @@ function App() {
         fontSize: "1rem",
       },
       body2: {
-        fontSize: "1rem",
+        fontSize: "0.85rem",
       },
       h1: {
-        fontSize: "4rem"
+        fontSize: "2.5rem"
       },
       h2: {
-        fontSize: "3.25rem"
+        fontSize: "2.25rem"
       },
       h3: {
-        fontSize: "2.75rem"
+        fontSize: "2rem"
+      },
+      h4: {
+        fontSize: "1.75rem"
+      },
+      h5: {
+        fontSize: "1.5rem"
+      },
+      h6: {
+        fontSize: "1.75rem"
       }
     },
     components: {
