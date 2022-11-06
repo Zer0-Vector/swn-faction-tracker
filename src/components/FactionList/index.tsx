@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function FactionList(): JSX.Element {
   const { state } = useContext(GameContext)
   return (
-    <Stack spacing={0} marginTop="5rem" marginX="5rem">
+    <Stack spacing={1} marginTop="5rem" marginX="5rem">
       {[...Object.values(state.factions).sort((a: FactionInfo, b: FactionInfo) => a.rank - b.rank)].map((f, index) => {
           const bgColor = (index % 2 === 0) ? "#444" : "#333"
           return (
