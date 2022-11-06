@@ -9,6 +9,7 @@ import EditableNameText from "../EditableNameText";
 import HealthDisplay from "../HealthDisplay";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import FactionStatSummary from "../FactionStatSummary";
+import FactionInfo from "../../types/FactionInfo";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);
@@ -53,8 +54,8 @@ export default function FactionList(): JSX.Element {
   );
 
   const handleClearSelection = () => {
-    console.log("Clearing faction selection");
-    uiController.selectFaction(null);
+    console.log("Clearing faction (and asset) selection");
+    uiController.deselectFaction();
   };
 
   const ItemColumn = styled(Box)(({ theme }) => ({
@@ -63,7 +64,7 @@ export default function FactionList(): JSX.Element {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="droppable">
+      <Droppable droppableId="faction-droppable">
         {(provided, snapshot) => (
           <Stack
             spacing={theme.spacing(0.125)}
@@ -75,7 +76,7 @@ export default function FactionList(): JSX.Element {
             {...provided.droppableProps}
           >
             {state.factionOrder.map((name: string, index: number) => {
-              const faction = state.factions[name];
+              const faction = state.factions.get(name) as FactionInfo;
               return (
                 <Draggable
                   key={name}
