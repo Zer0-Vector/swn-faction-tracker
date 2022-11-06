@@ -26,6 +26,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --verbose --watchAll",
+    "ci-test": "react-scripts test --verbose --watchAll=false",
     "lint": "npx eslint --ext .tsx,.ts .",
     "lint-fix": "npx eslint --ext .tsx,.ts --fix ."
   },
