@@ -129,8 +129,21 @@ export default class RuntimeGameState implements IGameController, IGameState {
         .map(entry => entry[1]);
   }
 
+  #nextId(prefix: string): number {
+    const currentIds = Array.from(this.assets.keys())
+      .filter(item => item.startsWith(prefix))
+      .map(item => parseInt(item.split(".")[2]));
+    if (currentIds.length === 0) {
+      return 1;
+    } else {
+      const maxId = currentIds
+          .reduce((prev, curr) => Math.max(prev, curr));
+      return maxId + 1;
+    }
+  }
+
   addAsset(selectedFaction: string, assetName: string) {
-    const id = NamedCounter.increment(`${selectedFaction}.${assetName}`);
+    const id = this.#nextId(`${selectedFaction}.${assetName}`);
     const hp = ASSETS[assetName]?.maxHp || 0;
     const asset = new PurchasedAsset(id, assetName, hp);
     this.assets.set(PurchasedAsset.getKey(selectedFaction, asset), asset);
