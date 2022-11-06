@@ -24,14 +24,21 @@ export class GameController implements IGameController {
     this.nextRank = 0;
   }
   
-  private refreshRanks(factions: FactionInfo[]): FactionInfo[] {
+  private refreshRanks(factions: FactionInfo[]): {[name: string]: FactionInfo} {
     const sorted = factions.sort((a, b) => a.rank - b.rank);
     let i = 0;
     for (; i < sorted.length; i++) {
       sorted[i].rank = i;
     }
     this.nextRank = i;
-    return sorted;
+    let result = {};
+    sorted.forEach(f => {
+      result = {
+        ...result,
+        [f.name]: f
+      };
+    });
+    return result;
   }
   
   private isInvalidStat(val: number) {
@@ -83,11 +90,12 @@ export class GameController implements IGameController {
 
   removeFaction(name: string): void {
     console.log("Removing faction: " + name);
-      this.setState((state: GameState) => {
-        const stateCopy = { ...state };
-        delete stateCopy.factions[name];
-        return stateCopy
-      });
+    this.setState((state: GameState) => {
+      const stateCopy = { ...state };
+      delete stateCopy.factions[name];
+      const factions = this.refreshRanks(Object.values(state.factions));
+      return { ...stateCopy, factions };
+    });
   }
 
   updateFactionName(currentName: string, newName: string): void {
