@@ -1,6 +1,8 @@
+import Nullable from "./Nullable";
+
 export default interface UiState {
-  selectedFaction: string | null;
-  selectedAssetKey: string | null;
-  selectedLocation: string | null;
+  selectedFaction: Nullable<string>;
+  selectedAssetKey: Nullable<string>;
+  selectedLocation: Nullable<string>;
   hasFactionSelected: boolean;
 }

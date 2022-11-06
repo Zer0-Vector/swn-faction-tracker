@@ -2,6 +2,7 @@ import { AssetActionInfo } from "./AssetActions";
 import { AssetRestrcition } from "./AssetRestrictions";
 import AssetType from "./AssetType";
 import { AssetAttribute, FactionAttribute } from "./FactionAttribute";
+import Nullable from "./Nullable";
 
 export type DiceDefinition = 
   | `${number}d${number}`
@@ -24,14 +25,14 @@ export default interface AssetInfo {
   // name: string;
   attribute: AssetAttribute;
   level: number;
-  maxHp: number | null;
-  cost: number | null;
+  maxHp: Nullable<number>;
+  cost: Nullable<number>;
   tl: number;
   type: AssetType;
-  attack: AssetAttackInfo | null;
-  counter: DiceDefinition | null;
+  attack: Nullable<AssetAttackInfo>;
+  counter: Nullable<DiceDefinition>;
   note: AssetNote[];
   upkeep: number;
-  action: AssetActionInfo | null;
-  restriction: AssetRestrcition | null;
+  action: Nullable<AssetActionInfo>;
+  restriction: Nullable<AssetRestrcition>;
 }

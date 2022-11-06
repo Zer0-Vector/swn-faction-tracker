@@ -7,6 +7,8 @@ import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import { OverridableStringUnion } from "@mui/types";
 
+import Nullable from "../types/Nullable";
+
 interface EditableNameTextProps {
   children: string;
   onUpdate: (newValue: string) => void;
@@ -61,7 +63,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
     }
   };
 
-  const dropdownChanged = (evt: React.SyntheticEvent, val: string | null) => {
+  const dropdownChanged = (evt: React.SyntheticEvent, val: Nullable<string>) => {
     if (isEditing) {
       if (val !== null && val.trim().length > 0) {
         onUpdate(val);

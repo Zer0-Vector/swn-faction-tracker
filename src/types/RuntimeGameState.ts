@@ -5,13 +5,14 @@ import ASSETS from "../data/Assets";
 
 import FactionInfo from "./FactionInfo";
 import LocationInfo from "./LocationInfo";
+import Nullable from "./Nullable";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
   getFactions(): FactionInfo[];
   getFaction(factionName: string): FactionInfo | undefined;
-  getAssets(factionName: string | null): PurchasedAsset[];
+  getAssets(factionName: Nullable<string>): PurchasedAsset[];
   getLocations(): LocationInfo[];
   getLocation(locationName: string): LocationInfo | undefined;
 }
@@ -137,7 +138,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     }
   }
 
-  getAssets(factionName: string | null): PurchasedAsset[] {
+  getAssets(factionName: Nullable<string>): PurchasedAsset[] {
     if (factionName === null) {
       return [];
     }

@@ -1,10 +1,11 @@
+import Nullable from "../types/Nullable";
 import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
 import UiState from "../types/UiState";
 
 export interface IUiStateController {
-  selectLocaion(locationName: string | null): void;
-  selectFaction(name: string | null): void;
-  selectAsset(pa: PurchasedAsset | null) : void;
+  selectLocaion(locationName: Nullable<string>): void;
+  selectFaction(name: Nullable<string>): void;
+  selectAsset(pa: Nullable<PurchasedAsset>) : void;
   deselectFaction(): void;
   clearSelections(): void;
 }
@@ -19,7 +20,7 @@ export class UiStateController implements IUiStateController {
     this.setState = setState;
   }
 
-  selectFaction(name: string | null): void {
+  selectFaction(name: Nullable<string>): void {
     this.setState((prev: UiState) => {
       if (prev.selectedFaction === name) {
         return prev;
@@ -34,7 +35,7 @@ export class UiStateController implements IUiStateController {
     });
   }
 
-  selectAsset(pa: PurchasedAsset | null): void {
+  selectAsset(pa: Nullable<PurchasedAsset>): void {
     this.setState(prev => ({
       ...prev,
       selectedAssetKey: pa === null ? null : PurchasedAssetUtils.getKey(prev.selectedFaction as string, pa as PurchasedAsset)
@@ -49,7 +50,7 @@ export class UiStateController implements IUiStateController {
     }));
   }
 
-  selectLocaion(locationName: string | null): void {
+  selectLocaion(locationName: Nullable<string>): void {
     this.setState(prev => ({
       ...prev,
       selectedLocation: locationName,

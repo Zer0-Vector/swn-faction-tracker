@@ -1,5 +1,6 @@
 import AssetType from "./AssetType";
 import { FactionAttribute } from "./FactionAttribute";
+import Nullable from "./Nullable";
 /* Basis */
 interface IAssetActionInfo<T> {
   type: string;
@@ -35,12 +36,14 @@ export type InstantEffect =
   | "PERMISSION_DENIED"
   | "PREVENT_TAG_DICE";
 
+interface InstantTest {
+  offense: FactionAttribute;
+  defense: FactionAttribute;
+}
+
 interface InstantActionDetails {
   trigger: InstantTrigger[];
-  test: {
-          offense: FactionAttribute;
-          defense: FactionAttribute;
-        } | null;
+  test: Nullable<InstantTest>;
   effect: InstantEffect[];
 }
 
