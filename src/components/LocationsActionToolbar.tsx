@@ -4,9 +4,9 @@ import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import LocationInfo from "../types/LocationInfo";
 
-import AddLocationDialog from "./AddLocationDialog";
-import ConfirmDialog from "./ConfirmDialog";
 import ListActionToolbar from "./ListActionToolbar";
+import AddLocationDialog from "./molecules/AddLocationDialog";
+import ConfirmDialog from "./molecules/ConfirmDialog";
 
 export default function LocationsActionToolbar() {
   const { controller } = useContext(GameContext);

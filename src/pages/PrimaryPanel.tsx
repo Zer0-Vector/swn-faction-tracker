@@ -5,10 +5,10 @@ import Slide from "@mui/material/Slide";
 import Typography from "@mui/material/Typography";
 
 import AssetList from "../components/AssetList";
-import AssetListActionsToolbar from "../components/AssetListActionsToolbar";
 import FactionDetails from "../components/FactionDetails";
 import FactionList from "../components/FactionList";
 import FactionListActionToolbar from "../components/FactionListActionToolbar";
+import AssetListActionsToolbar from "../components/organisms/AssetListActionsToolbar";
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import FactionInfo from "../types/FactionInfo";
