@@ -6,8 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import TextUtils from "../../utils/TextUtils";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 interface AddAssetDialogProps {
   open: boolean;
@@ -15,13 +17,26 @@ interface AddAssetDialogProps {
   onAdd: (key: string) => void;
 }
 
+type AssetOptionType = {
+  name: string,
+  group: string,
+};
+
 export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogProps) {
-  const names = Object.keys(ASSETS).filter(name => name !== "Base of Influence");
-  console.debug(`Found ${names.length} assets: `);
+  const options = Object.entries(ASSETS)
+      .filter(([name, _]) => name !== "Base of Influence")
+      .map(([name, item]) => {
+        const group = `${TextUtils.titleCase(item.attribute)} ${item.level}`;
+        return {
+          name: name,
+          group: group,
+        };
+      });
 
   const [selection, setSelection] = useState<string>("");
 
   const handleClose = () => {
+    setSelection("");
     onClose();
   };
 
@@ -38,8 +53,12 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
     }
   };
 
-  const handleSelectionChanged = (evt: SelectChangeEvent) => {
-    setSelection(evt.target.value);
+  const handleSelectionChanged = (_evt: React.SyntheticEvent, value: AssetOptionType | null) => {
+    if (value === null) {
+      setSelection("");
+    } else {
+      setSelection(value.name);
+    }
   };
 
   return (
@@ -47,14 +66,17 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
       <DialogTitle>Add Asset</DialogTitle>
       <DialogContent>
         <DialogContentText>Select an asset to add.</DialogContentText>
-        <Select onChange={handleSelectionChanged} value={selection} error={selection === ""}>
-          <MenuItem value="" selected><em>None</em></MenuItem>
-          {
-            names.map(name => (
-              <MenuItem key={name} value={name}>{name}</MenuItem>
-            ))
-          }
-        </Select>
+        <FormControl sx={{ minWidth: 200 }}>
+          <Autocomplete
+            id="asset-select-field"
+            options={options}
+            groupBy={o => o.group}
+            getOptionLabel={o => o.name}
+            isOptionEqualToValue={(o, v) => o.group === v.group && o.name === v.name}
+            onChange={handleSelectionChanged}
+            renderInput={params => <TextField {...params} label="Select Asset" />}
+          />
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel}>Cancel</Button>
