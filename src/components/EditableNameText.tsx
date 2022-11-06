@@ -38,7 +38,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
   const exitEditMode = (evt: React.SyntheticEvent<HTMLElement>) => {
     evt.preventDefault();
     if (isEditing && hasChanged) {
-      console.debug(`Changing ${textFieldRef.current}: ${textFieldRef.current?.value}`);
+      console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
       onUpdate(textFieldRef.current?.value as string);
       setHasChanged(false);
     }
