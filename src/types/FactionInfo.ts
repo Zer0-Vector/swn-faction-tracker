@@ -70,7 +70,8 @@ export default class FactionInfo {
       cunning: 0,
       wealth: 0,
       hp: 4,
-      maxHp: 4
+      maxHp: 4,
+      xp: 0,
     };
     FactionInfo.recomputeMaxHp(this);
   }
