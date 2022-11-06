@@ -80,7 +80,12 @@
         {
           "singleline": { "delimiter": "comma" }
         }
-      ]
+      ],
+      "@typescript-eslint/ban-types": ["error", {
+        "types": {
+          "{}": false
+        }
+      }]
     }
   },
   "browserslist": {
