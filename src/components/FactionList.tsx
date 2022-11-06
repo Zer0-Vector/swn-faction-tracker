@@ -83,7 +83,7 @@ export default function FactionList(): JSX.Element {
               return (
                 <Draggable
                   key={name}
-                  draggableId={`draggable-${name.replaceAll(/\W/g, "-")}`}
+                  draggableId={`draggable-faction-${name.replaceAll(/\W/g, "-")}`}
                   index={index}
                 >
                   {(itemProvided, itemSnapshot) => (
