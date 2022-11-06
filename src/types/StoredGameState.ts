@@ -7,4 +7,5 @@ export default interface StoredGameState {
   factionOrder: string[];
   assets: [key: string, value: PurchasedAsset][];
   locations: [key: string, value: LocationInfo][];
+  locationsOrder: string[];
 }

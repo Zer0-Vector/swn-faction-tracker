@@ -24,6 +24,7 @@ function App() {
       factionOrder: [],
       assets: [],
       locations: [],
+      locationsOrder: [],
     }
   );
 

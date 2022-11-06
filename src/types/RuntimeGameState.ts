@@ -22,6 +22,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   factionOrder: string[];
   assets: Map<string, PurchasedAsset>;
   locations: Map<string, LocationInfo>;
+  locationsOrder: string[];
 
   constructor(storedState: StoredGameState) {
     console.debug(`Init RuntimeGameState: ${storedState.factions.length} factions, ${storedState.assets.length} assets`);
@@ -29,7 +30,8 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.factionOrder = storedState.factionOrder;
     this.assets = new Map(storedState.assets);
     this.locations = new Map(storedState.locations);
-    console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A`);
+    this.locationsOrder = storedState.locationsOrder;
+    console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A, ${this.locations.size}L`);
   }
 
   updateTag(name: string, tag: string): void {
