@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
-import { GameContext } from "../contexts/GameContext/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext/UiStateContext";
+import { GameContext } from "../contexts/GameContext";
+import { UiStateContext } from "../contexts/UiStateContext";
 import { PurchasedAsset } from "../types/PurchasedAsset";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";

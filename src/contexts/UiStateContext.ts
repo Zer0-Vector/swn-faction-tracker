@@ -1,6 +1,6 @@
 import { createContext } from "react";
-import { IUiStateController } from "../../controllers/UiStateController/UiStateController";
-import { UiState } from "../../types/UiState";
+import { IUiStateController } from "../controllers/UiStateController";
+import { UiState } from "../types/UiState";
 
 type UiStateContextType = {
   state: UiState,

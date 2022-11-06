@@ -1,6 +1,6 @@
 import React from "react";
-import RuntimeGameState from "../../types/RuntimeGameState";
-import StoredGameState from "../../types/StoredGameState";
+import RuntimeGameState from "../types/RuntimeGameState";
+import StoredGameState from "../types/StoredGameState";
 
 export interface IGameController {
   removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void;

@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import Grid from "@mui/material/Grid";
 import { styled, useTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { GameContext } from "../contexts/GameContext/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext/UiStateContext";
+import { GameContext } from "../contexts/GameContext";
+import { UiStateContext } from "../contexts/UiStateContext";
 import Typography from "@mui/material/Typography";
 import EditableNameText from "./EditableNameText";
 

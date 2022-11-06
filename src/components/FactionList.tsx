@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { GameContext } from "../contexts/GameContext/GameContext";
+import { GameContext } from "../contexts/GameContext";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -7,7 +7,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import EditableNameText from "./EditableNameText";
 import HealthDisplay from "./HealthDisplay";
-import { UiStateContext } from "../contexts/UiStateContext/UiStateContext";
+import { UiStateContext } from "../contexts/UiStateContext";
 import FactionStatSummary from "./FactionStatSummary";
 import FactionInfo from "../types/FactionInfo";
 

@@ -1,5 +1,5 @@
-import { PurchasedAsset } from "../../types/PurchasedAsset";
-import { UiState } from "../../types/UiState";
+import { PurchasedAsset } from "../types/PurchasedAsset";
+import { UiState } from "../types/UiState";
 
 export interface IUiStateController {
   selectFaction(name: string | null): void;

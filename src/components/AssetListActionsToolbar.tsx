@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { GameContext } from "../contexts/GameContext/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext/UiStateContext";
+import { GameContext } from "../contexts/GameContext";
+import { UiStateContext } from "../contexts/UiStateContext";
 import AddAssetDialog from "./AddAssetDialog";
 import ListActionToolbar from "./ListActionToolbar";
 import ConfirmDialog from "./ConfirmDialog";
