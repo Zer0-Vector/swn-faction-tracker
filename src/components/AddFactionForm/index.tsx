@@ -11,7 +11,6 @@ type FormInfo = {
 
 export default function AddFactionForm() {
   const { state, controller } = useContext(GameContext);
-  const { addFaction } = controller;
   const { factions } = state;
 
   const [formState, setFormState] = useState<FormInfo>({text: "", valid: false});
@@ -19,7 +18,7 @@ export default function AddFactionForm() {
 
   const handleClick = () => {
     if (formState.valid) {
-      addFaction(formState.text);
+      controller.addFaction(formState.text);
       setFormState({ text: "", valid: false})
       inputRef.current?.focus();
     }
