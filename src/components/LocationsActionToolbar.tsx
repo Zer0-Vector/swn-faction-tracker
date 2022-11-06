@@ -10,7 +10,7 @@ import ListActionToolbar from "./ListActionToolbar";
 
 export default function LocationsActionToolbar() {
   const { controller } = useContext(GameContext);
-  const { state: uiState } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   const [removeDialogOpen, setRemoveDialogOpen] = useState<boolean>(false);
 
@@ -36,6 +36,7 @@ export default function LocationsActionToolbar() {
   const handleRemove = () => {
     if (uiState.selectedLocation) {
       controller.removeLocation(uiState.selectedLocation);
+      uiController.selectLocaion(null);
     }
     handleCloseRemoveDialog();
   };

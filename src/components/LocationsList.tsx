@@ -41,6 +41,14 @@ export default function LocationsList() {
     }
   };
 
+  const handleSelect = (locationName: string) => {
+    if (locationName === uiState.selectedLocation) {
+      uiController.selectLocaion(null);
+    } else {
+      uiController.selectLocaion(locationName);
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable-location">
@@ -49,10 +57,13 @@ export default function LocationsList() {
             {
               locations.length === 0 ? <Typography variant="body1" color="warning.main">No Locations</Typography>
               : locations.map((val, index) => (
-                <Draggable key={index} index={index} draggableId={`draggable-location-${val.name}`}>
+                <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
                   {(provided, snapshot) => (
-                    <Accordion {...provided.draggableProps} ref={provided.innerRef}>
-                      <AccordionSummary>
+                    <Accordion {...provided.draggableProps} ref={provided.innerRef} expanded={uiState.selectedLocation === val.name}>
+                      <AccordionSummary
+                        onClick={() => handleSelect(val.name)}
+                        sx={theme => ({ backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (uiState.selectedLocation === val.name ? theme.palette.action.selected : "inherit")})}
+                      >
                         <Box sx={theme => ({
                           display: "flex",
                           alignContent: "center",
