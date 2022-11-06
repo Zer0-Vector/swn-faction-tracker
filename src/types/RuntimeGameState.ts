@@ -1,3 +1,5 @@
+import { DraggableLocation } from "react-beautiful-dnd";
+
 import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
 
@@ -14,7 +16,7 @@ export interface IGameState {
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
-    
+
   factions: Map<string, FactionInfo>;
   factionOrder: string[];
   assets: Map<string, PurchasedAsset>;
@@ -181,6 +183,56 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
   addLocation(info: LocationInfo) {
     this.locations.set(info.name, info);
+  }
+
+  updateLocationName(curr: string, val: string) {
+    for (const loc of this.locations.values()) {
+      if (loc.name === curr) {
+        this.locations.delete(curr);
+        this.locations.set(val, {
+          ...loc,
+          name: val
+        });
+        break;
+      }
+    }
+
+    for (const faction of this.factions.values()) {
+      if (faction.homeworld === curr) {
+        this.factions.set(faction.name, {
+          ...faction,
+          homeworld: val,
+        });
+      }
+    }
+
+    for (const entry of this.assets.entries()) {
+      if (entry[1].location === curr) {
+        this.assets.set(entry[0], {
+          ...entry[1],
+          location: val,
+        });
+      }
+    }
+  }
+
+  reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void {
+    if (!destination) {
+      return;
+    }
+
+    const targets = Array.from(this.locations.values())
+        .filter(val => val.rank === source.index || val.rank === destination.index);
+    const t0 = targets[0];
+    const t1 = targets[1];
+    this.locations.set(t0.name, {
+      ...t0,
+      rank: t1.rank,
+    });
+    this.locations.set(t1.name, {
+      ...t1,
+      rank: t0.rank,
+    });
   }
 
 }

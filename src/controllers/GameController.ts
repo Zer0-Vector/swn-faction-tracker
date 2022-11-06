@@ -1,10 +1,13 @@
 import React from "react";
+import { DraggableLocation } from "react-beautiful-dnd";
 
 import LocationInfo from "../types/LocationInfo";
 import RuntimeGameState from "../types/RuntimeGameState";
 import StoredGameState from "../types/StoredGameState";
 
 export interface IGameController {
+  reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void;
+  updateLocationName(curr: string, val: string): void;
   removeLocation(selectedLocation: string): void;
   addLocation(info: LocationInfo): void;
   removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void;
@@ -85,6 +88,15 @@ export class GameController implements IGameController {
   #setLocations() {
     this.setState(state => ({
       ...state,
+      locations: Array.from(this.runtimeState.locations.entries()),
+    }));
+  }
+
+  #setLocationDependecies() {
+    this.setState(state => ({
+      ...state,
+      factions: Array.from(this.runtimeState.factions.entries()),
+      assets: Array.from(this.runtimeState.assets.entries()),
       locations: Array.from(this.runtimeState.locations.entries()),
     }));
   }
@@ -196,6 +208,20 @@ export class GameController implements IGameController {
     console.debug("Removing location:", selectedLocation);
     this.runtimeState.removeLocation(selectedLocation);
     this.#setLocations();
+  }
+
+  updateLocationName(curr: string, val: string): void {
+    console.debug(`Renaming location '${curr}' to '${val}'`);
+    this.runtimeState.updateLocationName(curr, val);
+    this.#setLocationDependecies();
+  }
+
+  reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void {
+    if (destination) {
+      console.debug(`Reordering locations: ${source.index} -> ${destination.index}`);
+      this.runtimeState.reorderLocations(source, destination);
+      this.#setLocations();
+    }
   }
 
 }
