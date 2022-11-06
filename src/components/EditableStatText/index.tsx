@@ -1,4 +1,5 @@
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
 
 type EditableNameTextProps = {
@@ -46,6 +47,7 @@ export default function EditableStatText({ children, updateValue, divStyle }: Ed
 
   useEffect(() => {
     if (isEditing) {
+      console.log("Editing ref: ", textFieldRef.current);
       textFieldRef.current?.select();
     }
   }, [isEditing]);
@@ -54,9 +56,10 @@ export default function EditableStatText({ children, updateValue, divStyle }: Ed
     return (
       <div style={actualDivStyle}>
         <form onSubmit={exitEditMode} onKeyUp={handleKeyUp}>
-          <TextField 
+          <TextField
             defaultValue={children?.toString()}
-            inputRef={textFieldRef}
+            inputRef={textFieldRef }
+            variant="filled"
             onBlur={exitEditMode}
             onInput={handleInputChange}
             autoComplete="off"
@@ -66,9 +69,9 @@ export default function EditableStatText({ children, updateValue, divStyle }: Ed
     );
   } else {
     return (
-      <div onDoubleClick={enterEditMode} title="Double-click to edit" style={actualDivStyle}>
+      <Typography onDoubleClick={enterEditMode} title="Double-click to edit" variant="body1">
         {children?.toString()}
-      </div>
+      </Typography>
     );
   }
 }
