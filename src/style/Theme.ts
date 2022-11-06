@@ -1,34 +1,152 @@
 import { createTheme } from "@mui/material/styles";
 
-interface ColorType {
-  [key: number]: string;
+enum Shade {
+  DARKER = -2,
+  DARK = -1,
+  BASE = 0,
+  LIGHT = 1,
+  LIGHTER = 2,
+}
+const DARKER = Shade.DARKER;
+const DARK = Shade.DARK;
+const BASE = Shade.BASE;
+const LIGHT = Shade.LIGHT;
+const LIGHTER = Shade.LIGHTER;
+
+type ColorType = {
+  [K in Shade]: string;
+};
+
+type ColorVariant = "main" | "very light pastel" | "greyish darkest" | "greyish lighter" | "shiny";
+
+interface MainPalette {
+  primary: ColorType;
+  secondary: ColorType;
+  tertiary: ColorType;
 }
 
-interface ColorsMapType {
-  [key: string]: ColorType;
-}
+type PaletteMap = { [K in ColorVariant]: MainPalette };
 
-const COLORS: ColorsMapType = {
-  primary: {
-    [-2]: "#1B384B",
-    [-1]: "#376E92",
-    [0]: "#619FC7",
-    [1]: "#9DCEEE",
-    [2]: "#F3FAFF",
+// https://paletton.com/#uid=33x0I0kmpJc6c+ygdUgrbuKqJdi
+const COLORS: PaletteMap = {
+  "main": {
+    primary: {
+      [DARKER]: "#0F2D44",
+      [DARK]: "#0F2D44",
+      [BASE]: "#4792CC",
+      [LIGHT]: "#7CBBEC",
+      [LIGHTER]: "#D0EAFE",
+    },
+    secondary: {
+      [DARKER]: "#6A1111",
+      [DARK]: "#F52525",
+      [BASE]: "#FF4C4C",
+      [LIGHT]: "#FF7E7E",
+      [LIGHTER]: "#FFCECE",
+    },
+    tertiary: {
+      [DARKER]: "#6A5B11",
+      [DARK]: "#F5D125",
+      [BASE]: "#FFE04C",
+      [LIGHT]: "#FFE97E",
+      [LIGHTER]: "#FFF7CE",
+    },
   },
-  secondary: {
-    [-2]: "#2B2151",
-    [-1]: "#55429D",
-    [0]: "#816CCF",
-    [1]: "#B4A4F0",
-    [2]: "#F6F4FF",
+  "greyish darkest": {
+    // TODO
+    primary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    secondary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    tertiary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
   },
-  tirtiary: {
-    [-2]: "#26601F",
-    [-1]: "#4BBB40",
-    [0]: "#73E368",
-    [1]: "#A6F69E",
-    [2]: "#F4FFF3",
+  "greyish lighter": {
+    // TODO
+    primary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    secondary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    tertiary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+  },
+  "very light pastel": {
+    // TODO
+    primary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    secondary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    tertiary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+  },
+  "shiny": {
+    // TODO
+    primary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    secondary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
+    tertiary: {
+      [DARKER]: "#",
+      [DARK]: "#",
+      [BASE]: "#",
+      [LIGHT]: "#",
+      [LIGHTER]: "#",
+    },
   }
 };
 
@@ -36,52 +154,64 @@ export const THEME = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: COLORS.primary[0],
-      light: COLORS.primary[1],
-      dark: COLORS.primary[-1],
-      contrastText: COLORS.primary[2],
+      main: COLORS.main.primary[BASE],
+      light: COLORS.main.primary[LIGHT],
+      dark: COLORS.main.primary[DARK],
+      contrastText: COLORS.main.primary[LIGHTER],
     },
     secondary: {
-      main: COLORS.tirtiary[0],
-      light: COLORS.tirtiary[1],
-      dark: COLORS.tirtiary[-1],
-      contrastText: COLORS.tirtiary[2],
+      main: COLORS.main.secondary[BASE],
+      light: COLORS.main.secondary[LIGHT],
+      dark: COLORS.main.secondary[DARK],
+      contrastText: COLORS.main.secondary[LIGHTER],
+    },
+    tertiary: {
+      main: COLORS.main.tertiary[BASE],
+      light: COLORS.main.tertiary[LIGHT],
+      dark: COLORS.main.tertiary[DARK],
+      contrastText: COLORS.main.tertiary[LIGHTER],
     },
     action: {
-      selected: COLORS.secondary[1],
-      dragging: COLORS.secondary[0],
+      selected: COLORS.main.tertiary[DARKER],
+      dragging: COLORS.main.secondary[DARKER],
     },
     background: {
       default: "#282c34",
       paper: "#383c44",
       paper2: "#484c54",
       paper3: "#50546c",
-    }
+    },
   },
   typography: {
     body1: {
       fontSize: "1rem",
     },
     body2: {
-      fontSize: "0.85rem",
+      fontSize: "1.125rem",
     },
     h1: {
-      fontSize: "2.5rem"
+      fontSize: "2.5rem",
     },
     h2: {
-      fontSize: "2.25rem"
+      fontSize: "2.25rem",
     },
     h3: {
-      fontSize: "2rem"
+      fontSize: "2rem",
     },
     h4: {
-      fontSize: "1.75rem"
+      fontSize: "1.75rem",
     },
     h5: {
-      fontSize: "1.5rem"
+      fontSize: "1.5rem",
     },
     h6: {
-      fontSize: "1.75rem"
+      fontSize: "1.25rem",
+    },
+    subtitle1: {
+      fontSize: "2.25rem"
+    },
+    subtitle2: {
+      fontSize: "2rem"
     }
   },
   components: {
