@@ -9,6 +9,7 @@ import FactionDetails from "../FactionDetails";
 import AssetList from "../AssetList";
 import Slide from "@mui/material/Slide";
 import FactionListActionToolbar from "../FactionListActionToolbar";
+import AssetListActionsToolbar from "../AssetListActionsToolbar";
 
 export default function PrimaryPanel() {
   const { state } = useContext(GameContext);
@@ -16,7 +17,7 @@ export default function PrimaryPanel() {
 
   const containerRef = useRef(null);
 
-  const faction: FactionInfo | undefined = state.factions[uiState.selectedFaction || "-=NULL=-"];
+  const faction: FactionInfo | undefined = uiState.selectedFaction ? state.factions.get(uiState.selectedFaction) : undefined;
 
   return (
     <Box sx={{
@@ -62,7 +63,7 @@ export default function PrimaryPanel() {
               <FactionDetails />
               <Box>
                 <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
-                {/* <AssetListActionsToolbar /> */}
+                <AssetListActionsToolbar />
                 <AssetList />
               </Box>
             </Box>
