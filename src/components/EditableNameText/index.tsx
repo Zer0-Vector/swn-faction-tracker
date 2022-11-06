@@ -18,17 +18,10 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
-  const actualDivStyle: React.CSSProperties = {
-    display: "inline",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-    overflow: "clip",
-    width: "100%",
-  };
-
   useEffect(() => {
     if (isEditing) {
-      textFieldRef.current?.focus();
+      console.debug(`selecting text field: ${textFieldRef.current} - ${isEditing}`);
+      textFieldRef.current?.select();
     }
   }, [isEditing]);
 
@@ -41,36 +34,40 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
     evt.stopPropagation();
   };
 
-  const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
+  const exitEditMode = (evt: React.SyntheticEvent<HTMLElement>) => {
     evt.preventDefault();
-    if (hasChanged) {
+    if (isEditing && hasChanged) {
+      console.debug(`Changing ${textFieldRef.current}: ${textFieldRef.current?.value}`);
       onUpdate(textFieldRef.current?.value as string);
       setHasChanged(false);
     }
     setIsEditing(false);
   };
 
-  const handleKeyUp = (evt: React.KeyboardEvent<HTMLFormElement>) => {
+  const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
     if (evt.key === 'Escape') {
       setIsEditing(false);
+    } else if (evt.key === 'Enter') {
+      exitEditMode(evt);
     }
   };
 
   const textChanged = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setHasChanged(true);
+    if (!hasChanged) {
+      setHasChanged(true);
+    }
   };
 
   if (isEditing) {
     return (
-      <form onSubmit={exitEditMode} onKeyUp={handleKeyUp} style={actualDivStyle}>
-        <TextField
-          inputRef={textFieldRef}
-          onBlur={exitEditMode}
-          onInput={textChanged}
-          defaultValue={children}
-          sx={inputSx}
-        />
-      </form>
+      <TextField
+        inputRef={textFieldRef}
+        onKeyUp={handleKeyUp}
+        onInput={textChanged}
+        onClick={clickHandler}
+        defaultValue={children}
+        sx={inputSx}
+      />
     ); 
   } else {
     return (
