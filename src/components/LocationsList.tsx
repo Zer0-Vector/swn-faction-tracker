@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -41,24 +43,42 @@ export default function LocationsList() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Box>
-        {
-          locations.length === 0 ? <Typography variant="body1" color="warning.main">No Locations</Typography>
-          : locations.sort((a, b) => a.rank - b.rank).map((val, index) => (
-            <Accordion key={index}>
-              <AccordionSummary><EditableNameText onUpdate={handleUpdateName(val.name)}>{val.name}</EditableNameText></AccordionSummary>
-              <AccordionDetails>
-                <Grid container>
-                  <Grid item xs={3}><ItemHeader>Tech Level</ItemHeader></Grid>
-                  <Grid item xs={3}><Item>{val.tl}</Item></Grid>
-                  <Grid item xs={3}><ItemHeader>Coordinates</ItemHeader></Grid>
-                  <Grid item xs={3}><Item>{val.x}, {val.y}</Item></Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          ))
-        }
-      </Box>
+      <Droppable droppableId="droppable-location">
+        {(provided, snapshot) => (
+          <Box {...provided.droppableProps} ref={provided.innerRef}>
+            {
+              locations.length === 0 ? <Typography variant="body1" color="warning.main">No Locations</Typography>
+              : locations.map((val, index) => (
+                <Draggable key={index} index={index} draggableId={`draggable-location-${val.name}`}>
+                  {(provided, snapshot) => (
+                    <Accordion {...provided.draggableProps} ref={provided.innerRef}>
+                      <AccordionSummary>
+                        <Box sx={theme => ({
+                          display: "flex",
+                          alignContent: "center",
+                          gap: theme.spacing(2),
+                        })}>
+                          <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
+                          <EditableNameText onUpdate={handleUpdateName(val.name)}>{val.name}</EditableNameText>
+                        </Box>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Grid container>
+                          <Grid item xs={3}><ItemHeader>Tech Level</ItemHeader></Grid>
+                          <Grid item xs={3}><Item>{val.tl}</Item></Grid>
+                          <Grid item xs={3}><ItemHeader>Coordinates</ItemHeader></Grid>
+                          <Grid item xs={3}><Item>{val.x}, {val.y}</Item></Grid>
+                        </Grid>
+                      </AccordionDetails>
+                    </Accordion>
+                  )}
+                </Draggable>
+              ))
+            }
+            {provided.placeholder}
+          </Box>
+        )}
+      </Droppable>
     </DragDropContext>
   );
 }
