@@ -48,15 +48,16 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
         </Container>
       </AppBar>
       <Toolbar id="appbar-shim" />
-      <Box sx={{
+      <Container sx={theme => ({
+        padding: theme.spacing(2),
         display: "flex",
         flexDirection: "row",
         width: "100%",
         gap: "0.25rem",
         overflow: "clip",
-      }}>
+      })}>
         {children}
-      </Box>
+      </Container>
     </Box>
   );
 }

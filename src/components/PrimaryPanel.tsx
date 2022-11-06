@@ -27,7 +27,6 @@ export default function PrimaryPanel() {
       <Box
         sx={{ 
         flexGrow: 1,
-        padding: "1rem",
       }}>
         <FactionListActionToolbar />
         <FactionList />
