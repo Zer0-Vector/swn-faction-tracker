@@ -16,6 +16,7 @@ interface EditableNameTextProps {
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
   selectableOptions?: string[];
+  validate?: (value: string)=>boolean;
 }
 
 interface EditableState {
@@ -28,8 +29,9 @@ const ALL_FALSE: EditableState = {
   hasChanged: false,
 };
 
-export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions }: EditableNameTextProps) {
+export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate }: EditableNameTextProps) {
   const [state, setState] = useState<EditableState>(ALL_FALSE);
+  const [isValid, setIsValid] = useState<boolean>(state.hasChanged || validate === undefined);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -67,11 +69,24 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
   };
 
   const textChanged = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (!state.hasChanged) {
-      setState(prev => ({
-        ...prev,
-        hasChanged: true,
-      }));
+    if (state.isEditing) {
+      if (!state.hasChanged) {
+        setState(prev => ({
+          ...prev,
+          hasChanged: true,
+        }));
+      }
+
+      const text = textFieldRef.current?.value as string;
+      console.assert(text !== undefined, "textFieldRef.current is undefined!!!");
+
+      if (validate) {
+        setIsValid(text.trim().length > 0 && validate(text));
+      } else if (selectableOptions) {
+        setIsValid(selectableOptions.includes(text));
+      } else {
+        setIsValid(text.trim().length > 0);
+      }
     }
   };
 
@@ -107,6 +122,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               onInput={textChanged}
               onClick={clickHandler}
               onBlur={handleCancel}
+              error={isValid}
               sx={inputSx}
             />
           }
@@ -121,6 +137,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           onClick={clickHandler}
           onBlur={handleCancel}
           defaultValue={children}
+          error={isValid}
           sx={inputSx}
         />
       ); 
