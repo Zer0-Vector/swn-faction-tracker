@@ -56,7 +56,9 @@ interface SabotageActionInfo extends IAssetActionInfo<null> {
   type: "SABOTAGE";
 }
 
+/**************/
 /* Final Form */
+/**************/
 export type AssetActionInfo =
   | MoveActionInfo
   | SacrificeActionInfo
