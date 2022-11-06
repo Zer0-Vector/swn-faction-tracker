@@ -3,7 +3,7 @@ import { GameContext } from './contexts/GameContext';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { GameController, IGameController } from './controllers/GameController';
 import StoredGameState from './types/StoredGameState';
-import { UiState } from './types/UiState';
+import UiState from './types/UiState';
 import { IUiStateController, UiStateController } from './controllers/UiStateController';
 import { UiStateContext } from './contexts/UiStateContext';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
