@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import AddFactionForm from './components/AddFactionForm';
-import FactionList from './components/FactionList';
 import { GameContext } from './contexts/GameContext';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { GameController, IGameController } from './controllers/GameController';
@@ -10,8 +8,8 @@ import { IUiStateController, UiStateController } from './controllers/UiStateCont
 import { UiStateContext } from './contexts/UiStateContext';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
+import PrimaryPanel from './components/PrimaryPanel';
 
 function App() {
   const [gameState, setGameState] = useLocalStorage<GameState>("Faction-GameState", 
@@ -37,6 +35,24 @@ function App() {
       secondary: {
         main: '#00C823',
       },
+      background: {
+        default: "#282c34",
+        paper: "#383c44"
+      }
+    },
+    typography: {
+      body1: {
+        fontSize: "1rem",
+      },
+      body2: {
+        fontSize: "1rem",
+      },
+      h1: {
+        fontSize: "4rem"
+      },
+      h2: {
+        fontSize: "3.5rem"
+      }
     },
     components: {
       MuiLinearProgress: {
@@ -56,25 +72,11 @@ function App() {
           <Box
             sx={{
               color: theme.palette.text.primary,
+              backgroundColor: theme.palette.background.default,
             }}
             data-testid="app-root"
           >
-            <Box
-              sx={{ 
-                backgroundColor: "#282c34",
-                display: "flex",
-                minHeight: "calc(100vh - 6rem)",
-                flexDirection: "column",
-                alignItems: "stretch",
-                fontSize: "calc(10px + 2vmin)",
-                padding: "3rem 0",
-              }}
-              data-testid="app-inner-box"
-            >
-              <Typography variant="h1" sx={{ textAlign: "center" }}>SWN Faction Tracker</Typography>
-              <AddFactionForm />
-              <FactionList />
-            </Box>
+            <PrimaryPanel />
           </Box>
         </UiStateContext.Provider>
       </GameContext.Provider>
