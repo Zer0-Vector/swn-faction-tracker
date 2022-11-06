@@ -17,21 +17,17 @@ export default function AssetList() {
 
   return (
     <>
-      <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
-      {/* <AssetActionToolbar /> */}
-      <Box>
-        {
-          assets && assets.length > 0 ? (
-            assets.map((pa, index) => (
-              <Accordion key={index}>
-                <AccordionSummary>{pa.info.name}</AccordionSummary>
-              </Accordion>
-            ))
-          ) : (
-            <i>No Assets</i>
-          )
-        }
-      </Box>
+      {
+        assets && assets.length > 0 ? (
+          assets.map((pa, index) => (
+            <Accordion key={index}>
+              <AccordionSummary>{pa.info.name}</AccordionSummary>
+            </Accordion>
+          ))
+        ) : (
+          <i>No Assets</i>
+        )
+      }
     </>
   );
 }
