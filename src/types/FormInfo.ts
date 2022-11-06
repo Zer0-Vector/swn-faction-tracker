@@ -1,4 +1,4 @@
-export default interface FormInfo {
-  value: string;
+export default interface FormInfo<T = string> {
+  value: T;
   valid: boolean;
 }
