@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import React, { useContext, useRef, useState } from "react";
-import { GameContext } from "../../GameContext";
+import { GameContext } from "../../contexts/GameContext";
 
 type FormInfo = {
   text: string,
@@ -36,14 +36,14 @@ export default function AddFactionForm() {
   };
   
   return (
-    <Box margin="1rem 0">
+    <Box sx={{ margin: "1rem 0" }}>
       <form noValidate={true} onSubmit={handleClick} style={{ 
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
       }}>
-        <Box margin="0 1rem" flexGrow={0.5}>
-          <TextField 
+        <Box sx={{ margin: "0 1rem", flexGrow: 0.5 }}>
+          <TextField
             id="faction-name"
             label="Faction Name"
             variant="filled"
@@ -58,7 +58,7 @@ export default function AddFactionForm() {
             autoComplete="off"
           />
         </Box>
-        <Box margin="0 1rem">
+        <Box sx={{ margin: "0 1rem" }}>
           <Button type="submit" disabled={!formState.valid} variant="contained">Add Faction</Button>
         </Box>
       </form>
