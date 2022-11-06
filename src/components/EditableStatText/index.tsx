@@ -1,27 +1,31 @@
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import { SxProps, Theme } from "@mui/material";
+import StatText from "../StatText";
 
 type EditableNameTextProps = {
-  children: string,
+  children: string | number,
   updateValue: (newValue: string) => void,
-  divStyle?: React.CSSProperties,
+  sx?: SxProps<Theme>,
+  inputSx?: SxProps<Theme>,
 }
 
-export default function EditableStatText({ children, updateValue, divStyle }: EditableNameTextProps) {
-  const actualDivStyle: React.CSSProperties = {
-    ...divStyle,
-    fontSize: "2.5rem",
-    textAlign: "center",
-    padding: "0 0.5rem",
-    maxWidth: "3rem",
-  };
-  
+export default function EditableStatText({ children, updateValue, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (isEditing) {
+      textFieldRef.current?.select();
+    }
+  }, [isEditing]);
+  
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
+    if (!updateValue) { 
+      return;
+    }
     evt.preventDefault();
     if (isEditing && hasChanged) {
       updateValue(textFieldRef.current?.value || children?.toString() || "");
@@ -30,8 +34,13 @@ export default function EditableStatText({ children, updateValue, divStyle }: Ed
     setIsEditing(false);
   };
 
-  const enterEditMode = () => {
+  const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
     setIsEditing(true);
+  };
+
+  const handleClick = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
   };
 
   const handleKeyUp = (evt: React.KeyboardEvent<HTMLFormElement>) => {
@@ -45,33 +54,49 @@ export default function EditableStatText({ children, updateValue, divStyle }: Ed
     textFieldRef.current?.focus();
   };
 
-  useEffect(() => {
-    if (isEditing) {
-      console.log("Editing ref: ", textFieldRef.current);
-      textFieldRef.current?.select();
+  const validate = (val: string | undefined): boolean => {
+    if (!val) {
+      return false;
     }
-  }, [isEditing]);
+    
+    try {
+      const n = parseInt(val);
+      return !isNaN(n) && n >= 0;
+    } catch {
+      return false;
+    }
+  };
     
   if (isEditing) {
     return (
-      <div style={actualDivStyle}>
-        <form onSubmit={exitEditMode} onKeyUp={handleKeyUp}>
-          <TextField
-            defaultValue={children?.toString()}
-            inputRef={textFieldRef }
-            variant="filled"
-            onBlur={exitEditMode}
-            onInput={handleInputChange}
-            autoComplete="off"
-          />
-        </form>
-      </div>
+      <FormControl
+        onSubmit={exitEditMode}
+        onKeyUp={handleKeyUp}
+        component="form"
+      >
+        <TextField
+          defaultValue={children?.toString()}
+          inputRef={textFieldRef }
+          variant="filled"
+          onBlur={exitEditMode}
+          onInput={handleInputChange}
+          onClick={handleClick}
+          autoComplete="off"
+          error={validate(textFieldRef.current?.value)}
+          sx={inputSx}
+        />
+      </FormControl>
     );
   } else {
     return (
-      <Typography onDoubleClick={enterEditMode} title="Double-click to edit" variant="body1">
-        {children?.toString()}
-      </Typography>
+      <StatText
+        onClick={handleClick}
+        onDoubleClick={enterEditMode}
+        title="Double-click to edit"
+        sx={{...sx, margin: "auto"}}
+      >
+        {children}
+      </StatText>
     );
   }
 }
