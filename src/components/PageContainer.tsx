@@ -8,10 +8,10 @@ import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 
-export type PageContainerProps = {
-  ref?: React.Ref<unknown>,
-  children?: React.ReactNode,
-};
+export interface PageContainerProps {
+  ref?: React.Ref<unknown>;
+  children?: React.ReactNode;
+}
 
 export default function PageContainer({ ref, children }: PageContainerProps) {
   const location = useLocation();
