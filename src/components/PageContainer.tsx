@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -9,13 +9,19 @@ import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+import { UiStateContext } from "../contexts/UiStateContext";
+
 export interface PageContainerProps {
   ref?: React.Ref<unknown>;
   children?: React.ReactNode;
 }
 
 export default function PageContainer({ ref, children }: PageContainerProps) {
+  const { controller: uiController } = useContext(UiStateContext);
   const location = useLocation();
+
+  const clearSelection = () => uiController.clearSelections();
+
   return (
     <Box sx={{
         display: "flex",
@@ -36,12 +42,14 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
                 label="Factions"
                 component={Link}
                 to="/"
+                onClick={clearSelection}
               />
               <Tab
                 value="/locations"
                 label="Locations"
                 component={Link}
                 to="/locations"
+                onClick={clearSelection}
               />
             </Tabs>
           </Toolbar>
