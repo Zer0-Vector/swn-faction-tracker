@@ -1,14 +1,14 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import Typography from '@mui/material/Typography';
-import React from 'react';
-import './App.css';
-import AddFactionForm from './components/AddFactionForm/AddFactionForm';
-import FactionList from './components/FactionList/FactionList';
-import { GameContext, GameController } from './components/GameContext';
+import AddFactionForm from './components/AddFactionForm';
+import FactionList from './components/FactionList';
+import { GameContext } from './components/GameContext';
 import { useLocalStorage } from './components/useLocalStorage';
-import FactionInfo from './types/FactionInfo';
+import { createController, IGameController } from './GameController';
 import GameState from './types/GameState';
+import './App.css';
 
 function App() {
 
@@ -17,37 +17,7 @@ function App() {
     { isLoading: false, factions: {}, }) as 
       [state: GameState, setState: React.Dispatch<React.SetStateAction<GameState>>];
 
-  const controller: GameController = {
-    addFaction: (faction: FactionInfo) => {
-      console.log("Adding Faction: " + faction.name)
-      if (faction.name.trim().length > 0) {
-        setState(state => {
-          let factions = state.factions;
-          if (Object.keys(factions).includes(`${faction.name}`)) {
-            console.warn("Overwriting faction: ", faction);
-          }
-  
-          factions = {
-            ...factions,
-            [faction.name]: faction,
-          };
-          
-          return {
-            ...state,
-            factions: factions,
-          };
-        });
-      }
-    },
-    removeFaction: (name: string) => {
-      console.log("Removing faction: " + name);
-      setState(state => {
-        const stateCopy = { ...state };
-        delete stateCopy.factions[name];
-        return stateCopy
-      });
-    },
-  };
+  const controller: IGameController = createController(setState);
 
   const themeOptions: ThemeOptions = {
     palette: {
@@ -59,13 +29,22 @@ function App() {
         main: '#00C823',
       },
     },
+    components: {
+      MuiLinearProgress: {
+        styleOverrides: {
+          root: {
+            borderRadius: "1rem"
+          }
+        }
+      }
+    }
   };
 
   const theme = createTheme(themeOptions);
   
   return (
     <ThemeProvider theme={theme}>
-      <GameContext.Provider value={{state, controller} as {state: GameState, controller: GameController}}>
+      <GameContext.Provider value={{state, controller} as {state: GameState, controller: IGameController}}>
         <Box className="App">
           <Box className="App-content">
             <Typography fontSize={32}>SWN Faction Tracker</Typography>

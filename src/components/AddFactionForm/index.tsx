@@ -19,7 +19,7 @@ export default function AddFactionForm() {
 
   const handleClick = () => {
     if (formState.valid) {
-      addFaction({ name: formState.text});
+      addFaction(formState.text);
       setFormState({ text: "", valid: false})
       inputRef.current?.focus();
     }
@@ -40,11 +40,10 @@ export default function AddFactionForm() {
     <Box margin="1rem 0">
       <form noValidate={true} onSubmit={handleClick} style={{ 
           display: "flex",
-          flexDirection: "row",
-          alignContent: "center",
+          alignItems: "center",
           justifyContent: "center",
       }}>
-        <Box margin="0 1rem">
+        <Box margin="0 1rem" flexGrow={0.5}>
           <TextField 
             id="faction-name"
             label="Faction Name"
@@ -55,8 +54,10 @@ export default function AddFactionForm() {
             autoFocus={true}
             value={formState.text}
             onInput={handleInputChange}
-            error={!formState.valid}
-            />
+            error={!formState.valid && formState.text !== ""}
+            fullWidth={true}
+            autoComplete="off"
+          />
         </Box>
         <Box margin="0 1rem">
           <Button type="submit" disabled={!formState.valid} variant="contained">Add Faction</Button>
