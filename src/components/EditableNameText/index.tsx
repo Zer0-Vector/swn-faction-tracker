@@ -1,19 +1,21 @@
-import { TextField } from "@mui/material";
+import { Variant } from "@mui/material/styles/createTypography";
+import TextField from "@mui/material/TextField";
+import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
+import { OverridableStringUnion } from "@mui/types";
 
 type EditableNameTextProps = {
   children: string,
   updateValue: (newValue: string) => void,
-  divStyle?: React.CSSProperties
+  variant: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>,
 }
 
-export default function EditableNameText({ children, updateValue, divStyle }: EditableNameTextProps) {
+export default function EditableNameText({ children, updateValue, variant }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   const actualDivStyle: React.CSSProperties = {
-    ...divStyle,
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     overflow: "clip",
@@ -58,13 +60,13 @@ export default function EditableNameText({ children, updateValue, divStyle }: Ed
           onInput={textChanged}
           defaultValue={children}
           fullWidth={true}
-          inputProps={{ style: { height: "100%" } }}
+          sx={{ height: "100%" }}
         />
       </form>
     ); 
   } else {
     return (
-      <div style={actualDivStyle} onDoubleClick={enterEditMode}>{children}</div>
+      <Typography onDoubleClick={enterEditMode} variant={variant}>{children}</Typography>
     );
   }
 }
