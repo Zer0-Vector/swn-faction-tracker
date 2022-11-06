@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { SxProps, Theme } from "@mui/material";
 import StatText from "../StatText";
@@ -43,9 +42,13 @@ export default function EditableStatText({ children, updateValue, sx, inputSx }:
     evt.stopPropagation();
   };
 
-  const handleKeyUp = (evt: React.KeyboardEvent<HTMLFormElement>) => {
-    if (isEditing && evt.key === 'Escape') {
-      setIsEditing(false);
+  const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
+    if (isEditing) {
+      if (evt.key === 'Escape') {
+        setIsEditing(false);
+      } else if (evt.key === 'Enter') {
+        exitEditMode(evt);
+      }
     }
   };
 
@@ -69,23 +72,18 @@ export default function EditableStatText({ children, updateValue, sx, inputSx }:
     
   if (isEditing) {
     return (
-      <FormControl
-        onSubmit={exitEditMode}
+      <TextField
+        defaultValue={children?.toString()}
+        inputRef={textFieldRef}
+        variant="filled"
+        onBlur={exitEditMode}
+        onInput={handleInputChange}
+        onClick={handleClick}
         onKeyUp={handleKeyUp}
-        component="form"
-      >
-        <TextField
-          defaultValue={children?.toString()}
-          inputRef={textFieldRef }
-          variant="filled"
-          onBlur={exitEditMode}
-          onInput={handleInputChange}
-          onClick={handleClick}
-          autoComplete="off"
-          error={validate(textFieldRef.current?.value)}
-          sx={inputSx}
-        />
-      </FormControl>
+        autoComplete="off"
+        error={validate(textFieldRef.current?.value)}
+        sx={inputSx}
+      />
     );
   } else {
     return (
