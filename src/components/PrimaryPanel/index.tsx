@@ -2,13 +2,13 @@ import React, { useContext, useRef } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FactionList from "../FactionList";
-import FactionActionToolbar from "../FactionActionToolbar";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { GameContext } from "../../contexts/GameContext";
 import FactionInfo from "../../types/FactionInfo";
 import FactionDetails from "../FactionDetails";
 import AssetList from "../AssetList";
 import Slide from "@mui/material/Slide";
+import FactionListActionToolbar from "../FactionListActionToolbar";
 
 export default function PrimaryPanel() {
   const { state } = useContext(GameContext);
@@ -43,7 +43,7 @@ export default function PrimaryPanel() {
           marginTop: "2rem",
           padding: "1rem",
         }}>
-          <FactionActionToolbar />
+          <FactionListActionToolbar />
           <FactionList />
         </Box>
         <Slide in={!!faction} direction="left" mountOnEnter={true} unmountOnExit={true} container={containerRef.current}>
@@ -60,7 +60,11 @@ export default function PrimaryPanel() {
               }}
             >
               <FactionDetails />
-              <AssetList />
+              <Box>
+                <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
+                {/* <AssetListActionsToolbar /> */}
+                <AssetList />
+              </Box>
             </Box>
           </Box>
         </Slide>
