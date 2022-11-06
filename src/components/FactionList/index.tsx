@@ -66,9 +66,10 @@ export default function FactionList(): JSX.Element {
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
           <Stack
-            spacing={2}
+            spacing={theme.spacing(0.125)}
             sx={{
-              backgroundColor: snapshot.isDraggingOver ? "background.default" : "inherit",
+              padding: theme.spacing(2),
+              backgroundColor: snapshot.isDraggingOver ? "background.paper2" : "background.paper",
             }}
             ref={provided.innerRef}
             {...provided.droppableProps}
@@ -91,7 +92,7 @@ export default function FactionList(): JSX.Element {
                         sx={{
                           display: "flex",
                           width: "100%",
-                          backgroundColor: name === uiState.selectedFaction ? theme.palette.primary.main : "inherit"
+                          backgroundColor: name === uiState.selectedFaction ? "primary.main" : "inherit"
                         }}
                       >
                         <ItemColumn 
@@ -106,7 +107,7 @@ export default function FactionList(): JSX.Element {
                           <DragHandleIcon />
                         </ItemColumn>
                         <ItemColumn sx={{ flexGrow: 1, display: "flex" }}>
-                          <EditableNameText updateValue={getEditNameHandler(name)} variant="body1" sx={{ fontSize: "2rem"}}>
+                          <EditableNameText updateValue={getEditNameHandler(name)} variant="body1">
                             {name}
                           </EditableNameText>
                         </ItemColumn>
@@ -128,8 +129,8 @@ export default function FactionList(): JSX.Element {
                           <FactionStatSummary
                             {...faction.stats}
                             factionName={name}
-                            fontSize="2rem"
-                            />
+                            fontSize={theme.typography.body1.fontSize}
+                          />
                         </ItemColumn>
                       </Box>
                     </Box>
