@@ -1,6 +1,5 @@
 import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
-import NamedCounter from "../utils/NamedCounter";
 import FactionInfo from "./FactionInfo";
 import { PurchasedAsset } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
