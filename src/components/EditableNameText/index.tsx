@@ -27,7 +27,7 @@ export default function EditableNameText({ children, updateValue, variant, sx, i
 
   useEffect(() => {
     if (isEditing) {
-      textFieldRef.current?.select();
+      textFieldRef.current?.focus();
     }
   }, [isEditing]);
 
