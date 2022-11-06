@@ -81,7 +81,6 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
         tl: parseInt(tlText.value),
         x: parseInt(xText.value),
         y: parseInt(yText.value),
-        rank: locationNames.length,
       });
     }
     handleClose();
