@@ -10,6 +10,7 @@ import { UiStateContext } from "../contexts/UiStateContext";
 import { TAGS } from "../data/Tags";
 
 import EditableNameText from "./EditableNameText";
+import FactionStatSummary from "./FactionStatSummary";
 
 export default function FactionDetails() {
   const { state, controller } = useContext(GameContext);
@@ -79,7 +80,12 @@ export default function FactionDetails() {
         <ItemHeader>F/C/W:</ItemHeader>
       </Grid>
       <Grid item xs={3}>
-        <Item>{faction.stats.force}/{faction.stats.cunning}/{faction.stats.wealth}</Item>
+        <Item>
+          <FactionStatSummary
+            {...faction.stats}
+            factionName={faction.name}
+          />
+        </Item>
       </Grid>
     </Grid>
   );
