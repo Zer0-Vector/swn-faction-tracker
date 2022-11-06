@@ -4,8 +4,8 @@ import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import Typography from '@mui/material/Typography';
 import AddFactionForm from './components/AddFactionForm';
 import FactionList from './components/FactionList';
-import { GameContext } from './components/GameContext';
-import { useLocalStorage } from './components/useLocalStorage';
+import { GameContext } from './GameContext';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import { createController, IGameController } from './GameController';
 import GameState from './types/GameState';
 import './App.css';

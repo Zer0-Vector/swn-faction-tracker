@@ -5,7 +5,7 @@ import { useContext } from "react";
 import FactionInfo from "../../types/FactionInfo";
 import AssetList from "../AssetList";
 import Faction from "../Faction";
-import { GameContext } from "../GameContext";
+import { GameContext } from "../../GameContext";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,

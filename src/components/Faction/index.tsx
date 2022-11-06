@@ -5,7 +5,7 @@ import { useContext } from "react";
 import FactionInfo from "../../types/FactionInfo";
 import EditableNameText from "../EditableNameText";
 import EditableStatText from "../EditableStatText";
-import { GameContext } from "../GameContext";
+import { GameContext } from "../../GameContext";
 import HealthDisplay from "../HealthDisplay";
 
 

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import React, { useContext, useRef, useState } from "react";
-import { GameContext } from "../GameContext";
+import { GameContext } from "../../GameContext";
 
 type FormInfo = {
   text: string,

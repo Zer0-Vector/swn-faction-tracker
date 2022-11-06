@@ -2,7 +2,7 @@ import { Box, LinearProgress, Tooltip } from "@mui/material";
 import { useContext } from "react";
 import FactionInfo from "../../types/FactionInfo";
 import EditableStatText from "../EditableStatText";
-import { GameContext } from "../GameContext"
+import { GameContext } from "../../GameContext"
 import StatText from "../StatText";
 
 type HealthDisplayProps = {
