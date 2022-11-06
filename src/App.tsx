@@ -6,9 +6,8 @@ import AddFactionForm from './components/AddFactionForm';
 import FactionList from './components/FactionList';
 import { GameContext } from './GameContext';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { createController, IGameController } from './GameController';
+import { GameController, IGameController } from './GameController';
 import GameState from './types/GameState';
-import './App.css';
 
 function App() {
 
@@ -17,7 +16,7 @@ function App() {
     { isLoading: false, factions: {}, }) as 
       [state: GameState, setState: React.Dispatch<React.SetStateAction<GameState>>];
 
-  const controller: IGameController = createController(setState);
+  const controller: IGameController = new GameController(setState);
 
   const themeOptions: ThemeOptions = {
     palette: {
@@ -45,15 +44,28 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GameContext.Provider value={{state, controller} as {state: GameState, controller: IGameController}}>
-        <Box className="App">
-          <Box className="App-content">
-            <Typography fontSize={32}>SWN Faction Tracker</Typography>
-            <Box>
-              <AddFactionForm />
-            </Box>
-            <Box>
-              <FactionList />
-            </Box>
+        <Box 
+          sx={{
+            textAlign: "center",
+            color: "white",
+          }}
+          data-testid="app-root"
+          >
+          <Box 
+            sx={{ 
+              backgroundColor: "#282c34",
+              display: "flex",
+              minHeight: "calc(100vh - 6rem)",
+              flexDirection: "column",
+              alignItems: "stretch",
+              fontSize: "calc(10px + 2vmin)",
+              padding: "3rem 0",
+            }}
+            data-testid="app-inner-box"
+          >
+            <Typography variant="h1" fontSize={64}>SWN Faction Tracker</Typography>
+            <AddFactionForm />
+            <FactionList />
           </Box>
         </Box>
       </GameContext.Provider>
