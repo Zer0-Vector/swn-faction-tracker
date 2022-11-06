@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GameContext } from './contexts/GameContext';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { GameController, IGameController } from './controllers/GameController';
-import GameState from './types/GameState';
+import StoredGameState from './types/StoredGameState';
 import { UiState } from './types/UiState';
 import { IUiStateController, UiStateController } from './controllers/UiStateController';
 import { UiStateContext } from './contexts/UiStateContext';
@@ -10,23 +10,27 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import Box from '@mui/material/Box';
 import { createTheme } from '@mui/material/styles';
 import PrimaryPanel from './components/PrimaryPanel';
+import RuntimeGameState from './types/RuntimeGameState';
 
 function App() {
-  const [gameState, setGameState] = useLocalStorage<GameState>("Faction-GameState", 
+  const [storedState, setStoredState] = useLocalStorage<StoredGameState>("Faction-GameState", 
     {
-      isLoading: false,
-      factions: {},
+      factions: [],
       factionOrder: [],
-      assets: {}
+      assets: []
     }
   );
-  
-  const gameController: IGameController = new GameController(setGameState);
 
-  const [uiState, setUiState] = useState<UiState>({
-    selectedFaction: null,
-    selectedAsset: null
-  });
+  const gameState: RuntimeGameState = new RuntimeGameState(storedState);
+  const gameController: IGameController = new GameController(gameState, setStoredState);
+
+  const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", 
+    {
+      selectedFaction: null,
+      selectedAssetKey: null,
+      hasFactionSelected: false,
+    }
+  );
   const uiController: IUiStateController = new UiStateController(setUiState);
 
   const theme = createTheme({
@@ -81,6 +85,8 @@ function App() {
       }
     }
   });
+
+  console.debug("Rendering App...");
 
   return (
     <ThemeProvider theme={theme}>

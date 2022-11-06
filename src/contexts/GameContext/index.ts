@@ -1,9 +1,9 @@
 import { createContext } from "react";
 import { IGameController } from "../../controllers/GameController";
-import GameState from "../../types/GameState";
+import RuntimeGameState from "../../types/RuntimeGameState";
 
 type GameContextType = {
-  state: GameState, 
+  state: RuntimeGameState, 
   controller: IGameController
 };
 
