@@ -68,20 +68,27 @@ export default class RuntimeGameState implements IGameController, IGameState {
       return;
     }
     faction.name = newName;
+    console.debug("RuntimeGameState: Updating faction map");
     this.factions.delete(currentName);
     this.factions.set(newName, faction);
 
-    this.factionOrder.forEach((item, index, array) => {
+    console.debug("RuntimeGameState: Updating factionOrder");
+    this.factionOrder.forEach((item, index) => {
       if (item === currentName) {
-        array[index] = newName;
+        this.factionOrder[index] = newName;
       }
     });
 
-    this.assets.forEach((value, key, map) => {
-      if (key.startsWith(currentName)) {
-        map.delete(key);
-        map.set(PurchasedAssetUtils.getKey(newName, value), value);
+    console.debug("RuntimeGameState: Updating assets map");
+    const keysToChange = Array.from(this.assets.keys()).filter(key => key.startsWith(currentName));
+    keysToChange.forEach(key => {
+      const asset = this.assets.get(key);
+      if (asset) {
+        this.assets.set(PurchasedAssetUtils.getKey(newName, asset), asset);
+      } else {
+        console.warn("Found undefined mapping for ", key);
       }
+      this.assets.delete(key);
     });
   }
 
