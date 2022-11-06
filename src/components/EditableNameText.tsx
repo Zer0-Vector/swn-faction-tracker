@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { SxProps, Theme } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import { SxProps, Theme } from "@mui/material/styles";
 import { Variant } from "@mui/material/styles/createTypography";
 import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
@@ -12,9 +13,10 @@ interface EditableNameTextProps {
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
+  selectableOptions?: string[];
 }
 
-export default function EditableNameText({ children, onUpdate, variant, sx, inputSx }: EditableNameTextProps) {
+export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -35,7 +37,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
     evt.stopPropagation();
   };
 
-  const exitEditMode = (evt: React.SyntheticEvent<HTMLElement>) => {
+  const exitEditMode = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (isEditing && hasChanged) {
       console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
@@ -59,17 +61,48 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
     }
   };
 
+  const dropdownChanged = (evt: React.SyntheticEvent, val: string | null) => {
+    if (isEditing) {
+      if (val !== null && val.trim().length > 0) {
+        onUpdate(val);
+      }
+      setIsEditing(false);
+    }
+  };
+
   if (isEditing) {
-    return (
-      <TextField
-        inputRef={textFieldRef}
-        onKeyUp={handleKeyUp}
-        onInput={textChanged}
-        onClick={clickHandler}
-        defaultValue={children}
-        sx={inputSx}
-      />
-    ); 
+    if (selectableOptions) {
+      return (
+        <Autocomplete
+          disablePortal={true}
+          id="autocomplete-faction-homeworld"
+          options={selectableOptions}
+          openOnFocus={true}
+          onChange={dropdownChanged}
+          renderInput={params =>
+            <TextField
+              {...params}
+              inputRef={textFieldRef}
+              onKeyUp={handleKeyUp}
+              onInput={textChanged}
+              onClick={clickHandler}
+              sx={inputSx}
+            />
+          }
+        />
+      );
+    } else {
+      return (
+        <TextField
+          inputRef={textFieldRef}
+          onKeyUp={handleKeyUp}
+          onInput={textChanged}
+          onClick={clickHandler}
+          defaultValue={children}
+          sx={inputSx}
+        />
+      ); 
+    }
   } else {
     return (
       <Typography

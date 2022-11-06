@@ -60,7 +60,7 @@ export default function FactionDetails() {
         <ItemHeader>Homeworld:</ItemHeader>
       </Grid>
       <Grid item xs={3}>
-        <Item><EditableNameText onUpdate={updateHomeworld}>{homeworldText}</EditableNameText></Item>
+        <Item><EditableNameText onUpdate={updateHomeworld} selectableOptions={state.getLocations().map(loc => loc.name)}>{homeworldText}</EditableNameText></Item>
       </Grid>
       <Grid item xs={3}>
         <ItemHeader>Tag:</ItemHeader>
