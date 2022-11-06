@@ -3,17 +3,19 @@ import { AssetRestrcition } from "./AssetRestrictions";
 import AssetType from "./AssetType";
 import { AssetAttribute, FactionAttribute } from "./FactionAttribute";
 
-type DiceDefinition = 
+export type DiceDefinition = 
   | `${number}d${number}`
   | `${number}d${number}+${number}`
   | `${number}d${number}-${number}`;
 
-type AssetAttackInfo = {
+export type AssetAttackResult = 
+  | { type: "REVEAL_STEALTHED" }
+  | { type: "DAMAGE", damage: DiceDefinition };
+
+export type AssetAttackInfo = {
   offense: FactionAttribute,
   defense: FactionAttribute,
-  result: 
-    | { type: "REVEAL_STEALTHED" }
-    | { type: "DAMAGE", damage: DiceDefinition },
+  result: AssetAttackResult,
 };
 
 type AssetNote = "A" | "S" | "P";
