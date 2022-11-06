@@ -13,6 +13,7 @@ import PrimaryPanel from './components/PrimaryPanel';
 import RuntimeGameState from './types/RuntimeGameState';
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LocationsPanel from './components/LocationsPanel';
+import PageContainer from './components/PageContainer';
 
 function App() {
   const [storedState, setStoredState] = useLocalStorage<StoredGameState>("Faction-GameState", 
@@ -102,14 +103,12 @@ function App() {
               }}
               data-testid="app-root"
             >
+              <PageContainer>
                 <Routes>
-                  <Route path="/">
-                    <PrimaryPanel />
-                  </Route>
-                  <Route path="/locations">
-                    <LocationsPanel />
-                  </Route>
+                  <Route path="/" element={<PrimaryPanel />} />
+                  <Route path="/locations" element={<LocationsPanel />} />
                 </Routes>
+              </PageContainer>
             </Box>
           </Router>
         </UiStateContext.Provider>
