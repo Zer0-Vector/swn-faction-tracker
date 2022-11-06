@@ -10,4 +10,8 @@ declare module '@mui/material/styles/createPalette' {
     dragging: string;
   }
 
+  interface PaletteOptions {
+    tertiary: PaletteColorOptions;
+  }
+
 }
