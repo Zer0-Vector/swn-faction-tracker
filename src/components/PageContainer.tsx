@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import { SxProps, Theme } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
@@ -22,6 +23,13 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
 
   const clearSelection = () => uiController.clearSelections();
 
+  const tabSx: SxProps<Theme> = {
+    color: "primary.contrastText",
+    '&:hover': {
+      color: "primary.light",
+    }
+  };
+
   return (
     <Box sx={{
         display: "flex",
@@ -32,10 +40,10 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
       ref={ref}
       data-testid="page-container"
     >
-      <AppBar>
+      <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Typography variant="h1" sx={{ mr: 3 }}>SWN Faction Tracker</Typography>
+            <Typography variant="subtitle1" sx={{ mr: 3 }}>SWN Faction Tracker</Typography>
             <Tabs value={location.pathname}>
               <Tab
                 value="/"
@@ -43,6 +51,7 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
                 component={Link}
                 to="/"
                 onClick={clearSelection}
+                sx={tabSx}
               />
               <Tab
                 value="/locations"
@@ -50,6 +59,7 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
                 component={Link}
                 to="/locations"
                 onClick={clearSelection}
+                sx={tabSx}
               />
             </Tabs>
           </Toolbar>
