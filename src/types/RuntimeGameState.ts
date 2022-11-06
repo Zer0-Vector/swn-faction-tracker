@@ -13,6 +13,7 @@ export interface IGameState {
   getFaction(factionName: string): FactionInfo | undefined;
   getAssets(factionName: string | null): PurchasedAsset[];
   getLocations(): LocationInfo[];
+  getLocation(locationName: string): LocationInfo | undefined;
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
@@ -233,6 +234,10 @@ export default class RuntimeGameState implements IGameController, IGameState {
       ...t1,
       rank: t0.rank,
     });
+  }
+
+  getLocation(locationName: string): LocationInfo | undefined {
+    return this.locations.get(locationName);
   }
 
 }
