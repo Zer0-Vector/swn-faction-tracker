@@ -21,17 +21,20 @@ interface AddLocationDialogProps {
   onCreate: (loc: LocationInfo) => void;
 }
 
+type Coordinate<T> = [x: T, y: T];
+
 const BLANK_FORM_INFO: FormInfo = { value: "", valid: false };
+const BLANK_COORDS: FormInfo<Coordinate<string>> = { value: ["", ""], valid: false };
 
 export default function AddLocationDialog({ open, onClose, onCreate }: AddLocationDialogProps) {
   const { state } = useContext(GameContext);
-  const [nameText, setNameText] = useState<FormInfo>({value: "", valid: false});
-  const [tlText, setTlText] = useState<FormInfo>({value: "", valid: false});
-  const [xText, setXText] = useState<FormInfo>({value: "", valid: false});
-  const [yText, setYText] = useState<FormInfo>({value: "", valid: false});
+  const [nameText, setNameText] = useState<FormInfo>(BLANK_FORM_INFO);
+  const [tlText, setTlText] = useState<FormInfo>(BLANK_FORM_INFO);
+  const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const locationNames = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
+  const locationsNames = state.getLocations().map(loc => loc.name);
+  const locationsCoords: Coordinate<string>[] = state.getLocations().map(loc => [`${loc.x}`, `${loc.y}`]);
 
   const handleChange = (setter: (val: FormInfo)=>void, valid?: (val: string)=>boolean) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
@@ -47,8 +50,32 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     setter(newState);
   };
 
-  const isNotDuplicateName = (val: string) => {
-    return !locationNames.includes(val);
+  const handleCoordsChange = (index: number) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (index > 1) {
+      throw new Error("wtf...index is out of range");
+    }
+
+    const newText = evt.target.value;
+    console.log(`validating index ${index}...`);
+    const newCoords: Coordinate<string> = index === 0 ? [newText, coords.value[1]] : [coords.value[0], newText];
+    const isNotBlank = newText !== undefined && newText.trim().length > 0;
+    const isValid = isValidAndNotDuplicateCoords(newCoords);
+    const newState = {
+      value: newCoords,
+      valid: isNotBlank && isValid,
+    };
+    console.log("setting coords: ", newState);
+    setCoords(newState);
+  };
+
+  const isNotDuplicateName = (val: string) => !locationsNames.includes(val.trim());
+
+  const isValidAndNotDuplicateCoords = (c: Coordinate<string>) => {
+    try {
+      return locationsCoords.filter(arr => arr[0] === c[0] && arr[1] === c[1]).length === 0;
+    } catch {
+      return false;
+    }
   };
 
   const isInteger = (val: string) => {
@@ -63,8 +90,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
   const handleClose = () => {
     setNameText(BLANK_FORM_INFO);
     setTlText(BLANK_FORM_INFO);
-    setXText(BLANK_FORM_INFO);
-    setYText(BLANK_FORM_INFO);
+    setCoords({ value: ["", ""], valid: false });
     inputRef.current?.focus();
     onClose();
   };
@@ -79,16 +105,26 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
       onCreate({ 
         name: nameText.value,
         tl: parseInt(tlText.value),
-        x: parseInt(xText.value),
-        y: parseInt(yText.value),
+        x: parseInt(coords.value[0]),
+        y: parseInt(coords.value[1]),
       });
     }
     handleClose();
   };
 
-  const allValid = useCallback(() => {
-    return nameText.valid && tlText.valid && xText.valid && yText.valid;
-  }, [nameText.valid, tlText.valid, xText.valid, yText.valid]);
+  const allValid = () => {
+    try {
+      return (
+        isNotDuplicateName(nameText.value)
+        && isValidAndNotDuplicateCoords(coords.value)
+        && nameText.valid
+        && tlText.valid
+        && coords.valid
+      );
+    } catch { // something did not parse to integer
+      return false;
+    }
+  };
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -143,9 +179,9 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
               type="number"
               placeholder="X Coordinate"
               autoFocus={false}
-              value={xText.value}
-              onInput={handleChange(setXText, isInteger)}
-              error={!xText.valid}
+              value={coords.value[0]}
+              onInput={handleCoordsChange(0)}
+              error={!coords.valid}
               autoComplete="off"
             />
             <TextField
@@ -155,9 +191,9 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
               type="number"
               placeholder="Y Coordinate"
               autoFocus={false}
-              value={yText.value}
-              onInput={handleChange(setYText, isInteger)}
-              error={!yText.valid}
+              value={coords.value[1]}
+              onInput={handleCoordsChange(1)}
+              error={!coords.valid}
               autoComplete="off"
             />
           </Box>
