@@ -12,7 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-
+import DragHandleIcon from "@mui/icons-material/DragHandle"
 
 type FactionProps = {
   info: FactionInfo,
@@ -59,6 +59,9 @@ export default function Faction({ info, bgColor }: FactionProps) {
     <>
       <Box display="flex" justifyContent="space-around" width="100%">
         <Box width="80%" display="flex">
+          <Item maxWidth="50px">
+            <DragHandleIcon />
+          </Item>
           <Item flexGrow={1} minWidth="300px" width="70%">
             <EditableNameText updateValue={editNameHandler} divStyle={{ textOverflow: "ellipsis", overflow: "clip"}}>
               {info.name}
