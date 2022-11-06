@@ -6,6 +6,7 @@ export interface IUiStateController {
   selectFaction(name: string | null): void;
   selectAsset(pa: PurchasedAsset | null) : void;
   deselectFaction(): void;
+  clearSelections(): void;
 }
 
 type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>;
@@ -52,6 +53,16 @@ export class UiStateController implements IUiStateController {
     this.setState(prev => ({
       ...prev,
       selectedLocation: locationName,
+    }));
+  }
+
+  clearSelections(): void {
+    this.setState(prev => ({
+      ...prev,
+      selectedFaction: null,
+      selectedAssetKey: null,
+      selectedLocation: null,
+      hasFactionSelected: false,
     }));
   }
 
