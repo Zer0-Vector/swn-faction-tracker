@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 interface ConfirmDialogProps {
   title: string;
   message: string;
-  buttonText: string;
+  buttonText?: string;
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -34,7 +34,7 @@ export default function ConfirmDialog({ title, message, buttonText, open, onClos
         <DialogContentText>{message}</DialogContentText>
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleConfirm}>{buttonText}</Button>
+          <Button onClick={handleConfirm}>{buttonText || "Confirm"}</Button>
         </DialogActions>
       </DialogContent>
     </Dialog>
