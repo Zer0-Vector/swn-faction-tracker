@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FactionInfo from "../../types/FactionInfo";
 import EditableNameText from "../EditableNameText";
 import EditableStatText from "../EditableStatText";
@@ -42,6 +42,7 @@ export default function Faction({ info, bgColor }: FactionProps) {
   }
 
   const confirmRemoveFaction = () => {
+    console.log(`confirming to remove faction: ${info.name}`);
     setRemoveConfirmationOpen(true);
   }
 
@@ -56,39 +57,37 @@ export default function Faction({ info, bgColor }: FactionProps) {
   }
 
   return (
-    <>
-      <Box display="flex" justifyContent="space-around" width="100%">
-        <Box width="80%" display="flex">
-          <Item maxWidth="50px">
-            <DragHandleIcon />
-          </Item>
-          <Item flexGrow={1} minWidth="300px" width="70%">
-            <EditableNameText updateValue={editNameHandler} divStyle={{ textOverflow: "ellipsis", overflow: "clip"}}>
-              {info.name}
-            </EditableNameText>
-          </Item>
-          <Item minWidth="16rem" width="17rem" display="flex" alignItems="center" justifyContent="space-between">
-            <HealthDisplay faction={info} />
-          </Item>
-          <Item minWidth="150px" display="flex" alignItems="center" justifyContent="center">
-            <EditableStatText updateValue={val => controller.updateForce(info.name, +val)}>
-              {info.stats?.force.toString()}
-            </EditableStatText> / 
-            <EditableStatText updateValue={val => controller.updateCunning(info.name, +val)}>
-              {info.stats?.cunning.toString()}
-            </EditableStatText> /
-            <EditableStatText updateValue={val => controller.updateWealth(info.name, +val)}>
-              {info.stats?.wealth.toString()}
-            </EditableStatText>
-          </Item>
-        </Box>
-        <Box flexGrow={1} width="20%">
-          <Item display="flex" alignItems="center" justifyContent="center">
-            <Button variant="outlined" onClick={confirmRemoveFaction}>Remove</Button>
-          </Item>
-        </Box>
+    <Box display="flex" justifyContent="space-around" width="100%">
+      <Box width="80%" display="flex">
+        <Item maxWidth="50px" id="draggable-handle">
+          <DragHandleIcon />
+        </Item>
+        <Item flexGrow={1} minWidth="300px" width="70%">
+          <EditableNameText updateValue={editNameHandler} divStyle={{ fontSize: "1.75rem" }}>
+            {info.name}
+          </EditableNameText>
+        </Item>
+        <Item minWidth="16rem" width="17rem" display="flex" alignItems="center" justifyContent="space-between">
+          <HealthDisplay faction={info} />
+        </Item>
+        <Item minWidth="150px" display="flex" alignItems="center" justifyContent="center">
+          <EditableStatText updateValue={val => controller.updateForce(info.name, +val)}>
+            {info.stats?.force.toString()}
+          </EditableStatText> / 
+          <EditableStatText updateValue={val => controller.updateCunning(info.name, +val)}>
+            {info.stats?.cunning.toString()}
+          </EditableStatText> /
+          <EditableStatText updateValue={val => controller.updateWealth(info.name, +val)}>
+            {info.stats?.wealth.toString()}
+          </EditableStatText>
+        </Item>
       </Box>
-      <Dialog open={removeConfirmationOpen} onClose={dialogCloseHandler} maxWidth="xs" fullWidth={true}>
+      <Box flexGrow={1} width="20%">
+        <Item display="flex" alignItems="center" justifyContent="center">
+          <Button variant="outlined" onClick={confirmRemoveFaction}>Remove</Button>
+        </Item>
+      </Box>
+      <Dialog id={`${info.name.replace(/\W/, "-")}-confirm-dialog`} open={removeConfirmationOpen} onClose={dialogCloseHandler} maxWidth="xs" fullWidth={true}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -100,6 +99,6 @@ export default function Faction({ info, bgColor }: FactionProps) {
           <Button onClick={doRemoveFaction} variant="contained">Delete</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Box>
   );
 }
