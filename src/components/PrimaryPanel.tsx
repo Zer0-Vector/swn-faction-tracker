@@ -15,7 +15,7 @@ export default function PrimaryPanel() {
   const { state } = useContext(GameContext);
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
 
-  const faction: FactionInfo | undefined = uiState.selectedFaction ? state.factions.get(uiState.selectedFaction) : undefined;
+  const faction: FactionInfo | undefined = uiState.selectedFaction ? state.getFaction(uiState.selectedFaction) : undefined;
 
   const handleExitTransitionEnd = () => uiController.selectFaction(null);
 

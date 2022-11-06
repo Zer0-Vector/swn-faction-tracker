@@ -1,11 +1,15 @@
 import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
 import FactionInfo from "./FactionInfo";
-import { PurchasedAsset } from "./PurchasedAsset";
+import LocationInfo from "./LocationInfo";
+import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
-interface IGameState {
-  getAssets(factionName: string | null): PurchasedAsset[]
+export interface IGameState {
+  getFactions(): FactionInfo[];
+  getFaction(factionName: string): FactionInfo | undefined;
+  getAssets(factionName: string | null): PurchasedAsset[];
+  getLocations(): LocationInfo[];
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
@@ -13,12 +17,14 @@ export default class RuntimeGameState implements IGameController, IGameState {
   factions: Map<string, FactionInfo>;
   factionOrder: string[];
   assets: Map<string, PurchasedAsset>;
+  locations: Map<string, LocationInfo>;
 
   constructor(storedState: StoredGameState) {
     console.debug(`Init RuntimeGameState: ${storedState.factions.length} factions, ${storedState.assets.length} assets`);
     this.factions = new Map(storedState.factions);
     this.factionOrder = storedState.factionOrder;
     this.assets = new Map(storedState.assets);
+    this.locations = new Map(storedState.locations);
     console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A`);
   }
 
@@ -68,7 +74,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.assets.forEach((value, key, map) => {
       if (key.startsWith(currentName)) {
         map.delete(key);
-        map.set(PurchasedAsset.getKey(newName, value), value);
+        map.set(PurchasedAssetUtils.getKey(newName, value), value);
       }
     });
   }
@@ -144,8 +150,8 @@ export default class RuntimeGameState implements IGameController, IGameState {
   addAsset(selectedFaction: string, assetName: string) {
     const id = this.#nextId(`${selectedFaction}.${assetName}`);
     const hp = ASSETS[assetName]?.maxHp || 0;
-    const asset = new PurchasedAsset(id, assetName, hp);
-    this.assets.set(PurchasedAsset.getKey(selectedFaction, asset), asset);
+    const asset: PurchasedAsset = { id, name: assetName, hp };
+    this.assets.set(PurchasedAssetUtils.getKey(selectedFaction, asset), asset);
   }
 
   removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void {
@@ -154,6 +160,18 @@ export default class RuntimeGameState implements IGameController, IGameState {
       console.warn("Nothing was deleted!");
     }
     console.debug(`${this.assets.size}`);
+  }
+
+  getFactions(): FactionInfo[] {
+    return this.factionOrder.map(name => this.factions.get(name)) as FactionInfo[];
+  }
+
+  getFaction(factionName: string): FactionInfo | undefined {
+    return this.factions.get(factionName);
+  }
+
+  getLocations(): LocationInfo[] {
+    return Array.from(this.locations.values());
   }
 
 }
