@@ -39,6 +39,7 @@ export default function FactionList(): JSX.Element {
 
   const getEditNameHandler = (name: string) => (
     (val: string) => {
+      console.debug(`Updating faction name '${name}' to '${val}'`);
       controller.updateFactionName(name, val);
       if (uiState.selectedFaction === name) {
         uiController.selectFaction(val);

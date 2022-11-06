@@ -74,7 +74,8 @@ export class GameController implements IGameController {
     }));
   }
 
-  #setAll() {
+  #setFactionsAndAssets() {
+    console.debug("setFactionsAndAssets()");
     this.setState((state: StoredGameState) => {
       return {
         ...state,
@@ -120,16 +121,13 @@ export class GameController implements IGameController {
   removeFaction(name: string): void {
     console.log("Removing faction: " + name);
     this.runtimeState.removeFaction(name);
-    this.#setAll();
+    this.#setFactionsAndAssets();
   }
 
   updateFactionName(currentName: string, newName: string): void {
-    if (newName.trim().length <= 0) {
-      return;
-    }
-
+    console.debug("GameController.updateFactionName");
     this.runtimeState.updateFactionName(currentName, newName);
-    this.#setAll();
+    this.#setFactionsAndAssets();
   }
 
   updateForce(name: string, force: number): void {
