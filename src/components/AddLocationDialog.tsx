@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -34,7 +34,6 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
   const inputRef = useRef<HTMLInputElement>(null);
 
   const locationsNames = state.getLocations().map(loc => loc.name);
-  const locationsCoords: Coordinate<string>[] = state.getLocations().map(loc => [`${loc.x}`, `${loc.y}`]);
 
   const handleChange = (setter: (val: FormInfo)=>void, valid?: (val: string)=>boolean) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
@@ -59,24 +58,15 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     console.log(`validating index ${index}...`);
     const newCoords: Coordinate<string> = index === 0 ? [newText, coords.value[1]] : [coords.value[0], newText];
     const isNotBlank = newText !== undefined && newText.trim().length > 0;
-    const isValid = isValidAndNotDuplicateCoords(newCoords);
     const newState = {
       value: newCoords,
-      valid: isNotBlank && isValid,
+      valid: isNotBlank,
     };
     console.log("setting coords: ", newState);
     setCoords(newState);
   };
 
   const isNotDuplicateName = (val: string) => !locationsNames.includes(val.trim());
-
-  const isValidAndNotDuplicateCoords = (c: Coordinate<string>) => {
-    try {
-      return locationsCoords.filter(arr => arr[0] === c[0] && arr[1] === c[1]).length === 0;
-    } catch {
-      return false;
-    }
-  };
 
   const isInteger = (val: string) => {
     try {
@@ -116,7 +106,6 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     try {
       return (
         isNotDuplicateName(nameText.value)
-        && isValidAndNotDuplicateCoords(coords.value)
         && nameText.valid
         && tlText.valid
         && coords.valid
