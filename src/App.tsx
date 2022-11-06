@@ -32,6 +32,7 @@ function App() {
     {
       selectedFaction: null,
       selectedAssetKey: null,
+      selectedLocation: null,
       hasFactionSelected: false,
     }
   );
