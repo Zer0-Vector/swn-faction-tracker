@@ -1,7 +1,8 @@
+import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import FactionInfo from "../../types/FactionInfo";
 import EditableNameText from "../EditableNameText";
 import EditableStatText from "../EditableStatText";
@@ -12,7 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import DragHandleIcon from "@mui/icons-material/DragHandle"
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 type FactionProps = {
   info: FactionInfo,
@@ -39,22 +40,22 @@ export default function Faction({ info, bgColor }: FactionProps) {
 
   const editNameHandler = (val: string) => {
     controller.updateFactionName(info.name, val);
-  }
+  };
 
   const confirmRemoveFaction = () => {
     console.log(`confirming to remove faction: ${info.name}`);
     setRemoveConfirmationOpen(true);
-  }
+  };
 
   const cancelRemoveFaction = () => {
     setRemoveConfirmationOpen(false);
-  }
+  };
 
   const dialogCloseHandler = (evt: object, reason: "backdropClick"|"escapeKeyDown") => {
     if (reason === "escapeKeyDown") {
       cancelRemoveFaction();
     }
-  }
+  };
 
   return (
     <Box display="flex" justifyContent="space-around" width="100%">

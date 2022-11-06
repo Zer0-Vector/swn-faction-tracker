@@ -7,7 +7,6 @@ function getStorageValue<T>(key: string, defaultValue: T): T {
   } else {
     return defaultValue;
   }
-
 }
 
 export function useLocalStorage<T>(key: string, defaultValue: T) {
@@ -15,7 +14,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value])
+  }, [key, value]);
 
   return [value, setValue];
 }

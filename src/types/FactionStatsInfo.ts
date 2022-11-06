@@ -1,7 +1,9 @@
-export default interface FactionStatsInfo {
+interface FactionStatsInfo {
   hp: number;
   maxHp: number;
   force: number;
   cunning: number;
   wealth: number;
 }
+
+export default FactionStatsInfo;

@@ -1,5 +1,5 @@
-import React from "react"
-import { styled } from "@mui/material/styles"
+import React from "react";
+import { styled } from "@mui/material/styles";
 
 type StatTextProps = {
   children: React.ReactNode,
@@ -18,5 +18,5 @@ export default function StatText({ children }: StatTextProps) {
     <Wrapper>
       {children?.toString()}
     </Wrapper>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
+import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AddFactionForm from './components/AddFactionForm';
 import FactionList from './components/FactionList';
@@ -10,7 +10,6 @@ import { GameController, IGameController } from './GameController';
 import GameState from './types/GameState';
 
 function App() {
-
   const [state, setState] = useLocalStorage<GameState>(
     "Faction-GameState", 
     { isLoading: false, factions: {}, }) as 
@@ -50,7 +49,7 @@ function App() {
             color: "white",
           }}
           data-testid="app-root"
-          >
+        >
           <Box 
             sx={{ 
               backgroundColor: "#282c34",

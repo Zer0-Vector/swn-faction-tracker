@@ -15,6 +15,7 @@ export interface IGameController {
 }
 
 export class GameController implements IGameController {
+
   private setState: React.Dispatch<React.SetStateAction<GameState>>;
   private nextRank: number;
 
@@ -40,9 +41,9 @@ export class GameController implements IGameController {
   reorderFactions(sourceIndex: number, destinationIndex: number): void {
     console.log("Reordering factions...");
     this.setState((prevState: GameState) => {
-      const factionsCopy = { ...prevState.factions }
-      const sourceName = Object.values(factionsCopy).filter(f => f.rank === sourceIndex).at(0)?.name
-      const destinationName = Object.values(factionsCopy).filter(f => f.rank === destinationIndex).at(0)?.name
+      const factionsCopy = { ...prevState.factions };
+      const sourceName = Object.values(factionsCopy).filter(f => f.rank === sourceIndex).at(0)?.name;
+      const destinationName = Object.values(factionsCopy).filter(f => f.rank === destinationIndex).at(0)?.name;
       if (!sourceName || !destinationName) {
         console.error("Could not find source or destination: ", sourceName, destinationName);
         return prevState;
@@ -54,7 +55,7 @@ export class GameController implements IGameController {
       return {
         ...prevState,
         factions: factionsCopy,
-      }
+      };
     });
   }
 
@@ -69,7 +70,7 @@ export class GameController implements IGameController {
 
         factions = {
           ...factions,
-          [name]: new FactionInfo(name),
+          [name]: new FactionInfo(name, this.nextRank++),
         };
         
         return {
@@ -112,14 +113,14 @@ export class GameController implements IGameController {
       return;
     }
     this.setState((state: GameState) => {
-      const factionsCopy = { ...state.factions }
+      const factionsCopy = { ...state.factions };
       console.log(`Updating force for ${name}: ${factionsCopy[name].stats.force} to ${force}`);
 
       const stats = factionsCopy[name].stats;
       factionsCopy[name].stats = {
         ...stats,
         force: force,
-      }
+      };
       FactionInfo.recomputeMaxHp(factionsCopy[name]);
       return {
         ...state,
@@ -133,14 +134,14 @@ export class GameController implements IGameController {
     }
 
     this.setState((state: GameState) => {
-      const factionsCopy = { ...state.factions }
+      const factionsCopy = { ...state.factions };
       console.log(`Updating cunning for ${name}: ${factionsCopy[name].stats.cunning} to ${cunning}`);
 
       const stats = factionsCopy[name].stats;
       factionsCopy[name].stats = {
         ...stats,
         cunning: cunning,
-      }
+      };
       FactionInfo.recomputeMaxHp(factionsCopy[name]);
       return {
         ...state,
@@ -154,14 +155,14 @@ export class GameController implements IGameController {
     }
 
     this.setState((state: GameState) => {
-      const factionsCopy = { ...state.factions }
+      const factionsCopy = { ...state.factions };
       console.log(`Updating wealth for ${name}: ${factionsCopy[name].stats.wealth} to ${wealth}`);
       
       const stats = factionsCopy[name].stats;
       factionsCopy[name].stats = {
         ...stats,
         wealth: wealth,
-      }
+      };
       FactionInfo.recomputeMaxHp(factionsCopy[name]);
       return {
         ...state,
@@ -175,14 +176,14 @@ export class GameController implements IGameController {
     }
 
     this.setState((state: GameState) => {
-      const factionsCopy = { ...state.factions }
+      const factionsCopy = { ...state.factions };
       console.log(`Updating hp for ${name}: ${factionsCopy[name].stats.hp} to ${hp}`);
       
       const stats = factionsCopy[name].stats;
       factionsCopy[name].stats = {
         ...stats,
         hp: hp,
-      }
+      };
       return {
         ...state,
         factions: factionsCopy
@@ -195,18 +196,19 @@ export class GameController implements IGameController {
     }
 
     this.setState((state: GameState) => {
-      const factionsCopy = { ...state.factions }
+      const factionsCopy = { ...state.factions };
       console.log(`Updating maxHp for ${name}: ${factionsCopy[name].stats.maxHp} to ${maxHp}`);
       
       const stats = factionsCopy[name].stats;
       factionsCopy[name].stats = {
         ...stats,
         maxHp: maxHp,
-      }
+      };
       return {
         ...state,
         factions: factionsCopy
       };
     });
   }
+
 }

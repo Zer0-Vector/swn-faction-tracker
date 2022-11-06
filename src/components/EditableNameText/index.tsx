@@ -18,17 +18,17 @@ export default function EditableNameText({ children, updateValue, divStyle }: Ed
     whiteSpace: "nowrap",
     overflow: "clip",
     width: "100%",
-  }
+  };
 
   useEffect(() => {
     if (isEditing) {
       textFieldRef.current?.select();
     }
-  }, [isEditing])
+  }, [isEditing]);
 
   const enterEditMode = () => {
     setIsEditing(true);
-  }
+  };
 
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
@@ -37,17 +37,17 @@ export default function EditableNameText({ children, updateValue, divStyle }: Ed
       setHasChanged(false);
     }
     setIsEditing(false);
-  }
+  };
 
   const handleKeyUp = (evt: React.KeyboardEvent<HTMLFormElement>) => {
     if (evt.key === 'Escape') {
       setIsEditing(false);
     }
-  }
+  };
 
   const textChanged = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setHasChanged(true);
-  }
+  };
 
   if (isEditing) {
     return (
@@ -61,7 +61,7 @@ export default function EditableNameText({ children, updateValue, divStyle }: Ed
           inputProps={{ style: { height: "100%" } }}
         />
       </form>
-    ) 
+    ); 
   } else {
     return (
       <div style={actualDivStyle} onDoubleClick={enterEditMode}>{children}</div>

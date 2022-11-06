@@ -1,3 +1,4 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { useLocalStorage } from "./useLocalStorage";
@@ -20,7 +21,7 @@ function setup() {
 test('useLocalStorage returns default value if unset', () => {
   setup();
   const value = screen.getByTestId("test-value").textContent;
-  expect(value).toBe("default test value 123")
+  expect(value).toBe("default test value 123");
 });
 
 test('useLocalStorage setValue changes output', () => {

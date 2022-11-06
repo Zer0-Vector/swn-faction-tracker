@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react";
 
 type EditableNameTextProps = {
   children: string,
@@ -8,7 +8,6 @@ type EditableNameTextProps = {
 }
 
 export default function EditableStatText({ children, updateValue, divStyle }: EditableNameTextProps) {
-
   const actualDivStyle: React.CSSProperties = {
     ...divStyle,
     fontSize: "2.5rem",
@@ -70,6 +69,6 @@ export default function EditableStatText({ children, updateValue, divStyle }: Ed
       <div onDoubleClick={enterEditMode} title="Double-click to edit" style={actualDivStyle}>
         {children?.toString()}
       </div>
-    )
+    );
   }
 }

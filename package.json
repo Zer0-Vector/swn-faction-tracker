@@ -27,10 +27,24 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "plugins": [
+      "react"
+    ],
     "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-extra-semi": "error",
+      "semi": "error",
+      "padded-blocks": [ "error", {
+        "blocks": "never",
+        "classes": "always",
+        "switches": "never"
+      }]
+    }
   },
   "browserslist": {
     "production": [

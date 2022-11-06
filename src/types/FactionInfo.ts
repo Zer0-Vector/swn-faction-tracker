@@ -47,14 +47,14 @@ const STAT_INFO: {[rating: number]:StatInfo} = {
     xpCost: 30,
     hpValue: 30
   }
-}
+};
 
 export default class FactionInfo {
   
   static copy(currentFaction: FactionInfo) {
-    let result = new FactionInfo(currentFaction.name);
+    let result = new FactionInfo(currentFaction.name, currentFaction.rank);
     result.rank = currentFaction.rank;
-    result.stats = { ...currentFaction.stats }
+    result.stats = { ...currentFaction.stats };
     return result;
   }
 
@@ -62,9 +62,9 @@ export default class FactionInfo {
   rank: number;
   stats: FactionStatsInfo;
 
-  constructor(name: string) {
+  constructor(name: string, rank: number) {
     this.name = name;
-    this.rank = 0;
+    this.rank = rank;
     this.stats = {
       force: 0,
       cunning: 0,
@@ -72,12 +72,13 @@ export default class FactionInfo {
       hp: 4,
       maxHp: 4
     };
-    FactionInfo.recomputeMaxHp(this)
+    FactionInfo.recomputeMaxHp(this);
   }
 
   static recomputeMaxHp(info: FactionInfo) {
     const { force, cunning, wealth } = info.stats;
     info.stats.maxHp = 4 + STAT_INFO[force].hpValue + STAT_INFO[cunning].hpValue + STAT_INFO[wealth].hpValue;
-    console.log(`Recomputed MaxHp for ${info.name}: ${info.stats.maxHp}`)
+    console.log(`Recomputed MaxHp for ${info.name}: ${info.stats.maxHp}`);
   }
+
 }

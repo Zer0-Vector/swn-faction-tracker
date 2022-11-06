@@ -19,7 +19,7 @@ export default function AddFactionForm() {
   const handleClick = () => {
     if (formState.valid) {
       controller.addFaction(formState.text);
-      setFormState({ text: "", valid: false})
+      setFormState({ text: "", valid: false });
       inputRef.current?.focus();
     }
   };
@@ -31,16 +31,16 @@ export default function AddFactionForm() {
     const newState = {
       text: newText,
       valid: isNotBlank && !nameExists,
-    }
+    };
     setFormState(newState);
   };
   
   return (
     <Box margin="1rem 0">
       <form noValidate={true} onSubmit={handleClick} style={{ 
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}>
         <Box margin="0 1rem" flexGrow={0.5}>
           <TextField 

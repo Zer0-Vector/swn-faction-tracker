@@ -1,4 +1,4 @@
-import { GameController } from "."
+import { GameController } from ".";
 
 it('new GameController does not crash', () => {
   const mockSetState = jest.fn();
