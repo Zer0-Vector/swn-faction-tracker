@@ -2,13 +2,15 @@ import React, { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
 import EditableStatText from "../EditableStatText";
 import StatText from "../StatText";
+import { Property } from "csstype";
+
 
 type FactionStatSummaryProps = {
   factionName: string,
   force: number,
   cunning: number,
   wealth: number,
-  fontSize: string,
+  fontSize?: Property.FontSize<number | string>,
 };
 
 export default function FactionStatSummary({ factionName, force, cunning, wealth, fontSize }: FactionStatSummaryProps) {
@@ -19,7 +21,7 @@ export default function FactionStatSummary({ factionName, force, cunning, wealth
       <EditableStatText
         updateValue={val => controller.updateForce(factionName, +val)}
         sx={{ fontSize: fontSize }}
-        inputSx={{ maxWidth: `calc(${fontSize} * 1.5)`}}
+        inputSx={{ width: `calc(${fontSize} * 1.5)`, minWidth: "3em" }}
       >
         {force}
       </EditableStatText>
@@ -27,7 +29,7 @@ export default function FactionStatSummary({ factionName, force, cunning, wealth
       <EditableStatText
         updateValue={val => controller.updateCunning(factionName, +val)}
         sx={{ fontSize }}
-        inputSx={{ maxWidth: `calc(${fontSize} * 1.5)` }}
+        inputSx={{ width: `calc(${fontSize} * 1.5)`, minWidth: "3em"  }}
       >
         {cunning}
       </EditableStatText>
@@ -35,7 +37,7 @@ export default function FactionStatSummary({ factionName, force, cunning, wealth
       <EditableStatText
         updateValue={val => controller.updateWealth(factionName, +val)}
         sx={{ fontSize }}
-        inputSx={{ maxWidth: `calc(${fontSize} * 1.5)` }}
+        inputSx={{ maxWidth: `calc(${fontSize} * 1.5)`, minWidth: "3em"  }}
       >
         {wealth}
       </EditableStatText>
