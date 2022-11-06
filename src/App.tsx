@@ -9,10 +9,10 @@ import { UiStateContext } from './contexts/UiStateContext/UiStateContext';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import Box from '@mui/material/Box';
 import { createTheme } from '@mui/material/styles';
-import PrimaryPanel from './components/PrimaryPanel/PrimaryPanel';
+import PrimaryPanel from './components/PrimaryPanel';
 import RuntimeGameState from './types/RuntimeGameState';
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import LocationsPanel from './components/LocationsPanel/LocationsPanel';
+import LocationsPanel from './components/LocationsPanel';
 
 function App() {
   const [storedState, setStoredState] = useLocalStorage<StoredGameState>("Faction-GameState", 

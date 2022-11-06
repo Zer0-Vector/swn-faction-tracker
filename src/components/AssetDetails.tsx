@@ -3,10 +3,10 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { styled, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import ASSETS from "../../data/Assets";
-import { PurchasedAsset } from "../../types/PurchasedAsset";
-import TextUtils from "../../utils/TextUtils";
-import { AssetAttackResult } from "../../types/AssetInfo";
+import ASSETS from "../data/Assets";
+import { PurchasedAsset } from "../types/PurchasedAsset";
+import TextUtils from "../utils/TextUtils";
+import { AssetAttackResult } from "../types/AssetInfo";
 
 type AssetDetailsProps = {
   asset: PurchasedAsset,
