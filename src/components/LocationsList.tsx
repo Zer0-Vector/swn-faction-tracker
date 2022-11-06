@@ -29,6 +29,7 @@ export default function LocationsList() {
 
   const ItemHeader = styled(Item)(({ theme }) => ({
     fontWeight: "bold",
+    textAlign: "right",
   }));
 
   const handleUpdateName = (curr: string) => (val: string) => {
@@ -70,11 +71,11 @@ export default function LocationsList() {
                           gap: theme.spacing(2),
                         })}>
                           <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
-                          <EditableNameText onUpdate={handleUpdateName(val.name)}>{val.name}</EditableNameText>
+                          <EditableNameText onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableNameText>
                         </Box>
                       </AccordionSummary>
                       <AccordionDetails>
-                        <Grid container>
+                        <Grid container spacing={2}>
                           <Grid item xs={3}><ItemHeader>Tech Level</ItemHeader></Grid>
                           <Grid item xs={3}><Item>{val.tl}</Item></Grid>
                           <Grid item xs={3}><ItemHeader>Coordinates</ItemHeader></Grid>
