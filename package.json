@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx eslint --ext .tsx,.ts ."
+    "lint": "npx eslint --ext .tsx,.ts .",
+    "lint-fix": "npx eslint --ext .tsx,.ts --fix ."
   },
   "eslintConfig": {
     "plugins": [
@@ -66,7 +67,8 @@
         "never"
       ],
       "no-empty-pattern": "off",
-      "no-unexpected-multiline": "error"
+      "no-unexpected-multiline": "error",
+      "eol-last": ["error", "always"]
     }
   },
   "browserslist": {
