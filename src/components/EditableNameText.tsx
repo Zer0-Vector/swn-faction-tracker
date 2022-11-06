@@ -1,9 +1,10 @@
+import React, { useEffect, useRef, useState } from "react";
+
+import { SxProps, Theme } from "@mui/material";
 import { Variant } from "@mui/material/styles/createTypography";
 import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
-import React, { useEffect, useRef, useState } from "react";
 import { OverridableStringUnion } from "@mui/types";
-import { SxProps, Theme } from "@mui/material";
 
 interface EditableNameTextProps {
   children: string;

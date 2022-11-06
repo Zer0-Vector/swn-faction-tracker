@@ -1,5 +1,6 @@
-import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
+
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
 type StatTextProps = TypographyProps;
 

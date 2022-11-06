@@ -1,15 +1,18 @@
 import React, { useContext } from "react";
+
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import FactionList from "./FactionList";
-import { UiStateContext } from "../contexts/UiStateContext";
-import { GameContext } from "../contexts/GameContext";
-import FactionInfo from "../types/FactionInfo";
-import FactionDetails from "./FactionDetails";
-import AssetList from "./AssetList";
 import Slide from "@mui/material/Slide";
-import FactionListActionToolbar from "./FactionListActionToolbar";
+import Typography from "@mui/material/Typography";
+
+import { GameContext } from "../contexts/GameContext";
+import { UiStateContext } from "../contexts/UiStateContext";
+import FactionInfo from "../types/FactionInfo";
+
+import AssetList from "./AssetList";
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
+import FactionDetails from "./FactionDetails";
+import FactionList from "./FactionList";
+import FactionListActionToolbar from "./FactionListActionToolbar";
 
 export default function PrimaryPanel() {
   const { state } = useContext(GameContext);

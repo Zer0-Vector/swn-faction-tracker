@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import TextField from "@mui/material/TextField";
+
 import { SxProps, Theme } from "@mui/material";
+import TextField from "@mui/material/TextField";
+
 import StatText from "./StatText";
 
 interface EditableNameTextProps {

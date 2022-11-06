@@ -1,9 +1,10 @@
+import { IGameController } from "../controllers/GameController";
+import ASSETS from "../data/Assets";
+
 import FactionInfo from "./FactionInfo";
 import LocationInfo from "./LocationInfo";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
-import ASSETS from "../data/Assets";
-import { IGameController } from "../controllers/GameController";
 
 export interface IGameState {
   getFactions(): FactionInfo[];

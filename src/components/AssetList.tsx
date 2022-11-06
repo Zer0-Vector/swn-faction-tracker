@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
-import Typography from "@mui/material/Typography";
+
 import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+
 import AssetDetails from "./AssetDetails";
 
 export default function AssetList() {

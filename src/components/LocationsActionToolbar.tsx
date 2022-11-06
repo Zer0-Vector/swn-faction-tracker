@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
+
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import LocationInfo from "../types/LocationInfo";
+
 import AddLocationDialog from "./AddLocationDialog";
 import ConfirmDialog from "./ConfirmDialog";
 import ListActionToolbar from "./ListActionToolbar";

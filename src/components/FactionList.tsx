@@ -1,15 +1,18 @@
 import React, { useContext } from "react";
-import { GameContext } from "../contexts/GameContext";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
+
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { styled, useTheme } from "@mui/material/styles";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import EditableNameText from "./EditableNameText";
-import HealthDisplay from "./HealthDisplay";
+
+import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
-import FactionStatSummary from "./FactionStatSummary";
 import FactionInfo from "../types/FactionInfo";
+
+import EditableNameText from "./EditableNameText";
+import FactionStatSummary from "./FactionStatSummary";
+import HealthDisplay from "./HealthDisplay";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);

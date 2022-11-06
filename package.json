@@ -32,7 +32,8 @@
   "eslintConfig": {
     "plugins": [
       "react",
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "simple-import-sort"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -74,18 +75,42 @@
       ],
       "no-empty-function": "off",
       "@typescript-eslint/no-empty-function": "warn",
-      "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+      "@typescript-eslint/consistent-type-definitions": [
+        "error",
+        "interface"
+      ],
       "@typescript-eslint/member-delimiter-style": [
         "error",
         {
-          "singleline": { "delimiter": "comma" }
+          "singleline": {
+            "delimiter": "comma"
+          }
         }
       ],
-      "@typescript-eslint/ban-types": ["error", {
-        "types": {
-          "{}": false
+      "@typescript-eslint/ban-types": [
+        "error",
+        {
+          "types": {
+            "{}": false
+          }
         }
-      }]
+      ],
+      "simple-import-sort/imports": [
+        "warn",
+        {
+          "groups": [
+            ["^react$", "^[a-z]"],
+            ["^@"],
+            ["^~"],
+            ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+            ["^.+\\.s?css$"],
+            ["^\\u0000"]
+          ]
+        }
+      ],
+      "simple-import-sort/exports": [
+        "warn"
+      ]
     }
   },
   "browserslist": {
@@ -104,6 +129,7 @@
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/parser": "^5.41.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "react-test-renderer": "^18.2.0"
   }
 }

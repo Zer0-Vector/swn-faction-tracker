@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import ASSETS from "../data/Assets";
+
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
-import TextUtils from "../utils/TextUtils";
-import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+
+import ASSETS from "../data/Assets";
+import TextUtils from "../utils/TextUtils";
 
 interface AddAssetDialogProps {
   open: boolean;

@@ -1,19 +1,21 @@
 import React from 'react';
-import { GameContext } from './contexts/GameContext';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { GameController, IGameController } from './controllers/GameController';
-import StoredGameState from './types/StoredGameState';
-import UiState from './types/UiState';
-import { IUiStateController, UiStateController } from './controllers/UiStateController';
-import { UiStateContext } from './contexts/UiStateContext';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
+
 import Box from '@mui/material/Box';
 import { createTheme } from '@mui/material/styles';
-import PrimaryPanel from './components/PrimaryPanel';
-import RuntimeGameState from './types/RuntimeGameState';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+
 import LocationsPanel from './components/LocationsPanel';
 import PageContainer from './components/PageContainer';
+import PrimaryPanel from './components/PrimaryPanel';
+import { GameContext } from './contexts/GameContext';
+import { UiStateContext } from './contexts/UiStateContext';
+import { GameController, IGameController } from './controllers/GameController';
+import { IUiStateController, UiStateController } from './controllers/UiStateController';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import RuntimeGameState from './types/RuntimeGameState';
+import StoredGameState from './types/StoredGameState';
+import UiState from './types/UiState';
 
 function App() {
   const [storedState, setStoredState] = useLocalStorage<StoredGameState>("Faction-GameState", 

@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
+
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
+
 import AddFactionDialog from "./AddFactionDialog";
-import ListActionToolbar from "./ListActionToolbar";
 import ConfirmDialog from "./ConfirmDialog";
+import ListActionToolbar from "./ListActionToolbar";
 
 export default function FactionListActionToolbar() {
   const { controller } = useContext(GameContext);
