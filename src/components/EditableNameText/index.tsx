@@ -3,14 +3,17 @@ import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
 import { OverridableStringUnion } from "@mui/types";
+import { SxProps, Theme } from "@mui/material";
 
 type EditableNameTextProps = {
   children: string,
   updateValue: (newValue: string) => void,
   variant: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>,
+  sx?: SxProps<Theme>,
+  inputSx?: SxProps<Theme>,
 }
 
-export default function EditableNameText({ children, updateValue, variant }: EditableNameTextProps) {
+export default function EditableNameText({ children, updateValue, variant, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -28,8 +31,13 @@ export default function EditableNameText({ children, updateValue, variant }: Edi
     }
   }, [isEditing]);
 
-  const enterEditMode = () => {
+  const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
     setIsEditing(true);
+  };
+
+  const clickHandler = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
   };
 
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
@@ -59,14 +67,20 @@ export default function EditableNameText({ children, updateValue, variant }: Edi
           onBlur={exitEditMode}
           onInput={textChanged}
           defaultValue={children}
-          fullWidth={true}
-          sx={{ height: "100%" }}
+          sx={inputSx}
         />
       </form>
     ); 
   } else {
     return (
-      <Typography onDoubleClick={enterEditMode} variant={variant}>{children}</Typography>
+      <Typography
+        onDoubleClick={enterEditMode}
+        onClick={clickHandler}
+        variant={variant}
+        sx={sx}
+      >
+        {children}
+      </Typography>
     );
   }
 }
