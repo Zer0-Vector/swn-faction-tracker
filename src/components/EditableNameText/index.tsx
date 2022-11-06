@@ -7,18 +7,19 @@ import { SxProps, Theme } from "@mui/material";
 
 type EditableNameTextProps = {
   children: string,
-  updateValue: (newValue: string) => void,
+  onUpdate: (newValue: string) => void,
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>,
   sx?: SxProps<Theme>,
   inputSx?: SxProps<Theme>,
 };
 
-export default function EditableNameText({ children, updateValue, variant, sx, inputSx }: EditableNameTextProps) {
+export default function EditableNameText({ children, onUpdate, variant, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   const actualDivStyle: React.CSSProperties = {
+    display: "inline",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     overflow: "clip",
@@ -43,7 +44,7 @@ export default function EditableNameText({ children, updateValue, variant, sx, i
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
     if (hasChanged) {
-      updateValue(textFieldRef.current?.value as string);
+      onUpdate(textFieldRef.current?.value as string);
       setHasChanged(false);
     }
     setIsEditing(false);
@@ -78,6 +79,7 @@ export default function EditableNameText({ children, updateValue, variant, sx, i
         onClick={clickHandler}
         variant={variant}
         sx={sx}
+        component="span"
       >
         {children}
       </Typography>
