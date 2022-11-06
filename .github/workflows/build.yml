@@ -16,6 +16,6 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: 16.15.1
-      - run: npm ci
-      - run: npm build --if-present
+      - run: npm install
+      - run: npm run build
       - run: npm test      
