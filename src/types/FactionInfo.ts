@@ -2,7 +2,7 @@ import FactionStatsInfo from "./FactionStatsInfo";
 
 type StatInfo = { xpCost: number, hpValue: number };
 
-const STAT_INFO: {[rating: number]:StatInfo} = {
+export const STAT_INFO: {[rating: number]:StatInfo} = {
   0: {
     xpCost: 0,
     hpValue: 0
