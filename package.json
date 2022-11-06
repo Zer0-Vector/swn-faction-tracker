@@ -95,6 +95,7 @@
           }
         }
       ],
+      "no-useless-computed-key": "off",
       "simple-import-sort/imports": [
         "warn",
         {
