@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FactionList from "./FactionList";
@@ -24,7 +24,6 @@ export default function PrimaryPanel() {
       <Box
         sx={{ 
         flexGrow: 1,
-        marginTop: "2rem",
         padding: "1rem",
       }}>
         <FactionListActionToolbar />
@@ -38,7 +37,6 @@ export default function PrimaryPanel() {
       >
         <Box sx={{
           width: "60%",
-          marginTop: "2rem",
           padding: "1rem",
         }}>
           <Typography variant="h2">{faction?.name}</Typography>
