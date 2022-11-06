@@ -24,7 +24,11 @@ export class GameController implements IGameController {
     this.setState = setState;
   }
 
-  private isInvalidStat(val: number) {
+  static isInvalidStat(val: number) {
+    return isNaN(val) || val < 0 || val > 10;
+  }
+
+  static isInvalidHp(val: number) {
     return isNaN(val) || val < 0;
   }
 
@@ -97,7 +101,7 @@ export class GameController implements IGameController {
   }
 
   updateForce(name: string, force: number): void {
-    if (this.isInvalidStat(force)) {
+    if (GameController.isInvalidStat(force)) {
       return;
     }
     this.setState((state: GameState) => {
@@ -117,7 +121,7 @@ export class GameController implements IGameController {
     });
   }
   updateCunning(name: string, cunning: number): void {
-    if (this.isInvalidStat(cunning)) {
+    if (GameController.isInvalidStat(cunning)) {
       return;
     }
 
@@ -138,7 +142,7 @@ export class GameController implements IGameController {
     });
   }
   updateWealth(name: string, wealth: number): void {
-    if (this.isInvalidStat(wealth)) {
+    if (GameController.isInvalidStat(wealth)) {
       return;
     }
 
@@ -159,7 +163,7 @@ export class GameController implements IGameController {
     });
   }
   updateHp(name: string, hp: number): void {
-    if (this.isInvalidStat(hp)) {
+    if (GameController.isInvalidHp(hp)) {
       return;
     }
 
@@ -179,7 +183,7 @@ export class GameController implements IGameController {
     });
   }
   updateMaxHp(name: string, maxHp: number): void {
-    if (this.isInvalidStat(maxHp)) {
+    if (GameController.isInvalidHp(maxHp)) {
       return;
     }
 
