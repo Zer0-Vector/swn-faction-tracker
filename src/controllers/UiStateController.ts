@@ -2,6 +2,7 @@ import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
 import UiState from "../types/UiState";
 
 export interface IUiStateController {
+  selectLocaion(locationName: string | null): void;
   selectFaction(name: string | null): void;
   selectAsset(pa: PurchasedAsset | null) : void;
   deselectFaction(): void;
@@ -44,6 +45,13 @@ export class UiStateController implements IUiStateController {
       ...prev,
       selectedAssetKey: null,
       hasFactionSelected: false,
+    }));
+  }
+
+  selectLocaion(locationName: string | null): void {
+    this.setState(prev => ({
+      ...prev,
+      selectedLocation: locationName,
     }));
   }
 
