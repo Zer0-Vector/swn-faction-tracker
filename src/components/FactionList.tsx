@@ -146,7 +146,6 @@ export default function FactionList(): JSX.Element {
                           <FactionStatSummary
                             {...faction.stats}
                             factionName={name}
-                            fontSize={theme.typography.body1.fontSize}
                           />
                         </ItemColumn>
                       </Box>

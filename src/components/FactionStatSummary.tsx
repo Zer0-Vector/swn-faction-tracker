@@ -12,34 +12,39 @@ interface FactionStatSummaryProps {
   force: number;
   cunning: number;
   wealth: number;
-  fontSize?: Property.FontSize<number | string>;
 }
 
-export default function FactionStatSummary({ factionName, force, cunning, wealth, fontSize }: FactionStatSummaryProps) {
+export default function FactionStatSummary({ factionName, force, cunning, wealth }: FactionStatSummaryProps) {
   const { controller } = useContext(GameContext);
   
   return (
     <>
       <EditableStatText
         updateValue={val => controller.updateForce(factionName, +val)}
-        sx={{ fontSize: fontSize }}
-        inputSx={{ width: `calc(${fontSize} * 1.5)`, minWidth: "3em" }}
+        inputSx={theme => ({ 
+          ...theme.typography.body2,
+          width: "3em",
+         })}
       >
         {force}
       </EditableStatText>
-      <StatText variant="body2" sx={{ fontSize: fontSize }}>/</StatText>
+      <StatText variant="body2">/</StatText>
       <EditableStatText
         updateValue={val => controller.updateCunning(factionName, +val)}
-        sx={{ fontSize }}
-        inputSx={{ width: `calc(${fontSize} * 1.5)`, minWidth: "3em"  }}
+        inputSx={theme => ({ 
+          ...theme.typography.body2,
+          width: "3em",
+         })}
       >
         {cunning}
       </EditableStatText>
-      <StatText variant="body2" sx={{ fontSize }}>/</StatText>
+      <StatText variant="body2">/</StatText>
       <EditableStatText
         updateValue={val => controller.updateWealth(factionName, +val)}
-        sx={{ fontSize }}
-        inputSx={{ maxWidth: `calc(${fontSize} * 1.5)`, minWidth: "3em"  }}
+        inputSx={theme => ({ 
+          ...theme.typography.body2,
+          width: "3em",
+         })}
       >
         {wealth}
       </EditableStatText>
