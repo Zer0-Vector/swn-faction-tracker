@@ -5,4 +5,9 @@ declare module '@mui/material/styles/createPalette' {
     paper2: string;
     paper3: string;
   }
+
+  interface TypeAction {
+    dragging: string;
+  }
+
 }
