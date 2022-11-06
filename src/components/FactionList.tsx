@@ -96,7 +96,7 @@ export default function FactionList(): JSX.Element {
                         sx={{
                           display: "flex",
                           width: "100%",
-                          backgroundColor: name === uiState.selectedFaction ? "primary.main" : "inherit"
+                          backgroundColor: itemSnapshot.isDragging ? "action.dragging" : (name === uiState.selectedFaction ? "action.selected" : "inherit")
                         }}
                       >
                         <ItemColumn 
