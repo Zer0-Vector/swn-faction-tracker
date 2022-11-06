@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import { createTheme } from '@mui/material/styles';
 import PrimaryPanel from './components/PrimaryPanel';
 import RuntimeGameState from './types/RuntimeGameState';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LocationsPanel from './components/LocationsPanel';
 import PageContainer from './components/PageContainer';
 
