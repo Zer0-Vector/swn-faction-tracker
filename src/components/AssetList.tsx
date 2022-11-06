@@ -9,7 +9,7 @@ import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
 
-import AssetDetails from "./AssetDetails";
+import AssetDetails from "./molecules/AssetDetails";
 
 export default function AssetList() {
   const { state } = useContext(GameContext);

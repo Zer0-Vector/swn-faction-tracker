@@ -5,10 +5,10 @@ import Grid from "@mui/material/Grid";
 import { styled, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import ASSETS from "../data/Assets";
-import { AssetAttackResult } from "../types/AssetInfo";
-import PurchasedAsset from "../types/PurchasedAsset";
-import TextUtils from "../utils/TextUtils";
+import ASSETS from "../../data/Assets";
+import { AssetAttackResult } from "../../types/AssetInfo";
+import PurchasedAsset from "../../types/PurchasedAsset";
+import TextUtils from "../../utils/TextUtils";
 
 interface AssetDetailsProps {
   asset: PurchasedAsset;
