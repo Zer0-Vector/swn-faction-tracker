@@ -13,11 +13,13 @@ import AssetListActionsToolbar from "../AssetListActionsToolbar";
 
 export default function PrimaryPanel() {
   const { state } = useContext(GameContext);
-  const { state: uiState } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController } = useContext(UiStateContext);
 
   const containerRef = useRef(null);
 
   const faction: FactionInfo | undefined = uiState.selectedFaction ? state.factions.get(uiState.selectedFaction) : undefined;
+
+  const handleExitTransitionEnd = () => uiController.selectFaction(null);
 
   return (
     <Box sx={{
@@ -40,16 +42,22 @@ export default function PrimaryPanel() {
       }}>
         <Box
           sx={{ 
-          flexGrow: 3,
+          flexGrow: 1,
           marginTop: "2rem",
           padding: "1rem",
         }}>
           <FactionListActionToolbar />
           <FactionList />
         </Box>
-        <Slide in={!!faction} direction="left" mountOnEnter={true} unmountOnExit={true} container={containerRef.current}>
+        <Slide
+          in={!!faction && uiState.hasFactionSelected}
+          direction="left"
+          unmountOnExit={true}
+          container={containerRef.current}
+          onExited={handleExitTransitionEnd}
+        >
           <Box sx={{
-            flexGrow: 10,
+            width: "60%",
             marginTop: "2rem",
             padding: "1rem",
           }}>
