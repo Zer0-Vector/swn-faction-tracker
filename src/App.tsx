@@ -17,7 +17,10 @@ function App() {
       isLoading: false,
       factions: {},
       factionOrder: [],
-  });
+      assets: {}
+    }
+  );
+  
   const gameController: IGameController = new GameController(setGameState);
 
   const [uiState, setUiState] = useState<UiState>({
@@ -51,7 +54,10 @@ function App() {
         fontSize: "4rem"
       },
       h2: {
-        fontSize: "3.5rem"
+        fontSize: "3.25rem"
+      },
+      h3: {
+        fontSize: "2.75rem"
       }
     },
     components: {
