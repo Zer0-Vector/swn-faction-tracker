@@ -23,14 +23,18 @@ export default function ListActionToolbar({ removable, onAddClick, onRemoveClick
       })}>
         <Fab
           size="medium"
-          color="secondary"
+          sx={{
+            backgroundColor: "secondary.main"
+          }}
           onClick={onAddClick}
         >
           <AddIcon />
         </Fab>
         <Fab
           size="medium"
-          color="secondary"
+          sx={{
+            backgroundColor: "secondary.main"
+          }}
           disabled={!removable}
           onClick={onRemoveClick}
         >
