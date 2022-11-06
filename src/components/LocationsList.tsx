@@ -50,43 +50,49 @@ export default function LocationsList() {
     }
   };
 
+  if (locations.length === 0) {
+    return (
+      <>
+        <Typography variant="body1" color="warning.main">No Locations</Typography>
+        <Typography variant="body2">Create locations using the buttons above.</Typography>
+      </>
+    );
+  }
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable-location">
         {(provided, snapshot) => (
           <Box {...provided.droppableProps} ref={provided.innerRef}>
-            {
-              locations.length === 0 ? <Typography variant="body1" color="warning.main">No Locations</Typography>
-              : locations.map((val, index) => (
-                <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
-                  {(provided, snapshot) => (
-                    <Accordion {...provided.draggableProps} ref={provided.innerRef} expanded={uiState.selectedLocation === val.name}>
-                      <AccordionSummary
-                        onClick={() => handleSelect(val.name)}
-                        sx={theme => ({ backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (uiState.selectedLocation === val.name ? theme.palette.action.selected : "inherit")})}
-                      >
-                        <Box sx={theme => ({
-                          display: "flex",
-                          alignContent: "center",
-                          gap: theme.spacing(2),
-                        })}>
-                          <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
-                          <EditableNameText onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableNameText>
-                        </Box>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Grid container spacing={2}>
-                          <Grid item xs={3}><ItemHeader>Tech Level</ItemHeader></Grid>
-                          <Grid item xs={3}><Item>{val.tl}</Item></Grid>
-                          <Grid item xs={3}><ItemHeader>Coordinates</ItemHeader></Grid>
-                          <Grid item xs={3}><Item>{val.x}, {val.y}</Item></Grid>
-                        </Grid>
-                      </AccordionDetails>
-                    </Accordion>
-                  )}
-                </Draggable>
-              ))
-            }
+            {locations.map((val, index) => (
+              <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
+                {(provided, snapshot) => (
+                  <Accordion {...provided.draggableProps} ref={provided.innerRef} expanded={uiState.selectedLocation === val.name}>
+                    <AccordionSummary
+                      onClick={() => handleSelect(val.name)}
+                      sx={theme => ({ backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (uiState.selectedLocation === val.name ? theme.palette.action.selected : "inherit")})}
+                    >
+                      <Box sx={theme => ({
+                        display: "flex",
+                        alignContent: "center",
+                        gap: theme.spacing(2),
+                      })}>
+                        <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
+                        <EditableNameText onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableNameText>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Grid container spacing={2}>
+                        <Grid item xs={3}><ItemHeader>Tech Level</ItemHeader></Grid>
+                        <Grid item xs={3}><Item>{val.tl}</Item></Grid>
+                        <Grid item xs={3}><ItemHeader>Coordinates</ItemHeader></Grid>
+                        <Grid item xs={3}><Item>{val.x}, {val.y}</Item></Grid>
+                      </Grid>
+                    </AccordionDetails>
+                  </Accordion>
+                )}
+              </Draggable>
+            ))}
             {provided.placeholder}
           </Box>
         )}

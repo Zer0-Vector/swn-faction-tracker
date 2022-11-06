@@ -5,6 +5,7 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { styled, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
@@ -66,6 +67,17 @@ export default function FactionList(): JSX.Element {
     padding: theme.spacing(1),
   }));
 
+  const factions = state.getFactions();
+
+  if (factions.length === 0) {
+    return (
+      <>
+        <Typography variant="body1" color="warning.main">No Factions</Typography>
+        <Typography variant="body2">Create factions using the buttons above.</Typography>
+      </>
+    );
+  }
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="faction-droppable">
@@ -79,7 +91,7 @@ export default function FactionList(): JSX.Element {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {state.getFactions().map((faction: FactionInfo, index: number) => {
+            {factions.map((faction: FactionInfo, index: number) => {
               const { name } = faction;
               return (
                 <Draggable
