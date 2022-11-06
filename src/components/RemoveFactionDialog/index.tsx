@@ -14,17 +14,24 @@ type RemoveFactionDialogProps = {
 };
 
 export default function RemoveFactionDialog({ factionName, open, onClose, onConfirm }: RemoveFactionDialogProps) {
-  const handleRemove = () => {
+  const handleRemove = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
     onConfirm();
     onClose();
   };
+
+  const handleCancel = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
+    onClose();
+  };
+  
   return (
     <Dialog open={open && factionName !== null} onClose={onClose}>
       <DialogContent>
         <DialogTitle>Confirm Delete Faction</DialogTitle>
         <DialogContentText>Delete faction {`"${factionName}"`}</DialogContentText>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={handleCancel}>Cancel</Button>
           <Button onClick={handleRemove}>Remove</Button>
         </DialogActions>
       </DialogContent>

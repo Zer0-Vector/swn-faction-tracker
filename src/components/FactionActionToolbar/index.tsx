@@ -27,12 +27,14 @@ export default function FactionActionToolbar() {
     controller.addFaction(val);
   };
 
-  const confirmRemoveFaction = () => {
+  const confirmRemoveFaction = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.stopPropagation();
     setRemoveDialogOpen(true);
   };
 
   const handleRemoveFaction = () => {
     if (uiState.selectedFaction) {
+      setRemoveDialogOpen(false);
       controller.removeFaction(uiState.selectedFaction);
       uiController.selectFaction(null);
     }
