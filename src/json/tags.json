@@ -1,0 +1,343 @@
+{
+  "Colonists": {
+    "effects": [
+      {
+        "type": "ASSUME_STAT",
+        "details": {
+          "tl": 4
+        }
+      },
+      {
+        "type": "ASSUME_TAG",
+        "details": {
+          "tag": "Planetary Government",
+          "target": "homeworld"
+        }
+      }
+    ]
+  },
+  "Deep Rooted": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": null,
+          "when": "DEFENDING",
+          "with": null,
+          "versus": null,
+          "target": "homeworld",
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Eugenics Cult": {
+    "effects": [
+      {
+        "type": "BONUS_ASSET_AVAILABLE",
+        "details": {
+          "asset": "Gengineered Slaves"
+        }
+      },
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": null,
+          "when": "DEFENDING",
+          "with": "Gengineered Slaves",
+          "versus": null,
+          "target": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Exchange Consulate": {
+    "effects": [
+      {
+        "type": "GOAL_COMPLETED_BONUS",
+        "details": {
+          "goal": "Peacable Kingdom",
+          "test": {
+            "type": "THRESHOLD",
+            "details": {
+              "roll": "1d6",
+              "comparison": "GREATER_OR_EQUAL",
+              "threshold": "4"
+            }
+          },
+          "bonus": {
+            "type": "XP",
+            "amount": 1
+          }
+        }
+      },
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "DEFENDING",
+          "with": null,
+          "versus": "WEALTH",
+          "target": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Fanatical": {
+    "effects": [
+      {
+        "type": "REROLL",
+        "details": {
+          "dieValue": 1
+        }
+      },
+      {
+        "type": "LOSE_TIES",
+        "details": {
+          "when": "ATTACKING"
+        }
+      }
+    ]
+  },
+  "Imperialists": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": null,
+          "when": "ATTACKING",
+          "with": null,
+          "versus": null,
+          "target": null,
+          "during": "SIEZE_PLANET",
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Machiavellian": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "ATTACKING",
+          "with": "CUNNING",
+          "versus": null,
+          "target": null,
+          "during": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Mercenary Group": {
+    "effects": [
+      {
+        "type": "ASSET_ABILITY",
+        "details": {
+          "type": "MOVE",
+          "distance": 1
+        }
+      }
+    ]
+  },
+  "Perimeter Agency": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "ATTACKING",
+          "with": null,
+          "versus": {
+            "tl": 5
+          },
+          "target": null,
+          "during": null,
+          "die": "1d10"
+        }
+      },
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": null,
+          "when": "DETECT_STEALTH",
+          "with": null,
+          "versus": null,
+          "target": null,
+          "during": null,
+          "die": "*"
+        }
+      }
+    ]
+  },
+  "Pirates": {
+    "effects": [
+      {
+        "type": "TAX",
+        "details": {
+          "when": "MOVE",
+          "onto": {
+            "contains": "Base of Influence"
+          },
+          "pay": 1,
+          "to": "FACTION"
+        }
+      }
+    ]
+  },
+  "Planetary Government": {
+    "attributes": [
+      {
+        "name": "location",
+        "type": "LOCATION"
+      }
+    ],
+    "effects": [
+      {
+        "type": "PERMISSION"
+      }
+    ]
+  },
+  "Plutocratic": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "ATTACKING",
+          "with": "WEALTH",
+          "versus": null,
+          "target": null,
+          "during": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Preceptor Archive": {
+    "effects": [
+      {
+        "type": "DISCOUNT",
+        "details": {
+          "on": {
+            "tl": 4
+          },
+          "discount": 1
+        }
+      },
+      {
+        "type": "BONUS_ACTION_AVAILABLE",
+        "details": {
+          "action": "Teach Planetary Population"
+        }
+      }
+    ]
+  },
+  "Psychic Academy": {
+    "effects": [
+      {
+        "type": "FORCE_REROLL",
+        "details": {
+          "limitPerTurn": 1,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Savage": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "DEFENDING",
+          "with": null,
+          "versus": null,
+          "target": {
+            "tl": 0
+          },
+          "during": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Scavengers": {
+    "effects": [
+      {
+        "type": "GAIN_CREDIT",
+        "details": {
+          "amount": 1,
+          "when": "ASSET_DESTROYED",
+          "owner": "SELF"
+        }
+      },
+      {
+        "type": "GAIN_CREDIT",
+        "details": {
+          "amount": 1,
+          "when": "ASSET_DESTROYED",
+          "owner": "ENEMY"
+        }
+      }
+    ]
+  },
+  "Secretive": {
+    "effects": [
+      {
+        "type": "STEALTH_ASSETS",
+        "details": null
+      }
+    ]
+  },
+  "Technical Expertise": {
+    "effects": [
+      {
+        "type": "TL4_BASE_WORLD",
+        "details": null
+      },
+      {
+        "type": "BUILD_STARSHIP",
+        "details": {
+          "population": 10000
+        }
+      }
+    ]
+  },
+  "Theocratic": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "DEFENDING",
+          "with": null,
+          "versus": "CUNNING",
+          "target": null,
+          "during": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  },
+  "Warlike": {
+    "effects": [
+      {
+        "type": "BONUS_DIE",
+        "details": {
+          "limitPerTurn": 1,
+          "when": "ATTACKING",
+          "with": "FORCE",
+          "versus": null,
+          "target": null,
+          "during": null,
+          "die": "1d10"
+        }
+      }
+    ]
+  }
+}
