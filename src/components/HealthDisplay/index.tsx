@@ -1,45 +1,36 @@
 import React from "react";
-import { Box, LinearProgress, Tooltip } from "@mui/material";
-import { useContext } from "react";
-import FactionInfo from "../../types/FactionInfo";
 import EditableStatText from "../EditableStatText";
-import { GameContext } from "../../GameContext";
 import StatText from "../StatText";
+import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 
 type HealthDisplayProps = {
-  faction: FactionInfo,
+  onHpUpdate: (hp: string) => void,
+  current: number,
+  max: number,
 }
 
-export default function HealthDisplay({ faction }: HealthDisplayProps) {
-  const { controller } = useContext(GameContext);
-
-  const updateHp = (hp: string): void => {
-    try {
-      controller.updateHp(faction.name, parseInt(hp));
-    } catch (e) {
-      console.warn(`Could not parse hp value: '${hp}'`);
-    }
-  };
-
+export default function HealthDisplay({ current, max, onHpUpdate }: HealthDisplayProps) {
   return (
     <>
-      <Tooltip 
+      <Tooltip
         title={
-          <Box display="flex" alignItems="center">
-            <EditableStatText updateValue={updateHp}>
-              {faction.stats.hp.toString()}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <EditableStatText updateValue={onHpUpdate}>
+              {current.toString()}
             </EditableStatText>
             /
             <StatText>
-              {faction.stats.maxHp}
+              {max}
             </StatText>
           </Box>
         }
-        arrow
+        arrow={true}
       >
-        <LinearProgress 
+        <LinearProgress
           color="error"
-          value={100*faction.stats.hp/faction.stats.maxHp}
+          value={100 * current / max}
           variant="determinate"
           sx={{ 
             width: "7rem",
@@ -48,7 +39,6 @@ export default function HealthDisplay({ faction }: HealthDisplayProps) {
           }}
         />
       </Tooltip>
-      
     </>
   );
 }
