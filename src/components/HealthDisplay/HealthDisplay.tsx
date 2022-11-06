@@ -1,9 +1,9 @@
 import React from "react";
-import EditableStatText from "../EditableStatText";
+import EditableStatText from "../EditableStatText/EditableStatText";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-import StatText from "../StatText";
+import StatText from "../StatText/StatText";
 
 type HealthDisplayProps = {
   onHpUpdate: (hp: string) => void,

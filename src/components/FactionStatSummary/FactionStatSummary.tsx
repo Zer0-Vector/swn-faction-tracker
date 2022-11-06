@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { GameContext } from "../../contexts/GameContext";
-import EditableStatText from "../EditableStatText";
-import StatText from "../StatText";
+import { GameContext } from "../../contexts/GameContext/GameContext";
+import EditableStatText from "../EditableStatText/EditableStatText";
+import StatText from "../StatText/StatText";
 import { Property } from "csstype";
 
 

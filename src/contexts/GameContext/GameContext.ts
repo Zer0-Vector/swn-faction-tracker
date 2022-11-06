@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { IGameController } from "../../controllers/GameController";
+import { IGameController } from "../../controllers/GameController/GameController";
 import RuntimeGameState from "../../types/RuntimeGameState";
 
 type GameContextType = {

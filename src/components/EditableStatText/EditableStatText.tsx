@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { SxProps, Theme } from "@mui/material";
-import StatText from "../StatText";
+import StatText from "../StatText/StatText";
 
 type EditableNameTextProps = {
   children: string | number,

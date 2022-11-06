@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { IUiStateController } from "../../controllers/UiStateController";
+import { IUiStateController } from "../../controllers/UiStateController/UiStateController";
 import { UiState } from "../../types/UiState";
 
 type UiStateContextType = {

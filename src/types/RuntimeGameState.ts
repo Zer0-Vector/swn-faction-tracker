@@ -1,4 +1,4 @@
-import { IGameController } from "../controllers/GameController";
+import { IGameController } from "../controllers/GameController/GameController";
 import ASSETS from "../data/Assets";
 import FactionInfo from "./FactionInfo";
 import { PurchasedAsset } from "./PurchasedAsset";
