@@ -23,9 +23,12 @@ interface AddAssetDialogProps {
 interface AssetOption {
   name: string;
   group: string;
+  disabled: boolean;
 }
 
 export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogProps) {
+  const [selection, setSelection] = useState<string>("");
+  
   const options = Object.entries(ASSETS)
       .filter(([name, _]) => name !== "Base of Influence")
       .map(([name, item]) => {
@@ -35,8 +38,6 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
           group: group,
         } as AssetOption;
       });
-
-  const [selection, setSelection] = useState<string>("");
 
   const handleClose = () => {
     setSelection("");
@@ -69,13 +70,14 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
       <DialogTitle>Add Asset</DialogTitle>
       <DialogContent>
         <DialogContentText>Select an asset to add.</DialogContentText>
-        <FormControl sx={{ minWidth: 200 }}>
+        <FormControl sx={{ my: 1, minWidth: 200 }}>
           <Autocomplete
             id="asset-select-field"
             options={options}
             groupBy={o => o.group}
             getOptionLabel={o => o.name}
             isOptionEqualToValue={(o, v) => o.group === v.group && o.name === v.name}
+            disableClearable={true}
             onChange={handleSelectionChanged}
             renderInput={params => <TextField {...params} label="Select Asset" />}
           />
