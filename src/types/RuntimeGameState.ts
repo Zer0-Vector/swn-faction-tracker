@@ -184,11 +184,12 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   getLocations(): LocationInfo[] {
-    return this.locationsOrder.map(name => this.locations.get(name)) as LocationInfo[];
+    return this.locationsOrder.map(name => this.locations.get(name)).filter(loc => loc !== undefined) as LocationInfo[];
   }
 
   removeLocation(selectedLocation: string) {
     this.locations.delete(selectedLocation);
+    this.locationsOrder = this.locationsOrder.filter(loc => loc !== selectedLocation);
   }
 
   addLocation(info: LocationInfo) {
