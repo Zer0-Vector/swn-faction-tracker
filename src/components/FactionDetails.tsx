@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
+import { TAGS } from "../data/Tags";
 
 import EditableNameText from "./EditableNameText";
 
@@ -66,7 +67,7 @@ export default function FactionDetails() {
         <ItemHeader>Tag:</ItemHeader>
       </Grid>
       <Grid item xs={3}>
-        <Item><EditableNameText onUpdate={updateTag}>{tagText}</EditableNameText></Item>
+        <Item><EditableNameText onUpdate={updateTag} selectableOptions={Object.keys(TAGS)}>{tagText}</EditableNameText></Item>
       </Grid>
       <Grid item xs={3}>
         <ItemHeader>HP:</ItemHeader>
