@@ -11,6 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 
 import ASSETS from "../data/Assets";
+import Nullable from "../types/Nullable";
 import TextUtils from "../utils/TextUtils";
 
 interface AddAssetDialogProps {
@@ -55,7 +56,7 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
     }
   };
 
-  const handleSelectionChanged = (_evt: React.SyntheticEvent, value: AssetOption | null) => {
+  const handleSelectionChanged = (_evt: React.SyntheticEvent, value: Nullable<AssetOption>) => {
     if (value === null) {
       setSelection("");
     } else {
