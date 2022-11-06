@@ -4,4 +4,6 @@ export default interface FactionStatsInfo {
   force: number;
   cunning: number;
   wealth: number;
+  xp: number;
+  [key: string]: number;
 }
