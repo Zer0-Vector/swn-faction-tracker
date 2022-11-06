@@ -4,14 +4,14 @@ import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 import Box from '@mui/material/Box';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
-import LocationsPanel from './components/LocationsPanel';
 import PageContainer from './components/PageContainer';
-import PrimaryPanel from './components/PrimaryPanel';
 import { GameContext } from './contexts/GameContext';
 import { UiStateContext } from './contexts/UiStateContext';
 import { GameController, IGameController } from './controllers/GameController';
 import { IUiStateController, UiStateController } from './controllers/UiStateController';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import LocationsPanel from './pages/LocationsPanel';
+import PrimaryPanel from './pages/PrimaryPanel';
 import { THEME } from './style/Theme';
 import RuntimeGameState from './types/RuntimeGameState';
 import StoredGameState from './types/StoredGameState';

@@ -2,8 +2,8 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 
-import LocationsActionToolbar from "./LocationsActionToolbar";
-import LocationsList from "./LocationsList";
+import LocationsActionToolbar from "../components/LocationsActionToolbar";
+import LocationsList from "../components/LocationsList";
 
 export default function LocationsPanel() {
   return (

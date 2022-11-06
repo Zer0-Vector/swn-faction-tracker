@@ -4,15 +4,14 @@ import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
 import Typography from "@mui/material/Typography";
 
+import AssetList from "../components/AssetList";
+import AssetListActionsToolbar from "../components/AssetListActionsToolbar";
+import FactionDetails from "../components/FactionDetails";
+import FactionList from "../components/FactionList";
+import FactionListActionToolbar from "../components/FactionListActionToolbar";
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import FactionInfo from "../types/FactionInfo";
-
-import AssetList from "./AssetList";
-import AssetListActionsToolbar from "./AssetListActionsToolbar";
-import FactionDetails from "./FactionDetails";
-import FactionList from "./FactionList";
-import FactionListActionToolbar from "./FactionListActionToolbar";
 
 export default function PrimaryPanel() {
   const { state } = useContext(GameContext);
