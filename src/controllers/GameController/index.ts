@@ -1,6 +1,6 @@
 import React from "react";
-import FactionInfo from "../types/FactionInfo";
-import GameState from "../types/GameState";
+import FactionInfo from "../../types/FactionInfo";
+import GameState from "../../types/GameState";
 
 export interface IGameController {
   reorderFactions(sourceIndex: number, destinationIndex: number): void;
@@ -14,33 +14,16 @@ export interface IGameController {
   updateMaxHp(name: string, maxHp: number): void;
 }
 
+type GameStateSetter = React.Dispatch<React.SetStateAction<GameState>>;
+
 export class GameController implements IGameController {
 
-  private setState: React.Dispatch<React.SetStateAction<GameState>>;
-  private nextRank: number;
+  private setState: GameStateSetter;
 
-  constructor(setState: React.Dispatch<React.SetStateAction<GameState>>) {
+  constructor(setState: GameStateSetter) {
     this.setState = setState;
-    this.nextRank = 0;
   }
-  
-  private refreshRanks(factions: FactionInfo[]): {[name: string]: FactionInfo} {
-    const sorted = factions.sort((a, b) => a.rank - b.rank);
-    let i = 0;
-    for (; i < sorted.length; i++) {
-      sorted[i].rank = i;
-    }
-    this.nextRank = i;
-    let result = {};
-    sorted.forEach(f => {
-      result = {
-        ...result,
-        [f.name]: f
-      };
-    });
-    return result;
-  }
-  
+
   private isInvalidStat(val: number) {
     return isNaN(val) || val < 0;
   }
@@ -48,20 +31,12 @@ export class GameController implements IGameController {
   reorderFactions(sourceIndex: number, destinationIndex: number): void {
     console.log("Reordering factions...");
     this.setState((prevState: GameState) => {
-      const factionsCopy = { ...prevState.factions };
-      const sourceName = Object.values(factionsCopy).filter(f => f.rank === sourceIndex).at(0)?.name;
-      const destinationName = Object.values(factionsCopy).filter(f => f.rank === destinationIndex).at(0)?.name;
-      if (!sourceName || !destinationName) {
-        console.error("Could not find source or destination: ", sourceName, destinationName);
-        return prevState;
-      }
-
-      factionsCopy[sourceName].rank = destinationIndex;
-      factionsCopy[destinationName].rank = sourceIndex;
-
+      const orderCopy = [ ...prevState.factionOrder ];
+      const [removed] = orderCopy.splice(sourceIndex, 1);
+      orderCopy.splice(destinationIndex, 0, removed);
       return {
         ...prevState,
-        factions: factionsCopy,
+        factionOrder: orderCopy,
       };
     });
   }
@@ -77,12 +52,16 @@ export class GameController implements IGameController {
 
         factions = {
           ...factions,
-          [name]: new FactionInfo(name, this.nextRank++),
+          [name]: new FactionInfo(name),
         };
+
+        const factionOrder: string[] = Array.from(state.factionOrder);
+        factionOrder.push(name);
         
         return {
           ...state,
-          factions: factions,
+          factions,
+          factionOrder
         };
       });
     }
@@ -93,8 +72,8 @@ export class GameController implements IGameController {
     this.setState((state: GameState) => {
       const stateCopy = { ...state };
       delete stateCopy.factions[name];
-      const factions = this.refreshRanks(Object.values(state.factions));
-      return { ...stateCopy, factions };
+      stateCopy.factionOrder = stateCopy.factionOrder.filter((fname: string) => fname !== name);
+      return stateCopy;
     });
   }
 
@@ -111,6 +90,7 @@ export class GameController implements IGameController {
       factionCopy.name = newName;
       delete stateCopy.factions[currentName];
       stateCopy.factions[newName] = factionCopy;
+      stateCopy.factionOrder = stateCopy.factionOrder.map(value => (value === currentName) ? newName : value);
       console.log("new state:", stateCopy);
       return stateCopy;
     });
