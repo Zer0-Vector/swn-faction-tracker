@@ -3,6 +3,7 @@ import FactionInfo from "../../types/FactionInfo";
 import GameState from "../../types/GameState";
 
 export interface IGameController {
+  updateTag(name: string, tag: string): void;
   reorderFactions(sourceIndex: number, destinationIndex: number): void;
   addFaction(name: string): void;
   removeFaction(name: string): void;
@@ -12,6 +13,7 @@ export interface IGameController {
   updateWealth(name: string, wealth: number): void;
   updateHp(name: string, hp: number): void;
   updateMaxHp(name: string, maxHp: number): void;
+  updateHomeworld(name: string, homeworld: string): void;
 }
 
 type GameStateSetter = React.Dispatch<React.SetStateAction<GameState>>;
@@ -89,6 +91,10 @@ export class GameController implements IGameController {
   }
 
   updateFactionName(currentName: string, newName: string): void {
+    if (newName.trim().length <= 0) {
+      return;
+    }
+
     this.setState((state: GameState) => {
       if (Object.keys(state.factions).includes(newName)) {
         console.warn(`Cannot rename faction '${currentName}' to '${newName}'. Already exists.`);
@@ -192,6 +198,7 @@ export class GameController implements IGameController {
       };
     });
   }
+
   updateMaxHp(name: string, maxHp: number): void {
     if (GameController.isInvalidHp(maxHp)) {
       return;
@@ -208,6 +215,30 @@ export class GameController implements IGameController {
       };
       return {
         ...state,
+        factions: factionsCopy
+      };
+    });
+  }
+
+  updateHomeworld(name: string, homeworld: string) {
+    // allow homeworld to be set to ""
+    this.setState(prev => {
+      const factionsCopy = { ...prev.factions };
+      factionsCopy[name].homeworld = homeworld.trim();
+      return {
+        ...prev,
+        factions: factionsCopy
+      };
+    });
+  }
+
+  updateTag(name: string, tag: string): void {
+    // allow tag to be set to ""
+    this.setState(prev => {
+      const factionsCopy = { ...prev.factions };
+      factionsCopy[name].tag = tag.trim();
+      return {
+        ...prev,
         factions: factionsCopy
       };
     });

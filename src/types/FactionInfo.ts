@@ -53,11 +53,14 @@ export default class FactionInfo {
   
   static copy(currentFaction: FactionInfo) {
     const result = new FactionInfo(currentFaction.name);
+    result.homeworld = currentFaction.homeworld;
     result.stats = { ...currentFaction.stats };
     return result;
   }
 
   name: string;
+  homeworld?: string;
+  tag?: string;
   stats: FactionStatsInfo;
 
   constructor(name: string) {
