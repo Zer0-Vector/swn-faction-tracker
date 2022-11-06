@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 import { GameContext } from "../../contexts/GameContext";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import FormControl from "@mui/material/FormControl";
 
 type AddFactionDialogProps = {
   open: boolean,
@@ -58,32 +57,30 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <FormControl onSubmit={handleCreate} component="form">
-        <DialogTitle>Add Faction</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ paddingBottom: "1rem" }}>
-            Enter a unique name for the new faction.
-          </DialogContentText>
-          <TextField
-            id="faction-name"
-            label="Faction Name"
-            variant="filled"
-            inputRef={inputRef}
-            type="text"
-            placeholder="Enter Faction Name"
-            autoFocus={true}
-            value={formState.text}
-            onInput={handleInputChange}
-            error={!formState.valid && formState.text !== ""}
-            fullWidth={true}
-            autoComplete="off"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button type="submit" disabled={!formState.valid}>Create</Button>
-        </DialogActions>
-      </FormControl>
+      <DialogTitle>Add Faction</DialogTitle>
+      <DialogContent>
+        <DialogContentText sx={{ paddingBottom: "1rem" }}>
+          Enter a unique name for the new faction.
+        </DialogContentText>
+        <TextField
+          id="faction-name"
+          label="Faction Name"
+          variant="filled"
+          inputRef={inputRef}
+          type="text"
+          placeholder="Enter Faction Name"
+          autoFocus={true}
+          value={formState.text}
+          onInput={handleInputChange}
+          error={!formState.valid && formState.text !== ""}
+          fullWidth={true}
+          autoComplete="off"
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleCreate} disabled={!formState.valid}>Create</Button>
+      </DialogActions>
     </Dialog>
   );
 }
