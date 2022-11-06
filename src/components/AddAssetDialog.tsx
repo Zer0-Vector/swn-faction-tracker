@@ -19,7 +19,7 @@ interface AddAssetDialogProps {
   onAdd: (key: string) => void;
 }
 
-interface AssetOptionType {
+interface AssetOption {
   name: string;
   group: string;
 }
@@ -32,7 +32,7 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
         return {
           name: name,
           group: group,
-        };
+        } as AssetOption;
       });
 
   const [selection, setSelection] = useState<string>("");
@@ -55,7 +55,7 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
     }
   };
 
-  const handleSelectionChanged = (_evt: React.SyntheticEvent, value: AssetOptionType | null) => {
+  const handleSelectionChanged = (_evt: React.SyntheticEvent, value: AssetOption | null) => {
     if (value === null) {
       setSelection("");
     } else {
