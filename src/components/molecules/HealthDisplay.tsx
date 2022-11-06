@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 
-import EditableStatText from "./EditableStatText";
-import StatText from "./StatText";
+import EditableStatText from "../atoms/EditableStatText";
+import StatText from "../atoms/StatText";
 
 interface HealthDisplayProps {
   onHpUpdate: (hp: string) => void;

@@ -7,13 +7,12 @@ import Stack from "@mui/material/Stack";
 import { styled, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { GameContext } from "../contexts/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext";
-import FactionInfo from "../types/FactionInfo";
-
-import EditableNameText from "./EditableNameText";
-import FactionStatSummary from "./FactionStatSummary";
-import HealthDisplay from "./HealthDisplay";
+import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import FactionInfo from "../../types/FactionInfo";
+import EditableNameText from "../atoms/EditableNameText";
+import FactionStatSummary from "../molecules/FactionStatSummary";
+import HealthDisplay from "../molecules/HealthDisplay";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);

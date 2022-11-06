@@ -12,10 +12,9 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { GameContext } from "../contexts/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext";
-
-import EditableNameText from "./EditableNameText";
+import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import EditableNameText from "../atoms/EditableNameText";
 
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);

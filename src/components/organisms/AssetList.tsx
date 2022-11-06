@@ -5,11 +5,11 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 
-import { GameContext } from "../contexts/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext";
-import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
+import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import PurchasedAsset, { PurchasedAssetUtils } from "../../types/PurchasedAsset";
 
-import AssetDetails from "./molecules/AssetDetails";
+import AssetDetails from "./AssetDetails";
 
 export default function AssetList() {
   const { state } = useContext(GameContext);

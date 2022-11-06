@@ -4,11 +4,11 @@ import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
 import Typography from "@mui/material/Typography";
 
-import AssetList from "../components/AssetList";
-import FactionDetails from "../components/FactionDetails";
-import FactionList from "../components/FactionList";
-import FactionListActionToolbar from "../components/FactionListActionToolbar";
+import AssetList from "../components/organisms/AssetList";
 import AssetListActionsToolbar from "../components/organisms/AssetListActionsToolbar";
+import FactionDetails from "../components/organisms/FactionDetails";
+import FactionList from "../components/organisms/FactionList";
+import FactionListActionToolbar from "../components/organisms/FactionListActionToolbar";
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
 import FactionInfo from "../types/FactionInfo";

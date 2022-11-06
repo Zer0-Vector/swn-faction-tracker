@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import { OverridableStringUnion } from "@mui/types";
 
-import Nullable from "../types/Nullable";
+import Nullable from "../../types/Nullable";
 
 interface EditableNameTextProps {
   children: string;

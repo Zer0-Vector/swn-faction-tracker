@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 import Box from '@mui/material/Box';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
-import PageContainer from './components/PageContainer';
+import PageContainer from './templates/PageContainer';
 import { GameContext } from './contexts/GameContext';
 import { UiStateContext } from './contexts/UiStateContext';
 import { GameController, IGameController } from './controllers/GameController';

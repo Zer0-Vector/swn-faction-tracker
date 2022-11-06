@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 
-import { GameContext } from "../contexts/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext";
-
-import ListActionToolbar from "./ListActionToolbar";
-import AddFactionDialog from "./molecules/AddFactionDialog";
-import ConfirmDialog from "./molecules/ConfirmDialog";
+import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import AddFactionDialog from "../molecules/AddFactionDialog";
+import ConfirmDialog from "../molecules/ConfirmDialog";
+import ListActionToolbar from "../molecules/ListActionToolbar";
 
 export default function FactionListActionToolbar() {
   const { controller } = useContext(GameContext);

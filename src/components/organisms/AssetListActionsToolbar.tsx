@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react";
 
 import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
-import ListActionToolbar from "../ListActionToolbar";
 import AddAssetDialog from "../molecules/AddAssetDialog";
 import ConfirmDialog from "../molecules/ConfirmDialog";
+import ListActionToolbar from "../molecules/ListActionToolbar";
 
 export default function AssetListActionsToolbar() {
   const { controller } = useContext(GameContext);

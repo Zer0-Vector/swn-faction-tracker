@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
-import { Property } from "csstype";
 
-import { GameContext } from "../contexts/GameContext";
-
-import EditableStatText from "./EditableStatText";
-import StatText from "./StatText";
+import { GameContext } from "../../contexts/GameContext";
+import EditableStatText from "../atoms/EditableStatText";
+import StatText from "../atoms/StatText";
 
 
 interface FactionStatSummaryProps {

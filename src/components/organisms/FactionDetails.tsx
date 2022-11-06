@@ -5,12 +5,11 @@ import Paper from "@mui/material/Paper";
 import { styled, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { GameContext } from "../contexts/GameContext";
-import { UiStateContext } from "../contexts/UiStateContext";
-import { TAGS } from "../data/Tags";
-
-import EditableNameText from "./EditableNameText";
-import FactionStatSummary from "./FactionStatSummary";
+import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import { TAGS } from "../../data/Tags";
+import EditableNameText from "../atoms/EditableNameText";
+import FactionStatSummary from "../molecules/FactionStatSummary";
 
 export default function FactionDetails() {
   const { state, controller } = useContext(GameContext);
