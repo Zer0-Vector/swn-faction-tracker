@@ -13,7 +13,7 @@ export default function FactionDetails() {
   const theme = useTheme();
 
   const selection = uiState.selectedFaction || "";
-  const faction = state.factions.get(selection);
+  const faction = state.getFaction(selection);
   if (selection === "" || faction === undefined) {
     return (
       <Typography color="info.main">No Faction Selected</Typography>

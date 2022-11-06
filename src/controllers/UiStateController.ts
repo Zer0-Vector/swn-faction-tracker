@@ -1,5 +1,5 @@
-import { PurchasedAsset } from "../types/PurchasedAsset";
-import { UiState } from "../types/UiState";
+import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
+import UiState from "../types/UiState";
 
 export interface IUiStateController {
   selectFaction(name: string | null): void;
@@ -35,7 +35,7 @@ export class UiStateController implements IUiStateController {
   selectAsset(pa: PurchasedAsset | null): void {
     this.setState(prev => ({
       ...prev,
-      selectedAssetKey: pa === null ? null : PurchasedAsset.getKey(prev.selectedFaction as string, pa as PurchasedAsset)
+      selectedAssetKey: pa === null ? null : PurchasedAssetUtils.getKey(prev.selectedFaction as string, pa as PurchasedAsset)
     }));
   }
 

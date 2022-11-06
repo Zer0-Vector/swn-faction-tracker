@@ -17,10 +17,10 @@ interface AddAssetDialogProps {
   onAdd: (key: string) => void;
 }
 
-type AssetOptionType = {
-  name: string,
-  group: string,
-};
+interface AssetOptionType {
+  name: string;
+  group: string;
+}
 
 export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogProps) {
   const options = Object.entries(ASSETS)

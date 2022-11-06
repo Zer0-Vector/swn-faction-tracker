@@ -4,13 +4,13 @@ import Grid from "@mui/material/Grid";
 import { styled, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import ASSETS from "../data/Assets";
-import { PurchasedAsset } from "../types/PurchasedAsset";
+import PurchasedAsset from "../types/PurchasedAsset";
 import TextUtils from "../utils/TextUtils";
 import { AssetAttackResult } from "../types/AssetInfo";
 
-type AssetDetailsProps = {
-  asset: PurchasedAsset,
-};
+interface AssetDetailsProps {
+  asset: PurchasedAsset;
+}
 
 function AssetDetailItem({ label, content }: { label?: React.ReactNode, content: React.ReactNode}) {
   const Item = styled(Box)(({ theme }) => ({

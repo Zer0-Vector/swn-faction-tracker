@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";
-import { PurchasedAsset } from "../types/PurchasedAsset";
+import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AssetDetails from "./AssetDetails";
@@ -30,7 +30,7 @@ export default function AssetList() {
       {
         assets.length > 0 ? (
           assets.map((pa, index) => {
-            const expanded = PurchasedAsset.getKey(uiState.selectedFaction as string, pa) === uiState.selectedAssetKey;
+            const expanded = PurchasedAssetUtils.getKey(uiState.selectedFaction as string, pa) === uiState.selectedAssetKey;
             const name = pa.nickname ? `${pa.nickname} (${pa.name})` : pa.name;
             return (
               <Accordion key={index} expanded={expanded} onChange={handleSelectAsset(pa)}>

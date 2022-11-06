@@ -8,20 +8,20 @@ import { GameContext } from "../contexts/GameContext";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
-type AddFactionDialogProps = {
-  open: boolean,
-  onClose: () => void,
-  onCreate: (val: string) => void,
-};
+interface AddFactionDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onCreate: (val: string) => void;
+}
 
-type FormInfo = {
-  text: string,
-  valid: boolean,
-};
+interface FormInfo {
+  text: string;
+  valid: boolean;
+}
 
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
   const { state } = useContext(GameContext);
-  const { factions } = state;
+  const factions = state.getFactions();
 
   const [formState, setFormState] = useState<FormInfo>({text: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);

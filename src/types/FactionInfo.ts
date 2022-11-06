@@ -1,6 +1,6 @@
 import FactionStatsInfo from "./FactionStatsInfo";
 
-type StatInfo = { xpCost: number, hpValue: number };
+interface StatInfo { xpCost: number, hpValue: number }
 
 export const STAT_INFO: {[rating: number]:StatInfo} = {
   0: {

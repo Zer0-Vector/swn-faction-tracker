@@ -75,8 +75,8 @@ export default function FactionList(): JSX.Element {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {state.factionOrder.map((name: string, index: number) => {
-              const faction = state.factions.get(name) as FactionInfo;
+            {state.getFactions().map((faction: FactionInfo, index: number) => {
+              const { name } = faction;
               return (
                 <Draggable
                   key={name}

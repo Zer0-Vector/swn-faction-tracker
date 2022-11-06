@@ -6,14 +6,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
-type ConfirmDialogProps = {
-  title: string,
-  message: string,
-  buttonText: string,
-  open: boolean,
-  onClose: () => void,
-  onConfirm: () => void,
-};
+interface ConfirmDialogProps {
+  title: string;
+  message: string;
+  buttonText: string;
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}
 
 export default function ConfirmDialog({ title, message, buttonText, open, onClose, onConfirm }: ConfirmDialogProps) {
   const handleConfirm = (evt: React.MouseEvent<HTMLElement>) => {

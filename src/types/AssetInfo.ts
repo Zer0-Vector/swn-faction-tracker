@@ -12,11 +12,11 @@ export type AssetAttackResult =
   | { type: "REVEAL_STEALTHED" }
   | { type: "DAMAGE", damage: DiceDefinition };
 
-export type AssetAttackInfo = {
-  offense: FactionAttribute,
-  defense: FactionAttribute,
-  result: AssetAttackResult,
-};
+export interface AssetAttackInfo {
+  offense: FactionAttribute;
+  defense: FactionAttribute;
+  result: AssetAttackResult;
+}
 
 type AssetNote = "A" | "S" | "P";
 

@@ -5,13 +5,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { OverridableStringUnion } from "@mui/types";
 import { SxProps, Theme } from "@mui/material";
 
-type EditableNameTextProps = {
-  children: string,
-  onUpdate: (newValue: string) => void,
-  variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>,
-  sx?: SxProps<Theme>,
-  inputSx?: SxProps<Theme>,
-};
+interface EditableNameTextProps {
+  children: string;
+  onUpdate: (newValue: string) => void;
+  variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
+  sx?: SxProps<Theme>;
+  inputSx?: SxProps<Theme>;
+}
 
 export default function EditableNameText({ children, onUpdate, variant, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);

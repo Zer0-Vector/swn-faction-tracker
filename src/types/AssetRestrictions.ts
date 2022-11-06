@@ -4,16 +4,16 @@ export type AssetRestrictionType =
   | "ATTACKER";
 
 interface IAssetRestriction<T> {
-  type: AssetRestrictionType
-  details: T
+  type: AssetRestrictionType;
+  details: T;
 }
 
-type AttackerRestrictionDetails = {
-  only: AssetType
-};
+interface AttackerRestrictionDetails {
+  only: AssetType;
+}
 
 interface AttackerRestriction extends IAssetRestriction<AttackerRestrictionDetails> {
-  type: "ATTACKER"
+  type: "ATTACKER";
 }
 
 export type AssetRestrcition =

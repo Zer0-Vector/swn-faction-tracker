@@ -4,12 +4,12 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-type ListActionToolbarProps = {
-  removable: boolean,
-  onAddClick: React.MouseEventHandler<HTMLButtonElement>,
-  onRemoveClick: React.MouseEventHandler<HTMLButtonElement>,
-  children: React.ReactElement | React.ReactElement[],
-};
+interface ListActionToolbarProps {
+  removable: boolean;
+  onAddClick: React.MouseEventHandler<HTMLButtonElement>;
+  onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactElement | React.ReactElement[];
+}
 
 export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children }: ListActionToolbarProps) {
   return (

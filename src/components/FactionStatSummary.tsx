@@ -5,13 +5,13 @@ import StatText from "./StatText";
 import { Property } from "csstype";
 
 
-type FactionStatSummaryProps = {
-  factionName: string,
-  force: number,
-  cunning: number,
-  wealth: number,
-  fontSize?: Property.FontSize<number | string>,
-};
+interface FactionStatSummaryProps {
+  factionName: string;
+  force: number;
+  cunning: number;
+  wealth: number;
+  fontSize?: Property.FontSize<number | string>;
+}
 
 export default function FactionStatSummary({ factionName, force, cunning, wealth, fontSize }: FactionStatSummaryProps) {
   const { controller } = useContext(GameContext);

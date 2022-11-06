@@ -38,8 +38,8 @@ export type InstantEffect =
 interface InstantActionDetails {
   trigger: InstantTrigger[];
   test: {
-          offense: FactionAttribute,
-          defense: FactionAttribute,
+          offense: FactionAttribute;
+          defense: FactionAttribute;
         } | null;
   effect: InstantEffect[];
 }

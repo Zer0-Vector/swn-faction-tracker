@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import StatText from "./StatText";
 
-type HealthDisplayProps = {
-  onHpUpdate: (hp: string) => void,
-  current: number,
-  max: number,
-};
+interface HealthDisplayProps {
+  onHpUpdate: (hp: string) => void;
+  current: number;
+  max: number;
+}
 
 export default function HealthDisplay({ current, max, onHpUpdate }: HealthDisplayProps) {
   return (

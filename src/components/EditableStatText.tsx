@@ -3,12 +3,12 @@ import TextField from "@mui/material/TextField";
 import { SxProps, Theme } from "@mui/material";
 import StatText from "./StatText";
 
-type EditableNameTextProps = {
-  children: string | number,
-  updateValue: (newValue: string) => void,
-  sx?: SxProps<Theme>,
-  inputSx?: SxProps<Theme>,
-};
+interface EditableNameTextProps {
+  children: string | number;
+  updateValue: (newValue: string) => void;
+  sx?: SxProps<Theme>;
+  inputSx?: SxProps<Theme>;
+}
 
 export default function EditableStatText({ children, updateValue, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
