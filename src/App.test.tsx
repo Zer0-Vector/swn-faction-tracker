@@ -6,4 +6,5 @@ test('renders without crashing', () => {
   render(<App />);
   const appRoot = screen.getByTestId("app-root");
   expect(appRoot).toBeDefined();
+  expect(appRoot).not.toBeEmptyDOMElement();
 });
