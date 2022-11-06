@@ -25,21 +25,34 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint --ext .tsx,.ts ."
   },
   "eslintConfig": {
     "plugins": [
-      "react"
+      "react",
+      "@typescript-eslint"
     ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latest"
+    },
     "extends": [
       "eslint:recommended",
       "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
       "react-app",
       "react-app/jest"
     ],
     "rules": {
       "no-extra-semi": "error",
-      "semi": "error",
+      "semi": "off",
+      "@typescript-eslint/semi": [
+        "error"
+      ],
       "padded-blocks": [
         "error",
         {
@@ -52,7 +65,8 @@
         "error",
         "never"
       ],
-      "no-empty-pattern": "off"
+      "no-empty-pattern": "off",
+      "no-unexpected-multiline": "error"
     }
   },
   "browserslist": {
@@ -69,6 +83,7 @@
   },
   "devDependencies": {
     "@types/react-beautiful-dnd": "^13.1.2",
+    "@typescript-eslint/parser": "^5.41.0",
     "react-test-renderer": "^18.2.0"
   }
 }
