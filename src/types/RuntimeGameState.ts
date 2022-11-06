@@ -177,7 +177,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   getLocations(): LocationInfo[] {
-    return Array.from(this.locations.values());
+    return this.locationsOrder.map(name => this.locations.get(name)) as LocationInfo[];
   }
 
   removeLocation(selectedLocation: string) {
@@ -186,6 +186,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
   addLocation(info: LocationInfo) {
     this.locations.set(info.name, info);
+    this.locationsOrder.push(info.name);
   }
 
   updateLocationName(curr: string, val: string) {
@@ -199,6 +200,12 @@ export default class RuntimeGameState implements IGameController, IGameState {
         break;
       }
     }
+
+    this.locationsOrder.forEach((loc, index) => {
+      if (loc === curr) {
+        this.locationsOrder[index] = val;
+      }
+    });
 
     for (const faction of this.factions.values()) {
       if (faction.homeworld === curr) {
@@ -223,19 +230,9 @@ export default class RuntimeGameState implements IGameController, IGameState {
     if (!destination) {
       return;
     }
-
-    const targets = Array.from(this.locations.values())
-        .filter(val => val.rank === source.index || val.rank === destination.index);
-    const t0 = targets[0];
-    const t1 = targets[1];
-    this.locations.set(t0.name, {
-      ...t0,
-      rank: t1.rank,
-    });
-    this.locations.set(t1.name, {
-      ...t1,
-      rank: t0.rank,
-    });
+    
+    const [removed] = this.locationsOrder.splice(source.index, 1);
+    this.locationsOrder.splice(destination.index, 0, removed);
   }
 
   getLocation(locationName: string): LocationInfo | undefined {

@@ -89,6 +89,7 @@ export class GameController implements IGameController {
     this.setState(state => ({
       ...state,
       locations: Array.from(this.runtimeState.locations.entries()),
+      locationsOrder: this.runtimeState.locationsOrder,
     }));
   }
 
