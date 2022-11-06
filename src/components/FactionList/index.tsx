@@ -107,7 +107,7 @@ export default function FactionList(): JSX.Element {
                           <DragHandleIcon />
                         </ItemColumn>
                         <ItemColumn sx={{ flexGrow: 1, display: "flex" }}>
-                          <EditableNameText updateValue={getEditNameHandler(name)} variant="body1">
+                          <EditableNameText onUpdate={getEditNameHandler(name)} variant="body1">
                             {name}
                           </EditableNameText>
                         </ItemColumn>
