@@ -1,22 +1,18 @@
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
-import { styled } from "@mui/material/styles";
 
-type StatTextProps = {
-  children: React.ReactNode,
-}
+type StatTextProps = TypographyProps;
 
-export default function StatText({ children }: StatTextProps) {
-  const Wrapper = styled('div')(({ theme }) => ({
-    ...theme.typography.body1,
-    fontSize: "2.5rem",
-    textAlign: "center",
-    padding: "0 0.5rem",
-    maxWidth: "3rem",
-  }));
-  
+export default function StatText(props: StatTextProps) {
   return (
-    <Wrapper>
-      {children?.toString()}
-    </Wrapper>
+    <>
+      <Typography
+        variant="body2"
+        {...props}
+        component="span"
+      >
+        {props.children}
+      </Typography>
+    </>
   );
 }
