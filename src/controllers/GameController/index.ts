@@ -61,11 +61,17 @@ export class GameController implements IGameController {
 
         const factionOrder: string[] = Array.from(state.factionOrder);
         factionOrder.push(name);
+
+        const assets = {
+          ...state.assets,
+          [name]: []
+        };
         
         return {
           ...state,
           factions,
-          factionOrder
+          factionOrder,
+          assets
         };
       });
     }
@@ -76,6 +82,7 @@ export class GameController implements IGameController {
     this.setState((state: GameState) => {
       const stateCopy = { ...state };
       delete stateCopy.factions[name];
+      delete stateCopy.assets[name];
       stateCopy.factionOrder = stateCopy.factionOrder.filter((fname: string) => fname !== name);
       return stateCopy;
     });
@@ -91,9 +98,12 @@ export class GameController implements IGameController {
       console.info(`Renaming faction '${currentName}' to '${newName}'`);
       const stateCopy = { ...state };
       const factionCopy = FactionInfo.copy(state.factions[currentName]);
+      const assetsCopy = [ ...state.assets[currentName] ];
       factionCopy.name = newName;
       delete stateCopy.factions[currentName];
+      delete stateCopy.assets[currentName];
       stateCopy.factions[newName] = factionCopy;
+      stateCopy.assets[newName] = assetsCopy;
       stateCopy.factionOrder = stateCopy.factionOrder.map(value => (value === currentName) ? newName : value);
       console.log("new state:", stateCopy);
       return stateCopy;
