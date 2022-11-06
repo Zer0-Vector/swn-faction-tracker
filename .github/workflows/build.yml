@@ -6,6 +6,7 @@ on:
     branches:
       - main
   workflow_dispatch:
+name: CI Build
 jobs:
   build:
     name: Build
