@@ -8,7 +8,6 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 import EditableNameText from "../EditableNameText";
 import HealthDisplay from "../HealthDisplay";
 import { UiStateContext } from "../../contexts/UiStateContext";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import FactionStatSummary from "../FactionStatSummary";
 
 export default function FactionList(): JSX.Element {
@@ -66,82 +65,80 @@ export default function FactionList(): JSX.Element {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
-          <ClickAwayListener onClickAway={handleClearSelection}>
-            <Stack
-              spacing={2}
-              sx={{
-                backgroundColor: snapshot.isDraggingOver ? "background.default" : "inherit",
-              }}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {state.factionOrder.map((name: string, index: number) => {
-                const faction = state.factions[name];
-                return (
-                  <Draggable
-                    key={name}
-                    draggableId={`draggable-${name.replaceAll(/\W/g, "-")}`}
-                    index={index}
-                  >
-                    {(itemProvided, itemSnapshot) => (
+          <Stack
+            spacing={2}
+            sx={{
+              backgroundColor: snapshot.isDraggingOver ? "background.default" : "inherit",
+            }}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {state.factionOrder.map((name: string, index: number) => {
+              const faction = state.factions[name];
+              return (
+                <Draggable
+                  key={name}
+                  draggableId={`draggable-${name.replaceAll(/\W/g, "-")}`}
+                  index={index}
+                >
+                  {(itemProvided, itemSnapshot) => (
+                    <Box
+                      ref={itemProvided.innerRef}
+                      {...itemProvided.draggableProps}
+                    >
                       <Box
-                        ref={itemProvided.innerRef}
-                        {...itemProvided.draggableProps}
+                        onClick={getSelectFactionHandler(name)}
+                        sx={{
+                          display: "flex",
+                          width: "100%",
+                          backgroundColor: name === uiState.selectedFaction ? theme.palette.primary.main : "inherit"
+                        }}
                       >
-                        <Box
-                          onClick={getSelectFactionHandler(name)}
+                        <ItemColumn 
                           sx={{
+                            maxWidth: "50px",
                             display: "flex",
-                            width: "100%",
-                            backgroundColor: name === uiState.selectedFaction ? theme.palette.primary.main : "inherit"
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
+                          {...itemProvided.dragHandleProps}
                         >
-                          <ItemColumn 
-                            sx={{
-                              maxWidth: "50px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                            {...itemProvided.dragHandleProps}
-                          >
-                            <DragHandleIcon />
-                          </ItemColumn>
-                          <ItemColumn sx={{ flexGrow: 1, display: "flex" }}>
-                            <EditableNameText updateValue={getEditNameHandler(name)} variant="h2" sx={{ fontSize: "2rem"}}>
-                              {name}
-                            </EditableNameText>
-                          </ItemColumn>
-                          <ItemColumn sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between"
-                          }}>
-                            <HealthDisplay
-                              current={faction.stats.hp}
-                              max={faction.stats.maxHp}
-                              onHpUpdate={getEditHpHandler(name)} 
+                          <DragHandleIcon />
+                        </ItemColumn>
+                        <ItemColumn sx={{ flexGrow: 1, display: "flex" }}>
+                          <EditableNameText updateValue={getEditNameHandler(name)} variant="body1" sx={{ fontSize: "2rem"}}>
+                            {name}
+                          </EditableNameText>
+                        </ItemColumn>
+                        <ItemColumn sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between"
+                        }}>
+                          <HealthDisplay
+                            current={faction.stats.hp}
+                            max={faction.stats.maxHp}
+                            onHpUpdate={getEditHpHandler(name)} 
+                          />
+                        </ItemColumn>
+                        <ItemColumn sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}>
+                          <FactionStatSummary
+                            {...faction.stats}
+                            factionName={name}
+                            fontSize="2rem"
                             />
-                          </ItemColumn>
-                          <ItemColumn sx={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}>
-                            <FactionStatSummary
-                              {...faction.stats}
-                              factionName={name}
-                              fontSize="2rem"
-                             />
-                          </ItemColumn>
-                        </Box>
+                        </ItemColumn>
                       </Box>
-                    )}
-                  </Draggable>
-                );
-              })}
-              {provided.placeholder}
-            </Stack>
-          </ClickAwayListener>
+                    </Box>
+                  )}
+                </Draggable>
+              );
+            })}
+            {provided.placeholder}
+          </Stack>
         )}
       </Droppable>
     </DragDropContext>
