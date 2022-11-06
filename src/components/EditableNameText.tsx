@@ -18,21 +18,33 @@ interface EditableNameTextProps {
   selectableOptions?: string[];
 }
 
+interface EditableState {
+  isEditing: boolean;
+  hasChanged: boolean;
+}
+
+const ALL_FALSE: EditableState = {
+  isEditing: false,
+  hasChanged: false,
+};
+
 export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions }: EditableNameTextProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [hasChanged, setHasChanged] = useState<boolean>(false);
+  const [state, setState] = useState<EditableState>(ALL_FALSE);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isEditing) {
-      console.debug(`selecting text field: ${textFieldRef.current} - ${isEditing}`);
+    if (state.isEditing) {
+      console.debug(`selecting text field: ${textFieldRef.current} - ${state.isEditing}`);
       textFieldRef.current?.select();
     }
-  }, [isEditing]);
+  }, [state.isEditing]);
 
   const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-    setIsEditing(true);
+    setState(prev => ({
+      ...prev,
+      isEditing: true,
+    }));
   };
 
   const clickHandler = (evt: React.MouseEvent<HTMLElement>) => {
@@ -41,38 +53,44 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
 
   const exitEditMode = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
-    if (isEditing && hasChanged) {
+    if (state.isEditing && state.hasChanged) {
       console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
       onUpdate(textFieldRef.current?.value as string);
-      setHasChanged(false);
     }
-    setIsEditing(false);
+    setState(ALL_FALSE);
   };
 
   const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
-    if (evt.key === 'Escape') {
-      setIsEditing(false);
-    } else if (evt.key === 'Enter') {
+    if (evt.key === 'Escape' || evt.key === 'Enter') {
       exitEditMode(evt);
     }
   };
 
   const textChanged = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (!hasChanged) {
-      setHasChanged(true);
+    if (!state.hasChanged) {
+      setState(prev => ({
+        ...prev,
+        hasChanged: true,
+      }));
     }
   };
 
   const dropdownChanged = (evt: React.SyntheticEvent, val: Nullable<string>) => {
-    if (isEditing) {
+    if (state.isEditing) {
       if (val !== null && val.trim().length > 0) {
         onUpdate(val);
       }
-      setIsEditing(false);
+      setState(ALL_FALSE);
     }
   };
 
-  if (isEditing) {
+  const handleCancel = () => {
+    if (state.isEditing) {
+      setState(ALL_FALSE);
+    }
+  };
+
+  if (state.isEditing) {
     if (selectableOptions) {
       return (
         <Autocomplete
@@ -88,6 +106,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               onKeyUp={handleKeyUp}
               onInput={textChanged}
               onClick={clickHandler}
+              onBlur={handleCancel}
               sx={inputSx}
             />
           }
@@ -100,6 +119,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           onKeyUp={handleKeyUp}
           onInput={textChanged}
           onClick={clickHandler}
+          onBlur={handleCancel}
           defaultValue={children}
           sx={inputSx}
         />
