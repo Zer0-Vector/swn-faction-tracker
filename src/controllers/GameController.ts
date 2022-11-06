@@ -1,8 +1,11 @@
 import React from "react";
+import LocationInfo from "../types/LocationInfo";
 import RuntimeGameState from "../types/RuntimeGameState";
 import StoredGameState from "../types/StoredGameState";
 
 export interface IGameController {
+  removeLocation(selectedLocation: string): void;
+  addLocation(info: LocationInfo): void;
   removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void;
   addAsset(selectedFaction: string, assetName: string): void;
   updateTag(name: string, tag: string): void;
@@ -76,6 +79,13 @@ export class GameController implements IGameController {
         assets: Array.from(this.runtimeState.assets.entries()),
       };
     });
+  }
+
+  #setLocations() {
+    this.setState(state => ({
+      ...state,
+      locations: Array.from(this.runtimeState.locations.entries()),
+    }));
   }
 
   reorderFactions(sourceIndex: number, destinationIndex: number): void {
@@ -173,6 +183,18 @@ export class GameController implements IGameController {
     console.debug(`GameController.removeAsset(${selectedFaction}, ${selectedAsset}, ${assetId})`);
     this.runtimeState.removeAsset(selectedFaction, selectedAsset, assetId);
     this.#setAssets();
+  }
+
+  addLocation(info: LocationInfo): void {
+    console.debug("Adding location:", info);
+    this.runtimeState.addLocation(info);
+    this.#setLocations();
+  }
+
+  removeLocation(selectedLocation: string): void {
+    console.debug("Removing location:", selectedLocation);
+    this.runtimeState.removeLocation(selectedLocation);
+    this.#setLocations();
   }
 
 }

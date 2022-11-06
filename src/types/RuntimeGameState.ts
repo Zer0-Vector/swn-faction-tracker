@@ -1,9 +1,9 @@
-import { IGameController } from "../controllers/GameController";
-import ASSETS from "../data/Assets";
 import FactionInfo from "./FactionInfo";
 import LocationInfo from "./LocationInfo";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
+import ASSETS from "../data/Assets";
+import { IGameController } from "../controllers/GameController";
 
 export interface IGameState {
   getFactions(): FactionInfo[];
@@ -13,7 +13,7 @@ export interface IGameState {
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
-  
+    
   factions: Map<string, FactionInfo>;
   factionOrder: string[];
   assets: Map<string, PurchasedAsset>;
@@ -172,6 +172,14 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
   getLocations(): LocationInfo[] {
     return Array.from(this.locations.values());
+  }
+
+  removeLocation(selectedLocation: string) {
+    this.locations.delete(selectedLocation);
+  }
+
+  addLocation(info: LocationInfo) {
+    this.locations.set(info.name, info);
   }
 
 }
