@@ -18,7 +18,7 @@ type AddFactionDialogProps = {
 type FormInfo = {
   text: string,
   valid: boolean,
-}
+};
 
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
   const { state } = useContext(GameContext);

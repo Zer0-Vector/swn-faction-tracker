@@ -8,10 +8,10 @@ import { SxProps, Theme } from "@mui/material";
 type EditableNameTextProps = {
   children: string,
   updateValue: (newValue: string) => void,
-  variant: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>,
+  variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>,
   sx?: SxProps<Theme>,
   inputSx?: SxProps<Theme>,
-}
+};
 
 export default function EditableNameText({ children, updateValue, variant, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);

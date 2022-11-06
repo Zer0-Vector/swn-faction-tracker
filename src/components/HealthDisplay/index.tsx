@@ -9,7 +9,7 @@ type HealthDisplayProps = {
   onHpUpdate: (hp: string) => void,
   current: number,
   max: number,
-}
+};
 
 export default function HealthDisplay({ current, max, onHpUpdate }: HealthDisplayProps) {
   return (

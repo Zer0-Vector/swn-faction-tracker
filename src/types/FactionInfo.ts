@@ -52,7 +52,7 @@ const STAT_INFO: {[rating: number]:StatInfo} = {
 export default class FactionInfo {
   
   static copy(currentFaction: FactionInfo) {
-    let result = new FactionInfo(currentFaction.name);
+    const result = new FactionInfo(currentFaction.name);
     result.stats = { ...currentFaction.stats };
     return result;
   }

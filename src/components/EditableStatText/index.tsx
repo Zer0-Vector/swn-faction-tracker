@@ -9,7 +9,7 @@ type EditableNameTextProps = {
   updateValue: (newValue: string) => void,
   sx?: SxProps<Theme>,
   inputSx?: SxProps<Theme>,
-}
+};
 
 export default function EditableStatText({ children, updateValue, sx, inputSx }: EditableNameTextProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);

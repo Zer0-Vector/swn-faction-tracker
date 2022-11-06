@@ -5,7 +5,7 @@ export interface IUiStateController {
   selectAsset(name: string | null) : void;
 }
 
-type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>
+type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>;
 
 export class UiStateController implements IUiStateController {
 
