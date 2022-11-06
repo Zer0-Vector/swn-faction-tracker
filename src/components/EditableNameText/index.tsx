@@ -15,8 +15,9 @@ export default function EditableNameText({ children, updateValue, divStyle }: Ed
   const actualDivStyle: React.CSSProperties = {
     ...divStyle,
     textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "clip",
     width: "100%",
-    height: "45px",
   }
 
   useEffect(() => {
