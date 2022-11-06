@@ -57,7 +57,7 @@
         "error"
       ],
       "padded-blocks": [
-        "error",
+        "warn",
         {
           "blocks": "never",
           "classes": "always",
@@ -110,9 +110,8 @@
           ]
         }
       ],
-      "simple-import-sort/exports": [
-        "warn"
-      ]
+      "simple-import-sort/exports": "warn",
+      "prefer-const": "warn"
     }
   },
   "browserslist": {
