@@ -1,6 +1,8 @@
 import AssetInfo from "../types/AssetInfo";
 
-interface AssetMap {[key: string]: AssetInfo}
+interface AssetMap {
+  [key: string]: AssetInfo;
+}
 
 const ASSETS: AssetMap = {
   "Base of Influence": {
