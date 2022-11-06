@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import { GameContext } from "../contexts/GameContext";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import FormInfo from "../types/FormInfo";
 
 interface AddFactionDialogProps {
   open: boolean;
@@ -14,31 +15,26 @@ interface AddFactionDialogProps {
   onCreate: (val: string) => void;
 }
 
-interface FormInfo {
-  text: string;
-  valid: boolean;
-}
-
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
   const { state } = useContext(GameContext);
-  const factions = state.getFactions();
-
-  const [formState, setFormState] = useState<FormInfo>({text: "", valid: false});
+  const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const factions = state.getFactions();
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
     const nameExists = Object.keys(factions).includes(newText);
     const isNotBlank = newText.trim().length > 0;
     const newState = {
-      text: newText,
+      value: newText,
       valid: isNotBlank && !nameExists,
     };
     setFormState(newState);
   };
   
   const handleClose = () => {
-    setFormState({ text: "", valid: false });
+    setFormState({ value: "", valid: false });
     inputRef.current?.focus();
     onClose();
   };
@@ -50,7 +46,7 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
 
   const handleCreate = () => {
     if (formState.valid) {
-      onCreate(formState.text);
+      onCreate(formState.value);
     }
     handleClose();
   };
@@ -59,7 +55,7 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Add Faction</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={{ paddingBottom: "1rem" }}>
+        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })}>
           Enter a unique name for the new faction.
         </DialogContentText>
         <TextField
@@ -70,9 +66,9 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
           type="text"
           placeholder="Enter Faction Name"
           autoFocus={true}
-          value={formState.text}
+          value={formState.value}
           onInput={handleInputChange}
-          error={!formState.valid && formState.text !== ""}
+          error={!formState.valid && formState.value !== ""}
           fullWidth={true}
           autoComplete="off"
         />
