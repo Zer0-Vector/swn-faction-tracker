@@ -13,14 +13,12 @@ export default function FactionDetails() {
   const theme = useTheme();
 
   const selection = uiState.selectedFaction || "";
-  if (selection === "") {
-    console.warn("No faction for FactionDetails");
+  const faction = state.factions.get(selection);
+  if (selection === "" || faction === undefined) {
     return (
       <Typography color="info.main">No Faction Selected</Typography>
     );
   }
-
-  const faction = state.factions[selection];
 
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
@@ -58,25 +56,25 @@ export default function FactionDetails() {
       <Grid item xs={3}>
         <ItemHeader>Homeworld:</ItemHeader>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={3}>
         <Item><EditableNameText onUpdate={updateHomeworld}>{homeworldText}</EditableNameText></Item>
       </Grid>
       <Grid item xs={3}>
         <ItemHeader>Tag:</ItemHeader>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={3}>
         <Item><EditableNameText onUpdate={updateTag}>{tagText}</EditableNameText></Item>
       </Grid>
       <Grid item xs={3}>
         <ItemHeader>HP:</ItemHeader>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={3}>
         <Item>{faction.stats.hp}/{faction.stats.maxHp}</Item>
       </Grid>
       <Grid item xs={3}>
         <ItemHeader>F/C/W:</ItemHeader>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={3}>
         <Item>{faction.stats.force}/{faction.stats.cunning}/{faction.stats.wealth}</Item>
       </Grid>
     </Grid>
