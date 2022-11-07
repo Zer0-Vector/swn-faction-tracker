@@ -23,6 +23,7 @@ type AssetNote = "A" | "S" | "P";
 
 export default interface AssetInfo {
   // name: string;
+  description: string;
   attribute: AssetAttribute;
   level: number;
   maxHp: Nullable<number>;
