@@ -85,6 +85,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx }:
         autoComplete="off"
         error={validate(textFieldRef.current?.value)}
         sx={inputSx}
+        size="small"
       />
     );
   } else {
@@ -93,7 +94,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx }:
         onClick={handleClick}
         onDoubleClick={enterEditMode}
         title="Double-click to edit"
-        sx={{...sx, margin: "auto"}}
+        sx={sx}
       >
         {children}
       </StatText>
