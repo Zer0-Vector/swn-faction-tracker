@@ -9,6 +9,7 @@ import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { TAGS } from "../../data/Tags";
 import EditableNameText from "../atoms/EditableNameText";
+import FactionHpSummary from "../molecules/FactionHpSummary";
 import FactionStatSummary from "../molecules/FactionStatSummary";
 
 export default function FactionDetails() {
@@ -73,7 +74,7 @@ export default function FactionDetails() {
         <ItemHeader>HP:</ItemHeader>
       </Grid>
       <Grid item xs={3}>
-        <Item>{faction.stats.hp}/{faction.stats.maxHp}</Item>
+        <Item><FactionHpSummary factionName={faction.name} /></Item>
       </Grid>
       <Grid item xs={3}>
         <ItemHeader>F/C/W:</ItemHeader>
