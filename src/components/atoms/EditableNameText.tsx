@@ -27,7 +27,6 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
 
   useEffect(() => {
     if (state.editing) {
-      console.debug(`selecting text field: ${textFieldRef.current} - ${state.editing}`);
       textFieldRef.current?.select();
     }
   }, [state.editing]);
