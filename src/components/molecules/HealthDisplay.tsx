@@ -1,42 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 
-import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 
-import EditableStatText from "../atoms/EditableStatText";
-import StatText from "../atoms/StatText";
+import { GameContext } from "../../contexts/GameContext";
+
+import FactionHpSummary from "./FactionHpSummary";
 
 interface HealthDisplayProps {
-  onHpUpdate: (hp: string) => void;
-  current: number;
-  max: number;
+  factionName: string;
 }
 
-export default function HealthDisplay({ current, max, onHpUpdate }: HealthDisplayProps) {
+export default function HealthDisplay({ factionName }: HealthDisplayProps) {
+  const { state } = useContext(GameContext);
+  const faction = state.getFaction(factionName);
+  if (!faction) {
+    return (<>No Faction Selected</>);
+  }
+
+  const { hp, maxHp } = faction.stats;
+
   return (
     <>
       <Tooltip
-        title={
-          <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}>
-            <EditableStatText updateValue={onHpUpdate} sx={{ fontSize: "3rem" }} inputSx={{ maxWidth: "4.5em"}}>
-              {current.toString()}
-            </EditableStatText>
-            <StatText sx={{ fontSize: "3rem" }}>/</StatText>
-            <StatText sx={{ fontSize: "3rem" }}>
-              {max}
-            </StatText>
-          </Box>
-        }
+        title={ <FactionHpSummary factionName={factionName} /> }
         arrow={true}
       >
         <LinearProgress
           color="error"
-          value={100 * current / max}
+          value={100 * hp / maxHp}
           variant="determinate"
           sx={{ 
             width: "5rem",

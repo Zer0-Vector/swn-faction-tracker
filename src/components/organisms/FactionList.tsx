@@ -47,16 +47,6 @@ export default function FactionList(): JSX.Element {
     }
   );
 
-  const getEditHpHandler = (name: string) => (
-    (val: string) => {
-      try {
-        controller.updateHp(name, parseInt(val));
-      } catch (e) {
-        console.warn(`Could not parse hp value: '${val}'`);
-      }
-    }
-  );
-
   const handleClearSelection = () => {
     console.log("Clearing faction (and asset) selection");
     uiController.deselectFaction();
@@ -132,11 +122,7 @@ export default function FactionList(): JSX.Element {
                           alignItems: "center",
                           justifyContent: "space-between"
                         }}>
-                          <HealthDisplay
-                            current={faction.stats.hp}
-                            max={faction.stats.maxHp}
-                            onHpUpdate={getEditHpHandler(name)} 
-                          />
+                          <HealthDisplay factionName={faction.name} />
                         </ItemColumn>
                         <ItemColumn sx={{
                           display: "flex",
