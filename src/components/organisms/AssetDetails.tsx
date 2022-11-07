@@ -62,7 +62,6 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
   const counterText = counter ? counter : "None";
   const typeText = TextUtils.titleCase(type.replaceAll(/_/g, " "));
   const upkeepText = upkeep === 0 ? "None" : `${upkeep} FacCred`;
-  const permissionText = note.includes("P") ? "Government Permission Required" : "";
   // const hasAction = note.includes("A");
   // const hasSpecial = note.includes("S");
 
@@ -78,8 +77,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
       <AssetDetailItem label="Upkeep" content={upkeepText} />
       <AssetDetailItem label="Attack" content={attackText} />
       <AssetDetailItem label="Counterattack" content={counterText} />
-      <AssetDetailItem content={permissionText} />
-      <AssetDetailItem label="Note" content={note.filter(val => val !== "P").join(", ")} />
+      <AssetDetailItem label="Note" content={note.join(", ")} />
     </Grid>
   );
 }
