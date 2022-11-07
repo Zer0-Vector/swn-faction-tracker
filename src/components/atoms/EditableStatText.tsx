@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { SxProps, Theme } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
+import EditableState from "../../types/EditableState";
+
 import StatText from "./StatText";
 
 interface EditableNameTextProps {
@@ -10,34 +12,40 @@ interface EditableNameTextProps {
   updateValue: (newValue: string) => void;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
+  id?: string;
 }
 
-export default function EditableStatText({ children, updateValue, sx, inputSx }: EditableNameTextProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [hasChanged, setHasChanged] = useState<boolean>(false);
+export default function EditableStatText({ children, updateValue, sx, inputSx, id }: EditableNameTextProps) {
+  const defaultState: EditableState = {
+    editing: false,
+    hasChanged: false,
+    valid: true
+  };
+  const [state, setState] = useState<EditableState>(defaultState);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isEditing) {
+    if (state.editing) {
       textFieldRef.current?.select();
     }
-  }, [isEditing]);
+  }, [state.editing]);
   
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
-    if (!updateValue) { 
-      return;
-    }
     evt.preventDefault();
-    if (isEditing && hasChanged) {
-      updateValue(textFieldRef.current?.value || children?.toString() || "");
-      setHasChanged(false);
+    if (state.editing && state.valid) {
+      if (state.hasChanged) {
+        updateValue(textFieldRef.current?.value || children?.toString() || "");
+      }
+      setState(defaultState);
     }
-    setIsEditing(false);
   };
 
   const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-    setIsEditing(true);
+    setState(prev => ({
+      ...prev,
+      editing: true,
+    }));
   };
 
   const handleClick = (evt: React.MouseEvent<HTMLElement>) => {
@@ -45,34 +53,44 @@ export default function EditableStatText({ children, updateValue, sx, inputSx }:
   };
 
   const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
-    if (isEditing) {
+    if (state.editing) {
       if (evt.key === 'Escape') {
-        setIsEditing(false);
+        setState(prev => ({
+          ...prev,
+          editing: false,
+        }));
       } else if (evt.key === 'Enter') {
         exitEditMode(evt);
       }
     }
   };
 
-  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setHasChanged(true);
-    textFieldRef.current?.focus();
+  const handleInputChange = (_evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (!textFieldRef.current) {
+      return;
+    }
+    const valid = validate(textFieldRef.current.value);
+    setState(prev => ({
+      ...prev,
+      hasChanged: true,
+      valid: valid,
+    }));
+    textFieldRef.current.focus();
   };
 
-  const validate = (val: string | undefined): boolean => {
-    if (!val) {
-      return false;
-    }
-    
+  const validate = (val: string): boolean => {
+    let result = true;
     try {
       const n = parseInt(val);
-      return !isNaN(n) && n >= 0;
+      result = !isNaN(n) && n >= 0;
     } catch {
-      return false;
+      result = false;
     }
+    console.debug(`Validated text: '${val}', valid=${result}`);
+    return result;
   };
     
-  if (isEditing) {
+  if (state.editing) {
     return (
       <TextField
         defaultValue={children?.toString()}
@@ -83,9 +101,11 @@ export default function EditableStatText({ children, updateValue, sx, inputSx }:
         onClick={handleClick}
         onKeyUp={handleKeyUp}
         autoComplete="off"
-        error={validate(textFieldRef.current?.value)}
+        error={!state.valid}
         sx={inputSx}
         size="small"
+        id={id}
+        data-testid="editable-stat-text-textfield"
       />
     );
   } else {
