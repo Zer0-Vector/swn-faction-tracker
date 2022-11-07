@@ -20,32 +20,28 @@ interface EditableNameTextProps {
 }
 
 interface EditableState {
-  isEditing: boolean;
+  editing: boolean;
   hasChanged: boolean;
+  valid: boolean;
 }
 
-const ALL_FALSE: EditableState = {
-  isEditing: false,
-  hasChanged: false,
-};
-
 export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate }: EditableNameTextProps) {
-  const [state, setState] = useState<EditableState>(ALL_FALSE);
-  const [isValid, setIsValid] = useState<boolean>(state.hasChanged || validate === undefined);
+  const defaultState: EditableState = { editing: false, hasChanged: false, valid: validate === undefined };
+  const [state, setState] = useState<EditableState>(defaultState);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (state.isEditing) {
-      console.debug(`selecting text field: ${textFieldRef.current} - ${state.isEditing}`);
+    if (state.editing) {
+      console.debug(`selecting text field: ${textFieldRef.current} - ${state.editing}`);
       textFieldRef.current?.select();
     }
-  }, [state.isEditing]);
+  }, [state.editing]);
 
   const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     setState(prev => ({
       ...prev,
-      isEditing: true,
+      editing: true,
     }));
   };
 
@@ -55,57 +51,70 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
 
   const exitEditMode = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
-    if (state.isEditing && state.hasChanged) {
-      console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
-      onUpdate(textFieldRef.current?.value as string);
+    if (state.editing && state.valid) {
+      if (state.hasChanged) {
+        console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
+        onUpdate(textFieldRef.current?.value as string);
+      }
+      setState(defaultState);
     }
-    setState(ALL_FALSE);
   };
 
   const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
-    if (evt.key === 'Escape' || evt.key === 'Enter') {
+    if (evt.key === 'Escape') {
+      handleCancel();
+    } else if (evt.key === 'Enter') {
       exitEditMode(evt);
     }
   };
 
   const textChanged = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (state.isEditing) {
+    if (state.editing) {
+      const text = textFieldRef.current?.value as string;
+      console.assert(text !== undefined, "textFieldRef.current is undefined!!!");
+
+      
+      let isValid = false;
+      if (validate) {
+        isValid = text.trim().length > 0 && validate(text);
+      } else if (selectableOptions) {
+        isValid = selectableOptions.includes(text);
+      } else {
+        isValid = text.trim().length > 0;
+      }
+      console.debug("validating...", isValid);
+
       if (!state.hasChanged) {
         setState(prev => ({
           ...prev,
           hasChanged: true,
+          valid: isValid,
         }));
-      }
-
-      const text = textFieldRef.current?.value as string;
-      console.assert(text !== undefined, "textFieldRef.current is undefined!!!");
-
-      if (validate) {
-        setIsValid(text.trim().length > 0 && validate(text));
-      } else if (selectableOptions) {
-        setIsValid(selectableOptions.includes(text));
       } else {
-        setIsValid(text.trim().length > 0);
+        setState(prev => ({
+          ...prev,
+          valid: isValid,
+        }));
       }
     }
   };
 
   const dropdownChanged = (evt: React.SyntheticEvent, val: Nullable<string>) => {
-    if (state.isEditing) {
+    if (state.editing) {
       if (val !== null && val.trim().length > 0) {
         onUpdate(val);
       }
-      setState(ALL_FALSE);
+      setState(defaultState);
     }
   };
 
   const handleCancel = () => {
-    if (state.isEditing) {
-      setState(ALL_FALSE);
+    if (state.editing) {
+      setState(defaultState);
     }
   };
 
-  if (state.isEditing) {
+  if (state.editing) {
     if (selectableOptions) {
       return (
         <Autocomplete
@@ -122,7 +131,8 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               onInput={textChanged}
               onClick={clickHandler}
               onBlur={handleCancel}
-              error={isValid}
+              error={!state.valid}
+              autoComplete="off"
               sx={inputSx}
             />
           }
@@ -137,7 +147,8 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           onClick={clickHandler}
           onBlur={handleCancel}
           defaultValue={children}
-          error={isValid}
+          error={!state.valid}
+          autoComplete="off"
           sx={inputSx}
         />
       ); 
