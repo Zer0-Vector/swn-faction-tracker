@@ -1,8 +1,9 @@
 import React from "react";
 
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { styled, useTheme } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import Grid, { GridSize } from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import { styled, SxProps, Theme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import ASSETS from "../../data/Assets";
@@ -14,40 +15,45 @@ interface AssetDetailsProps {
   asset: PurchasedAsset;
 }
 
-function AssetDetailItem({ label, content }: { label?: React.ReactNode, content: React.ReactNode}) {
-  const Item = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(0.25),
-  }));
-  
-  const ItemHeader = styled(Item)(({ theme }) => ({
-    fontWeight: "bold",
-    textAlign: "right",
-    overflow: "clip",
-    textOverflow: "ellipsis",
-  }));
+const Item = styled(Paper)(({ theme }) => ({
+  textAlign: "center",
+  padding: theme.spacing(1),
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
 
-  if (!label) {
-    return (
-      <Grid item xs={6}>
-        <Item textAlign="center">{content}</Item>
+interface LabeledItemProps {
+  label: string;
+  children: React.ReactNode;
+  sx?: SxProps<Theme>;
+  xsLabel?: GridSize;
+  xsContent?: GridSize;
+}
+
+function LabeledItem({ label, children, sx, xsLabel, xsContent }: LabeledItemProps) {
+  return (
+    <Item sx={sx}>
+      <Grid container columnSpacing={2}>
+        <Grid item xs={xsLabel || "auto"} sx={{
+          fontWeight: "bold",
+          textAlign: "right",
+          overflow: "clip",
+          textOverflow: "ellipsis",
+        }}>
+          {label}
+        </Grid>
+        <Grid item xs={xsContent || "auto"} sx={{
+          textAlign: "left",
+        }}>
+          {children}
+        </Grid>
       </Grid>
-    );
-  } else {
-    return (
-      <>
-        <Grid item xs={2}>
-          <ItemHeader>{label}</ItemHeader>
-        </Grid>
-        <Grid item xs={4}>
-         <Item>{content}</Item>
-        </Grid>
-      </>
-    );
-  }
+    </Item>
+  );
 }
 
 export default function AssetDetails({ asset }: AssetDetailsProps) {
-  const theme = useTheme();
   const assetInfo = ASSETS[asset.name];
   if (!assetInfo) {
     console.error(`Could not find asset named '${asset.name}'`);
@@ -55,29 +61,30 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
   }
 
   const { hp } = asset;
-  const { attack, counter, attribute, level, maxHp, type, upkeep, note } = assetInfo;
-  const attributeText = (<em>{`${TextUtils.titleCase(attribute)} ${level}`}</em>);
+  const { description, attack, counter, attribute, level, maxHp, type, upkeep, note } = assetInfo;
+  const attributeText = `${attribute} ${level}`;
   const dmgText = (result: AssetAttackResult) => result.type === "DAMAGE" ? result.damage : "Special";
   const attackText = attack ? `${TextUtils.titleCase(attack.offense)} vs. ${TextUtils.titleCase(attack.defense)}, ${dmgText(attack.result)}` : "None";
   const counterText = counter ? counter : "None";
   const typeText = TextUtils.titleCase(type.replaceAll(/_/g, " "));
   const upkeepText = upkeep === 0 ? "None" : `${upkeep} FacCred`;
-  // const hasAction = note.includes("A");
-  // const hasSpecial = note.includes("S");
 
   return (
-    <Grid container spacing={1} sx={{
-      backgroundColor: "background.paper",
-      margin: theme.spacing(1),
-      width: "97%"
+    <Card sx={{
+      backgroundColor: "background.paper2",
+      display: "grid",
+      gridTemplateColumns: "3fr 2fr",
+      gap: 1.5,
+      padding: 2,
     }}>
-      <AssetDetailItem content={attributeText} />
-      <AssetDetailItem label="Type" content={typeText} />
-      <AssetDetailItem label="HP" content={`${hp}/${maxHp}`} />
-      <AssetDetailItem label="Upkeep" content={upkeepText} />
-      <AssetDetailItem label="Attack" content={attackText} />
-      <AssetDetailItem label="Counterattack" content={counterText} />
-      <AssetDetailItem label="Note" content={note.join(", ")} />
-    </Grid>
+      <Item sx={{ textAlign: "justify", gridRow: "1 / 5", alignItems: "flex-start" }}>{description}</Item>
+      <Item sx={{ textTransform: "uppercase" }}>{attributeText}</Item>
+      {/* TODO use HealthDisplay or refactor it */}
+      <Item>{hp}/{maxHp}</Item>
+      <Item>{typeText}</Item>
+      <LabeledItem label="Upkeep" xsLabel={6}>{upkeepText}</LabeledItem>
+      <LabeledItem label="Attack" xsLabel={attackText === "None" ? 6 : "auto"}>{attackText}</LabeledItem>
+      <LabeledItem label="Counter" xsLabel={6}>{counterText}</LabeledItem>
+    </Card>
   );
 }
