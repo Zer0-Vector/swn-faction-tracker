@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import { OverridableStringUnion } from "@mui/types";
 
+import EditableState from "../../types/EditableState";
 import Nullable from "../../types/Nullable";
 
 interface EditableNameTextProps {
@@ -17,12 +18,6 @@ interface EditableNameTextProps {
   inputSx?: SxProps<Theme>;
   selectableOptions?: string[];
   validate?: (value: string)=>boolean;
-}
-
-interface EditableState {
-  editing: boolean;
-  hasChanged: boolean;
-  valid: boolean;
 }
 
 export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate }: EditableNameTextProps) {
