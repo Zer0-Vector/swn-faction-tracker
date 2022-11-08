@@ -1,4 +1,4 @@
-@startuml Faction Turn States
+@startuml Faction Turn Attacking States
 
 state "TurnMode" as TM
 state "FactionSelected" as FS
