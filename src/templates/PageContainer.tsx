@@ -67,12 +67,10 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
       </AppBar>
       <Toolbar id="appbar-shim" />
       <Container sx={theme => ({
-        padding: theme.spacing(2),
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        gap: "0.25rem",
-        overflow: "clip",
+        py: theme.spacing(2),
+        width: "100vw",
+        display: "grid",
+        gridTemplateColumns: "40% 60%",
       })}>
         {children}
       </Container>

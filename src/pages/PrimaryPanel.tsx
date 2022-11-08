@@ -23,10 +23,7 @@ export default function PrimaryPanel() {
 
   return (
     <>
-      <Box
-        sx={{ 
-        flexGrow: 1,
-      }}>
+      <Box sx={{ gridColumnStart: "1", gridColumnEnd: faction ? "2" : "3" }}>
         <FactionListActionToolbar />
         <FactionList />
       </Box>
@@ -37,8 +34,7 @@ export default function PrimaryPanel() {
         onExited={handleExitTransitionEnd}
       >
         <Box sx={{
-          width: "60%",
-          padding: "1rem",
+          padding: 1,
         }}>
           <Typography variant="h2">{faction?.name}</Typography>
           <Box
