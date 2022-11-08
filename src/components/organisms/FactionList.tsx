@@ -97,8 +97,8 @@ export default function FactionList(): JSX.Element {
                         onClick={getSelectFactionHandler(name)}
                         sx={{
                           display: "flex",
-                          width: "100%",
-                          backgroundColor: itemSnapshot.isDragging ? "action.dragging" : (name === uiState.selectedFaction ? "action.selected" : "inherit")
+                          backgroundColor: itemSnapshot.isDragging ? "action.dragging" : (name === uiState.selectedFaction ? "action.selected" : "inherit"),
+                          overflow: "clip",
                         }}
                       >
                         <ItemColumn 
@@ -112,27 +112,31 @@ export default function FactionList(): JSX.Element {
                         >
                           <DragHandleIcon />
                         </ItemColumn>
-                        <ItemColumn sx={{ flexGrow: 1, display: "flex" }}>
-                          <EditableNameText onUpdate={getEditNameHandler(name)} variant="body1">
+                        <ItemColumn sx={{ display: "flex", textOverflow: "ellipsis", overflow: "hidden" }}>
+                          <EditableNameText onUpdate={getEditNameHandler(name)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {name}
                           </EditableNameText>
                         </ItemColumn>
-                        <ItemColumn sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between"
-                        }}>
-                          <HealthDisplay factionName={faction.name} />
-                        </ItemColumn>
-                        <ItemColumn sx={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}>
-                          <FactionStatSummary
-                            {...faction.stats}
-                            factionName={name}
-                          />
-                        </ItemColumn>
+                        {uiState.selectedFaction === faction.name ? null : (
+                          <>
+                            <ItemColumn sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between"
+                            }}>
+                              <HealthDisplay factionName={faction.name} />
+                            </ItemColumn>
+                            <ItemColumn sx={{
+                              display: "flex",
+                              alignItems: "center",
+                            }}>
+                              <FactionStatSummary
+                                {...faction.stats}
+                                factionName={name}
+                              />
+                            </ItemColumn>
+                          </>
+                        )}
                       </Box>
                     </Box>
                   )}
