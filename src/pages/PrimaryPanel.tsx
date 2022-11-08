@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import AssetList from "../components/organisms/AssetList";
 import AssetListActionsToolbar from "../components/organisms/AssetListActionsToolbar";
 import FactionDetails from "../components/organisms/FactionDetails";
-import FactionList from "../components/organisms/FactionList";
+import FactionList from "../components/organisms/FactionList/FactionList";
 import FactionListActionToolbar from "../components/organisms/FactionListActionToolbar";
 import { GameContext } from "../contexts/GameContext";
 import { UiStateContext } from "../contexts/UiStateContext";

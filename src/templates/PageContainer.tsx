@@ -43,8 +43,8 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
       <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Typography variant="subtitle1" sx={{ mr: 3 }}>SWN Faction Tracker</Typography>
-            <Tabs value={location.pathname}>
+            <Typography variant="h1" sx={{ mr: 3, color: "primary.contrastText" }}>SWN Faction Tracker</Typography>
+            <Tabs value={location.pathname} component="nav">
               <Tab
                 value="/"
                 label="Factions"
