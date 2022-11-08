@@ -84,7 +84,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
           {faction.name}
         </EditableNameText>
       </ItemColumn>
-      <Slide in={!isSelected} container={boxRef.current} direction="up">
+      <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={{
           display: "grid",
           gridTemplateColumns: "1fr 75px"
