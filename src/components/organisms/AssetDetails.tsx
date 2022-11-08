@@ -61,7 +61,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
   }
 
   const { hp } = asset;
-  const { description, attack, counter, attribute, level, maxHp, type, upkeep, note } = assetInfo;
+  const { description, attack, counter, attribute, level, maxHp, type, upkeep, /*note*/ } = assetInfo;
   const attributeText = `${attribute} ${level}`;
   const dmgText = (result: AssetAttackResult) => result.type === "DAMAGE" ? result.damage : "Special";
   const attackText = attack ? `${TextUtils.titleCase(attack.offense)} vs. ${TextUtils.titleCase(attack.defense)}, ${dmgText(attack.result)}` : "None";
