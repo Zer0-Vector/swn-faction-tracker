@@ -2,17 +2,23 @@ import React, { useContext } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import FactionInfo from "../../../types/FactionInfo";
+import AssetList from "../AssetList";
+import AssetListActionsToolbar from "../AssetListActionsToolbar";
+import FactionDetails from "../FactionDetails";
 
-import FactionListRow from "./FactionListRow";
+import FactionListItem from "./FactionListItem";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);
+  const { state: uiState } = useContext(UiStateContext);
   const theme = useTheme();
   
   const handleDragEnd = (result: DropResult) => {
@@ -59,11 +65,33 @@ export default function FactionList(): JSX.Element {
                       ref={itemProvided.innerRef}
                       {...itemProvided.draggableProps}
                     >
-                      <FactionListRow
+                      <FactionListItem
                         faction={faction}
                         dragHandleProps={itemProvided.dragHandleProps}
                         isDragging={itemSnapshot.isDragging}
                       />
+                      <Collapse
+                        in={uiState.selectedFaction === faction.name}
+                        unmountOnExit={true}
+                      >
+                        <Box sx={{
+                          padding: 1,
+                        }}>
+                          <Box
+                            sx={{
+                              backgroundColor: "background.paper",
+                              padding: 3
+                            }}
+                          >
+                            <FactionDetails />
+                            <Box>
+                              <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
+                              <AssetListActionsToolbar />
+                              <AssetList />
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Collapse>
                     </Box>
                   )}
                 </Draggable>

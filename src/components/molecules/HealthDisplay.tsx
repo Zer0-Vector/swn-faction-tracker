@@ -30,9 +30,9 @@ export default function HealthDisplay({ factionName }: HealthDisplayProps) {
           color="error"
           value={100 * hp / maxHp}
           variant="determinate"
-          sx={{ 
-            width: "5rem",
-            minWidth: "2rem",
+          sx={{
+            minWidth: "50px",
+            width: "100%",
             height: "1.25rem"
           }}
         />

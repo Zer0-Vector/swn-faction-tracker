@@ -20,9 +20,12 @@ interface FactionListRowProps {
 
 const ItemColumn = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
-export default function FactionListRow({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
+export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
   const { controller } = useContext(GameContext);
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
   
@@ -38,7 +41,7 @@ export default function FactionListRow({ dragHandleProps, isDragging, faction }:
 
   const handleClearSelection = () => {
     console.log("Clearing faction (and asset) selection");
-    uiController.deselectFaction();
+    uiController.selectFaction(null);
   };
 
   const getSelectFactionHandler = (name: string) => (
@@ -52,48 +55,39 @@ export default function FactionListRow({ dragHandleProps, isDragging, faction }:
     }
   );
 
+  const isSelected = uiState.selectedFaction === faction.name;
+
   return (
     <Box
       onClick={getSelectFactionHandler(faction.name)}
       sx={{
-        display: "flex",
+        display: "grid",
+        gridTemplateColumns: "50px 1fr 100px 75px",
         backgroundColor: isDragging ? "action.dragging" : (faction.name === uiState.selectedFaction ? "action.selected" : "inherit"),
         overflow: "clip",
       }}
     >
-      <ItemColumn 
-        sx={{
-          maxWidth: "50px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        {...dragHandleProps}
-      >
+      <ItemColumn {...dragHandleProps} >
         <DragHandleIcon />
       </ItemColumn>
-      <ItemColumn sx={{ display: "flex", textOverflow: "ellipsis", overflow: "hidden" }}>
+      <ItemColumn sx={{
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        gridColumnStart: "2",
+        gridColumnEnd: isSelected ? "5" : "3",
+        justifyContent: "flex-start",
+      }}>
         <EditableNameText onUpdate={getEditNameHandler(faction.name)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {faction.name}
         </EditableNameText>
       </ItemColumn>
-      {uiState.selectedFaction === faction.name ? null : (
+      {isSelected ? null : (
         <>
-          <ItemColumn sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}>
+          <ItemColumn>
             <HealthDisplay factionName={faction.name} />
           </ItemColumn>
-          <ItemColumn sx={{
-            display: "flex",
-            alignItems: "center",
-          }}>
-            <FactionStatSummary
-              {...faction.stats}
-              factionName={faction.name}
-            />
+          <ItemColumn>
+            <FactionStatSummary {...faction.stats} factionName={faction.name} />
           </ItemColumn>
         </>
       )}
