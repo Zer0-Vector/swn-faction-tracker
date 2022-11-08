@@ -78,12 +78,12 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
       padding: 2,
     }}>
       <Item sx={{ textAlign: "justify", gridRow: "1 / 5", alignItems: "flex-start" }}>{description}</Item>
-      <Item sx={{ textTransform: "uppercase" }}>{attributeText}</Item>
+      <Item sx={{ textTransform: "uppercase", fontStyle: "italic" }}>{attributeText}</Item>
       {/* TODO use HealthDisplay or refactor it */}
       <Item>{hp}/{maxHp}</Item>
       <Item>{typeText}</Item>
       <LabeledItem label="Upkeep" xsLabel={6}>{upkeepText}</LabeledItem>
-      <LabeledItem label="Attack" xsLabel={attackText === "None" ? 6 : "auto"}>{attackText}</LabeledItem>
+      <LabeledItem label="Attack" xsLabel={4}>{attackText}</LabeledItem>
       <LabeledItem label="Counter" xsLabel={6}>{counterText}</LabeledItem>
     </Card>
   );
