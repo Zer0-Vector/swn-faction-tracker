@@ -40,7 +40,7 @@ export default function PrimaryPanel() {
           <Box
             sx={{
               backgroundColor: "background.paper",
-              padding: "2rem"
+              padding: 3
             }}
           >
             <FactionDetails />
