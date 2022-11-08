@@ -155,6 +155,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
         variant={variant}
         sx={sx}
         component="span"
+        title={children}
       >
         {children}
       </Typography>
