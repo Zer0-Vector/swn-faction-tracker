@@ -37,7 +37,6 @@ function App() {
       selectedFaction: null,
       selectedAssetKey: null,
       selectedLocation: null,
-      hasFactionSelected: false,
     }
   );
   const uiController: IUiStateController = new UiStateController(setUiState);

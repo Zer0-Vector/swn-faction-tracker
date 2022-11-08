@@ -6,7 +6,6 @@ export interface IUiStateController {
   selectLocaion(locationName: Nullable<string>): void;
   selectFaction(name: Nullable<string>): void;
   selectAsset(pa: Nullable<PurchasedAsset>) : void;
-  deselectFaction(): void;
   clearSelections(): void;
 }
 
@@ -39,14 +38,6 @@ export class UiStateController implements IUiStateController {
     this.setState(prev => ({
       ...prev,
       selectedAssetKey: pa === null ? null : PurchasedAssetUtils.getKey(prev.selectedFaction as string, pa as PurchasedAsset)
-    }));
-  }
-
-  deselectFaction(): void {
-    this.setState(prev => ({
-      ...prev,
-      selectedAssetKey: null,
-      hasFactionSelected: false,
     }));
   }
 
