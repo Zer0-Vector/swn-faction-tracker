@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
+import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
@@ -28,6 +29,7 @@ const ItemColumn = styled(Box)(({ theme }) => ({
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
   const { controller } = useContext(GameContext);
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const boxRef = useRef<HTMLElement>(null);
   
   const getEditNameHandler = (name: string) => (
     (val: string) => {
@@ -62,10 +64,11 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
       onClick={getSelectFactionHandler(faction.name)}
       sx={{
         display: "grid",
-        gridTemplateColumns: "50px 1fr 100px 75px",
+        gridTemplateColumns: "50px 1fr 30%",
         backgroundColor: isDragging ? "action.dragging" : (faction.name === uiState.selectedFaction ? "action.selected" : "inherit"),
         overflow: "clip",
       }}
+      ref={boxRef}
     >
       <ItemColumn {...dragHandleProps} >
         <DragHandleIcon />
@@ -74,23 +77,26 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         textOverflow: "ellipsis",
         overflow: "hidden",
         gridColumnStart: "2",
-        gridColumnEnd: isSelected ? "5" : "3",
+        gridColumnEnd: "3",
         justifyContent: "flex-start",
       }}>
         <EditableNameText onUpdate={getEditNameHandler(faction.name)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {faction.name}
         </EditableNameText>
       </ItemColumn>
-      {isSelected ? null : (
-        <>
+      <Slide in={!isSelected} container={boxRef.current} direction="up">
+        <Box sx={{
+          display: "grid",
+          gridTemplateColumns: "1fr 75px"
+        }}>
           <ItemColumn>
             <HealthDisplay factionName={faction.name} />
           </ItemColumn>
           <ItemColumn>
             <FactionStatSummary {...faction.stats} factionName={faction.name} />
           </ItemColumn>
-        </>
-      )}
+        </Box>
+      </Slide>
     </Box>
   );
 }
