@@ -24,6 +24,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
   const defaultState: EditableState = { editing: false, hasChanged: false, valid: validate === undefined };
   const [state, setState] = useState<EditableState>(defaultState);
   const textFieldRef = useRef<HTMLInputElement>(null);
+  const [clicked, setClicked] = useState<boolean>(false);
 
   useEffect(() => {
     if (state.editing) {
@@ -40,7 +41,13 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
   };
 
   const clickHandler = (evt: React.MouseEvent<HTMLElement>) => {
-    evt.stopPropagation();
+    if (clicked) {
+      evt.stopPropagation();
+      setClicked(false);
+    } else {
+      setClicked(true);
+      setTimeout(() => setClicked(false), 250);
+    }
   };
 
   const exitEditMode = (evt: React.SyntheticEvent) => {
@@ -123,7 +130,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               inputRef={textFieldRef}
               onKeyUp={handleKeyUp}
               onInput={textChanged}
-              onClick={clickHandler}
+              onClick={evt => evt.stopPropagation()}
               onBlur={handleCancel}
               error={!state.valid}
               autoComplete="off"
@@ -138,7 +145,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           inputRef={textFieldRef}
           onKeyUp={handleKeyUp}
           onInput={textChanged}
-          onClick={clickHandler}
+          onClick={evt => evt.stopPropagation()}
           onBlur={handleCancel}
           defaultValue={children}
           error={!state.valid}
