@@ -1,34 +1,47 @@
 @startuml Faction Turn Attacking States
+hide empty description
 
 state "TurnMode" as TM
 state "FactionSelected" as FS
 state "AssetSelected" as ASel
+state cancelled <<start>>
+state "TargetSelected" as TSel
+state "DefenderSelected" as DSel
+state "ComputingAttack" as AComp
+state "AttackComputationDone" as ACDone
+state "ResultsApplied" as RA {
+  RA : Disables selected asset
+  RA : (cannot attack again)
+}
+state "PrepareNext" as PN
+state TNe <<end>>
+state DSe <<end>>
+state ACDoneE <<end>>
+state decide <<choice>>
 
 [*] --> FS : SelectFaction
 FS : Turn Mode button enabled
 FS --> TM : EnterTurnMode
 TM : Turn actions become visible
-
+cancelled -> TM : from Cancelled
 TM --> ASel : SelectAsset
 ASel : Turn actions enabled
+ASel --> PrepAttack : AttackButtonClick
 
-state "TargetSelected" as TSel
-state "DefenderSelected" as DSel
-state "ComputingAttack" as AComp
-state "AttackComputationDone" as ACDone
-state "ResultsApplied" as RA
-state "PrepareNext" as PN
 
-ASel --> TSel : SelectTarget
-TSel --> DSel : SelectDefender
-DSel --> AComp : ConfirmAttack
-AComp --> ACDone : ComputedResult
-ACDone --> [*] : Cancel
-ACDone --> RA : Confirm
-RA --> [*] : LastAsset
-RA : Disables selected asset
-RA : (cannot attack again)
-RA --> PN : MoreAssetsAvailable
-PN --> ASel : SelectedAsset
+
+
+PrepAttack -> TSel : SelectTarget
+TSel -> DSel : SelectDefender
+TSel --> TNe : Cancel
+DSel --> AComp : Confirm
+DSel -> DSe : Cancel
+AComp -> ACDone : ComputedResult
+ACDone -up-> RA : Confirm
+ACDone --> ACDoneE : Cancel
+RA -up-> decide
+decide -up-> [*] : LastAsset
+decide -left-> PN : MoreAssetsAvailable
+PN -left-> ASel : SelectAsset
 
 @enduml
