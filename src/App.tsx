@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 
 import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
 import { GameContext } from './contexts/GameContext';
@@ -48,13 +49,8 @@ function App() {
       <GameContext.Provider value={{state: gameState, controller: gameController}}>
         <UiStateContext.Provider value={{ state: uiState, controller: uiController }}>
           <Router>
-            <Box
-              sx={theme => ({
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.background.default,
-              })}
-              data-testid="app-root"
-            >
+            <CssBaseline />
+            <Box data-testid="app-root">
               <PageContainer>
                 <Routes>
                   <Route path="/" element={<PrimaryPanel />} />
