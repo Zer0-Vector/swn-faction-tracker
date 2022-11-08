@@ -1,62 +1,34 @@
 @startuml Faction Turn States
 
 state "TurnMode" as TM
+state "FactionSelected" as FS
+state "AssetSelected" as ASel
 
-[*] --> TM : TurnModeButton
+[*] --> FS : SelectFaction
+FS : Turn Mode button enabled
+FS --> TM : EnterTurnMode
 TM : Turn actions become visible
 
-state Attacking {
-  state AttackMode <<entryPoint>>
-  state Cancel <<exitPoint>>
-  state DoneAttack <<exitPoint>>
-  state "PrepareAttack" as PrepA
-  state "AttackerSelected" as ASel
-  state "TargetSelected" as TSel
-  state "DefenderSelected" as DSel
-  state "AttackPrepared" as APrep
+TM --> ASel : SelectAsset
+ASel : Turn actions enabled
 
-  TM --> AttackMode : AttackButtonClick
-  AttackMode --> PrepA
-  PrepA -right-> Cancel : Back/Cancel
-  
-  PrepA --> ASel : SelectAttackingAsset
-  ASel --> PrepA : Back
-  ASel -right-> Cancel : Cancel
-  
-  ASel --> TSel : SelectTargetFaction
-  TSel --> ASel : Back
-  TSel --> Cancel : Cancel
+state "TargetSelected" as TSel
+state "DefenderSelected" as DSel
+state "ComputingAttack" as AComp
+state "AttackComputationDone" as ACDone
+state "ResultsApplied" as RA
+state "PrepareNext" as PN
 
-  TSel --> DSel : SelectDefender
-  DSel --> TSel : Back
-  DSel -right-> Cancel : Cancel
-
-  DSel --> APrep : ClickDone
-  APrep --> DSel : Back
-  APrep -right-> Cancel : Cancel
-
-  APrep --> AttackCompute : ConfirmAttack
-  AttackCompute : Computing results
-
-  AttackCompute --> Attacked : FinishedComputation
-  Attacked : Show results
-
-  Attacked --> ApplyResults : Confirm
-  Attacked -right-> Cancel : Cancel
-  ApplyResults : Update HP for targets
-
-  ApplyResults --> PrepA : OK
-  PrepA --> DoneAttack : Finished
-
-
-
-  Cancel --> TM
-  DoneAttack --> TM
-}
-
-
-
-
-
+ASel --> TSel : SelectTarget
+TSel --> DSel : SelectDefender
+DSel --> AComp : ConfirmAttack
+AComp --> ACDone : ComputedResult
+ACDone --> [*] : Cancel
+ACDone --> RA : Confirm
+RA --> [*] : LastAsset
+RA : Disables selected asset
+RA : (cannot attack again)
+RA --> PN : MoreAssetsAvailable
+PN --> ASel : SelectedAsset
 
 @enduml
