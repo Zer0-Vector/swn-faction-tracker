@@ -1,4 +1,4 @@
-@startuml Faction Turn Attacking States
+@startuml Faction Turn Use Ability States
 hide empty description
 
 state "FactionSelected" as FS : Turn Mode button enabled
