@@ -1,0 +1,12 @@
+@startuml Faction Turn Change Homeworld States
+
+state "FactionSelected" as FS : Turn Mode button enabled
+state "TurnMode" as TM : Turn actions become visible
+
+[*] -> FS : SelectFaction
+FS -> TM : EnterTurnMode
+TM --> HomeworldPrompt : ChangeHomeworldClick
+HomeworldPrompt --> [*] : ConfirmChange
+HomeworldPrompt --> TM : Cancel
+
+@enduml
