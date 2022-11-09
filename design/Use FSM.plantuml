@@ -3,61 +3,84 @@ hide empty description
 
 state "FactionSelected" as FS : Turn Mode button enabled
 state "TurnMode" as TM : Turn actions become visible
-state "AssetSelected" as ASel : Turn actions enabled
+state "AssetSelected" as ASel #lightblue : Turn actions enabled
 state cancelled <<start>>
 state "Type?" as type <<choice>>
-state "Move Self?" as self <<choice>>
-state "Find Destination" as FD
 state "More Assets?" as more <<choice>>
-state "Charged Cost" as CC1
-state "Charged Cost" as CC2
-state "Meets Threshold" as enough <<choice>>
-state "WillRollDice" as WRD1
-state "WillRollDice" as WRD2
-state "Should Roll" as toroll <<choice>>
+state moreassets <<start>>
 
-state MoveEnd <<end>>
-state DisEnd <<end>>
-state HarvEnd <<end>>
+[*] -> FS : SelectFaction
+FS -> TM : EnterTurnMode
+cancelled --> TM : from Cancelled
+TM -> ASel : SelectAsset
+moreassets --> ASel : (from below)
+ASel -> type : UseAbilityClick
 
-[*] --> FS : SelectFaction
-FS --> TM : EnterTurnMode
-cancelled -> TM : from Cancelled
-TM --> ASel : SelectAsset
-ASel --> type : UseAbilityClick
+state MoveAsset {
+  state " " as MoveIn <<entryPoint>>
+  state "Move Self?" as self <<choice>>
+  state "Find Destination" as FD
+  state "Charged Cost" as CC1
+  state " " as MoveOut <<exitPoint>>
+  state MoveEnd <<end>>
 
-type --> self : Type=Move
-self --> FD : Self
-self -> FindOthers : Others
-FindOthers --> FD : Selected Asset(s)
-FindOthers -[#red,bold]-> FindOthers : InvalidSelection
-FindOthers --> MoveEnd : Cancel
-FD -[#red,bold]-> FD : InvalidDestination
-FD --> CC1 : SelectDestination
-FD --> MoveEnd : Cancel
-CC1 --> more : ConfirmPayment\n/deduct cost
-CC1 -> MoveEnd : Cancel
+  type --> MoveIn : Type=Move
+  MoveIn --> self
+  self --> FD : Self
+  self -> FindOthers : Others
+  FindOthers --> FD : Selected Asset(s)
+  FindOthers -[#red,bold]-> FindOthers : InvalidSelection
+  FindOthers --> MoveEnd : Cancel
+  FD -[#red,bold]-> FD : InvalidDestination
+  FD --> CC1 : SelectDestination
+  FD --> MoveEnd : Cancel
+  CC1 --> MoveOut : ConfirmPayment\n/deduct cost
+  CC1 -> MoveEnd : Cancel
+  MoveOut --> more
+}
 
-type --> toroll : Type=Discount
-toroll -> WRD2 : ShouldRoll
-WRD2 --> FindPurchase : RollDice
-WRD2 --> DisEnd : Cancel
-toroll --> FindPurchase : ShouldNotRoll
-FindPurchase --> CC2 : SelectAsset
-FindPurchase -> DisEnd : Cancel
-CC2 --> more : PaidCost
-CC2 -> DisEnd : Cancel
+state Discount {
+  state "Charged Cost" as CC2
+  state "WillRollDice" as WRD2
+  state "Should Roll" as toroll <<choice>>
+  state " " as DisIn <<entryPoint>>
+  state " " as DisOut <<exitPoint>>
+  state DisEnd <<end>>
 
-type --> WRD1 : Type=Harvest
-WRD1 --> enough : RollDice
-WRD1 -> HarvEnd : Cancel
-enough --> more : BelowThreshold
-enough -> GetsPaid : AboveThreshold
-GetsPaid --> more : AcceptPayment
-GetsPaid -> HarvEnd : Cancel
+  type --> DisIn : Type=Discount
+  DisIn --> toroll
+  toroll -> WRD2 : ShouldRoll
+  WRD2 --> FindPurchase : RollDice
+  WRD2 --> DisEnd : Cancel
+  toroll --> FindPurchase : ShouldNotRoll
+  FindPurchase --> CC2 : SelectAsset
+  FindPurchase -> DisEnd : Cancel
+  CC2 --> DisOut : PaidCost
+  CC2 -> DisEnd : Cancel
+  DisOut --> more
+}
 
-more -> FindNext : More Usable Assets
+state Harvest {
+  state "Meets Threshold" as enough <<choice>>
+  state "WillRollDice" as WRD1
+  state HarvEnd <<end>>
+  state " " as HarvIn <<entryPoint>>
+  state " " as HarvOut <<exitPoint>>
+
+  
+  type --> HarvIn : Type=Harvest
+  HarvIn --> WRD1 
+  WRD1 --> enough : RollDice
+  WRD1 -> HarvEnd : Cancel
+  enough --> HarvOut : BelowThreshold
+  enough -> GetsPaid : AboveThreshold
+  GetsPaid --> HarvOut : AcceptPayment
+  GetsPaid -> HarvEnd : Cancel
+  HarvOut --> more
+}
+
+more --> FindNext : More Usable Assets
 more --> [*] : Last Asset
-FindNext -> TM
+FindNext --> AssetSelected #lightblue : SelectAsset
 
 @enduml
