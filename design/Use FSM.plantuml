@@ -15,10 +15,10 @@ state "Meets Threshold" as enough <<choice>>
 state "WillRollDice" as WRD1
 state "WillRollDice" as WRD2
 state "Should Roll" as toroll <<choice>>
-state "Rolled Dice" as RD1
-state "Rolled Dice" as RD2
 
-' TODO add where can the process be cancelled.
+state MoveEnd <<end>>
+state DisEnd <<end>>
+state HarvEnd <<end>>
 
 [*] --> FS : SelectFaction
 FS --> TM : EnterTurnMode
@@ -31,25 +31,30 @@ self --> FD : Self
 self -> FindOthers : Others
 FindOthers --> FD : Selected Asset(s)
 FindOthers -[#red,bold]-> FindOthers : InvalidSelection
+FindOthers --> MoveEnd : Cancel
 FD -[#red,bold]-> FD : InvalidDestination
 FD --> CC1 : SelectDestination
-CC1 --> DoIt : PaidCost
-DoIt --> more : Done
+FD --> MoveEnd : Cancel
+CC1 --> more : ConfirmPayment\n/deduct cost
+CC1 -> MoveEnd : Cancel
 
 type --> toroll : Type=Discount
 toroll -> WRD2 : ShouldRoll
-WRD2 --> RD2 : RollDice
-RD2 -> FindPurchase : SaveDiscountAmt
+WRD2 --> FindPurchase : RollDice
+WRD2 --> DisEnd : Cancel
 toroll --> FindPurchase : ShouldNotRoll
 FindPurchase --> CC2 : SelectAsset
+FindPurchase -> DisEnd : Cancel
 CC2 --> more : PaidCost
+CC2 -> DisEnd : Cancel
 
 type --> WRD1 : Type=Harvest
-WRD1 --> RD1 : RollDice
-RD1 --> enough : SaveValue
+WRD1 --> enough : RollDice
+WRD1 -> HarvEnd : Cancel
 enough --> more : BelowThreshold
 enough -> GetsPaid : AboveThreshold
-GetsPaid --> more : PaidCreds
+GetsPaid --> more : AcceptPayment
+GetsPaid -> HarvEnd : Cancel
 
 more -> FindNext : More Usable Assets
 more --> [*] : Last Asset
