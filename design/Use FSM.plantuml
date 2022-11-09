@@ -1,0 +1,58 @@
+@startuml Faction Turn Attacking States
+hide empty description
+
+state "FactionSelected" as FS : Turn Mode button enabled
+state "TurnMode" as TM : Turn actions become visible
+state "AssetSelected" as ASel : Turn actions enabled
+state cancelled <<start>>
+state "Type?" as type <<choice>>
+state "Move Self?" as self <<choice>>
+state "Find Destination" as FD
+state "More Assets?" as more <<choice>>
+state "Charged Cost" as CC1
+state "Charged Cost" as CC2
+state "Meets Threshold" as enough <<choice>>
+state "WillRollDice" as WRD1
+state "WillRollDice" as WRD2
+state "Should Roll" as toroll <<choice>>
+state "Rolled Dice" as RD1
+state "Rolled Dice" as RD2
+
+' TODO add where can the process be cancelled.
+
+[*] --> FS : SelectFaction
+FS --> TM : EnterTurnMode
+cancelled -> TM : from Cancelled
+TM --> ASel : SelectAsset
+ASel --> type : UseAbilityClick
+
+type --> self : Type=Move
+self --> FD : Self
+self -> FindOthers : Others
+FindOthers --> FD : Selected Asset(s)
+FindOthers -[#red,bold]-> FindOthers : InvalidSelection
+FD -[#red,bold]-> FD : InvalidDestination
+FD --> CC1 : SelectDestination
+CC1 --> DoIt : PaidCost
+DoIt --> more : Done
+
+type --> toroll : Type=Discount
+toroll -> WRD2 : ShouldRoll
+WRD2 --> RD2 : RollDice
+RD2 -> FindPurchase : SaveDiscountAmt
+toroll --> FindPurchase : ShouldNotRoll
+FindPurchase --> CC2 : SelectAsset
+CC2 --> more : PaidCost
+
+type --> WRD1 : Type=Harvest
+WRD1 --> RD1 : RollDice
+RD1 --> enough : SaveValue
+enough --> more : BelowThreshold
+enough -> GetsPaid : AboveThreshold
+GetsPaid --> more : PaidCreds
+
+more -> FindNext : More Usable Assets
+more --> [*] : Last Asset
+FindNext -> TM
+
+@enduml
