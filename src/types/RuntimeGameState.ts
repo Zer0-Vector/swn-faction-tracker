@@ -5,6 +5,7 @@ import ASSETS from "../data/Assets";
 
 import FactionInfo from "./FactionInfo";
 import GameMode, { isGameMode } from "./GameMode";
+import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
 import Nullable from "./Nullable";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
@@ -37,6 +38,14 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.locationsOrder = storedState.locationsOrder;
     this.mode = storedState.mode;
     console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A, ${this.locations.size}L`);
+  }
+
+  setGoal(factionName: string, goal: GoalInfo): void {
+    const faction = this.factions.get(factionName);
+    if (faction) {
+      faction.goal = goal;
+      this.factions.set(factionName, faction);
+    }
   }
 
   setMode(mode: string) {

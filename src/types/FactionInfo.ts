@@ -1,4 +1,5 @@
 import FactionStatsInfo from "./FactionStatsInfo";
+import GoalInfo from "./GoalInfo";
 
 interface StatInfo { xpCost: number, hpValue: number }
 
@@ -57,11 +58,12 @@ export default class FactionInfo {
     result.stats = { ...currentFaction.stats };
     return result;
   }
-
+  
   name: string;
   homeworld?: string;
   tag?: string;
   stats: FactionStatsInfo;
+  goal?: GoalInfo;
 
   constructor(name: string) {
     this.name = name;
