@@ -17,7 +17,6 @@ export default function FactionHpSummary({ factionName }: HealthTextProps) {
   const HpBox = styled(Box)(theme => ({
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
   }));
 
   const faction = state.getFaction(factionName);
