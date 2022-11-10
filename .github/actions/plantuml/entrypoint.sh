@@ -1,9 +1,10 @@
 #!/usr/bin/env sh
 
-echo "Hello $1"
 time=$(date)
 echo "time=$time" >> $GITHUB_OUTPUT
 
+echo "args: $@"
+
 ls -l /github/workspace
 
-java -jar /opt/plantuml.jar -version
+java -jar /opt/plantuml.jar "$@"
