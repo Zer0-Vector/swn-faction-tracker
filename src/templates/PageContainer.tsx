@@ -4,12 +4,14 @@ import { Link, useLocation } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import { SxProps, Theme } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+import ModeToggleButtons from "../components/molecules/ModeToggleButtons";
 import { UiStateContext } from "../contexts/UiStateContext";
 
 export interface PageContainerProps {
@@ -41,29 +43,36 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
       data-testid="page-container"
     >
       <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Typography variant="h1" sx={{ mr: 3, color: "primary.contrastText" }}>SWN Faction Tracker</Typography>
-            <Tabs value={location.pathname} component="nav">
-              <Tab
-                value="/"
-                label="Factions"
-                component={Link}
-                to="/"
-                onClick={clearSelection}
-                sx={tabSx}
-              />
-              <Tab
-                value="/locations"
-                label="Locations"
-                component={Link}
-                to="/locations"
-                onClick={clearSelection}
-                sx={tabSx}
-              />
-            </Tabs>
-          </Toolbar>
-        </Container>
+        <Toolbar>
+          <Grid container>
+            <Grid item xs={4.25}>
+              <Typography variant="h1" sx={{ mr: 3, color: "primary.contrastText", whiteSpace: "nowrap" }}>SWN Faction Tracker</Typography>
+            </Grid>
+            <Grid item xs={4.75}>
+              <Tabs value={location.pathname} component="nav">
+                <Tab
+                  value="/"
+                  label="Factions"
+                  component={Link}
+                  to="/"
+                  onClick={clearSelection}
+                  sx={tabSx}
+                  />
+                <Tab
+                  value="/locations"
+                  label="Locations"
+                  component={Link}
+                  to="/locations"
+                  onClick={clearSelection}
+                  sx={tabSx}
+                  />
+              </Tabs>
+            </Grid>
+            <Grid item xs={3}>
+              <ModeToggleButtons />
+            </Grid>
+          </Grid>
+        </Toolbar>
       </AppBar>
       <Toolbar id="appbar-shim" />
       <Container sx={theme => ({
