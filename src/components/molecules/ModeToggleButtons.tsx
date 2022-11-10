@@ -9,7 +9,9 @@ export default function ModeToggleButtons() {
   const { state, controller } = useContext(GameContext);
 
   const handleChange = (_: React.MouseEvent, value: string) => {
-    controller.setMode(value);
+    if (value) {
+      controller.setMode(value);
+    }
   };
 
   return (
