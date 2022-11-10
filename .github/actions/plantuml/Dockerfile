@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM ghcr.io/plantuml/plantuml:latest
 
 COPY entrypoint.sh /entrypoint.sh
 
