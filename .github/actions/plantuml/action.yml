@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greeting and time check'
+name: 'PlantUML Generator'
+description: 'Generates diagrams using PlantUML'
 inputs:
   infiles:
     description: input files
