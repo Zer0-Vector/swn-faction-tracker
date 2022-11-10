@@ -46,8 +46,6 @@ jobs:
         with:
           infiles: design/**/*.plantuml
           outdir: png
-      - name: list files
-        run: ls -l ./png
       - name: 'Upload Diagrams'
         uses: actions/upload-artifact@v3
         with:
