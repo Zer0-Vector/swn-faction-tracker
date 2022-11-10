@@ -1,15 +1,14 @@
 name: 'Hello World'
 description: 'Greeting and time check'
 inputs:
-  who-to-greet:
-    description: 'Who to greet'
+  args:
+    description: args for planuml
     required: true
-    default: 'World'
 outputs:
   time:
-    description: 'The time of the greeting'
+    description: 'The time'
 runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.args }}
