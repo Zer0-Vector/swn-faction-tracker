@@ -41,3 +41,14 @@ jobs:
           name: diagrams
           path: 'design/**/png/*.png'
           if-no-files-found: error
+  hello:
+    name: Hello
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/plantuml
+        name: greeting
+        id: hello
+        with:
+          who-to-greet: Zer0-Vector
+      - name: what time?
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
