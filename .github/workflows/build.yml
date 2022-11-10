@@ -34,7 +34,7 @@ jobs:
       - name: Generate PNG Diagrams
         uses: cloudbees/plantuml-github-action@master
         with:
-          args: -v -tpng -o "png" "design/*.plantuml"
+          args: -v -tpng -o "png" "design/**/*.plantuml"
       - name: 'Upload Diagrams'
         uses: actions/upload-artifact@v3
         with:
