@@ -1,8 +1,11 @@
 name: 'Hello World'
 description: 'Greeting and time check'
 inputs:
-  args:
-    description: args for planuml
+  infiles:
+    description: input files
+    required: true
+  outdir:
+    description: output directory
     required: true
 outputs:
   time:
@@ -11,4 +14,5 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.args }}
+    - ${{ inputs.infiles }}
+    - ${{ inputs.outdir }}

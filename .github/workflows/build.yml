@@ -50,6 +50,7 @@ jobs:
         name: greeting
         id: hello
         with:
-          who-to-greet: Zer0-Vector
+          infiles: design/**/*.plantuml
+          outdir: png
       - name: what time?
         run: echo "The time was ${{ steps.hello.outputs.time }}"
