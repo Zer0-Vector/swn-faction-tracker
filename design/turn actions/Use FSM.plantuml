@@ -13,7 +13,7 @@ state moreassets <<start>>
 FS -> TM : EnterTurnMode
 cancelled --> TM : from Cancelled
 TM -> ASel : SelectAsset
-moreassets --> ASel : (from below)
+moreassets --> type : (from below)
 ASel -> type : UseAbilityClick
 
 state MoveAsset {
