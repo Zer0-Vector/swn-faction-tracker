@@ -7,6 +7,10 @@ inputs:
   outdir:
     description: output directory
     required: true
+  type:
+    description: output type
+    required: false
+    default: png
 outputs:
   time:
     description: 'The time'
@@ -16,3 +20,4 @@ runs:
   args:
     - ${{ inputs.infiles }}
     - ${{ inputs.outdir }}
+    - ${{ inputs.type }}
