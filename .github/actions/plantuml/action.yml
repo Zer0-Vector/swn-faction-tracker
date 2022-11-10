@@ -11,9 +11,6 @@ inputs:
     description: output type
     required: false
     default: png
-outputs:
-  time:
-    description: 'The time'
 runs:
   using: docker
   image: Dockerfile
