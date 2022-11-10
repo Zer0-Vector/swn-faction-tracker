@@ -3,7 +3,7 @@ import { createContext } from "react";
 import { IGameController } from "../controllers/GameController";
 import { IGameState } from "../types/RuntimeGameState";
 
-interface GameContextType {
+export interface GameContextType {
   state: IGameState;
   controller: IGameController;
 }
