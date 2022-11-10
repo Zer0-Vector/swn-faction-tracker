@@ -83,8 +83,18 @@
       "@typescript-eslint/member-delimiter-style": [
         "error",
         {
+          "multiline": {
+            "requireLast": true
+          },
           "singleline": {
             "delimiter": "comma"
+          },
+          "overrides": {
+            "typeLiteral": {
+              "multiline": {
+                "delimiter": "comma"
+              }
+            }
           }
         }
       ],
