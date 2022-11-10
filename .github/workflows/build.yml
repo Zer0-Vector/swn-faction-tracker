@@ -45,6 +45,7 @@ jobs:
     name: Hello
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/plantuml
         name: greeting
         id: hello
