@@ -31,28 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Generate PNG Diagrams
-        uses: cloudbees/plantuml-github-action@master
-        with:
-          args: -v -tpng -o "png" "design/**/*.plantuml"
-      - name: 'Upload Diagrams'
-        uses: actions/upload-artifact@v3
-        with:
-          name: diagrams
-          path: 'design/**/png/*.png'
-          if-no-files-found: error
-  hello:
-    name: Hello
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
       - uses: ./.github/actions/plantuml
         name: greeting
         id: hello
         with:
           infiles: design/**/*.plantuml
           outdir: png
-      - name: what time?
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
       - name: list files
         run: ls -l ./png
+      - name: 'Upload Diagrams'
+        uses: actions/upload-artifact@v3
+        with:
+          name: diagrams
+          path: 'png/**/*.png'
+          if-no-files-found: error
