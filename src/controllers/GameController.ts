@@ -9,6 +9,7 @@ import StoredGameState from "../types/StoredGameState";
 
 export interface IGameController {
   setGoal(faction: string, goal: GoalInfo): void;
+  setMode(value: string): void;
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void;
   updateLocationName(curr: string, val: string): void;
   removeLocation(selectedLocation: string): void;
@@ -57,13 +58,18 @@ export class GameController implements IGameController {
     if (!isGameMode(mode)) {
       throw new Error(`Invalid GameMode: '${mode}'`);
     }
+    this.runtimeState.setMode(mode);
+    this.#writeMode();
+  }
+  
+  #writeMode() {
     this.setState(prev => ({
       ...prev,
-      mode: mode,
+      mode: this.runtimeState.mode,
     }));
   }
 
-  #setFactions(setOrder = false) {
+  #writeFactions(setOrder = false) {
     if (setOrder) {
       this.setState(prev => ({
         ...prev,
@@ -78,21 +84,21 @@ export class GameController implements IGameController {
     }
   }
 
-  #setFactionOrder() {
+  #writeFactionOrder() {
     this.setState(prev => ({
       ...prev,
       factionOrder: this.runtimeState.factionOrder
     }));
   }
 
-  #setAssets() {
+  #writeAssets() {
     this.setState(prev => ({
       ...prev,
       assets: Array.from(this.runtimeState.assets.entries()),
     }));
   }
 
-  #setFactionsAndAssets() {
+  #writeFactionsAndAssets() {
     console.debug("setFactionsAndAssets()");
     this.setState((state: StoredGameState) => {
       return {
@@ -104,7 +110,7 @@ export class GameController implements IGameController {
     });
   }
 
-  #setLocations() {
+  #writeLocations() {
     this.setState(state => ({
       ...state,
       locations: Array.from(this.runtimeState.locations.entries()),
@@ -112,7 +118,7 @@ export class GameController implements IGameController {
     }));
   }
 
-  #setLocationDependecies() {
+  #writeLocationDependecies() {
     this.setState(state => ({
       ...state,
       factions: Array.from(this.runtimeState.factions.entries()),
@@ -124,7 +130,7 @@ export class GameController implements IGameController {
   reorderFactions(sourceIndex: number, destinationIndex: number): void {
     console.log("Reordering factions...");
     this.runtimeState.reorderFactions(sourceIndex, destinationIndex);
-    this.#setFactionOrder();
+    this.#writeFactionOrder();
   }
 
   addFaction(name: string): void {
@@ -133,19 +139,19 @@ export class GameController implements IGameController {
     }
     console.log("Adding Faction: " + name);
     this.runtimeState.addFaction(name);
-    this.#setFactions(true);
+    this.#writeFactions(true);
   }
 
   removeFaction(name: string): void {
     console.log("Removing faction: " + name);
     this.runtimeState.removeFaction(name);
-    this.#setFactionsAndAssets();
+    this.#writeFactionsAndAssets();
   }
 
   updateFactionName(currentName: string, newName: string): void {
     console.debug("GameController.updateFactionName");
     this.runtimeState.updateFactionName(currentName, newName);
-    this.#setFactionsAndAssets();
+    this.#writeFactionsAndAssets();
   }
 
   updateForce(name: string, force: number): void {
@@ -153,7 +159,7 @@ export class GameController implements IGameController {
       return;
     }
     this.runtimeState.updateForce(name, force);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   updateCunning(name: string, cunning: number): void {
@@ -162,7 +168,7 @@ export class GameController implements IGameController {
     }
 
     this.runtimeState.updateCunning(name, cunning);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   updateWealth(name: string, wealth: number): void {
@@ -171,7 +177,7 @@ export class GameController implements IGameController {
     }
 
     this.runtimeState.updateWealth(name, wealth);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   updateHp(name: string, hp: number): void {
@@ -180,7 +186,7 @@ export class GameController implements IGameController {
     }
 
     this.runtimeState.updateHp(name, hp);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   updateMaxHp(name: string, maxHp: number): void {
@@ -189,55 +195,55 @@ export class GameController implements IGameController {
     }
 
     this.runtimeState.updateMaxHp(name, maxHp);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   updateHomeworld(name: string, homeworld: string) {
     // allow homeworld to be set to ""
     this.runtimeState.updateHomeworld(name, homeworld);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   updateTag(name: string, tag: string): void {
     // allow tag to be set to ""
     this.runtimeState.updateTag(name, tag);
-    this.#setFactions();
+    this.#writeFactions();
   }
 
   addAsset(selectedFaction: string, assetName: string): void {
     this.runtimeState.addAsset(selectedFaction, assetName);
-    this.#setAssets();
+    this.#writeAssets();
   }
 
   removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void {
     console.debug(`GameController.removeAsset(${selectedFaction}, ${selectedAsset}, ${assetId})`);
     this.runtimeState.removeAsset(selectedFaction, selectedAsset, assetId);
-    this.#setAssets();
+    this.#writeAssets();
   }
 
   addLocation(info: LocationInfo): void {
     console.debug("Adding location:", info);
     this.runtimeState.addLocation(info);
-    this.#setLocations();
+    this.#writeLocations();
   }
 
   removeLocation(selectedLocation: string): void {
     console.debug("Removing location:", selectedLocation);
     this.runtimeState.removeLocation(selectedLocation);
-    this.#setLocations();
+    this.#writeLocations();
   }
 
   updateLocationName(curr: string, val: string): void {
     console.debug(`Renaming location '${curr}' to '${val}'`);
     this.runtimeState.updateLocationName(curr, val);
-    this.#setLocationDependecies();
+    this.#writeLocationDependecies();
   }
 
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void {
     if (destination) {
       console.debug(`Reordering locations: ${source.index} -> ${destination.index}`);
       this.runtimeState.reorderLocations(source, destination);
-      this.#setLocations();
+      this.#writeLocations();
     }
   }
 
