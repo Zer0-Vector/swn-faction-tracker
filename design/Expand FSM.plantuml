@@ -1,0 +1,15 @@
+@startuml Expand Influence Action States
+hide empty description
+
+state "FactionSelected" as FS : Turn Mode button enabled
+state "TurnMode" as TM : Turn actions become visible
+state cancelled <<start>>
+
+[*] -> FS : SelectFaction
+FS -> TM : EnterTurnMode
+cancelled --> TM : from Cancelled
+TM -> LocationSelection : ExpandInfluenceClick
+LocationSelection -[#red,bold]-> LocationSelection : InvalidSelection
+LocationSelection --> [*] : LocationSelected\n/Base of Influence created
+
+@enduml
