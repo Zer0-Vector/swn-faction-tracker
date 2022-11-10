@@ -12,5 +12,10 @@ declare module '@mui/material/styles/createPalette' {
   interface PaletteOptions {
     tertiary: PaletteColorOptions;
   }
+}
 
+declare module '@mui/material/ToggleButtonGroup/ToggleButtonGroup' {
+  interface ToggleButtonGroupPropsColorOverrides {
+    tertiary: PaletteOptions['tertiary'];
+  }
 }
