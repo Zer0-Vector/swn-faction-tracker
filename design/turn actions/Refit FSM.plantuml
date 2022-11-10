@@ -1,0 +1,15 @@
+@startuml Refit Asset Turn Action States
+hide empty description
+
+state "FactionSelected" as FS : Turn Mode button enabled
+state "TurnMode" as TM : Turn actions become visible
+state "AssetSelected" as ASel #lightblue : Turn actions enabled
+
+[*] -> FS : SelectFaction
+FS -> TM : EnterTurnMode
+TM -> ASel : SelectAsset
+ASel --> PromptForRefit : RefitClick
+PromptForRefit --> [*] : ConfirmRefitAssetSelection
+PromptForRefit -> TM : Cancel
+
+@enduml
