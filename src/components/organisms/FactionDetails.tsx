@@ -28,6 +28,7 @@ export default function FactionDetails() {
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
     padding: theme.spacing(0.5),
+    margin: theme.spacing(0.5),
   }));
 
   const ItemHeader = styled(Item)(({ theme }) => ({
@@ -58,6 +59,7 @@ export default function FactionDetails() {
         paddingRight: theme.spacing(gridContainerSpacing)
       }}
     >
+      {/* ROW 1 */}
       <Grid item xs={3}>
         <ItemHeader>Homeworld:</ItemHeader>
       </Grid>
@@ -70,6 +72,8 @@ export default function FactionDetails() {
       <Grid item xs={3}>
         <Item><EditableNameText onUpdate={updateTag} selectableOptions={Object.keys(TAGS)}>{tagText}</EditableNameText></Item>
       </Grid>
+
+      {/* ROW 2 */}
       <Grid item xs={3}>
         <ItemHeader>HP:</ItemHeader>
       </Grid>
@@ -86,6 +90,17 @@ export default function FactionDetails() {
             factionName={faction.name}
           />
         </Item>
+      </Grid>
+
+      {/* ROW 3 */}
+      <Grid item xs={3}>
+        <ItemHeader>Goal:</ItemHeader>
+      </Grid>
+      <Grid item xs={3}>
+        <Item>{faction.goal?.type || "None"}</Item>
+      </Grid>
+      <Grid item xs={6}>
+        <Item sx={{ height: "80%" }}></Item>
       </Grid>
     </Grid>
   );
