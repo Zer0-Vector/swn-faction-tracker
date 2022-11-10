@@ -26,6 +26,7 @@ function App() {
       assets: [],
       locations: [],
       locationsOrder: [],
+      mode: "EDIT", // TODO default mode should be VIEW
     }
   );
 

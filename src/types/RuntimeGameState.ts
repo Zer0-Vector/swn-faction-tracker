@@ -4,12 +4,14 @@ import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
 
 import FactionInfo from "./FactionInfo";
+import GameMode, { isGameMode } from "./GameMode";
 import LocationInfo from "./LocationInfo";
 import Nullable from "./Nullable";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
+  mode: GameMode;
   getFactions(): FactionInfo[];
   getFaction(factionName: string): FactionInfo | undefined;
   getAssets(factionName: Nullable<string>): PurchasedAsset[];
@@ -24,6 +26,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   assets: Map<string, PurchasedAsset>;
   locations: Map<string, LocationInfo>;
   locationsOrder: string[];
+  mode: GameMode;
 
   constructor(storedState: StoredGameState) {
     console.debug(`Init RuntimeGameState: ${storedState.factions.length} factions, ${storedState.assets.length} assets`);
@@ -32,7 +35,15 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.assets = new Map(storedState.assets);
     this.locations = new Map(storedState.locations);
     this.locationsOrder = storedState.locationsOrder;
+    this.mode = storedState.mode;
     console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A, ${this.locations.size}L`);
+  }
+
+  setMode(mode: string) {
+    if (!isGameMode(mode)) {
+      throw new Error(`Unknown GameMode: '${mode}'`);
+    }
+    this.mode = mode;
   }
 
   updateTag(name: string, tag: string): void {
