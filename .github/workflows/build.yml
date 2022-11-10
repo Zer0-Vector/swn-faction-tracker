@@ -54,3 +54,5 @@ jobs:
           outdir: png
       - name: what time?
         run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - name: list files
+        run: ls -l ./png
