@@ -1,11 +1,13 @@
 import React from "react";
 import { DraggableLocation } from "react-beautiful-dnd";
 
+import { isGameMode } from "../types/GameMode";
 import LocationInfo from "../types/LocationInfo";
 import RuntimeGameState from "../types/RuntimeGameState";
 import StoredGameState from "../types/StoredGameState";
 
 export interface IGameController {
+  setMode(value: string): unknown;
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void;
   updateLocationName(curr: string, val: string): void;
   removeLocation(selectedLocation: string): void;
@@ -43,6 +45,16 @@ export class GameController implements IGameController {
 
   static isInvalidHp(val: number) {
     return isNaN(val) || val < 0;
+  }
+
+  setMode(mode: string) {
+    if (!isGameMode(mode)) {
+      throw new Error(`Invalid GameMode: '${mode}'`);
+    }
+    this.setState(prev => ({
+      ...prev,
+      mode: mode,
+    }));
   }
 
   #setFactions(setOrder = false) {
