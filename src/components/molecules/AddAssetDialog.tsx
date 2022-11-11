@@ -66,10 +66,10 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add Asset</DialogTitle>
+    <Dialog open={open} onClose={handleClose} data-testid="add-asset-dialog">
+      <DialogTitle data-testid="add-asset-dialog-title-text">Add Asset</DialogTitle>
       <DialogContent>
-        <DialogContentText>Select an asset to add.</DialogContentText>
+        <DialogContentText data-testid="add-asset-dialog-content-text">Select an asset to add.</DialogContentText>
         <FormControl sx={{ my: 1, minWidth: 200 }}>
           <Autocomplete
             id="asset-select-field"
@@ -79,13 +79,14 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
             isOptionEqualToValue={(o, v) => o.group === v.group && o.name === v.name}
             disableClearable={true}
             onChange={handleSelectionChanged}
-            renderInput={params => <TextField {...params} label="Select Asset" />}
+            renderInput={params => <TextField {...params} label="Select Asset" data-testid="add-asset-dialog-asset-selection-field" />}
+            data-testid="add-asset-dialog-asset-autocomplete"
           />
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleAdd} disabled={selection === ""}>Add</Button>
+        <Button onClick={handleCancel} data-testid="add-asset-dialog-cancel-button">Cancel</Button>
+        <Button onClick={handleAdd} disabled={selection === ""} data-testid="add-asset-dialog-confirm-button">Add</Button>
       </DialogActions>
     </Dialog>
   );
