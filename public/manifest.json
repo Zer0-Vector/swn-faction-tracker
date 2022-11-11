@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SWN Faction Tracker",
+  "name": "Stars Without Number Faction Tracker",
   "icons": [
     {
       "src": "favicon.ico",
