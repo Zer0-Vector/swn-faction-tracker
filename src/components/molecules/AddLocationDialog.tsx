@@ -116,10 +116,10 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add Faction</DialogTitle>
+    <Dialog open={open} onClose={onClose} data-testid="add-location-dialog">
+      <DialogTitle data-testid="add-location-dialog-title">Add Location</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })}>
+        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })} data-testid="add-location-dialog-content-text">
           Enter the new location&apos;s details.
         </DialogContentText>
         <FormControl sx={theme => ({
@@ -139,6 +139,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
             error={!nameText.valid}
             fullWidth={true}
             autoComplete="off"
+            data-testid="add-location-dialog-location-name-field"
           />
           <TextField
             id="location-tl"
@@ -152,6 +153,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
             fullWidth={true}
             autoComplete="off"
             select={true}
+            data-testid="add-location-dialog-location-tl-field"
           >
             <MenuItem value="0">0</MenuItem>
             <MenuItem value="1">1</MenuItem>
@@ -172,6 +174,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
               onInput={handleCoordsChange(0)}
               error={!coords.valid}
               autoComplete="off"
+              data-testid="add-location-dialog-location-x-field"
             />
             <TextField
               id="location-y"
@@ -184,13 +187,14 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
               onInput={handleCoordsChange(1)}
               error={!coords.valid}
               autoComplete="off"
+              data-testid="add-location-dialog-location-y-field"
             />
           </Box>
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleCreate} disabled={!allValid()}>Create</Button>
+        <Button onClick={handleCancel}  data-testid="add-location-dialog-cancel-button">Cancel</Button>
+        <Button onClick={handleCreate} disabled={!allValid()}  data-testid="add-location-dialog-confirm-button">Create</Button>
       </DialogActions>
     </Dialog>
   );
