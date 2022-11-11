@@ -9,128 +9,128 @@ interface DieTest {
 
 type TagEffect = 
   | {
-      type: "ASSUME_STAT";
+      type: "ASSUME_STAT",
       details: {
-        tl?: number;
-      };
+        tl?: number,
+      },
     }
   | {
-      type: "ASSUME_TAG";
+      type: "ASSUME_TAG",
       details: {
-        tag: string;
-        target?: "homeworld";
-      };
+        tag: string,
+        target?: "homeworld",
+      },
     }
   | {
-      type: "BONUS_DIE";
+      type: "BONUS_DIE",
       details: {
-        limitPerTurn?: 1;
-        when: "ATTACKING" | "DEFENDING" | "DETECT_STEALTH";
-        with?: FactionAttribute | string;
-        versus?: FactionAttribute | { tl: 5 };
-        target?: "homeworld" | { tl: 0 };
-        during?: "SIEZE_PLANET";
-        die: DiceDefinition | "*";
-      };
+        limitPerTurn?: 1,
+        when: "ATTACKING" | "DEFENDING" | "DETECT_STEALTH",
+        with?: FactionAttribute | string,
+        versus?: FactionAttribute | { tl: 5 },
+        target?: "homeworld" | { tl: 0 },
+        during?: "SIEZE_PLANET",
+        die: DiceDefinition | "*",
+      },
     }
   | {
-      type: "GOAL_COMPLETED_BONUS";
+      type: "GOAL_COMPLETED_BONUS",
       details: {
-        goal: string;
-        test: DieTest;
+        goal: string,
+        test: DieTest,
         bonus: {
-          type: "XP";
-          amount: 1;
-        };
-      };
+          type: "XP",
+          amount: 1,
+        },
+      },
     }
   | {
-      type: "REROLL";
+      type: "REROLL",
       details: {
-        dieValue: 1;
-      };
+        dieValue: 1,
+      },
     }
   | {
-      type: "LOSE_TIES";
+      type: "LOSE_TIES",
       details: {
-        when: "ATTACKING";
-      };
+        when: "ATTACKING",
+      },
     }
   | {
-      type: "ASSET_ABILITY";
+      type: "ASSET_ABILITY",
       details: {
-        type: "MOVE";
-        distance: 1;
-      };
+        type: "MOVE",
+        distance: 1,
+      },
     }
   | {
-      type: "TAX";
+      type: "TAX",
       details: {
-        when: "MOVE";
+        when: "MOVE",
         onto: {
-          contains: "Base of Influence";
-        };
-        pay: 1;
-        to: "FACTION";
-      };
+          contains: "Base of Influence",
+        },
+        pay: 1,
+        to: "FACTION",
+      },
     }
   | {
-      type: "PERMISSION";
+      type: "PERMISSION",
     }
   | {
-      type: "DISCOUNT";
+      type: "DISCOUNT",
       details: {
         on: {
-          tl: 4;
-        };
-        discount: 1;
-      };
+          tl: 4,
+        },
+        discount: 1,
+      },
     }
   | {
-      type: "BONUS_ACTION_AVAILABLE";
+      type: "BONUS_ACTION_AVAILABLE",
       details: {
-        action: "Teach Planetary Population";
-      };
+        action: "Teach Planetary Population",
+      },
     }
   | {
-      type: "FORCE_REROLL";
+      type: "FORCE_REROLL",
       details: {
-        limitPerTurn: 1;
-        die: DiceDefinition;
-      };
+        limitPerTurn: 1,
+        die: DiceDefinition,
+      },
     }
   | {
-      type: "GAIN_CREDIT";
+      type: "GAIN_CREDIT",
       details: {
-        amount: 1;
-        when: "ASSET_DESTROYED";
-        owner: "SELF" | "ENEMY";
-      };
+        amount: 1,
+        when: "ASSET_DESTROYED",
+        owner: "SELF" | "ENEMY",
+      },
     }
   | {
-      type: "STEALTH_ASSETS";
+      type: "STEALTH_ASSETS",
     }
   | {
-      type: "TL4_BASE_WORLD";
+      type: "TL4_BASE_WORLD",
     }
   | {
-      type: "BUILD_STARSHIP";
+      type: "BUILD_STARSHIP",
       details: {
-        population: 10000;
-      };
+        population: 10000,
+      },
     }
   | {
-      type: "BONUS_ASSET_AVAILABLE";
+      type: "BONUS_ASSET_AVAILABLE",
       details: {
-        asset: "Gengineered Slaves";
-      };
+        asset: "Gengineered Slaves",
+      },
     };
 
 export default interface TagInfo {
   name: string;
   attributes?: {
-    name: "location";
-    type: "LOCATION";
+    name: "location",
+    type: "LOCATION",
   }[];
   effects: TagEffect[];
 }
