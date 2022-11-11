@@ -11,6 +11,7 @@ import { TAGS } from "../../data/Tags";
 import EditableNameText from "../atoms/EditableNameText";
 import FactionHpSummary from "../molecules/FactionHpSummary";
 import FactionStatSummary from "../molecules/FactionStatSummary";
+import GoalText from "../molecules/GoalText";
 
 export default function FactionDetails() {
   const { state, controller } = useContext(GameContext);
@@ -97,7 +98,7 @@ export default function FactionDetails() {
         <ItemHeader>Goal:</ItemHeader>
       </Grid>
       <Grid item xs={3}>
-        <Item>{faction.goal?.type || "None"}</Item>
+        <Item><GoalText faction={faction} /></Item>
       </Grid>
       <Grid item xs={6}>
         <Item sx={{ height: "80%" }}></Item>
