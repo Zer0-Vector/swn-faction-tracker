@@ -4,8 +4,8 @@ type GoalUnit = "Asset" | "Planet" | "Base" | "HP" | "Turn" | "Faction" | "FacCr
 
 export default interface GoalInfo {
   type: GoalType;
-  tally: number;
-  target: number;
-  unit: GoalUnit;
-  reward: number;
+  tally?: number;
+  target?: number;
+  unit?: GoalUnit;
+  reward?: number;
 }
