@@ -1,4 +1,4 @@
-const GoalTypes = [
+export const GoalTypes = [
   "Military Conquest",
   "Commercial Expansion",
   "Intelligence Coup",
