@@ -22,16 +22,18 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
   const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const factions = state.getFactions();
+  const factions = state.getFactions().map(f => f.name);
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    console.debug("input changed!", factions);
     const newText = evt.target.value;
-    const nameExists = Object.keys(factions).includes(newText);
+    const nameExists = factions.includes(newText);
     const isNotBlank = newText.trim().length > 0;
     const newState = {
       value: newText,
       valid: isNotBlank && !nameExists,
     };
+    console.debug(isNotBlank, !nameExists);
     setFormState(newState);
   };
   
@@ -54,10 +56,10 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add Faction</DialogTitle>
+    <Dialog open={open} onClose={onClose} data-testid="add-faction-dialog">
+      <DialogTitle data-testid="add-faction-dialog-title">Add Faction</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })}>
+        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })} data-testid="add-faction-dialog-content-text">
           Enter a unique name for the new faction.
         </DialogContentText>
         <TextField
@@ -73,11 +75,12 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
           error={!formState.valid && formState.value !== ""}
           fullWidth={true}
           autoComplete="off"
+          data-testid="add-faction-dialog-faction-name-field"
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleCreate} disabled={!formState.valid}>Create</Button>
+        <Button onClick={handleCancel} data-testid="add-faction-dialog-cancel-button">Cancel</Button>
+        <Button onClick={handleCreate} disabled={!formState.valid} data-testid="add-faction-dialog-confirm-button">Create</Button>
       </DialogActions>
     </Dialog>
   );
