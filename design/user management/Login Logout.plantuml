@@ -1,0 +1,26 @@
+@startuml Login Logout States
+hide empty description
+
+state LoggedOut
+state LoggingIn : Showing login dialog
+state LoginWaiting : waiting on server
+state LoginError : Showing error dialog
+state LoggingOut : Showing confirmation dialog
+state Registering : Showing registration dialog
+state Registered : Showing registration instructions dialog
+
+LoggedOut --> LoggingIn : LoginClick
+LoggingIn --> LoginWaiting : LoginButtonClick
+LoginWaiting --> LoggedIn : LoginSuccess
+LoggingIn --> LoggedOut : CancelClick
+LoggedIn --> LoggingOut : LogoutClick
+LoggingOut --> LoggedIn : CancelClick
+LoggingOut --> LoggedOut : LogoutConfirm
+LoginWaiting --> LoginError : LoginFailure
+LoginError --> LoggedOut : LoginErrorOkClick
+LoggingIn --> Registering : RegisterClick
+Registering --> Registered : RegisterConfirm
+Registered --> LoggingIn : RegisteredOkClick
+
+
+@enduml
