@@ -12,6 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import ModeToggleButtons from "../components/molecules/ModeToggleButtons";
+import UserMenu from "../components/molecules/UserMenu";
 import { UiStateContext } from "../contexts/UiStateContext";
 
 export interface PageContainerProps {
@@ -45,10 +46,10 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
       <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
         <Toolbar>
           <Grid container>
-            <Grid item xs={4.25}>
-              <Typography variant="h1" sx={{ mr: 3, color: "primary.contrastText", whiteSpace: "nowrap" }}>SWN Faction Tracker</Typography>
+            <Grid item xs={3.5}>
+              <Typography variant="h1" sx={{ mr: 2, color: "primary.contrastText", whiteSpace: "nowrap" }}>SWN Faction Tracker</Typography>
             </Grid>
-            <Grid item xs={4.75}>
+            <Grid item xs={4.5}>
               <Tabs value={location.pathname} component="nav">
                 <Tab
                   value="/"
@@ -70,6 +71,9 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
             </Grid>
             <Grid item xs={3}>
               <ModeToggleButtons />
+            </Grid>
+            <Grid item xs={1}>
+              <UserMenu user={undefined} />
             </Grid>
           </Grid>
         </Toolbar>
