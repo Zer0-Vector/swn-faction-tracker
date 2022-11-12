@@ -38,6 +38,7 @@ function App() {
       selectedFaction: null,
       selectedAssetKey: null,
       selectedLocation: null,
+      loginState: "LOGGED_OUT",
     }
   );
   const uiController: IUiStateController = new UiStateController(setUiState);

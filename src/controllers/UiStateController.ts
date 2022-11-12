@@ -1,8 +1,10 @@
+import LoginState from "../types/LoginState";
 import Nullable from "../types/Nullable";
 import PurchasedAsset, { PurchasedAssetUtils } from "../types/PurchasedAsset";
 import UiState from "../types/UiState";
 
 export interface IUiStateController {
+  setLoginState(state: LoginState): void;
   selectLocaion(locationName: Nullable<string>): void;
   selectFaction(name: Nullable<string>): void;
   selectAsset(pa: Nullable<PurchasedAsset>) : void;
@@ -17,6 +19,13 @@ export class UiStateController implements IUiStateController {
 
   constructor(setState: UiStateSetter) {
     this.setState = setState;
+  }
+
+  setLoginState(state: LoginState): void {
+    this.setState(prev => ({
+      ...prev,
+      loginState: state,
+    }));
   }
 
   selectFaction(name: Nullable<string>): void {
