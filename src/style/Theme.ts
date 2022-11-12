@@ -37,25 +37,25 @@ export const THEME = createTheme({
   },
   typography: {
     body1: {
-      fontSize: "1rem",
+      fontSize: "0.75rem",
     },
     body2: {
-      fontSize: "1.125rem",
+      fontSize: "1rem",
     },
     h1: {
-      fontSize: "2.5rem",
-      color: COLORS.pastel.tertiary[LIGHTER],
-    },
-    h2: {
-      fontSize: "2.25rem",
-      color: COLORS.pastel.tertiary[LIGHTER],
-    },
-    h3: {
       fontSize: "2rem",
       color: COLORS.pastel.tertiary[LIGHTER],
     },
-    h4: {
+    h2: {
+      fontSize: "1.875rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
+    },
+    h3: {
       fontSize: "1.75rem",
+      color: COLORS.pastel.tertiary[LIGHTER],
+    },
+    h4: {
+      fontSize: "1.625rem",
       color: COLORS.pastel.tertiary[LIGHTER],
     },
     h5: {
@@ -63,7 +63,7 @@ export const THEME = createTheme({
       color: COLORS.pastel.tertiary[LIGHTER],
     },
     h6: {
-      fontSize: "1.25rem",
+      fontSize: "1.375rem",
       color: COLORS.pastel.tertiary[LIGHTER],
     },
     subtitle1: {
