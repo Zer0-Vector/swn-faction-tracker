@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useRef, useState } from "react";
+import firebase from "firebase/compat/app";
 
 import PersonIcon from '@mui/icons-material/Person';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -9,11 +10,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import Nullable from "../../types/Nullable";
 
-import LoginDialog from "./LoginDialog";
+import "firebase/compat/auth";
 
+import LoginDialog from "./LoginDialog";
+import LogoutConfirmDialog from "./LogoutConfirmDialog";
 
 interface UserMenuProps {
-  user: unknown | undefined;
+  user: firebase.User | null;
 }
 
 export default function UserMenu({ user }: UserMenuProps) {
@@ -21,7 +24,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   const btnRef = useRef<Nullable<HTMLButtonElement>>(null);
   const { controller: uiController } = useContext(UiStateContext);
 
-  const icon: JSX.Element = user === undefined ? <PersonOutlinedIcon /> : <PersonIcon />;
+  const icon: JSX.Element = user === null ? <PersonOutlinedIcon /> : <PersonIcon />;
 
   const handleClose = () => {
     setOpen(false);
@@ -47,7 +50,7 @@ export default function UserMenu({ user }: UserMenuProps) {
 
   const menuItems: JSX.Element[] = useMemo(() => {
     const result: JSX.Element[] = [];
-    if (user === undefined) {
+    if (user === null) {
       result.push(<MenuItem key="0" onClick={handleLogin}>Login</MenuItem>);
     } else {
       result.push(<MenuItem key="1" onClick={handleSettings}>Settings</MenuItem>);
@@ -57,6 +60,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  console.log("Rendering UserMenu... user =", user);
 
   return (
     <div>
@@ -67,6 +71,7 @@ export default function UserMenu({ user }: UserMenuProps) {
         {menuItems}
       </Menu>
       <LoginDialog />
+      <LogoutConfirmDialog />
     </div>
   );
 }
