@@ -99,9 +99,9 @@ export default function LoginDialog() {
   console.debug("Rendering LoginDialog...");
 
   return (
-    <Dialog open={uiState.loginState === "LOGGING_IN"}>
-      <DialogTitle>Login</DialogTitle>
-      <form onSubmit={handleLogin}>
+    <Dialog open={uiState.loginState === "LOGGING_IN"} data-testid="login-dialog">
+      <DialogTitle data-testid="login-dialog-title">Login</DialogTitle>
+      <form onSubmit={handleLogin} data-testid="login-dialog-form">
         <DialogContent>
           <DialogContentText sx={{ my: 2 }}>Enter your credientials.</DialogContentText>
           <Container disableGutters sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2}}>
@@ -113,6 +113,7 @@ export default function LoginDialog() {
               autoFocus={true}
               autoComplete="email"
               inputRef={emailRef}
+              data-testid="login-dialog-email-field"
             />
             <TextField
               id="password"
@@ -122,12 +123,13 @@ export default function LoginDialog() {
               onChange={handlePasswordChange}
               autoComplete="current-password"
               inputRef={passwordRef}
+              data-testid="login-dialog-password-field"
             />
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button type="submit" disabled={buttonDisabled}>Login</Button>
+          <Button onClick={handleCancel} data-testid="login-dialog-cancel-button">Cancel</Button>
+          <Button type="submit" disabled={buttonDisabled} data-testid="login-dialog-login-button">Login</Button>
         </DialogActions>
       </form>
     </Dialog>
