@@ -3,11 +3,13 @@ hide empty description
 
 state LoggingIn : Showing login dialog
 state LoginWaiting : waiting on server
-state LoginError : Showing error dialog
+LoginWaiting : still showing login dialog
+state LoginError : Showing error message in login dialog
 state LoggingOut : Showing confirmation dialog
 state Registering : Showing registration dialog
-state Registered : Showing registration instructions dialog
-state RegisterError : Showing error dialog
+state Registered : Email validation instructions
+state RegisterError : Showing error message 
+RegisterError: still showing registration dialog
 state RegisterWaiting : waiting on server
 state LogoutWaiting : waiting on server
 state LoggedOut
