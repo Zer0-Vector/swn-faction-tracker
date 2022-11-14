@@ -39,6 +39,8 @@ export default function FactionList(): JSX.Element {
     );
   }
 
+  console.debug("Rendering FactionList...");
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="faction-droppable">
