@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 
 import Box from '@mui/material/Box';
@@ -30,8 +30,9 @@ function App() {
     }
   );
 
-  const gameState: RuntimeGameState = new RuntimeGameState(storedState);
-  const gameController: IGameController = new GameController(gameState, setStoredState);
+  const gameState: RuntimeGameState = useMemo(() => new RuntimeGameState(storedState), [storedState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const gameController: IGameController = useMemo(() => new GameController(gameState, setStoredState), [gameState]);
 
   const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", 
     {
@@ -41,7 +42,9 @@ function App() {
       loginState: "LOGGED_OUT",
     }
   );
-  const uiController: IUiStateController = new UiStateController(setUiState);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const uiController: IUiStateController = useMemo(() => new UiStateController(setUiState), []);
 
   console.debug("Rendering App...");
 
