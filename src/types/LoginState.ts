@@ -2,6 +2,7 @@ const LoginStates = [
   "LOGGED_OUT", // before login, or after logout
   "LOGGING_IN", // login dialog showing
   "LOGGING_OUT", // logout confirmation showing
+  "LOGOUT_WAITING", // after logout confirm, before server response
   "LOGGED_IN", // after login dialog success
   "LOGIN_ERROR", // after login failure, error dialog showing
   "LOGIN_WAITING", // after login button click, before login success/failure
