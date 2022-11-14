@@ -10,6 +10,7 @@ const LoginStates = [
   "REGISTER_WAITING", // after register button click, before register success/failure
   "REGISTER_ERROR", // after register failure
   "REGISTERED", // showing instructional dialog, after register success
+  "NEEDS_VERIFICATION",
 ] as const;
 
 type LoginState = typeof LoginStates[number];
