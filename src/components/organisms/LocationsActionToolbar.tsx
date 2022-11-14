@@ -53,7 +53,7 @@ export default function LocationsActionToolbar() {
       />
       <ConfirmDialog
         open={removeDialogOpen}
-        onClose={handleCloseRemoveDialog}
+        onCancel={handleCloseRemoveDialog}
         onConfirm={handleRemove}
         title="Confirm Remove Location"
         message={`Remove location '${uiState.selectedLocation}'?`}

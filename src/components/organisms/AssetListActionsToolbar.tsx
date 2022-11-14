@@ -49,7 +49,7 @@ export default function AssetListActionsToolbar() {
         message={`Remove asset ${uiState.selectedAssetKey?.split(".")[1]}?`}
         buttonText="Remove"
         open={removeOpen}
-        onClose={() => setRemoveOpen(false)}
+        onCancel={() => setRemoveOpen(false)}
         onConfirm={handleRemove}
       />
     </ListActionToolbar>
