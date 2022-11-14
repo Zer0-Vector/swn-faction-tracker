@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -59,7 +60,8 @@ export default function LoginDialog() {
     }
 
     uiController.setLoginState("LOGIN_WAITING");
-    FirebaseAuth.signInWithEmailAndPassword(
+    signInWithEmailAndPassword(
+      FirebaseAuth,
       username,
       password
     ).then(cred => {
