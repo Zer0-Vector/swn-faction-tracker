@@ -1,4 +1,5 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
+import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import Button from "@mui/material/Button";
@@ -9,10 +10,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { FirebaseAuth } from "../../firebase-init";
 import Nullable from "../../types/Nullable";
+import Link from "../atoms/Link";
 
 interface ValidationInfo {
   hasChanged: boolean;
@@ -25,6 +28,12 @@ export default function LoginDialog() {
   const [passwordValid, setPasswordValid] = useState({hasChanged: false, valid: false});
   const emailRef = useRef<Nullable<HTMLInputElement>>(null);
   const passwordRef = useRef<Nullable<HTMLInputElement>>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const open = useMemo(() => 
+      uiState.loginState === "LOGGING_IN"
+      || uiState.loginState === "LOGIN_ERROR"
+      || uiState.loginState === "LOGIN_WAITING",
+    [uiState.loginState]);
 
   const handleClearForm = () => {
     if (emailRef.current) {
@@ -41,6 +50,7 @@ export default function LoginDialog() {
       hasChanged: false,
       valid: false,
     });
+    setErrorMessage(null);
   };
 
   const handleCancel = () => {
@@ -65,13 +75,33 @@ export default function LoginDialog() {
       username,
       password
     ).then(cred => {
-      console.info("Logged in as ", cred.user?.email);
-      uiController.setLoginState("LOGGED_IN");
-    }).catch(reason => {
+      console.info("Logged in as:", cred.user.email);
+      if (cred.user.emailVerified) {
+        console.debug("verified");
+        uiController.setLoginState("LOGGED_IN");
+        handleClearForm();
+      } else {
+        console.warn("User not email verified");
+        uiController.setLoginState("NEEDS_VERIFICATION");
+      }
+    }).catch((reason: FirebaseError) => {
       console.error("Error logging in: ", reason);
-      uiController.setLoginState("LOGGED_OUT");
+      switch (reason.code) {
+        case "auth/user-not-found":
+        case "auth/invalid-email":
+        case "auth/wrong-password":
+          setErrorMessage("Invalid credentials.");
+          emailRef.current?.select();
+          break;
+        case "auth/too-many-requests":
+          setErrorMessage("Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.");
+          break;
+        default:
+          setErrorMessage(`An error occurred logging in (${reason.code}).`);
+          break;
+      }
+      uiController.setLoginState("LOGGING_IN");
     });
-    handleClearForm();
   };
 
   const handleUsernameChange: React.ChangeEventHandler<HTMLInputElement> = (evt) => {
@@ -99,20 +129,29 @@ export default function LoginDialog() {
   console.debug("Rendering LoginDialog...");
 
   return (
-    <Dialog open={uiState.loginState === "LOGGING_IN"} data-testid="login-dialog">
-      <DialogTitle data-testid="login-dialog-title">Login</DialogTitle>
+    <Dialog open={open} fullWidth={true} maxWidth="sm" data-testid="login-dialog">
       <form onSubmit={handleLogin} data-testid="login-dialog-form">
+        <DialogTitle data-testid="login-dialog-title">Login</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ my: 2 }}>Enter your credientials.</DialogContentText>
-          <Container disableGutters sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2}}>
+          <DialogContentText sx={{ marginBottom: 2 }} >Enter your credentials.</DialogContentText>
+          {errorMessage ? <Typography color="error" sx={{ marginBottom: 2}}>{errorMessage}</Typography> : null}
+          <Container
+            disableGutters
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 2,
+              textAlign: "center"
+          }}>
             <TextField
               id="email"
               label="Email"
               error={usernameError}
               onChange={handleUsernameChange}
-              autoFocus={true}
               autoComplete="email"
+              autoFocus={true}
               inputRef={emailRef}
+              sx={{ gridColumn: "1 / 3" }}
               data-testid="login-dialog-email-field"
             />
             <TextField
@@ -123,8 +162,11 @@ export default function LoginDialog() {
               onChange={handlePasswordChange}
               autoComplete="current-password"
               inputRef={passwordRef}
+              sx={{ gridColumn: "1 / 3" }}
               data-testid="login-dialog-password-field"
             />
+            <Link>Register</Link>
+            <Link>Reset Password</Link>
           </Container>
         </DialogContent>
         <DialogActions>

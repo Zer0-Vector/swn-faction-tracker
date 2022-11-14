@@ -49,7 +49,7 @@ describe('default LoginDialog', () => {
         <LoginDialog />
       </UiStateContext.Provider>
     );
-    // TODO how to assert empty, nameless div?
+    expect(screen.queryByTestId("login-dialog")).not.toBeInTheDocument();
   });
 
   it('displays dialog with buttons and TextFields when open', () => {
@@ -109,8 +109,8 @@ describe('default LoginDialog', () => {
     expect(loginButton).not.toBeDisabled();
   });
 
-  it('after login click with credentails, LoginState is updated', async () => {
-    mockSignIn.mockImplementationOnce(() => Promise.resolve({ user: {} as User } as UserCredential));
+  it('after login click with verified credentails, LoginState=LOGGED_IN', async () => {
+    mockSignIn.mockImplementationOnce(() => Promise.resolve({ user: { emailVerified: true } as User } as UserCredential));
     renderOpened();
     const emailField = screen.getByLabelText("Email") as HTMLInputElement;
     const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
@@ -125,7 +125,23 @@ describe('default LoginDialog', () => {
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_IN");
   });
 
-  it('after failed login, state is LOGGED_OUT', async () => {
+  it('after login with unverified credentials, LoginState=NEEDS_VERIFICATION', async () => {
+    mockSignIn.mockImplementationOnce(() => Promise.resolve({ user: { emailVerified: false } as User } as UserCredential));
+    renderOpened();
+    const emailField = screen.getByLabelText("Email") as HTMLInputElement;
+    const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
+    const loginButton = screen.getByTestId("login-dialog-login-button");
+
+    fireEvent.input(emailField, { target: { value: "a@b.c" } });
+    fireEvent.input(passwordField, { target: { value: "123" } });
+    fireEvent.click(loginButton);
+
+    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
+    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
+    expect(mockContext.controller.setLoginState).toBeCalledWith("NEEDS_VERIFICATION");
+  });
+
+  it('after failed login, LoginState=LOGIN_ERROR', async () => {
     mockSignIn.mockImplementationOnce(() => Promise.reject("testing"));
     renderOpened();
     const emailField = screen.getByLabelText("Email") as HTMLInputElement;
@@ -138,6 +154,6 @@ describe('default LoginDialog', () => {
 
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
-    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_OUT");
+    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGING_IN");
   });
 });
