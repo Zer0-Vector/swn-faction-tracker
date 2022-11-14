@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef, useState } from "react";
-import firebase from "firebase/compat/app";
+import * as Auth from "firebase/auth";
 
 import PersonIcon from '@mui/icons-material/Person';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -10,13 +10,11 @@ import MenuItem from "@mui/material/MenuItem";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import Nullable from "../../types/Nullable";
 
-import "firebase/compat/auth";
-
 import LoginDialog from "./LoginDialog";
 import LogoutConfirmDialog from "./LogoutConfirmDialog";
 
 interface UserMenuProps {
-  user: firebase.User | null;
+  user: Auth.User | null;
 }
 
 export default function UserMenu({ user }: UserMenuProps) {
