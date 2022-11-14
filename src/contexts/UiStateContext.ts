@@ -3,7 +3,7 @@ import { createContext } from "react";
 import { IUiStateController } from "../controllers/UiStateController";
 import UiState from "../types/UiState";
 
-interface UiStateContextType {
+export interface UiStateContextType {
   state: UiState;
   controller: IUiStateController;
 }
