@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -14,17 +14,20 @@ import Typography from "@mui/material/Typography";
 import ModeToggleButtons from "../components/molecules/ModeToggleButtons";
 import UserMenu from "../components/molecules/UserMenu";
 import { UiStateContext } from "../contexts/UiStateContext";
+import { FirebaseAuth } from "../firebase-init";
 
 export interface PageContainerProps {
-  ref?: React.Ref<unknown>;
   children?: React.ReactNode;
 }
 
-export default function PageContainer({ ref, children }: PageContainerProps) {
+export default function PageContainer({ children }: PageContainerProps) {
   const { controller: uiController } = useContext(UiStateContext);
   const location = useLocation();
 
-  const clearSelection = () => uiController.clearSelections();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const clearSelection = useCallback(() => uiController.clearSelections(), []);
+
+  console.debug("Rendering PageContainer...");
 
   const tabSx: SxProps<Theme> = {
     color: "primary.contrastText",
@@ -40,7 +43,6 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
         flexDirection: "column",
         alignItems: "stretch",
       }}
-      ref={ref}
       data-testid="page-container"
     >
       <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
@@ -73,7 +75,7 @@ export default function PageContainer({ ref, children }: PageContainerProps) {
               <ModeToggleButtons />
             </Grid>
             <Grid item xs={1}>
-              <UserMenu user={undefined} />
+              <UserMenu user={FirebaseAuth.currentUser} />
             </Grid>
           </Grid>
         </Toolbar>
