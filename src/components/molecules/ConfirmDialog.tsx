@@ -12,24 +12,23 @@ interface ConfirmDialogProps {
   message: string;
   buttonText?: string;
   open: boolean;
-  onClose: () => void;
   onConfirm: () => void;
+  onCancel: () => void;
 }
 
-export default function ConfirmDialog({ title, message, buttonText, open, onClose, onConfirm }: ConfirmDialogProps) {
+export default function ConfirmDialog({ title, message, buttonText, open, onCancel, onConfirm }: ConfirmDialogProps) {
   const handleConfirm = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     onConfirm();
-    onClose();
   };
 
   const handleCancel = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-    onClose();
+    onCancel();
   };
   
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onCancel}>
       <DialogContent>
         <DialogTitle>{title}</DialogTitle>
         <DialogContentText>{message}</DialogContentText>

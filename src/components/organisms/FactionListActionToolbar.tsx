@@ -36,7 +36,7 @@ export default function FactionListActionToolbar() {
         message={`Delete faction "${uiState.selectedFaction}"`}
         buttonText="Remove"
         open={removeOpen}
-        onClose={() => setRemoveOpen(false)}
+        onCancel={() => setRemoveOpen(false)}
         onConfirm={handleRemove}
       />
     </ListActionToolbar>
