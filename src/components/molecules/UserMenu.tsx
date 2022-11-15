@@ -12,6 +12,7 @@ import Nullable from "../../types/Nullable";
 
 import LoginDialog from "./LoginDialog";
 import LogoutConfirmDialog from "./LogoutConfirmDialog";
+import RegistrationDialog from "./RegistrationDialog";
 
 interface UserMenuProps {
   user: Auth.User | null;
@@ -58,7 +59,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  console.log("Rendering UserMenu... user =", user);
+  console.debug("Rendering UserMenu... logged in? ", !!user);
 
   return (
     <div>
@@ -70,6 +71,7 @@ export default function UserMenu({ user }: UserMenuProps) {
       </Menu>
       <LoginDialog />
       <LogoutConfirmDialog />
+      <RegistrationDialog />
     </div>
   );
 }
