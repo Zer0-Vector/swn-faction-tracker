@@ -1,5 +1,5 @@
 import React from "react";
-import { signInWithEmailAndPassword, User, UserCredential } from "firebase/auth";
+import { setPersistence, signInWithEmailAndPassword, User, UserCredential } from "firebase/auth";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
@@ -12,6 +12,7 @@ jest.mock("firebase/app");
 jest.mock("firebase/analytics");
 jest.mock("firebase/auth");
 
+const mockSetPersistence = setPersistence as jest.MockedFn<typeof setPersistence>;
 const mockSignIn = signInWithEmailAndPassword as jest.MockedFn<typeof signInWithEmailAndPassword>;
 
 //   getAuth: () => ({} as FBAuth.Auth),
@@ -38,6 +39,10 @@ function renderOpened() {
 }
 
 describe('default LoginDialog', () => {
+  beforeEach(() => {
+    mockSetPersistence.mockImplementationOnce(() => Promise.resolve());
+  });
+
   it('displays nothing when not open', () => {
     render(
       <UiStateContext.Provider value={
