@@ -1,7 +1,7 @@
 import React from "react";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
 import RegistrationDialog from "../RegistrationDialog";
@@ -68,7 +68,21 @@ describe('default RegistrationDialog', () => {
     expect(confirmField.getAttribute("type")).toBe("password");
   });
 
-  it.todo('register button enables when fields are non-empty and passwords match');
+  it('register button enables when fields are non-empty and passwords match', () => {
+    renderOpened();
+    const registerButton = screen.getByTestId("registration-dialog-register-button");
+    expect(registerButton).toBeDisabled();
+    
+    const emailField = screen.getByLabelText("Email");
+    const passwordField = screen.getByLabelText("Password");
+    const confirmField = screen.getByLabelText("Confirm Password");
+
+    fireEvent.input(emailField, { target: { value: "a@b.c" } });
+    fireEvent.input(passwordField, { target: { value: "123" } });
+    fireEvent.input(confirmField, { target: { value: "123" } });
+
+    expect(registerButton).not.toBeDisabled();
+  });
 
   it.todo('password and confirm fields are error highlighted when passwords do not match');
 
