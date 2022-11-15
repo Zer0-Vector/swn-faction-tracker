@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import { browserLocalPersistence, getAuth, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
+import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -27,7 +27,6 @@ export default function LoginDialog() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const open = useMemo(() => 
       uiState.loginState === "LOGGING_IN"
-      || uiState.loginState === "LOGIN_ERROR"
       || uiState.loginState === "LOGIN_WAITING",
     [uiState.loginState]);
 
@@ -66,7 +65,7 @@ export default function LoginDialog() {
     }
 
     uiController.setLoginState("LOGIN_WAITING");
-    setPersistence(getAuth(), browserLocalPersistence).then(() => 
+    setPersistence(FirebaseAuth, browserLocalPersistence).then(() => 
       signInWithEmailAndPassword(FirebaseAuth, username, password)
     ).then(cred => {
       console.info("Logged in as:", cred.user.email);
@@ -128,7 +127,7 @@ export default function LoginDialog() {
         <DialogTitle data-testid="login-dialog-title">Login</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ marginBottom: 2 }} >Enter your credentials.</DialogContentText>
-          {errorMessage ? <Typography color="error" sx={{ marginBottom: 2}}>{errorMessage}</Typography> : null}
+          {errorMessage ? <Typography color="error" sx={{ marginBottom: 2}} data-testid="login-dialog-error-message">{errorMessage}</Typography> : null}
           <Container
             disableGutters
             sx={{
@@ -159,8 +158,8 @@ export default function LoginDialog() {
               sx={{ gridColumn: "1 / 3" }}
               data-testid="login-dialog-password-field"
             />
-            <Link>Register</Link>
-            <Link>Reset Password</Link>
+            <Link onClick={() => uiController.setLoginState("REGISTERING")}>Register</Link>
+            <Link onClick={() => uiController.setLoginState("RESETTING_PASSWORD")}>Reset Password</Link>
           </Container>
         </DialogContent>
         <DialogActions>
