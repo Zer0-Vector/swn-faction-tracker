@@ -1,7 +1,9 @@
 import React, { useCallback, useContext, useMemo } from "react";
+import { FirebaseError } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 import { UiStateContext } from "../../contexts/UiStateContext";
-import { FirebaseAuth } from "../../firebase-init";
+import { FirebaseApp } from "../../firebase-init";
 
 import ConfirmDialog from "./ConfirmDialog";
 
@@ -9,9 +11,9 @@ const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const handleLogout = useCallback(() => {
     uiController.setLoginState("LOGOUT_WAITING");
-    FirebaseAuth.signOut().then(() => {
+    getAuth(FirebaseApp).signOut().then(() => {
       uiController.setLoginState("LOGGED_OUT");
-    }).catch(reason => {
+    }).catch((reason: FirebaseError) => {
       console.error("Logout failed: ", reason);
       uiController.setLoginState("LOGGED_IN");
     });

@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -13,7 +13,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { UiStateContext } from "../../contexts/UiStateContext";
-import { FirebaseAuth } from "../../firebase-init";
+import { FirebaseApp } from "../../firebase-init";
 import Nullable from "../../types/Nullable";
 import { ValidationInfo } from "../../types/ValidationInfo";
 
@@ -63,7 +63,7 @@ const RegistrationDialog = () => {
     }
 
     uiController.setLoginState("REGISTER_WAITING");
-    createUserWithEmailAndPassword(FirebaseAuth, emailRef.current.value, passwordRef.current.value)
+    createUserWithEmailAndPassword(getAuth(FirebaseApp), emailRef.current.value, passwordRef.current.value)
       .then(cred => {
         return sendEmailVerification(cred.user)
           .then(() => {

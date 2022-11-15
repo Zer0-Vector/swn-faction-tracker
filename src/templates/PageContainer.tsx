@@ -1,4 +1,5 @@
 import React, { useCallback, useContext } from "react";
+import { getAuth } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -14,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import ModeToggleButtons from "../components/molecules/ModeToggleButtons";
 import UserMenu from "../components/molecules/UserMenu";
 import { UiStateContext } from "../contexts/UiStateContext";
-import { FirebaseAuth } from "../firebase-init";
+import { FirebaseApp } from "../firebase-init";
 
 export interface PageContainerProps {
   children?: React.ReactNode;
@@ -75,7 +76,7 @@ export default function PageContainer({ children }: PageContainerProps) {
               <ModeToggleButtons />
             </Grid>
             <Grid item xs={1}>
-              <UserMenu user={FirebaseAuth.currentUser} />
+              <UserMenu user={getAuth(FirebaseApp).currentUser} />
             </Grid>
           </Grid>
         </Toolbar>
