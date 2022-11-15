@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
+import { browserLocalPersistence, getAuth, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -13,7 +13,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { UiStateContext } from "../../contexts/UiStateContext";
-import { FirebaseAuth } from "../../firebase-init";
+import { FirebaseApp } from "../../firebase-init";
 import Nullable from "../../types/Nullable";
 import { ValidationInfo } from "../../types/ValidationInfo";
 import Link from "../atoms/Link";
@@ -65,8 +65,9 @@ export default function LoginDialog() {
     }
 
     uiController.setLoginState("LOGIN_WAITING");
-    setPersistence(FirebaseAuth, browserLocalPersistence).then(() => 
-      signInWithEmailAndPassword(FirebaseAuth, username, password)
+    const AUTH = getAuth(FirebaseApp);
+    setPersistence(AUTH, browserLocalPersistence).then(() => 
+      signInWithEmailAndPassword(AUTH, username, password)
     ).then(cred => {
       console.info("Logged in as:", cred.user.email);
       if (cred.user.emailVerified) {
