@@ -15,12 +15,8 @@ import Typography from "@mui/material/Typography";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { FirebaseAuth } from "../../firebase-init";
 import Nullable from "../../types/Nullable";
+import { ValidationInfo } from "../../types/ValidationInfo";
 import Link from "../atoms/Link";
-
-interface ValidationInfo {
-  hasChanged: boolean;
-  valid: boolean;
-}
 
 export default function LoginDialog() {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
