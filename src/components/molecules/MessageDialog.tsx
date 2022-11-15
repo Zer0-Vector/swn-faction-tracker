@@ -14,14 +14,16 @@ interface MessageDialogProps {
   onClose: () => void;
   id: string;
   buttonText?: string;
+  children?: React.ReactNode;
 }
 
-const MessageDialog = ({ open, title, message, onClose, id, buttonText }: MessageDialogProps) => {
+const MessageDialog = ({ open, title, message, onClose, id, buttonText, children }: MessageDialogProps) => {
   return (
     <Dialog open={open} fullWidth={true} maxWidth="xs" data-testid={`${id}-dialog`}>
       <DialogTitle data-testid={`${id}-dialog-title`}>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText data-testid={`${id}-dialog-message`}>{message}</DialogContentText>
+        {children}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} data-testid={`${id}-dialog-close-button`}>{buttonText || "Close"}</Button>
