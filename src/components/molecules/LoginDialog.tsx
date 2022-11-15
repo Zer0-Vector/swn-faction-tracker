@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { browserLocalPersistence, getAuth, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -70,10 +70,8 @@ export default function LoginDialog() {
     }
 
     uiController.setLoginState("LOGIN_WAITING");
-    signInWithEmailAndPassword(
-      FirebaseAuth,
-      username,
-      password
+    setPersistence(getAuth(), browserLocalPersistence).then(() => 
+      signInWithEmailAndPassword(FirebaseAuth, username, password)
     ).then(cred => {
       console.info("Logged in as:", cred.user.email);
       if (cred.user.emailVerified) {

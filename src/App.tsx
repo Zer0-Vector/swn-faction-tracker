@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { getAuth, User } from "firebase/auth";
 import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 
 import Box from '@mui/material/Box';
@@ -45,6 +46,16 @@ function App() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const uiController: IUiStateController = useMemo(() => new UiStateController(setUiState), []);
+
+  useEffect(() => {
+    console.debug("Registering onAuthStateChanged");
+    getAuth().onAuthStateChanged((user: User | null) => {
+      console.debug("Checking login status: ", user);
+      if (user) {
+        uiController.setLoginState("LOGGED_IN");
+      }
+    });
+  }, []);
 
   console.debug("Rendering App...");
 
