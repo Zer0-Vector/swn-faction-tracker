@@ -146,12 +146,13 @@ describe('default LoginDialog', () => {
     expect(mockContext.controller.setLoginState).toBeCalledWith("NEEDS_VERIFICATION");
   });
 
-  it('after failed login, LoginState=LOGIN_ERROR', async () => {
-    mockSignIn.mockImplementationOnce(() => Promise.reject("testing"));
+  it('after failed login, LoginState=LOGGING_IN with error message', async () => {
+    mockSignIn.mockImplementationOnce(() => Promise.reject({ code: "testing" }));
     renderOpened();
     const emailField = screen.getByLabelText("Email") as HTMLInputElement;
     const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
     const loginButton = screen.getByTestId("login-dialog-login-button");
+    expect(screen.queryByTestId("login-dialog-error-message")).not.toBeInTheDocument();
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
     fireEvent.input(passwordField, { target: { value: "123" } });
@@ -160,5 +161,8 @@ describe('default LoginDialog', () => {
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGING_IN");
+    const errorMessage = screen.getByTestId("login-dialog-error-message");
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent("error");
   });
 });
