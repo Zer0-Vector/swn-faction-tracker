@@ -14,9 +14,10 @@ interface ConfirmDialogProps {
   open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  children?: React.ReactNode;
 }
 
-export default function ConfirmDialog({ title, message, buttonText, open, onCancel, onConfirm }: ConfirmDialogProps) {
+export default function ConfirmDialog({ title, message, buttonText, open, onCancel, onConfirm, children }: ConfirmDialogProps) {
   const handleConfirm = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     onConfirm();
@@ -29,14 +30,15 @@ export default function ConfirmDialog({ title, message, buttonText, open, onCanc
   
   return (
     <Dialog open={open} onClose={onCancel}>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <DialogTitle>{title}</DialogTitle>
         <DialogContentText>{message}</DialogContentText>
-        <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleConfirm}>{buttonText || "Confirm"}</Button>
-        </DialogActions>
+        {children}
       </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleConfirm}>{buttonText || "Confirm"}</Button>
+      </DialogActions>
     </Dialog>
   );
 }
