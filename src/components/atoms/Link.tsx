@@ -4,11 +4,12 @@ import MuiLink from "@mui/material/Link";
 
 interface LinkProps {
   children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-const Link = ({ children }: LinkProps) => {
+const Link = ({ children, onClick }: LinkProps) => {
   return (
-    <MuiLink sx={{ "&:hover": { cursor: "pointer" } }}>{children}</MuiLink>
+    <MuiLink onClick={onClick} sx={{ "&:hover": { cursor: "pointer" } }}>{children}</MuiLink>
   );
 };
 
