@@ -55,7 +55,11 @@ function App() {
         uiController.setLoginState("LOGGED_IN");
       }
     });
-  }, []);
+  }, [uiController]);
+
+  useEffect(() => {
+    console.debug("LoginState: ", uiState.loginState);
+  }, [uiState.loginState]);
 
   console.debug("Rendering App...");
 
