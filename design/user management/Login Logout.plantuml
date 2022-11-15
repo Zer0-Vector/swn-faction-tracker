@@ -2,37 +2,44 @@
 hide empty description
 
 state LoggingIn : Showing login dialog
+LoggingIn : maybe showing error message
 state LoginWaiting : waiting on server
 LoginWaiting : still showing login dialog
-state LoginError : Showing error message in login dialog
 state LoggingOut : Showing confirmation dialog
-state Registering : Showing registration dialog
-state Registered : Email validation instructions
-state RegisterError : Showing error message 
-RegisterError: still showing registration dialog
-state RegisterWaiting : waiting on server
 state LogoutWaiting : waiting on server
+state Registering : Showing registration dialog
+Registering : maybe showing error message
 state LoggedOut
-
+state Registered : Email validation instructions
+state RegisterWaiting : waiting on server
+RegisterWaiting: still showing registration dialog
+state verify <<choice>>
+state NeedsVerification : show instruction dialog\nwith resend link
+state SendVerificationWaiting : waiting on server
+state SendVerificationError : show error dialog
 
 LoggedOut --> LoggingIn : LoginClick
-LoggingIn -left-> LoginWaiting : LoginButtonClick
-LoginWaiting -left-> LoggedIn : LoginSuccess
+LoggingIn --> LoginWaiting : LoginButtonClick
+LoginWaiting --> verify : LoginSuccess
+verify --> LoggedIn : Verified
+verify --> NeedsVerification : Unverified
+NeedsVerification --> LoggedOut : CancelClick
+NeedsVerification --> LoggingIn : LoginClick
 LoggingIn --> LoggedOut : CancelClick
 LoggedIn --> LoggingOut : LogoutClick
 LoggingOut --> LoggedIn : CancelClick
 LoggingOut --> LogoutWaiting : LogoutConfirm
 LogoutWaiting --> LoggedOut : LogoutSuccess
 LogoutWaiting --> LoggedIn : LogoutFailure
-LoginWaiting --> LoginError : LoginFailure
-LoginError --> LoggedOut : LoginErrorOkClick
+LoginWaiting --> LoggingIn : LoginFailure
 LoggingIn --> Registering : RegisterClick
 Registering --> RegisterWaiting : RegisterConfirm
-RegisterWaiting --> Registered : RegisterSuccess
-RegisterWaiting --> RegisterError : RegisterFailure
-RegisterError --> LoggedOut : RegisterErrorOkClick
-Registered --> LoggingIn : RegisteredOkClick
+RegisterWaiting --> SendVerificationWaiting : RegisterSuccess
+SendVerificationError --> LoggedOut : OkClick
+RegisterWaiting --> Registering : RegisterFailure
+Registered --> LoggingIn : OkClick
 Registering --> LoggedOut : CancelClick
-
+SendVerificationWaiting --> SendVerificationError : VerificationError
+SendVerificationWaiting --> Registered : SendVerificationSuccess
 
 @enduml
