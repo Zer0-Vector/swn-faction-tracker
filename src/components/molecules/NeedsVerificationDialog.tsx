@@ -10,7 +10,7 @@ import MessageDialog from "./MessageDialog";
 
 const NeedsVerificationDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
-  const open = uiState.loginState === "NEEDS_VERIFICATION";
+  const open = uiState.loginState === "NEEDS_VERIFICATION" || uiState.loginState === "REGISTERED";
   
   const handleResend = useCallback(() => {
     const currentUser = getAuth(FirebaseApp).currentUser;
@@ -28,7 +28,7 @@ const NeedsVerificationDialog = () => {
     signOut(getAuth(FirebaseApp)).then(() => {
       uiController.setLoginState("LOGGED_OUT");
     }).catch((reason: FirebaseError) => {
-      console.error("Log out failed: ", reason);
+      console.warn("Log out failed: ", reason);
       uiController.setLoginState("LOGGED_IN");
     });
   }, [uiController]);

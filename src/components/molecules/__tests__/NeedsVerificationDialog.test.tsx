@@ -4,9 +4,10 @@ import { Auth, getAuth, sendEmailVerification, signOut, User } from "firebase/au
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
-import LoginState from "../../../types/LoginState";
+import LoginState, { LoginStates } from "../../../types/LoginState";
 import UiState from "../../../types/UiState";
 import NeedsVerificationDialog from "../NeedsVerificationDialog";
+import { UiStateController } from "../../../controllers/UiStateController";
 
 jest.mock("firebase/app");
 jest.mock("firebase/analytics");
@@ -35,8 +36,35 @@ function renderOpened() {
 }
 
 describe('<NeedsVerificationDialog />', () => {
-  it('opens when LoginState=NEEDS_VERIFICATION', () => {
-    renderOpened();
+  it.each(
+    [...LoginStates].filter(s => s !== "REGISTERED" && s !== "NEEDS_VERIFICATION")
+  )('is not rendered when LoginState=%p', s => {
+    render(
+      <UiStateContext.Provider value={{
+        state: {
+          loginState: s,
+        } as UiState,
+        controller: {} as UiStateController,
+      }}>
+        <NeedsVerificationDialog />
+      </UiStateContext.Provider>
+    );
+    expect(screen.queryByTestId("verification-dialog")).not.toBeInTheDocument();
+  });
+
+  it.each(
+    ["NEEDS_VERIFICATION", "REGISTERED"] as LoginState[]
+  )('opens when LoginState=%p', s => {
+    render(
+      <UiStateContext.Provider value={{
+        state: {
+          loginState: s,
+        } as UiState,
+        controller: {} as UiStateController,
+      }}>
+        <NeedsVerificationDialog />
+      </UiStateContext.Provider>
+    );
     expect(screen.getByTestId("verification-dialog")).toBeInTheDocument();
   });
 
