@@ -1,4 +1,4 @@
-const LoginStates = [
+export const LoginStates = [
   "LOGGED_OUT", // before login, or after logout
   "LOGGING_IN", // login dialog showing (maybe error message)
   "LOGGING_OUT", // logout confirmation showing
