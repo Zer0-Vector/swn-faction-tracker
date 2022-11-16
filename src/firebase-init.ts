@@ -1,5 +1,4 @@
 // Import the functions you need from the SDKs you need
-import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -11,4 +10,3 @@ const firebaseConfig = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
 
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
-export const FirebaseAnalytics = getAnalytics(FirebaseApp);
