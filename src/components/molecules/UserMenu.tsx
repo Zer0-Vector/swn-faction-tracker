@@ -12,7 +12,9 @@ import Nullable from "../../types/Nullable";
 
 import LoginDialog from "./LoginDialog";
 import LogoutConfirmDialog from "./LogoutConfirmDialog";
+import NeedsVerificationDialog from "./NeedsVerificationDialog";
 import RegistrationDialog from "./RegistrationDialog";
+import VerificationEmailErrorDialog from "./VerificationEmailErrorDialog";
 
 interface UserMenuProps {
   user: Auth.User | null;
@@ -72,6 +74,8 @@ export default function UserMenu({ user }: UserMenuProps) {
       <LoginDialog />
       <LogoutConfirmDialog />
       <RegistrationDialog />
+      <NeedsVerificationDialog />
+      <VerificationEmailErrorDialog />
     </div>
   );
 }
