@@ -15,8 +15,10 @@ const NeedsVerificationDialog = () => {
   const handleResend = useCallback(() => {
     const currentUser = getAuth(FirebaseApp).currentUser;
     if (currentUser) {
-      sendEmailVerification(currentUser).catch(() => {
-        console.error("Error sending email verification");
+      sendEmailVerification(currentUser).then(() => {
+        console.log("Email sent.");
+      }).catch((reason) => {
+        console.error("Error sending email verification: ", reason);
         uiController.setLoginState("VERIFICATION_ERROR");
       });
     } else {
