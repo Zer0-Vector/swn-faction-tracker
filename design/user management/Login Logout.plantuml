@@ -1,30 +1,34 @@
 @startuml Login Logout States
 hide empty description
 
-state LoggingIn : Showing login dialog
+state LoggedOut #LightBlue
+state LoggingIn #LightSeaGreen : Showing login dialog
 LoggingIn : maybe showing error message
-state LoginWaiting : waiting on server
-LoginWaiting : still showing login dialog
-state LoggingOut : Showing confirmation dialog
-state LogoutWaiting : waiting on server
-state Registering : Showing registration dialog
+state LoginWaiting #LightGreen : still showing login dialog
+state LoggingOut #LightSeaGreen : Showing confirmation dialog
+state LogoutWaiting #LightGreen
+state Registering #LightSeaGreen : Showing registration dialog
 Registering : maybe showing error message
-state LoggedOut
-state Registered : Email validation instructions
-state RegisterWaiting : waiting on server
+state Registered #LightSeaGreen : Email validation instructions
+state RegisterWaiting #LightGreen
 RegisterWaiting: still showing registration dialog
 state verify <<choice>>
-state NeedsVerification : show instruction dialog\nwith resend link
-state SendVerificationWaiting : waiting on server
-state SendVerificationError : show error dialog
+state NeedsVerification #LightSeaGreen : show instruction dialog\nwith resend link
+state SendVerificationWaiting #LightGreen : waiting on server
+state SendVerificationError #Salmon : show error dialog
+state LoggedIn #LightBlue
+state PasswordResetting #LightSeaGreen : show dialog to confirm/cancel
+state PasswordResetWaiting #LightGreen
+state PasswordResetError #Salmon : show error dialog
+state PasswordResetSent #LightSeaGreen : notification dialog
 
 LoggedOut --> LoggingIn : LoginClick
 LoggingIn --> LoginWaiting : LoginButtonClick
 LoginWaiting --> verify : LoginSuccess
 verify --> LoggedIn : Verified
 verify --> NeedsVerification : Unverified
-NeedsVerification --> LoggedOut : CancelClick
-NeedsVerification --> LoggingIn : LoginClick
+NeedsVerification --> LoggingIn : CloseClick
+NeedsVerification --> SendVerificationWaiting : ResendClick
 LoggingIn --> LoggedOut : CancelClick
 LoggedIn --> LoggingOut : LogoutClick
 LoggingOut --> LoggedIn : CancelClick
@@ -35,11 +39,18 @@ LoginWaiting --> LoggingIn : LoginFailure
 LoggingIn --> Registering : RegisterClick
 Registering --> RegisterWaiting : RegisterConfirm
 RegisterWaiting --> SendVerificationWaiting : RegisterSuccess
-SendVerificationError --> LoggedOut : OkClick
+SendVerificationError --> LoggingIn : OkClick
 RegisterWaiting --> Registering : RegisterFailure
 Registered --> LoggingIn : OkClick
-Registering --> LoggedOut : CancelClick
+Registering --> LoggingIn : CancelClick
 SendVerificationWaiting --> SendVerificationError : VerificationError
 SendVerificationWaiting --> Registered : SendVerificationSuccess
+LoggingIn --> PasswordResetting : PasswordResetClick
+PasswordResetting --> LoggingIn : CancelClick
+PasswordResetting --> PasswordResetWaiting : SendClick
+PasswordResetWaiting --> PasswordResetSent : SendSuccess
+PasswordResetWaiting --> PasswordResetError : SendFailure
+PasswordResetSent --> LoggingIn : CloseClick
+PasswordResetError --> LoggingIn : CloseClock
 
 @enduml
