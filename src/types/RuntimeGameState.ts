@@ -86,7 +86,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       }
     }
 
-    this.factions.set(id, new FactionInfo(name));
+    this.factions.set(id, new FactionInfo(id, name));
     this.factionOrder.push(id);
   }
 
