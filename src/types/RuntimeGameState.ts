@@ -2,6 +2,7 @@ import { DraggableLocation } from "react-beautiful-dnd";
 
 import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
+import { generateId } from "../utils/IdGenerator";
 
 import FactionInfo from "./FactionInfo";
 import { FactionStat } from "./FactionStatsInfo";
@@ -70,8 +71,23 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addFaction(name: string): void {
-    this.factions.set(name, new FactionInfo(name));
-    this.factionOrder.push(name);
+    const currentIds = Array.from(this.factions.keys());
+    const id = generateId(name, currentIds);
+
+    // indicates bug in id generation
+    if (currentIds.includes(id)) {
+      throw new Error(`duplicate faction id: "${id}"`);
+    }
+
+    // indicates bug in form validation
+    for (const val of this.factions.values()) {
+      if (val.name === name) {
+        throw new Error(`Duplicat faction name: "${name}"`);
+      }
+    }
+
+    this.factions.set(id, new FactionInfo(name));
+    this.factionOrder.push(id);
   }
 
   removeFaction(name: string): void {
