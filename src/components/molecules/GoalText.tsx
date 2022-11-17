@@ -14,7 +14,7 @@ export default function GoalText({faction}: GoalTextProps) {
   
   const handleUpdate = (val: string) => {
     if (isGoalType(val)) {
-      controller.setGoal(faction.name, { type: val });
+      controller.setGoal(faction.id, { type: val });
     }
   };
 

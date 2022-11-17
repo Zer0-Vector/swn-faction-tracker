@@ -67,12 +67,12 @@ export default function FactionDetails() {
 
       {/* ROW 2 */}
         <ItemHeader>HP:</ItemHeader>
-        <Item><FactionHpSummary factionName={faction.name} /></Item>
+        <Item><FactionHpSummary factionId={faction.id} /></Item>
         <ItemHeader>F/C/W:</ItemHeader>
         <Item>
           <FactionStatSummary
             {...faction.stats}
-            factionName={faction.name}
+            factionId={faction.id}
           />
         </Item>
 

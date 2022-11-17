@@ -73,7 +73,7 @@ export default function FactionList(): JSX.Element {
                         isDragging={itemSnapshot.isDragging}
                       />
                       <Collapse
-                        in={uiState.selectedFaction === faction.name}
+                        in={uiState.selectedFaction === faction.id}
                         unmountOnExit={true}
                       >
                         <Box sx={{

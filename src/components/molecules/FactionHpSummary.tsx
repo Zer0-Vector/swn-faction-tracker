@@ -8,10 +8,10 @@ import EditableStatText from "../atoms/EditableStatText";
 import StatText from "../atoms/StatText";
 
 interface HealthTextProps {
-  factionName: string;
+  factionId: string;
 }
 
-export default function FactionHpSummary({ factionName }: HealthTextProps) {
+export default function FactionHpSummary({ factionId: factionName }: HealthTextProps) {
   const { state, controller } = useContext(GameContext);
 
   const HpBox = styled(Box)(theme => ({
