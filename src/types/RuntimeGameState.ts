@@ -4,6 +4,7 @@ import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
 
 import FactionInfo from "./FactionInfo";
+import { FactionStat } from "./FactionStatsInfo";
 import GameMode, { isGameMode } from "./GameMode";
 import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
@@ -113,7 +114,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     });
   }
 
-  #updateStat(factionName: string, statName: string, value: number) {
+  #updateStat(factionName: string, statName: FactionStat, value: number) {
     const faction = this.factions.get(factionName);
     if (faction) {
       faction.stats[statName] = value;
