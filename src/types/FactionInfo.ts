@@ -53,19 +53,21 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
 export default class FactionInfo {
   
   static copy(currentFaction: FactionInfo) {
-    const result = new FactionInfo(currentFaction.name);
+    const result = new FactionInfo(currentFaction.id, currentFaction.name);
     result.homeworld = currentFaction.homeworld;
     result.stats = { ...currentFaction.stats };
     return result;
   }
   
+  id: string;
   name: string;
   homeworld?: string;
   tag?: string;
   stats: FactionStatsInfo;
   goal?: GoalInfo;
 
-  constructor(name: string) {
+  constructor(id: string, name: string) {
+    this.id = id;
     this.name = name;
     this.stats = {
       force: 0,

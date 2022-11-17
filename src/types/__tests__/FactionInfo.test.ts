@@ -1,7 +1,7 @@
 import FactionInfo from "../FactionInfo";
 
 it('Copy method makes deep copy', () => {
-  const info1 = new FactionInfo("test1");
+  const info1 = new FactionInfo("test1", "test1");
   const info2 = FactionInfo.copy(info1);
   expect(info1).not.toBe(info2);
   expect(info1.name).toBe(info2.name);
@@ -17,7 +17,7 @@ it('Copy method makes deep copy', () => {
 });
 
 it('Recompute HP method sets maxhp', () => {
-  const info = new FactionInfo("test");
+  const info = new FactionInfo("test", "test");
   expect(info.stats.maxHp).toBe(4);
   info.stats.cunning += 1;
   FactionInfo.recomputeMaxHp(info);
