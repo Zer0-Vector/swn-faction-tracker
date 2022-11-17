@@ -1,4 +1,4 @@
-export function hyphenate(input: string, currentValues?: string[]): string {
+export function generateId(input: string, currentValues?: string[]): string {
   // replace groups of non-word characters with a single hyphen
   const simple = input.trim().toLowerCase().replaceAll(/[\W_]+/g, "-");
 

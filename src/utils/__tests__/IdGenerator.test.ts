@@ -1,4 +1,4 @@
-import { hyphenate } from "../Hyphenator";
+import { generateId } from "../IdGenerator";
 
 describe('hyphenate(*, [])', () => {
   describe('returns input when only aphanumeric', () => {
@@ -10,7 +10,7 @@ describe('hyphenate(*, [])', () => {
         "123test123",
       ]
     )('%p remains unchanged', (input: string) => {
-      expect(hyphenate(input)).toEqual(input);
+      expect(generateId(input)).toEqual(input);
     });
   });
 
@@ -20,7 +20,7 @@ describe('hyphenate(*, [])', () => {
       ["\ttest", "test"],
       ["\n\rtest543\t", "test543"],
     ])('%p returns %p', (input: string, expected: string) => {
-      expect(hyphenate(input)).toEqual(expected);
+      expect(generateId(input)).toEqual(expected);
     });
   });
 
@@ -34,7 +34,7 @@ describe('hyphenate(*, [])', () => {
         ["123-3.2", "123-3-2"]
       ]
     )('converts %p into %p', (input: string, expected: string) => {
-      expect(hyphenate(input)).toEqual(expected);
+      expect(generateId(input)).toEqual(expected);
     });
   });
 });
@@ -50,7 +50,7 @@ describe('hyphenate("hw", [x, ...])', () => {
     [["hw-1", "hw-2","hw-3"], 4],
     [["hw-1","hw-3"], 4],
   ])('given "hw" with exising %p, expect "hw-%p"', (currentValues: string[], expectedSuffix: number) => {
-    expect(hyphenate("hw", currentValues)).toEqual(`hw-${expectedSuffix}`);
+    expect(generateId("hw", currentValues)).toEqual(`hw-${expectedSuffix}`);
   });
 });
 
@@ -63,6 +63,6 @@ describe('hyphenate(*, [*, ...])', () => {
     ["hw-7", ["hw-1", "hw-2"], "hw-7"],
     ["abc", ["hw", "hw-1", "hw-54"], "abc"],
   ])('given %p with existing %p, expect %p', (input: string, currentValues: string[], expected: string) => {
-    expect(hyphenate(input, currentValues)).toEqual(expected);
+    expect(generateId(input, currentValues)).toEqual(expected);
   });
 });
