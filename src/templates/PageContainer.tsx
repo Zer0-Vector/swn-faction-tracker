@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import { SxProps, Theme } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
@@ -25,6 +26,8 @@ export default function PageContainer({ children }: PageContainerProps) {
   const { controller: uiController } = useContext(UiStateContext);
   const location = useLocation();
 
+  const tab = location.pathname === "/locations" ? "LOCATION" : "FACTIONS";
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const clearSelection = useCallback(() => uiController.clearSelections(), []);
 
@@ -38,58 +41,62 @@ export default function PageContainer({ children }: PageContainerProps) {
   };
 
   return (
-    <Box sx={{
-        display: "flex",
-        minHeight: "100vh",
-        flexDirection: "column",
-        alignItems: "stretch",
-      }}
-      data-testid="page-container"
-    >
-      <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
-        <Toolbar>
-          <Grid container>
-            <Grid item xs={3.5}>
-              <Typography variant="h1" sx={{ mr: 2, color: "primary.contrastText", whiteSpace: "nowrap" }}>SWN Faction Tracker</Typography>
+    <>
+      <CssBaseline />
+      <Box sx={{
+          display: "flex",
+          minHeight: "100vh",
+          flexDirection: "column",
+          alignItems: "stretch",
+        }}
+        data-testid="page-container"
+      >
+        
+        <AppBar sx={{ color: "primary.contrastText", backgroundColor: "primary.dark" }}>
+          <Toolbar>
+            <Grid container>
+              <Grid item xs={3.5}>
+                <Typography variant="h1" sx={{ mr: 2, color: "primary.contrastText", whiteSpace: "nowrap" }}>SWN Faction Tracker</Typography>
+              </Grid>
+              <Grid item xs={4.5}>
+                <Tabs value={tab} component="nav">
+                  <Tab
+                    value="FACTIONS"
+                    label="Factions"
+                    component={Link}
+                    to="/"
+                    onClick={clearSelection}
+                    sx={tabSx}
+                    />
+                  <Tab
+                    value="LOCATIONS"
+                    label="Locations"
+                    component={Link}
+                    to="/locations"
+                    onClick={clearSelection}
+                    sx={tabSx}
+                    />
+                </Tabs>
+              </Grid>
+              <Grid item xs={3}>
+                <ModeToggleButtons />
+              </Grid>
+              <Grid item xs={1}>
+                <UserMenu user={getAuth(FirebaseApp).currentUser} />
+              </Grid>
             </Grid>
-            <Grid item xs={4.5}>
-              <Tabs value={location.pathname} component="nav">
-                <Tab
-                  value="/"
-                  label="Factions"
-                  component={Link}
-                  to="/"
-                  onClick={clearSelection}
-                  sx={tabSx}
-                  />
-                <Tab
-                  value="/locations"
-                  label="Locations"
-                  component={Link}
-                  to="/locations"
-                  onClick={clearSelection}
-                  sx={tabSx}
-                  />
-              </Tabs>
-            </Grid>
-            <Grid item xs={3}>
-              <ModeToggleButtons />
-            </Grid>
-            <Grid item xs={1}>
-              <UserMenu user={getAuth(FirebaseApp).currentUser} />
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-      <Toolbar id="appbar-shim" />
-      <Container sx={theme => ({
-        py: theme.spacing(2),
-        width: "100vw",
-        display: "grid",
-        gridTemplateColumns: "40% 60%",
-      })}>
-        {children}
-      </Container>
-    </Box>
+          </Toolbar>
+        </AppBar>
+        <Toolbar id="appbar-shim" />
+        <Container sx={theme => ({
+          py: theme.spacing(2),
+          width: "100vw",
+          display: "grid",
+          gridTemplateColumns: "40% 60%",
+        })}>
+          {children}
+        </Container>
+      </Box>
+    </>
   );
 }
