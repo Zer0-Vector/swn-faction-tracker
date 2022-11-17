@@ -52,13 +52,6 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
 
 export default class FactionInfo {
   
-  static copy(currentFaction: FactionInfo) {
-    const result = new FactionInfo(currentFaction.id, currentFaction.name);
-    result.homeworld = currentFaction.homeworld;
-    result.stats = { ...currentFaction.stats };
-    return result;
-  }
-  
   id: string;
   name: string;
   homeworld?: string;
@@ -78,6 +71,13 @@ export default class FactionInfo {
       xp: 0,
     };
     FactionInfo.recomputeMaxHp(this);
+  }
+
+  static copy(currentFaction: FactionInfo) {
+    const result = new FactionInfo(currentFaction.id, currentFaction.name);
+    result.homeworld = currentFaction.homeworld;
+    result.stats = { ...currentFaction.stats };
+    return result;
   }
 
   static recomputeMaxHp(info: FactionInfo) {
