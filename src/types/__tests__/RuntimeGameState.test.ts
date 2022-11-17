@@ -5,6 +5,7 @@ let storedState: StoredGameState;
 let state: RuntimeGameState;
 beforeEach(() => {
   storedState = {
+    mode: "EDIT",
     factions: [],
     assets: [],
     factionOrder: [],
