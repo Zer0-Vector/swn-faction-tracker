@@ -1,35 +1,42 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
+import { useFactionSelection } from "../../hooks/useFactionSelection";
+import AssetId from "../../types/AssetId";
 import AddAssetDialog from "../molecules/AddAssetDialog";
 import ConfirmDialog from "../molecules/ConfirmDialog";
 import ListActionToolbar from "../molecules/ListActionToolbar";
 
 export default function AssetListActionsToolbar() {
   const { controller } = useContext(GameContext);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { state: uiState } = useContext(UiStateContext);
 
   const [addOpen, setAddOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
 
+  const { asset, faction } = useFactionSelection();
+
+  const nav = useNavigate();
+
   const handleAdd = (assetName: string) => {
-    if (uiState.selectedFaction) {
-      controller.addAsset(uiState.selectedFaction, assetName);
+    if (faction) {
+      controller.addAsset(faction.id, assetName);
+    } else {
+      console.warn("No faction selected.");
     }
   };
 
   const handleRemove = () => {
-    if (uiState.selectedAssetKey && uiState.selectedFaction) {
-      const keyParts = uiState.selectedAssetKey.split(".");
-      try {
-        const id = parseInt(keyParts[2]);
-        console.debug(`handleRemove(${keyParts})`);
-        controller.removeAsset(uiState.selectedFaction, keyParts[1], id);
-        uiController.selectAsset(null);
-      } catch (e) {
-        console.error("Could not parse assetId: ", keyParts);
-      }
+    if (faction && asset) {
+      const assetRef = AssetId.toRefFormat(asset.id);
+      console.debug(`handleRemove(${faction.id}, ${assetRef})`);
+      controller.removeAsset(faction.id, assetRef);
+      setRemoveOpen(false);
+      nav("..");
+    } else {
+      console.warn(`Illegal selection state. faction=${faction}, asset=${asset}`);
     }
   };
 
@@ -46,7 +53,7 @@ export default function AssetListActionsToolbar() {
       />
       <ConfirmDialog
         title="Confirm Remove Asset"
-        message={`Remove asset ${uiState.selectedAssetKey?.split(".")[1]}?`}
+        message={`Remove asset ${asset?.id.displayName}`}
         buttonText="Remove"
         open={removeOpen}
         onCancel={() => setRemoveOpen(false)}
