@@ -7,7 +7,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../contexts/GameContext";
-import { UiStateContext } from "../../contexts/UiStateContext";
 import { useSelectionId } from "../../hooks/useSelectionId";
 import AssetId from "../../types/AssetId";
 import PurchasedAsset, { PurchasedAssetUtils } from "../../types/PurchasedAsset";
@@ -16,7 +15,6 @@ import AssetDetails from "./AssetDetails";
 
 export default function AssetList() {
   const { state } = useContext(GameContext);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const { assetId, factionId } = useSelectionId();
   const nav = useNavigate();
 
