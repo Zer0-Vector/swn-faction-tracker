@@ -2,47 +2,45 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../contexts/GameContext";
-import { UiStateContext } from "../../contexts/UiStateContext";
 import { useSelection } from "../../hooks/useSelection";
-import AssetId from "../../types/AssetId";
+import { useSelectionId } from "../../hooks/useSelectionId";
 import AddAssetDialog from "../molecules/AddAssetDialog";
 import ConfirmDialog from "../molecules/ConfirmDialog";
 import ListActionToolbar from "../molecules/ListActionToolbar";
 
 export default function AssetListActionsToolbar() {
   const { controller } = useContext(GameContext);
-  const { state: uiState } = useContext(UiStateContext);
 
   const [addOpen, setAddOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
 
-  const { asset, faction } = useSelection();
+  const { asset } = useSelection();
+  const { assetId, factionId } = useSelectionId();
 
   const nav = useNavigate();
 
   const handleAdd = (assetName: string) => {
-    if (faction) {
-      controller.addAsset(faction.id, assetName);
+    if (factionId) {
+      controller.addAsset(factionId, assetName);
     } else {
       console.warn("No faction selected.");
     }
   };
 
   const handleRemove = () => {
-    if (faction && asset) {
-      const assetRef = AssetId.toRefFormat(asset.id);
-      console.debug(`handleRemove(${faction.id}, ${assetRef})`);
-      controller.removeAsset(faction.id, assetRef);
+    if (factionId && assetId) {
+      console.debug(`handleRemove(${factionId}, ${assetId})`);
+      controller.removeAsset(factionId, assetId);
       setRemoveOpen(false);
-      nav("..");
+      nav(`/factions/${factionId}`);
     } else {
-      console.warn(`Illegal selection state. faction=${faction}, asset=${asset}`);
+      console.warn(`Illegal selection state. factionId=${factionId}, assetId=${assetId}`);
     }
   };
 
   return (
     <ListActionToolbar
-      removable={!!uiState.selectedAssetKey}
+      removable={!!assetId}
       onAddClick={() => setAddOpen(true)}
       onRemoveClick={() => setRemoveOpen(true)}
     >
