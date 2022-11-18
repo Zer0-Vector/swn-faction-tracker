@@ -14,7 +14,7 @@ export interface IGameController {
   updateLocationName(curr: string, val: string): void;
   removeLocation(selectedLocation: string): void;
   addLocation(info: LocationInfo): void;
-  removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void;
+  removeAsset(selectedFaction: string, assetRef: string): void;
   addAsset(selectedFaction: string, assetName: string): void;
   updateTag(name: string, tag: string): void;
   reorderFactions(sourceIndex: number, destinationIndex: number): void;
@@ -215,9 +215,9 @@ export class GameController implements IGameController {
     this.#writeAssets();
   }
 
-  removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void {
-    console.debug(`GameController.removeAsset(${selectedFaction}, ${selectedAsset}, ${assetId})`);
-    this.runtimeState.removeAsset(selectedFaction, selectedAsset, assetId);
+  removeAsset(selectedFaction: string, assetRef: string): void {
+    console.debug(`GameController.removeAsset(${selectedFaction}, ${assetRef})`);
+    this.runtimeState.removeAsset(selectedFaction, assetRef);
     this.#writeAssets();
   }
 
