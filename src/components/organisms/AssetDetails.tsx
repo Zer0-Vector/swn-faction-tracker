@@ -54,9 +54,9 @@ function LabeledItem({ label, children, sx, xsLabel, xsContent }: LabeledItemPro
 }
 
 export default function AssetDetails({ asset }: AssetDetailsProps) {
-  const assetInfo = ASSETS[asset.name];
+  const assetInfo = ASSETS[asset.id.displayName];
   if (!assetInfo) {
-    console.error(`Could not find asset named '${asset.name}'`);
+    console.error(`Could not find asset named '${asset.id.displayName}'`);
     return (<Typography color="error.main" fontWeight="bold" fontStyle="italic">Could not load asset info</Typography>);
   }
 
