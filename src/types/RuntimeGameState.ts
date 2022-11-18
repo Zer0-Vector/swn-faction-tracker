@@ -48,7 +48,6 @@ export default class RuntimeGameState implements IGameController, IGameState {
     const faction = this.factions.get(factionId);
     if (faction) {
       faction.goal = goal;
-      this.factions.set(factionId, faction); // FIXME I think this is redundant
     }
   }
 
@@ -63,7 +62,6 @@ export default class RuntimeGameState implements IGameController, IGameState {
     const faction = this.factions.get(factionId);
     if (faction) {
       faction.tag = tag;
-      this.factions.set(factionId, faction); // FIXME I think this is redundant
     }
   }
 
