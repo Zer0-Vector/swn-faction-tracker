@@ -222,6 +222,9 @@ export default class RuntimeGameState implements IGameController, IGameState {
       return 1;
     } else {
       const maxId = Math.max(...currentIds);
+      if (isNaN(maxId)) {
+        console.error("Something went wrong finding nextAssetIndex: ", currentIds);
+      }
       return maxId + 1;
     }
   }
