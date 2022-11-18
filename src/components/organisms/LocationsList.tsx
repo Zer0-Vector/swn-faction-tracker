@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
+import { useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Accordion from "@mui/material/Accordion";
@@ -13,12 +14,13 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../contexts/GameContext";
-import { UiStateContext } from "../../contexts/UiStateContext";
+import { useSelectionId } from "../../hooks/useSelectionId";
 import EditableNameText from "../atoms/EditableNameText";
 
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { locationId: selectedLocationId } = useSelectionId();
+  const nav = useNavigate();
 
   const locations = state.getLocations();
 
@@ -41,11 +43,11 @@ export default function LocationsList() {
     }
   };
 
-  const handleSelect = (locationName: string) => {
-    if (locationName === uiState.selectedLocation) {
-      uiController.selectLocaion(null);
+  const handleSelect = (locationId: string) => {
+    if (locationId === selectedLocationId) {
+      nav("/locations");
     } else {
-      uiController.selectLocaion(locationName);
+      nav(`/locations/${locationId}`);
     }
   };
 
@@ -66,10 +68,10 @@ export default function LocationsList() {
             {locations.map((val, index) => (
               <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
                 {(provided, snapshot) => (
-                  <Accordion {...provided.draggableProps} ref={provided.innerRef} expanded={uiState.selectedLocation === val.name}>
+                  <Accordion {...provided.draggableProps} ref={provided.innerRef} expanded={selectedLocationId === val.id}>
                     <AccordionSummary
-                      onClick={() => handleSelect(val.name)}
-                      sx={theme => ({ backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (uiState.selectedLocation === val.name ? theme.palette.action.selected : "inherit")})}
+                      onClick={() => handleSelect(val.id)}
+                      sx={theme => ({ backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (selectedLocationId === val.id ? theme.palette.action.selected : "inherit")})}
                     >
                       <Box sx={theme => ({
                         display: "flex",
