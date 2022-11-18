@@ -48,7 +48,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
     () => {
       if (navFactionId === factionId) {
         console.debug("Deselecting faction: ", navFactionId);
-        nav("..");
+        nav("/factions");
       } else {
         console.log("Selecting faction: ", factionId);
         nav(`/factions/${factionId}`);
@@ -65,8 +65,12 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
       sx={{
         display: "grid",
         gridTemplateColumns: "50px 1fr 30%",
-        backgroundColor: isDragging ? "action.dragging" : (faction.id === navFactionId ? "action.selected" : "inherit"),
+        backgroundColor: isDragging ? "action.dragging" : (isSelected ? "action.selected" : "inherit"),
         overflow: "clip",
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: isSelected ? "action.selected-hover" : "action.hover",
+        },
       }}
       ref={boxRef}
     >
