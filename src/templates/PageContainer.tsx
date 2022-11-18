@@ -64,7 +64,7 @@ export default function PageContainer({ children }: PageContainerProps) {
                     value="FACTIONS"
                     label="Factions"
                     component={Link}
-                    to="/"
+                    to="/factions"
                     onClick={clearSelection}
                     sx={tabSx}
                     />
