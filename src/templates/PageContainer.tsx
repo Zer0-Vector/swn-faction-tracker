@@ -26,7 +26,7 @@ export default function PageContainer({ children }: PageContainerProps) {
   const { controller: uiController } = useContext(UiStateContext);
   const location = useLocation();
 
-  const tab = location.pathname === "/locations" ? "LOCATIONS" : "FACTIONS";
+  const tab = location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS";
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const clearSelection = useCallback(() => uiController.clearSelections(), []);
