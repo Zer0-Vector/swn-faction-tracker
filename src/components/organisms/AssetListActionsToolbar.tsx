@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
-import { useFactionSelection } from "../../hooks/useFactionSelection";
+import { useSelection } from "../../hooks/useSelection";
 import AssetId from "../../types/AssetId";
 import AddAssetDialog from "../molecules/AddAssetDialog";
 import ConfirmDialog from "../molecules/ConfirmDialog";
@@ -16,7 +16,7 @@ export default function AssetListActionsToolbar() {
   const [addOpen, setAddOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
 
-  const { asset, faction } = useFactionSelection();
+  const { asset, faction } = useSelection();
 
   const nav = useNavigate();
 

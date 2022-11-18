@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../contexts/GameContext";
 import { TAGS } from "../../data/Tags";
-import { useFactionSelection } from "../../hooks/useFactionSelection";
+import { useSelection } from "../../hooks/useSelection";
 import EditableNameText from "../atoms/EditableNameText";
 import FactionHpSummary from "../molecules/FactionHpSummary";
 import FactionStatSummary from "../molecules/FactionStatSummary";
@@ -16,7 +16,7 @@ import GoalText from "../molecules/GoalText";
 
 export default function FactionDetails() {
   const { state, controller } = useContext(GameContext);
-  const { faction } = useFactionSelection();
+  const { faction } = useSelection();
 
   if (!faction) {
     return (
