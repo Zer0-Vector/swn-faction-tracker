@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
@@ -7,7 +8,6 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { UiStateContext } from "../../../contexts/UiStateContext";
 import FactionInfo from "../../../types/FactionInfo";
 import EditableNameText from "../../atoms/EditableNameText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
@@ -28,36 +28,36 @@ const ItemColumn = styled(Box)(({ theme }) => ({
 
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
   const { controller } = useContext(GameContext);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const boxRef = useRef<HTMLElement>(null);
-  
+  const location = useLocation();
+  const nav = useNavigate();
+
+  // process location.pathname
+  // FIXME should this useFactionSelection() instead?
+  const pathParts = location.pathname.split("/");
+  const navFactionId = pathParts.length > 2 ? pathParts[2] : null;
+
   const getEditNameHandler = (factionId: string) => (
     (val: string) => {
       console.debug(`Updating faction name '${factionId}' to '${val}'`);
       controller.updateFactionName(factionId, val);
-      if (uiState.selectedFaction === factionId) {
-        uiController.selectFaction(val);
-      }
     }
   );
-
-  const handleClearSelection = () => {
-    console.log("Clearing faction (and asset) selection");
-    uiController.selectFaction(null);
-  };
 
   const getSelectFactionHandler = (factionId: string) => (
     () => {
-      if (uiState.selectedFaction === factionId) {
-        handleClearSelection();
+      if (navFactionId === factionId) {
+        console.debug("Deselecting faction: ", navFactionId);
+        nav("..");
       } else {
         console.log("Selecting faction: ", factionId);
-        uiController.selectFaction(factionId);
+        nav(`/factions/${factionId}`);
       }
     }
   );
 
-  const isSelected = uiState.selectedFaction === faction.id;
+
+  const isSelected = navFactionId === faction.id;
 
   return (
     <Box
@@ -65,7 +65,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
       sx={{
         display: "grid",
         gridTemplateColumns: "50px 1fr 30%",
-        backgroundColor: isDragging ? "action.dragging" : (faction.id === uiState.selectedFaction ? "action.selected" : "inherit"),
+        backgroundColor: isDragging ? "action.dragging" : (faction.id === navFactionId ? "action.selected" : "inherit"),
         overflow: "clip",
       }}
       ref={boxRef}
