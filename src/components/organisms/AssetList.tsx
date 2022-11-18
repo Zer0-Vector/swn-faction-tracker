@@ -33,11 +33,14 @@ export default function AssetList() {
       {
         assets.length > 0 ? (
           assets.map((pa, index) => {
+            console.debug("pa, index: ", pa, index);
             const expanded = PurchasedAssetUtils.getKey(uiState.selectedFaction as string, pa) === uiState.selectedAssetKey;
-            const name = pa.nickname ? `${pa.nickname} (${pa.name})` : pa.name;
+            const name = pa.nickname ? `${pa.nickname} (${pa.id.displayName})` : pa.id.displayName;
             return (
               <Accordion key={index} expanded={expanded} onChange={handleSelectAsset(pa)}>
-                <AccordionSummary sx={{ backgroundColor: expanded ? "action.selected" : "inherit" }}>{name}</AccordionSummary>
+                <AccordionSummary sx={{ backgroundColor: expanded ? "action.selected" : "inherit" }}>
+                  {name}
+                </AccordionSummary>
                 <AccordionDetails><AssetDetails asset={pa} /></AccordionDetails>
               </Accordion>
             );
