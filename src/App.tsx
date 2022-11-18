@@ -81,7 +81,10 @@ function App() {
                       </Route>
                     </Route>
                   </Route>
-                  <Route path="locations" element={<LocationsPanel />} />
+                  <Route path="locations">
+                    <Route index element={<LocationsPanel />} />
+                    <Route path=":locationId" element={<LocationsPanel />} />
+                  </Route>
                 </Route>
               </Routes>
             </PageContainer>
