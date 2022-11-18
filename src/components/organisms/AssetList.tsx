@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
+import { useSelectionId } from "../../hooks/useSelectionId";
 import PurchasedAsset, { PurchasedAssetUtils } from "../../types/PurchasedAsset";
 
 import AssetDetails from "./AssetDetails";
@@ -14,8 +15,9 @@ import AssetDetails from "./AssetDetails";
 export default function AssetList() {
   const { state } = useContext(GameContext);
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { factionId } = useSelectionId();
 
-  const assets: PurchasedAsset[] = state.getAssets(uiState.selectedFaction);
+  const assets: PurchasedAsset[] = state.getAssets(factionId);
   
   console.log("rendering asset list: ", assets);
 

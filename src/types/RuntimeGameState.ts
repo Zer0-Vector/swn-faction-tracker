@@ -10,7 +10,7 @@ import { FactionStat } from "./FactionStatsInfo";
 import GameMode, { isGameMode } from "./GameMode";
 import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
-import Nullable from "./Nullable";
+import { Maybe } from "./Maybe";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
@@ -18,7 +18,7 @@ export interface IGameState {
   mode: GameMode;
   getFactions(): FactionInfo[];
   getFaction(factionId: string): FactionInfo | undefined;
-  getAssets(factionId: Nullable<string>): PurchasedAsset[];
+  getAssets(factionId: Maybe<string>): PurchasedAsset[];
   getAsset(factionId: string, assetId: string): PurchasedAsset | undefined;
   getLocations(): LocationInfo[];
   getLocation(locationName: string): LocationInfo | undefined;
@@ -197,8 +197,8 @@ export default class RuntimeGameState implements IGameController, IGameState {
     }
   }
 
-  getAssets(factionId: Nullable<string>): PurchasedAsset[] {
-    if (factionId === null) {
+  getAssets(factionId: Maybe<string>): PurchasedAsset[] {
+    if (factionId === undefined) {
       // FIXME reenable once faction list clears uiState.selectedFaction after animation completes
       // console.warn("Requesting assets for null faction");
       return [];
