@@ -92,7 +92,8 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
 
   const handleCreate = () => {
     if (allValid()) {
-      onCreate({ 
+      onCreate({
+        id: nameText.value.toLowerCase().replaceAll(/[\W_]+/g, "-"),
         name: nameText.value,
         tl: parseInt(tlText.value),
         x: parseInt(coords.value[0]),
