@@ -1,6 +1,7 @@
+import AssetId from "./AssetId";
+
 export default interface PurchasedAsset {
-  id: number;
-  name: string;
+  id: AssetId;
   hp: number;
   nickname?: string;
   location?: string;
@@ -9,7 +10,7 @@ export default interface PurchasedAsset {
 export class PurchasedAssetUtils {
 
   static getKey(factionName: string, pa: PurchasedAsset): string {
-    return `${factionName}.${pa.name}.${pa.id}`;
+    return `${factionName}.${AssetId.toRefFormat(pa.id)}`;
   }
 
 }
