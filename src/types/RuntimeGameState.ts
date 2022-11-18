@@ -4,6 +4,7 @@ import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
 import { generateId } from "../utils/IdGenerator";
 
+import AssetId from "./AssetId";
 import FactionInfo from "./FactionInfo";
 import { FactionStat } from "./FactionStatsInfo";
 import GameMode, { isGameMode } from "./GameMode";
@@ -16,8 +17,9 @@ import StoredGameState from "./StoredGameState";
 export interface IGameState {
   mode: GameMode;
   getFactions(): FactionInfo[];
-  getFaction(factionName: string): FactionInfo | undefined;
-  getAssets(factionName: Nullable<string>): PurchasedAsset[];
+  getFaction(factionId: string): FactionInfo | undefined;
+  getAssets(factionId: Nullable<string>): PurchasedAsset[];
+  getAsset(factionId: string, assetId: string): PurchasedAsset | undefined;
   getLocations(): LocationInfo[];
   getLocation(locationName: string): LocationInfo | undefined;
 }
@@ -88,14 +90,17 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
     this.factions.set(id, new FactionInfo(id, name));
     this.factionOrder.push(id);
+    console.info("Added faction:", id);
   }
 
   removeFaction(factionId: string): void {
     this.factions.delete(factionId);
     this.factionOrder = this.factionOrder.filter(item => item !== factionId);
-    this.assets.forEach((_, key, map) => {
+    console.info("Deleting faction:", factionId);
+    this.assets.forEach((_asset, key, map) => {
       if (key.startsWith(factionId)) {
         map.delete(key);
+        console.info("Deleting asset:", key);
       }
     });
   }
@@ -132,6 +137,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       }
       this.assets.delete(key);
     });
+    console.info(`Renamed ${faction.name} (${currentFactionId}) to ${newFactionName} (${newFactionId})`);
   }
 
   #updateStat(factionId: string, statName: FactionStat, value: number) {
@@ -140,6 +146,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       faction.stats[statName] = value;
       FactionInfo.recomputeMaxHp(faction);
       this.factions.set(factionId, faction);
+      console.info(`${statName} set for ${factionId}:`, value);
     } else {
       console.warn("Unknown faction id: ", factionId);
     }
@@ -162,6 +169,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     if (faction) {
       faction.stats.hp = hp;
       this.factions.set(factionId, faction);
+      console.info(`HP set for ${factionId}:`, hp);
     } else {
       console.warn("Unknown faction id: ", factionId);
     }
@@ -172,6 +180,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     if (faction) {
       faction.stats.maxHp = maxHp;
       this.factions.set(factionId, faction);
+      console.info(`MaxHp set for ${factionId}:`, maxHp);
     } else {
       console.warn("Unknown faction id: ", factionId);
     }
@@ -182,6 +191,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     if (faction) {
       faction.homeworld = homeworld;
       this.factions.set(factionId, faction);
+      console.info(`Homeworld set for ${faction?.name} (${factionId}):`, homeworld);
     } else {
       console.warn("Unknown faction id: ", factionId);
     }
@@ -199,10 +209,15 @@ export default class RuntimeGameState implements IGameController, IGameState {
         .map(entry => entry[1]);
   }
 
-  #nextAssetId(prefix: string): number {
+  getAsset(factionId: string, assetRef: string): PurchasedAsset | undefined {
+      const fqAssetId = `${factionId}.${assetRef}`;
+      return this.assets.get(fqAssetId);
+  }
+
+  #nextAssetIndex(prefix: string): number {
     const currentIds = Array.from(this.assets.keys())
       .filter(item => item.startsWith(prefix))
-      .map(item => parseInt(item.split(".")[2]));
+      .map(item => parseInt(item.split(/[.-]/)[2]));
     if (currentIds.length === 0) {
       return 1;
     } else {
@@ -212,14 +227,16 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addAsset(selectedFactionId: string, assetName: string) {
-    const id = this.#nextAssetId(`${selectedFactionId}.${assetName}`);
+    const index = this.#nextAssetIndex(`${selectedFactionId}.${AssetId.toRefName(assetName)}`);
+    const id: AssetId = new AssetId(assetName, index);
     const hp = ASSETS[assetName]?.maxHp || 0;
-    const asset: PurchasedAsset = { id, name: assetName, hp };
+    const asset: PurchasedAsset = { id, hp };
     this.assets.set(PurchasedAssetUtils.getKey(selectedFactionId, asset), asset);
+    console.info(`Added asset (${assetName}): ${AssetId.toRefFormat(id)}`);
   }
 
-  removeAsset(selectedFactionId: string, selectedAsset: string, assetId: number): void {
-    const fqAssetId = `${selectedFactionId}.${selectedAsset}.${assetId}`;
+  removeAsset(selectedFactionId: string, assetRef: string): void {
+    const fqAssetId = `${selectedFactionId}.${assetRef}`;
     if (!this.assets.delete(fqAssetId)) {
       console.warn("No assets were deleted: ", fqAssetId);
     }
