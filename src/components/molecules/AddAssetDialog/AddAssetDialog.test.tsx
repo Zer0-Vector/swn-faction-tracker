@@ -2,7 +2,7 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import AddAssetDialog from "../AddAssetDialog";
+import AddAssetDialog from "./AddAssetDialog";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const NOP = ()=>{};

@@ -10,9 +10,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 
-import ASSETS from "../../data/Assets";
-import Nullable from "../../types/Nullable";
-import TextUtils from "../../utils/TextUtils";
+import ASSETS from "../../../data/Assets";
+import Nullable from "../../../types/Nullable";
+import TextUtils from "../../../utils/TextUtils";
 
 interface AddAssetDialogProps {
   open: boolean;
