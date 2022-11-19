@@ -6,7 +6,7 @@ import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import FactionInfo from "../../../types/FactionInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
-import AddFactionDialog from "../AddFactionDialog";
+import AddFactionDialog from "./AddFactionDialog";
 
 const EMPTY_CONTEXT: GameContextType = {
   state: {
