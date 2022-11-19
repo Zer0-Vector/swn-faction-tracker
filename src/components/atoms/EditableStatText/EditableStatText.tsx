@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import EditableState from "../../../types/EditableState";
 import StatText from "../StatText";
 
-export interface EditableNameTextProps {
+export interface EditableStatTextProps {
   children: string | number;
   updateValue: (newValue: string) => void;
   sx?: SxProps<Theme>;
@@ -14,7 +14,7 @@ export interface EditableNameTextProps {
   id?: string;
 }
 
-export default function EditableStatText({ children, updateValue, sx, inputSx, id }: EditableNameTextProps) {
+export default function EditableStatText({ children, updateValue, sx, inputSx, id }: EditableStatTextProps) {
   const defaultState: EditableState = {
     editing: false,
     hasChanged: false,
