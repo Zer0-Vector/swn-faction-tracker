@@ -36,7 +36,7 @@ jobs:
           node-version: 16.15.1
           cache: 'npm'
       - run: npm install
-      - run: npm run ci-test
+      - run: npm run ci-test -- --coverage
   diagrams:
     name: Diagrams
     runs-on: ubuntu-latest
