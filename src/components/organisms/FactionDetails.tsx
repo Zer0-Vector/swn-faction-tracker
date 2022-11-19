@@ -3,26 +3,22 @@ import React, { useContext } from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../contexts/GameContext";
 import { TAGS } from "../../data/Tags";
-import { useSelection } from "../../hooks/useSelection";
+import FactionInfo from "../../types/FactionInfo";
 import EditableNameText from "../atoms/EditableNameText";
 import FactionHpSummary from "../molecules/FactionHpSummary";
 import FactionStatSummary from "../molecules/FactionStatSummary";
 import GoalProgress from "../molecules/GoalProgress";
 import GoalText from "../molecules/GoalText";
 
-export default function FactionDetails() {
-  const { state, controller } = useContext(GameContext);
-  const { faction } = useSelection();
+interface FactionDetailsProps {
+  faction: FactionInfo;
+}
 
-  if (!faction) {
-    return (
-      <Typography color="info.main">No Faction Selected</Typography>
-    );
-  }
+export default function FactionDetails({ faction }: FactionDetailsProps) {
+  const { state, controller } = useContext(GameContext);
 
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
@@ -39,19 +35,11 @@ export default function FactionDetails() {
   const tagText = faction.tag ? faction.tag : "Unknown";
 
   const updateHomeworld = (val: string) => {
-    if (faction) {
-      controller.updateHomeworld(faction.id, val);
-    } else {
-      console.warn("Cannot updateHomeworld. No faction selected");
-    }
+    controller.updateHomeworld(faction.id, val);
   };
 
   const updateTag = (val: string) => {
-    if (faction) {
-      controller.updateTag(faction.id, val);
-    } else {
-      console.warn("Cannot updateTag. No faction selected.");
-    }
+    controller.updateTag(faction.id, val);
   };
 
   return (
