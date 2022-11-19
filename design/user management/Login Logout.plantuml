@@ -22,35 +22,35 @@ state PasswordResetWaiting #LightGreen
 state PasswordResetError #Salmon : show error dialog
 state PasswordResetSent #LightSeaGreen : notification dialog
 
-LoggedOut --> LoggingIn : LoginClick
-LoggingIn --> LoginWaiting : LoginButtonClick
-LoginWaiting --> verify : LoginSuccess
+LoggedOut --> LoggingIn : RequestLogin
+LoggingIn --> LoginWaiting : DoLogin
+LoginWaiting --> verify : Success
 verify --> LoggedIn : Verified
 verify --> NeedsVerification : Unverified
-NeedsVerification --> LoggingIn : CloseClick
-NeedsVerification --> SendVerificationWaiting : ResendClick
-LoggingIn --> LoggedOut : CancelClick
-LoggedIn --> LoggingOut : LogoutClick
-LoggingOut --> LoggedIn : CancelClick
-LoggingOut --> LogoutWaiting : LogoutConfirm
-LogoutWaiting --> LoggedOut : LogoutSuccess
-LogoutWaiting --> LoggedIn : LogoutFailure
-LoginWaiting --> LoggingIn : LoginFailure
-LoggingIn --> Registering : RegisterClick
-Registering --> RegisterWaiting : RegisterConfirm
-RegisterWaiting --> SendVerificationWaiting : RegisterSuccess
-SendVerificationError --> LoggingIn : OkClick
-RegisterWaiting --> Registering : RegisterFailure
-Registered --> LoggingIn : OkClick
-Registering --> LoggingIn : CancelClick
-SendVerificationWaiting --> SendVerificationError : VerificationError
-SendVerificationWaiting --> Registered : SendVerificationSuccess
-LoggingIn --> PasswordResetting : PasswordResetClick
-PasswordResetting --> LoggingIn : CancelClick
-PasswordResetting --> PasswordResetWaiting : SendClick
-PasswordResetWaiting --> PasswordResetSent : SendSuccess
-PasswordResetWaiting --> PasswordResetError : SendFailure
-PasswordResetSent --> LoggingIn : CloseClick
-PasswordResetError --> LoggingIn : CloseClock
+NeedsVerification --> LoggingIn : Close
+NeedsVerification --> SendVerificationWaiting : SendVerification
+LoggingIn --> LoggedOut : Cancel
+LoggedIn --> LoggingOut : RequestLogout
+LoggingOut --> LoggedIn : Cancel
+LoggingOut --> LogoutWaiting : DoLogout
+LogoutWaiting --> LoggedOut : Success
+LogoutWaiting --> LoggedIn : Failure
+LoginWaiting --> LoggingIn : Failure
+LoggingIn --> Registering : RequestRegister
+Registering --> RegisterWaiting : DoRegister
+RegisterWaiting --> SendVerificationWaiting : Success
+SendVerificationError --> LoggingIn : Close
+RegisterWaiting --> Registering : Failure
+Registered --> LoggingIn : RequestLogin
+Registering --> LoggingIn : Cancel
+SendVerificationWaiting --> SendVerificationError : Failure
+SendVerificationWaiting --> Registered : Success
+LoggingIn --> PasswordResetting : RequestPasswordReset
+PasswordResetting --> LoggingIn : Cancel
+PasswordResetting --> PasswordResetWaiting : SendPasswordReset
+PasswordResetWaiting --> PasswordResetSent : Success
+PasswordResetWaiting --> PasswordResetError : Failure
+PasswordResetSent --> LoggingIn : Close
+PasswordResetError --> LoggingIn : Close
 
 @enduml
