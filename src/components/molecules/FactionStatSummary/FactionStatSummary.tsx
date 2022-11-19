@@ -18,6 +18,7 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
   return (
     <>
       <EditableStatText
+        id="stat-force"
         updateValue={val => controller.updateForce(factionId, +val)}
         inputSx={theme => ({ 
           ...theme.typography.body2,
@@ -28,6 +29,7 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
       </EditableStatText>
       <StatText variant="body2">/</StatText>
       <EditableStatText
+        id="stat-cunning"
         updateValue={val => controller.updateCunning(factionId, +val)}
         inputSx={theme => ({ 
           ...theme.typography.body2,
@@ -38,6 +40,7 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
       </EditableStatText>
       <StatText variant="body2">/</StatText>
       <EditableStatText
+        id="stat-wealth"
         updateValue={val => controller.updateWealth(factionId, +val)}
         inputSx={theme => ({ 
           ...theme.typography.body2,
