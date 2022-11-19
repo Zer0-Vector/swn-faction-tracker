@@ -39,7 +39,7 @@ export default function FactionHpSummary({ factionId: factionName }: HealthTextP
 
   return (
     <HpBox>
-      <EditableStatText updateValue={handleUpdate} inputSx={{ maxWidth: "4em"}}>
+      <EditableStatText id="faction-hp" updateValue={handleUpdate} inputSx={{ maxWidth: "4em"}}>
         {hp}
       </EditableStatText>
       <StatText>/</StatText>

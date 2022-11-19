@@ -45,9 +45,9 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   return (
     <span>
-      <EditableStatText updateValue={handleUpdateTally} inputSx={{ width: "3em" }}>{valueOrDefault(tally)}</EditableStatText>
+      <EditableStatText id="goal-progress" updateValue={handleUpdateTally} inputSx={{ width: "3em" }}>{valueOrDefault(tally)}</EditableStatText>
       <StatText>/</StatText>
-      <EditableStatText updateValue={handleUpdateTarget} inputSx={{ width: "3em" }}>{valueOrDefault(target)}</EditableStatText>
+      <EditableStatText id="goal-target" updateValue={handleUpdateTarget} inputSx={{ width: "3em" }}>{valueOrDefault(target)}</EditableStatText>
     </span>
   );
 }

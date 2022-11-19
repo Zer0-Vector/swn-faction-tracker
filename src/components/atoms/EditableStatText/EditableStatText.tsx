@@ -11,7 +11,7 @@ export interface EditableStatTextProps {
   updateValue: (newValue: string) => void;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
-  id?: string;
+  id: string;
 }
 
 export default function EditableStatText({ children, updateValue, sx, inputSx, id }: EditableStatTextProps) {
@@ -104,7 +104,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, i
         sx={inputSx}
         size="small"
         id={id}
-        data-testid="editable-stat-text-textfield"
+        data-testid={`editable-stat-text-textfield-${id}`}
       />
     );
   } else {
