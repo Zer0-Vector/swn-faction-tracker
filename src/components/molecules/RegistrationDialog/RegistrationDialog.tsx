@@ -12,10 +12,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import { UiStateContext } from "../../contexts/UiStateContext";
-import { FirebaseApp } from "../../firebase-init";
-import Nullable from "../../types/Nullable";
-import { ValidationInfo } from "../../types/ValidationInfo";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { FirebaseApp } from "../../../firebase-init";
+import Nullable from "../../../types/Nullable";
+import { ValidationInfo } from "../../../types/ValidationInfo";
 
 const DEFAULT_VALIDATION_INFO: ValidationInfo = {
   hasChanged: false,
