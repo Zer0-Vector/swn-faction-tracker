@@ -2,7 +2,7 @@ import React from "react";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
-import EditableStatText from "../EditableStatText";
+import EditableStatText from "./EditableStatText";
 
 describe('default EditableStatText', () => {
   it('renders StatText initially', () => {

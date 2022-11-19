@@ -3,11 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { SxProps, Theme } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
-import EditableState from "../../types/EditableState";
+import EditableState from "../../../types/EditableState";
+import StatText from "../StatText";
 
-import StatText from "./StatText";
-
-interface EditableNameTextProps {
+export interface EditableNameTextProps {
   children: string | number;
   updateValue: (newValue: string) => void;
   sx?: SxProps<Theme>;
