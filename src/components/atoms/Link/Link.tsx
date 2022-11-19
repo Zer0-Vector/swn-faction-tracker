@@ -2,7 +2,7 @@ import React from "react";
 
 import MuiLink from "@mui/material/Link";
 
-interface LinkProps {
+export interface LinkProps {
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLElement>;
   "data-testid"?: string;
