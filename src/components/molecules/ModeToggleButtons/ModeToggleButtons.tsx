@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import { GameContext } from "../../contexts/GameContext";
+import { GameContext } from "../../../contexts/GameContext";
 
 export default function ModeToggleButtons() {
   const { state, controller } = useContext(GameContext);
