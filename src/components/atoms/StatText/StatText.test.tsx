@@ -2,7 +2,7 @@ import React from "react";
 
 import { render, screen } from "@testing-library/react";
 
-import StatText from "../StatText";
+import StatText from "./StatText";
 
 describe('default StatText component', () => {
   it('renders a span with children text', () => {
