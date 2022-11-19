@@ -11,9 +11,9 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-import { GameContext } from "../../contexts/GameContext";
-import FormInfo from "../../types/FormInfo";
-import LocationInfo from "../../types/LocationInfo";
+import { GameContext } from "../../../contexts/GameContext";
+import FormInfo from "../../../types/FormInfo";
+import LocationInfo from "../../../types/LocationInfo";
 
 interface AddLocationDialogProps {
   open: boolean;

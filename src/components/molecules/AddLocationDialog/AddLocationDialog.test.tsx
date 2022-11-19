@@ -6,7 +6,7 @@ import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import LocationInfo from "../../../types/LocationInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
-import AddLocationDialog from "../AddLocationDialog";
+import AddLocationDialog from "./AddLocationDialog";
 
 const EMPTY_CONTEXT: GameContextType = {
   state: {
