@@ -3,9 +3,9 @@ import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 
-import { GameContext } from "../../contexts/GameContext";
-import EditableStatText from "../atoms/EditableStatText";
-import StatText from "../atoms/StatText";
+import { GameContext } from "../../../contexts/GameContext";
+import EditableStatText from "../../atoms/EditableStatText";
+import StatText from "../../atoms/StatText";
 
 interface HealthTextProps {
   factionId: string;
