@@ -4,10 +4,10 @@ import { Auth, getAuth, sendEmailVerification, signOut, User } from "firebase/au
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
+import { UiStateController } from "../../../controllers/UiStateController";
 import LoginState, { LoginStates } from "../../../types/LoginState";
 import UiState from "../../../types/UiState";
 import NeedsVerificationDialog from "../NeedsVerificationDialog";
-import { UiStateController } from "../../../controllers/UiStateController";
 
 jest.mock("firebase/app");
 jest.mock("firebase/analytics");
