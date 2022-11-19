@@ -68,7 +68,7 @@ function App() {
           <Router>
             <PageContainer>
               <Routes>
-                {/* UGLY but useRoutes "disables" animated transitions */}
+                {/* UGLY is there another way???? */}
                 <Route path="/">
                   <Route index element={<PrimaryPanel />} />
                   <Route path="factions">
