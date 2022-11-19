@@ -7,10 +7,10 @@ import TextField from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import { OverridableStringUnion } from "@mui/types";
 
-import EditableState from "../../types/EditableState";
-import Nullable from "../../types/Nullable";
+import EditableState from "../../../types/EditableState";
+import Nullable from "../../../types/Nullable";
 
-interface EditableNameTextProps {
+export interface EditableNameTextProps {
   children: string;
   onUpdate: (newValue: string) => void;
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;

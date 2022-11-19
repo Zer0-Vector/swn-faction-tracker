@@ -2,7 +2,7 @@ import React from "react";
 
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import EditableNameText from "../EditableNameText";
+import EditableNameText from "./EditableNameText";
 
 describe('default EditableNameText', () => {
   it('displays children', () => {
