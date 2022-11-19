@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
@@ -7,7 +8,7 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { UiStateContext } from "../../../contexts/UiStateContext";
+import { useSelectionId } from "../../../hooks/useSelectionId";
 import FactionInfo from "../../../types/FactionInfo";
 import EditableNameText from "../../atoms/EditableNameText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
@@ -28,45 +29,44 @@ const ItemColumn = styled(Box)(({ theme }) => ({
 
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
   const { controller } = useContext(GameContext);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const boxRef = useRef<HTMLElement>(null);
-  
-  const getEditNameHandler = (name: string) => (
+  const { factionId: navFactionId } = useSelectionId();
+  const nav = useNavigate();
+
+  const getEditNameHandler = (factionId: string) => (
     (val: string) => {
-      console.debug(`Updating faction name '${name}' to '${val}'`);
-      controller.updateFactionName(name, val);
-      if (uiState.selectedFaction === name) {
-        uiController.selectFaction(val);
-      }
+      console.debug(`Updating faction name '${factionId}' to '${val}'`);
+      controller.updateFactionName(factionId, val);
     }
   );
 
-  const handleClearSelection = () => {
-    console.log("Clearing faction (and asset) selection");
-    uiController.selectFaction(null);
-  };
-
-  const getSelectFactionHandler = (name: string) => (
+  const getSelectFactionHandler = (factionId: string) => (
     () => {
-      if (uiState.selectedFaction === name) {
-        handleClearSelection();
+      if (navFactionId === factionId) {
+        console.debug("Deselecting faction: ", navFactionId);
+        nav("/factions");
       } else {
-        console.log("Selecting faction: ", name);
-        uiController.selectFaction(name);
+        console.log("Selecting faction: ", factionId);
+        nav(`/factions/${factionId}`);
       }
     }
   );
 
-  const isSelected = uiState.selectedFaction === faction.name;
+
+  const isSelected = navFactionId === faction.id;
 
   return (
     <Box
-      onClick={getSelectFactionHandler(faction.name)}
+      onClick={getSelectFactionHandler(faction.id)}
       sx={{
         display: "grid",
         gridTemplateColumns: "50px 1fr 30%",
-        backgroundColor: isDragging ? "action.dragging" : (faction.name === uiState.selectedFaction ? "action.selected" : "inherit"),
+        backgroundColor: isDragging ? "action.dragging" : (isSelected ? "action.selected" : "inherit"),
         overflow: "clip",
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: isSelected ? "action.selected-hover" : "action.hover",
+        },
       }}
       ref={boxRef}
     >
@@ -80,7 +80,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         gridColumnEnd: "3",
         justifyContent: "flex-start",
       }}>
-        <EditableNameText onUpdate={getEditNameHandler(faction.name)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <EditableNameText onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {faction.name}
         </EditableNameText>
       </ItemColumn>
@@ -90,10 +90,10 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
           gridTemplateColumns: "1fr 75px"
         }}>
           <ItemColumn>
-            <HealthDisplay factionName={faction.name} />
+            <HealthDisplay factionId={faction.id} />
           </ItemColumn>
           <ItemColumn>
-            <FactionStatSummary {...faction.stats} factionName={faction.name} />
+            <FactionStatSummary {...faction.stats} factionId={faction.id} />
           </ItemColumn>
         </Box>
       </Slide>

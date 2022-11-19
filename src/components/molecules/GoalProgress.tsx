@@ -11,7 +11,7 @@ interface GoalProgressProps {
 
 export default function GoalProgress({ faction }: GoalProgressProps) {
   const { controller } = useContext(GameContext);
-  
+
   if (!faction.goal) {
     return (
       <em>Select Goal</em>
@@ -21,7 +21,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
   const handleUpdateTally = (val: string) => {
     if (faction.goal) {
       console.debug(`setting tally: '${val}'`);
-      controller.setGoal(faction.name, {
+      controller.setGoal(faction.id, {
         ...faction.goal,
         tally: parseInt(val),
       });
@@ -30,7 +30,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   const handleUpdateTarget = (val: string) => {
     if (faction.goal) {
-      controller.setGoal(faction.name, {
+      controller.setGoal(faction.id, {
         ...faction.goal,
         target: parseInt(val),
       });

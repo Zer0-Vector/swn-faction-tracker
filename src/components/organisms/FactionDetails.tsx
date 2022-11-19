@@ -3,28 +3,22 @@ import React, { useContext } from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../contexts/GameContext";
-import { UiStateContext } from "../../contexts/UiStateContext";
 import { TAGS } from "../../data/Tags";
+import FactionInfo from "../../types/FactionInfo";
 import EditableNameText from "../atoms/EditableNameText";
 import FactionHpSummary from "../molecules/FactionHpSummary";
 import FactionStatSummary from "../molecules/FactionStatSummary";
 import GoalProgress from "../molecules/GoalProgress";
 import GoalText from "../molecules/GoalText";
 
-export default function FactionDetails() {
-  const { state, controller } = useContext(GameContext);
-  const { state: uiState } = useContext(UiStateContext);
+interface FactionDetailsProps {
+  faction: FactionInfo;
+}
 
-  const selection = uiState.selectedFaction || "";
-  const faction = state.getFaction(selection);
-  if (selection === "" || faction === undefined) {
-    return (
-      <Typography color="info.main">No Faction Selected</Typography>
-    );
-  }
+export default function FactionDetails({ faction }: FactionDetailsProps) {
+  const { state, controller } = useContext(GameContext);
 
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
@@ -41,11 +35,11 @@ export default function FactionDetails() {
   const tagText = faction.tag ? faction.tag : "Unknown";
 
   const updateHomeworld = (val: string) => {
-    controller.updateHomeworld(selection, val);
+    controller.updateHomeworld(faction.id, val);
   };
 
   const updateTag = (val: string) => {
-    controller.updateTag(selection, val);
+    controller.updateTag(faction.id, val);
   };
 
   return (
@@ -67,12 +61,12 @@ export default function FactionDetails() {
 
       {/* ROW 2 */}
         <ItemHeader>HP:</ItemHeader>
-        <Item><FactionHpSummary factionName={faction.name} /></Item>
+        <Item><FactionHpSummary factionId={faction.id} /></Item>
         <ItemHeader>F/C/W:</ItemHeader>
         <Item>
           <FactionStatSummary
             {...faction.stats}
-            factionName={faction.name}
+            factionId={faction.id}
           />
         </Item>
 

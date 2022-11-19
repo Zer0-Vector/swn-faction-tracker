@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { getAuth, User } from "firebase/auth";
-import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
 import { GameContext } from './contexts/GameContext';
@@ -68,15 +66,28 @@ function App() {
       <GameContext.Provider value={{state: gameState, controller: gameController}}>
         <UiStateContext.Provider value={{ state: uiState, controller: uiController }}>
           <Router>
-            <CssBaseline />
-            <Box data-testid="app-root">
-              <PageContainer>
-                <Routes>
-                  <Route path="/" element={<PrimaryPanel />} />
-                  <Route path="/locations" element={<LocationsPanel />} />
-                </Routes>
-              </PageContainer>
-            </Box>
+            <PageContainer>
+              <Routes>
+                {/* UGLY is there another way???? */}
+                <Route path="/">
+                  <Route index element={<PrimaryPanel />} />
+                  <Route path="factions">
+                    <Route index element={<PrimaryPanel />} />
+                    <Route path=":factionId">
+                      <Route index element={<PrimaryPanel />} />
+                      <Route path="assets">
+                        <Route index element={<PrimaryPanel />} />
+                        <Route path=":assetId" element={<PrimaryPanel />} />
+                      </Route>
+                    </Route>
+                  </Route>
+                  <Route path="locations">
+                    <Route index element={<LocationsPanel />} />
+                    <Route path=":locationId" element={<LocationsPanel />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </PageContainer>
           </Router>
         </UiStateContext.Provider>
       </GameContext.Provider>

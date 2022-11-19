@@ -6,7 +6,7 @@ import App from './App';
 
 test('renders without crashing', () => {
   render(<App />);
-  const appRoot = screen.getByTestId("app-root");
+  const appRoot = screen.getByTestId("page-container");
   expect(appRoot).toBeDefined();
   expect(appRoot).not.toBeEmptyDOMElement();
 });

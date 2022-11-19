@@ -5,6 +5,7 @@ let storedState: StoredGameState;
 let state: RuntimeGameState;
 beforeEach(() => {
   storedState = {
+    mode: "EDIT",
     factions: [],
     assets: [],
     factionOrder: [],
@@ -54,7 +55,12 @@ describe('getFaction', () => {
   });
 });
 
-// TODO getAssets
+describe('getAssets', () => {
+  it.todo('is empty on init');
+  it.todo('contains asset after adding one');
+  it.todo('does not contain asset after removing it');
+});
+
 // TODO getLocations
 // TODO getLocation
 // TODO reorderLocations

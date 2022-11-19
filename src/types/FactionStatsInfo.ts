@@ -1,9 +1,13 @@
-export default interface FactionStatsInfo {
-  hp: number;
-  maxHp: number;
-  force: number;
-  cunning: number;
-  wealth: number;
-  xp: number;
-  [key: string]: number;
-}
+export type FactionStat = 
+  | "hp"
+  | "maxHp"
+  | "force"
+  | "cunning"
+  | "wealth"
+  | "xp";
+
+type FactionStatsInfo = {
+  [Stat in FactionStat]: number
+};
+
+export default FactionStatsInfo;

@@ -2,20 +2,24 @@ import { DraggableLocation } from "react-beautiful-dnd";
 
 import { IGameController } from "../controllers/GameController";
 import ASSETS from "../data/Assets";
+import { generateId } from "../utils/IdGenerator";
 
+import AssetId from "./AssetId";
 import FactionInfo from "./FactionInfo";
+import { FactionStat } from "./FactionStatsInfo";
 import GameMode, { isGameMode } from "./GameMode";
 import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
-import Nullable from "./Nullable";
+import { Maybe } from "./Maybe";
 import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
   mode: GameMode;
   getFactions(): FactionInfo[];
-  getFaction(factionName: string): FactionInfo | undefined;
-  getAssets(factionName: Nullable<string>): PurchasedAsset[];
+  getFaction(factionId: string): FactionInfo | undefined;
+  getAssets(factionId: Maybe<string>): PurchasedAsset[];
+  getAsset(factionId: string, assetId: string): PurchasedAsset | undefined;
   getLocations(): LocationInfo[];
   getLocation(locationName: string): LocationInfo | undefined;
 }
@@ -40,11 +44,10 @@ export default class RuntimeGameState implements IGameController, IGameState {
     console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A, ${this.locations.size}L`);
   }
 
-  setGoal(factionName: string, goal: GoalInfo): void {
-    const faction = this.factions.get(factionName);
+  setGoal(factionId: string, goal: GoalInfo): void {
+    const faction = this.factions.get(factionId);
     if (faction) {
       faction.goal = goal;
-      this.factions.set(factionName, faction);
     }
   }
 
@@ -55,11 +58,10 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.mode = mode;
   }
 
-  updateTag(name: string, tag: string): void {
-    const faction = this.factions.get(name);
+  updateTag(factionId: string, tag: string): void {
+    const faction = this.factions.get(factionId);
     if (faction) {
       faction.tag = tag;
-      this.factions.set(name, faction);
     }
   }
 
@@ -69,139 +71,184 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addFaction(name: string): void {
-    this.factions.set(name, new FactionInfo(name));
-    this.factionOrder.push(name);
+    const currentIds = Array.from(this.factions.keys());
+    const id = generateId(name, currentIds);
+
+    // indicates bug in id generation
+    if (currentIds.includes(id)) {
+      throw new Error(`duplicate faction id: "${id}"`);
+    }
+
+    // indicates bug in form validation
+    for (const val of this.factions.values()) {
+      if (val.name === name) {
+        throw new Error(`Duplicat faction name: "${name}"`);
+      }
+    }
+
+    this.factions.set(id, new FactionInfo(id, name));
+    this.factionOrder.push(id);
+    console.info("Added faction:", id);
   }
 
-  removeFaction(name: string): void {
-    this.factions.delete(name);
-    this.factionOrder = this.factionOrder.filter(item => item !== name);
-    this.assets.forEach((_, key, map) => {
-      if (key.startsWith(name)) {
+  removeFaction(factionId: string): void {
+    this.factions.delete(factionId);
+    this.factionOrder = this.factionOrder.filter(item => item !== factionId);
+    console.info("Deleting faction:", factionId);
+    this.assets.forEach((_asset, key, map) => {
+      if (key.startsWith(factionId)) {
         map.delete(key);
+        console.info("Deleting asset:", key);
       }
     });
   }
 
-  updateFactionName(currentName: string, newName: string): void {
-    const faction = this.factions.get(currentName);
+  updateFactionName(currentFactionId: string, newFactionName: string): void {
+    const faction = this.factions.get(currentFactionId);
     if (!faction) {
       return;
     }
-    faction.name = newName;
-    console.debug("RuntimeGameState: Updating faction map");
-    this.factions.delete(currentName);
-    this.factions.set(newName, faction);
+    const currentIds = Array.from(this.factions.keys()).filter(val => val !== currentFactionId);
+    const newFactionId = generateId(newFactionName, currentIds);
+    if (currentIds.includes(newFactionId)) {
+      throw new Error(`Duplicate faction id detected: ${newFactionId}`);
+    }
 
-    console.debug("RuntimeGameState: Updating factionOrder");
+    faction.id = newFactionId;
+    faction.name = newFactionName;
+    this.factions.delete(currentFactionId);
+    this.factions.set(newFactionId, faction);
+
     this.factionOrder.forEach((item, index) => {
-      if (item === currentName) {
-        this.factionOrder[index] = newName;
+      if (item === currentFactionId) {
+        this.factionOrder[index] = newFactionId;
       }
     });
 
-    console.debug("RuntimeGameState: Updating assets map");
-    const keysToChange = Array.from(this.assets.keys()).filter(key => key.startsWith(currentName));
+    const keysToChange = Array.from(this.assets.keys()).filter(key => key.startsWith(currentFactionId));
     keysToChange.forEach(key => {
       const asset = this.assets.get(key);
       if (asset) {
-        this.assets.set(PurchasedAssetUtils.getKey(newName, asset), asset);
+        this.assets.set(PurchasedAssetUtils.getKey(newFactionId, asset), asset);
       } else {
         console.warn("Found undefined mapping for ", key);
       }
       this.assets.delete(key);
     });
+    console.info(`Renamed ${faction.name} (${currentFactionId}) to ${newFactionName} (${newFactionId})`);
   }
 
-  #updateStat(factionName: string, statName: string, value: number) {
-    const faction = this.factions.get(factionName);
+  #updateStat(factionId: string, statName: FactionStat, value: number) {
+    const faction = this.factions.get(factionId);
     if (faction) {
       faction.stats[statName] = value;
       FactionInfo.recomputeMaxHp(faction);
-      this.factions.set(factionName, faction);
+      this.factions.set(factionId, faction);
+      console.info(`${statName} set for ${factionId}:`, value);
+    } else {
+      console.warn("Unknown faction id: ", factionId);
     }
   }
 
-  updateForce(name: string, force: number): void {
-    this.#updateStat(name, "force", force);
+  updateForce(factionId: string, force: number): void {
+    this.#updateStat(factionId, "force", force);
   }
 
-  updateCunning(name: string, cunning: number): void {
-    this.#updateStat(name, "cunning", cunning);
+  updateCunning(factionId: string, cunning: number): void {
+    this.#updateStat(factionId, "cunning", cunning);
   }
 
-  updateWealth(name: string, wealth: number): void {
-    this.#updateStat(name, "wealth", wealth);
+  updateWealth(factionId: string, wealth: number): void {
+    this.#updateStat(factionId, "wealth", wealth);
   }
 
-  updateHp(name: string, hp: number): void {
-    const faction = this.factions.get(name);
+  updateHp(factionId: string, hp: number): void {
+    const faction = this.factions.get(factionId);
     if (faction) {
       faction.stats.hp = hp;
-      this.factions.set(name, faction);
+      this.factions.set(factionId, faction);
+      console.info(`HP set for ${factionId}:`, hp);
+    } else {
+      console.warn("Unknown faction id: ", factionId);
     }
   }
 
-  updateMaxHp(name: string, maxHp: number): void {
-    const faction = this.factions.get(name);
+  updateMaxHp(factionId: string, maxHp: number): void {
+    const faction = this.factions.get(factionId);
     if (faction) {
       faction.stats.maxHp = maxHp;
-      this.factions.set(name, faction);
+      this.factions.set(factionId, faction);
+      console.info(`MaxHp set for ${factionId}:`, maxHp);
+    } else {
+      console.warn("Unknown faction id: ", factionId);
     }
   }
 
-  updateHomeworld(name: string, homeworld: string): void {
-    const faction = this.factions.get(name);
+  updateHomeworld(factionId: string, homeworld: string): void {
+    const faction = this.factions.get(factionId);
     if (faction) {
       faction.homeworld = homeworld;
-      this.factions.set(name, faction);
+      this.factions.set(factionId, faction);
+      console.info(`Homeworld set for ${faction?.name} (${factionId}):`, homeworld);
+    } else {
+      console.warn("Unknown faction id: ", factionId);
     }
   }
 
-  getAssets(factionName: Nullable<string>): PurchasedAsset[] {
-    if (factionName === null) {
+  getAssets(factionId: Maybe<string>): PurchasedAsset[] {
+    if (factionId === undefined) {
+      // FIXME reenable once faction list clears uiState.selectedFaction after animation completes
+      // console.warn("Requesting assets for null faction");
       return [];
     }
 
     return Array.from(this.assets.entries())
-        .filter(entry => entry[0].startsWith(factionName))
+        .filter(entry => entry[0].startsWith(factionId))
         .map(entry => entry[1]);
   }
 
-  #nextId(prefix: string): number {
+  getAsset(factionId: string, assetRef: string): PurchasedAsset | undefined {
+      const fqAssetId = `${factionId}.${assetRef}`;
+      return this.assets.get(fqAssetId);
+  }
+
+  #nextAssetIndex(prefix: string): number {
     const currentIds = Array.from(this.assets.keys())
       .filter(item => item.startsWith(prefix))
-      .map(item => parseInt(item.split(".")[2]));
+      .map(item => parseInt(item.split(/[.-]/)[2]));
     if (currentIds.length === 0) {
       return 1;
     } else {
-      const maxId = currentIds
-          .reduce((prev, curr) => Math.max(prev, curr));
+      const maxId = Math.max(...currentIds);
+      if (isNaN(maxId)) {
+        console.error("Something went wrong finding nextAssetIndex: ", currentIds);
+      }
       return maxId + 1;
     }
   }
 
-  addAsset(selectedFaction: string, assetName: string) {
-    const id = this.#nextId(`${selectedFaction}.${assetName}`);
+  addAsset(selectedFactionId: string, assetName: string) {
+    const index = this.#nextAssetIndex(`${selectedFactionId}.${AssetId.toRefName(assetName)}`);
+    const id: AssetId = new AssetId(assetName, index);
     const hp = ASSETS[assetName]?.maxHp || 0;
-    const asset: PurchasedAsset = { id, name: assetName, hp };
-    this.assets.set(PurchasedAssetUtils.getKey(selectedFaction, asset), asset);
+    const asset: PurchasedAsset = { id, hp };
+    this.assets.set(PurchasedAssetUtils.getKey(selectedFactionId, asset), asset);
+    console.info(`Added asset (${assetName}): ${AssetId.toRefFormat(id)}`);
   }
 
-  removeAsset(selectedFaction: string, selectedAsset: string, assetId: number): void {
-    console.debug(`RuntimeGameController.removeAsset(${selectedFaction}, ${selectedAsset}, ${assetId}); ${this.assets.size} assets`);
-    if (!this.assets.delete(`${selectedFaction}.${selectedAsset}.${assetId}`)) {
-      console.warn("Nothing was deleted!");
+  removeAsset(selectedFactionId: string, assetRef: string): void {
+    const fqAssetId = `${selectedFactionId}.${assetRef}`;
+    if (!this.assets.delete(fqAssetId)) {
+      console.warn("No assets were deleted: ", fqAssetId);
     }
-    console.debug(`${this.assets.size}`);
   }
 
   getFactions(): FactionInfo[] {
-    return this.factionOrder.map(name => this.factions.get(name)) as FactionInfo[];
+    return this.factionOrder.map(factionId => this.factions.get(factionId)) as FactionInfo[];
   }
 
-  getFaction(factionName: string): FactionInfo | undefined {
-    return this.factions.get(factionName);
+  getFaction(factionId: string): FactionInfo | undefined {
+    return this.factions.get(factionId);
   }
 
   getLocations(): LocationInfo[] {
@@ -238,7 +285,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
     for (const faction of this.factions.values()) {
       if (faction.homeworld === curr) {
-        this.factions.set(faction.name, {
+        this.factions.set(faction.id, {
           ...faction,
           homeworld: val,
         });

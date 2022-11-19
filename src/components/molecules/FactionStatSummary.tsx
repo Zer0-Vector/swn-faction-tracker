@@ -6,19 +6,19 @@ import StatText from "../atoms/StatText";
 
 
 interface FactionStatSummaryProps {
-  factionName: string;
+  factionId: string;
   force: number;
   cunning: number;
   wealth: number;
 }
 
-export default function FactionStatSummary({ factionName, force, cunning, wealth }: FactionStatSummaryProps) {
+export default function FactionStatSummary({ factionId, force, cunning, wealth }: FactionStatSummaryProps) {
   const { controller } = useContext(GameContext);
   
   return (
     <>
       <EditableStatText
-        updateValue={val => controller.updateForce(factionName, +val)}
+        updateValue={val => controller.updateForce(factionId, +val)}
         inputSx={theme => ({ 
           ...theme.typography.body2,
           width: "3em",
@@ -28,7 +28,7 @@ export default function FactionStatSummary({ factionName, force, cunning, wealth
       </EditableStatText>
       <StatText variant="body2">/</StatText>
       <EditableStatText
-        updateValue={val => controller.updateCunning(factionName, +val)}
+        updateValue={val => controller.updateCunning(factionId, +val)}
         inputSx={theme => ({ 
           ...theme.typography.body2,
           width: "3em",
@@ -38,7 +38,7 @@ export default function FactionStatSummary({ factionName, force, cunning, wealth
       </EditableStatText>
       <StatText variant="body2">/</StatText>
       <EditableStatText
-        updateValue={val => controller.updateWealth(factionName, +val)}
+        updateValue={val => controller.updateWealth(factionId, +val)}
         inputSx={theme => ({ 
           ...theme.typography.body2,
           width: "3em",

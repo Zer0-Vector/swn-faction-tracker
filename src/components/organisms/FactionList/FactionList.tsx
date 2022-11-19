@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { UiStateContext } from "../../../contexts/UiStateContext";
+import { useSelection } from "../../../hooks/useSelection";
 import FactionInfo from "../../../types/FactionInfo";
 import AssetList from "../AssetList";
 import AssetListActionsToolbar from "../AssetListActionsToolbar";
@@ -18,8 +18,8 @@ import FactionListItem from "./FactionListItem";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);
-  const { state: uiState } = useContext(UiStateContext);
   const theme = useTheme();
+  const { faction: selectedFaction } = useSelection();
   
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -73,7 +73,7 @@ export default function FactionList(): JSX.Element {
                         isDragging={itemSnapshot.isDragging}
                       />
                       <Collapse
-                        in={uiState.selectedFaction === faction.name}
+                        in={selectedFaction?.id === faction.id}
                         unmountOnExit={true}
                       >
                         <Box sx={{
@@ -85,7 +85,7 @@ export default function FactionList(): JSX.Element {
                               padding: 3
                             }}
                           >
-                            <FactionDetails />
+                            <FactionDetails faction={faction} />
                             <Box>
                               <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
                               <AssetListActionsToolbar />

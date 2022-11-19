@@ -41,18 +41,20 @@ test('useLocalStorage setValue changes output', () => {
 
 test('rerender does not change data', () => {
   const { unmount } = render(<TestComponent />);
-  const value1 = screen.getByTestId("test-value").textContent;
+  const testElement = screen.getByTestId("test-value");
+  const value1 = testElement.textContent;
   expect(value1).toBe("default test value 123");
 
   const button = screen.getByTestId("test-button");
   expect(button).toBeDefined();
   button.click();
 
-  const value = screen.getByTestId("test-value").textContent;
+  const value = testElement.textContent;
   expect(value).toBe("new test value 4567");
   unmount();
+  expect(testElement).not.toBeInTheDocument();
 
   render(<TestComponent />);
-  const value2 = screen.getByTestId("test-value").textContent;
+  const value2 = testElement.textContent;
   expect(value2).toBe("new test value 4567");
 });

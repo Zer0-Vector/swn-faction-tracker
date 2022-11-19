@@ -8,10 +8,10 @@ import { GameContext } from "../../contexts/GameContext";
 import FactionHpSummary from "./FactionHpSummary";
 
 interface HealthDisplayProps {
-  factionName: string;
+  factionId: string;
 }
 
-export default function HealthDisplay({ factionName }: HealthDisplayProps) {
+export default function HealthDisplay({ factionId: factionName }: HealthDisplayProps) {
   const { state } = useContext(GameContext);
   const faction = state.getFaction(factionName);
   if (!faction) {
@@ -23,7 +23,7 @@ export default function HealthDisplay({ factionName }: HealthDisplayProps) {
   return (
     <>
       <Tooltip
-        title={ <FactionHpSummary factionName={factionName} /> }
+        title={ <FactionHpSummary factionId={factionName} /> }
         arrow={true}
       >
         <LinearProgress
