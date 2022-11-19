@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
@@ -8,6 +8,7 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
+import { useSelectionId } from "../../../hooks/useSelectionId";
 import FactionInfo from "../../../types/FactionInfo";
 import EditableNameText from "../../atoms/EditableNameText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
@@ -29,13 +30,8 @@ const ItemColumn = styled(Box)(({ theme }) => ({
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
   const { controller } = useContext(GameContext);
   const boxRef = useRef<HTMLElement>(null);
-  const location = useLocation();
+  const { factionId: navFactionId } = useSelectionId();
   const nav = useNavigate();
-
-  // process location.pathname
-  // FIXME should this useFactionSelection() instead?
-  const pathParts = location.pathname.split("/");
-  const navFactionId = pathParts.length > 2 ? pathParts[2] : null;
 
   const getEditNameHandler = (factionId: string) => (
     (val: string) => {
