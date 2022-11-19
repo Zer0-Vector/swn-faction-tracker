@@ -85,7 +85,7 @@ export default function FactionList(): JSX.Element {
                               padding: 3
                             }}
                           >
-                            <FactionDetails />
+                            <FactionDetails faction={faction} />
                             <Box>
                               <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
                               <AssetListActionsToolbar />
