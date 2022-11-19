@@ -1,10 +1,10 @@
 import React, { useCallback, useContext } from "react";
 import { getAuth, signOut } from "firebase/auth";
 
-import { UiStateContext } from "../../contexts/UiStateContext";
-import { FirebaseApp } from "../../firebase-init";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { FirebaseApp } from "../../../firebase-init";
 
-import MessageDialog from "./MessageDialog";
+import MessageDialog from "../MessageDialog";
 
 const VerificationEmailErrorDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
