@@ -4,11 +4,11 @@ import { render } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
+import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import GoalProgress from "./GoalProgress";
-import FactionInfo from "../../../types/FactionInfo";
 
 const mockContext: GameContextType = {
   state: {} as IGameState,

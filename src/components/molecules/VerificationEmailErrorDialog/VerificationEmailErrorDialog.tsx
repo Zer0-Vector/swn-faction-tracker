@@ -3,7 +3,6 @@ import { getAuth, signOut } from "firebase/auth";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { FirebaseApp } from "../../../firebase-init";
-
 import MessageDialog from "../MessageDialog";
 
 const VerificationEmailErrorDialog = () => {

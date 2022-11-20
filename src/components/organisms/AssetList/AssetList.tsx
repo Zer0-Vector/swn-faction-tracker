@@ -10,7 +10,6 @@ import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import AssetId from "../../../types/AssetId";
 import PurchasedAsset, { PurchasedAssetUtils } from "../../../types/PurchasedAsset";
-
 import AssetDetails from "../AssetDetails";
 
 export default function AssetList() {
