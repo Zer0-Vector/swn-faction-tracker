@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 
-import { GameContext } from "../../contexts/GameContext";
-import { UiStateContext } from "../../contexts/UiStateContext";
-import LocationInfo from "../../types/LocationInfo";
-import AddLocationDialog from "../molecules/AddLocationDialog";
-import ConfirmDialog from "../molecules/ConfirmDialog";
-import ListActionToolbar from "../molecules/ListActionToolbar";
+import { GameContext } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import LocationInfo from "../../../types/LocationInfo";
+import AddLocationDialog from "../../molecules/AddLocationDialog";
+import ConfirmDialog from "../../molecules/ConfirmDialog";
+import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function LocationsActionToolbar() {
   const { controller } = useContext(GameContext);
