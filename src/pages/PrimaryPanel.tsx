@@ -2,7 +2,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 
-import FactionList from "../components/organisms/FactionList/FactionList";
+import FactionList from "../components/organisms/FactionList";
 import FactionListActionToolbar from "../components/organisms/FactionListActionToolbar";
 
 export default function PrimaryPanel() {
