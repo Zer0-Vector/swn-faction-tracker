@@ -7,14 +7,13 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import { UiStateContext } from "../../contexts/UiStateContext";
-import Nullable from "../../types/Nullable";
-
-import LoginDialog from "./LoginDialog";
-import LogoutConfirmDialog from "./LogoutConfirmDialog";
-import NeedsVerificationDialog from "./NeedsVerificationDialog";
-import RegistrationDialog from "./RegistrationDialog";
-import VerificationEmailErrorDialog from "./VerificationEmailErrorDialog";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import Nullable from "../../../types/Nullable";
+import LoginDialog from "../LoginDialog";
+import LogoutConfirmDialog from "../LogoutConfirmDialog";
+import NeedsVerificationDialog from "../NeedsVerificationDialog";
+import RegistrationDialog from "../RegistrationDialog";
+import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
 
 interface UserMenuProps {
   user: Auth.User | null;
