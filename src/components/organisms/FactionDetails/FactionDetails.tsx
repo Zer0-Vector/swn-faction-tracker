@@ -4,14 +4,14 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
-import { GameContext } from "../../contexts/GameContext";
-import { TAGS } from "../../data/Tags";
-import FactionInfo from "../../types/FactionInfo";
-import EditableNameText from "../atoms/EditableNameText";
-import FactionHpSummary from "../molecules/FactionHpSummary";
-import FactionStatSummary from "../molecules/FactionStatSummary";
-import GoalProgress from "../molecules/GoalProgress";
-import GoalText from "../molecules/GoalText";
+import { GameContext } from "../../../contexts/GameContext";
+import { TAGS } from "../../../data/Tags";
+import FactionInfo from "../../../types/FactionInfo";
+import EditableNameText from "../../atoms/EditableNameText";
+import FactionHpSummary from "../../molecules/FactionHpSummary";
+import FactionStatSummary from "../../molecules/FactionStatSummary";
+import GoalProgress from "../../molecules/GoalProgress";
+import GoalText from "../../molecules/GoalText";
 
 interface FactionDetailsProps {
   faction: FactionInfo;
