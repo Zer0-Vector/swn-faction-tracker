@@ -2,10 +2,9 @@ import React, { useCallback, useContext, useMemo } from "react";
 import { FirebaseError } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-import { UiStateContext } from "../../contexts/UiStateContext";
-import { FirebaseApp } from "../../firebase-init";
-
-import ConfirmDialog from "./ConfirmDialog";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { FirebaseApp } from "../../../firebase-init";
+import ConfirmDialog from "../ConfirmDialog";
 
 const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
