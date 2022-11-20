@@ -3,9 +3,8 @@ import React, { useContext } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 
-import { GameContext } from "../../contexts/GameContext";
-
-import FactionHpSummary from "./FactionHpSummary";
+import { GameContext } from "../../../contexts/GameContext";
+import FactionHpSummary from "../FactionHpSummary";
 
 interface HealthDisplayProps {
   factionId: string;
