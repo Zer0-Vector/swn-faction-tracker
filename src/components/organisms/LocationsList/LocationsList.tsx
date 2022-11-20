@@ -13,9 +13,9 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { GameContext } from "../../contexts/GameContext";
-import { useSelectionId } from "../../hooks/useSelectionId";
-import EditableNameText from "../atoms/EditableNameText";
+import { GameContext } from "../../../contexts/GameContext";
+import { useSelectionId } from "../../../hooks/useSelectionId";
+import EditableNameText from "../../atoms/EditableNameText";
 
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);
