@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 
-import { GameContext } from "../../contexts/GameContext";
-import FactionInfo from "../../types/FactionInfo";
-import EditableStatText from "../atoms/EditableStatText";
-import StatText from "../atoms/StatText";
+import { GameContext } from "../../../contexts/GameContext";
+import FactionInfo from "../../../types/FactionInfo";
+import EditableStatText from "../../atoms/EditableStatText";
+import StatText from "../../atoms/StatText";
 
 interface GoalProgressProps {
   faction: FactionInfo;
