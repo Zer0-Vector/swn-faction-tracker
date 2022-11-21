@@ -14,6 +14,8 @@ export default function ModeToggleButtons() {
     }
   };
 
+  console.debug("Rendering ModeToggleButtons...");
+
   return (
     <ToggleButtonGroup
       value={state.mode}
@@ -21,9 +23,9 @@ export default function ModeToggleButtons() {
       color="tertiary"
       onChange={handleChange}
     >
-      <ToggleButton value="VIEW" fullWidth={true}>View</ToggleButton>
+      <ToggleButton value="VIEW" fullWidth={true} disabled>View</ToggleButton>
       <ToggleButton value="EDIT" fullWidth={true}>Free Edit</ToggleButton>
-      <ToggleButton value="TURN" fullWidth={true}>Take Turn</ToggleButton>
+      <ToggleButton value="TURN" fullWidth={true} disabled>Take Turn</ToggleButton>
     </ToggleButtonGroup>
   );
 }
