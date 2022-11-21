@@ -35,9 +35,6 @@ function App() {
 
   const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", 
     {
-      selectedFaction: null,
-      selectedAssetKey: null,
-      selectedLocation: null,
       loginState: "LOGGED_OUT",
     }
   );

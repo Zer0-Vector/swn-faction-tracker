@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React from "react";
 import { getAuth } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
 
@@ -15,7 +15,6 @@ import Typography from "@mui/material/Typography";
 
 import ModeToggleButtons from "../components/molecules/ModeToggleButtons";
 import UserMenu from "../components/molecules/UserMenu";
-import { UiStateContext } from "../contexts/UiStateContext";
 import { FirebaseApp } from "../firebase-init";
 
 export interface PageContainerProps {
@@ -23,13 +22,9 @@ export interface PageContainerProps {
 }
 
 export default function PageContainer({ children }: PageContainerProps) {
-  const { controller: uiController } = useContext(UiStateContext);
   const location = useLocation();
 
   const tab = location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS";
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const clearSelection = useCallback(() => uiController.clearSelections(), []);
 
   console.debug("Rendering PageContainer...");
 
@@ -65,7 +60,6 @@ export default function PageContainer({ children }: PageContainerProps) {
                     label="Factions"
                     component={Link}
                     to="/factions"
-                    onClick={clearSelection}
                     sx={tabSx}
                     />
                   <Tab
@@ -73,7 +67,6 @@ export default function PageContainer({ children }: PageContainerProps) {
                     label="Locations"
                     component={Link}
                     to="/locations"
-                    onClick={clearSelection}
                     sx={tabSx}
                     />
                 </Tabs>
