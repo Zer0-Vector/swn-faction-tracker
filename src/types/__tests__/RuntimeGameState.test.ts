@@ -61,12 +61,36 @@ describe('getAssets', () => {
   it.todo('does not contain asset after removing it');
 });
 
-// TODO getLocations
-// TODO getLocation
-// TODO reorderLocations
-// TODO updateLocationName
-// TODO removeLocation
-// TODO addLocation
+describe('getLocations', () => {
+  it.todo('is empty on init');
+  it.todo('contains location after adding one');
+  it.todo('does not contain location after removing it');
+});
+
+describe('getLocation', () => {
+  it.todo('is undefined if locationId DNE');
+  it.todo('returns location');
+});
+
+describe('reorderLocations', () => {
+  it.todo('updates location order array');
+});
+
+describe('updateLocationName', () => {
+  it.todo('updates location id and name in locations map');
+  it.todo('updates locationId in locationsOrder array');
+  it.todo('updates any factions which reference updated location');
+});
+
+describe('removeLocation', () => {
+  it.todo('removes location from location map');
+  it.todo('updates any factions which reference removed location');
+});
+
+describe('addLocation', () => {
+  it.todo('adds location to location map and locationsOrder array');
+});
+
 // TODO removeAsset
 // TODO addAsset
 // TODO updateTag
