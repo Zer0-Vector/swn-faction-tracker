@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from "react";
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
 import * as Auth from "firebase/auth";
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -26,34 +26,34 @@ export default function UserMenu({ user }: UserMenuProps) {
 
   const icon: JSX.Element = user === null ? <PersonOutlinedIcon /> : <PersonIcon />;
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
-  };
+  }, []);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     handleClose();
     console.info("Logging in...");
     uiController.setLoginState("LOGGING_IN");
-  };
+  }, [handleClose, uiController]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     handleClose();
     console.info("Logging out...");
     uiController.setLoginState("LOGGING_OUT");
-  };
+  }, [handleClose, uiController]);
 
-  const handleSettings = () => {
+  const handleSettings = useCallback(() => {
     handleClose();
     console.info("Opening settings...");
     // TODO
-  };
+  }, [handleClose]);
 
   const menuItems: JSX.Element[] = useMemo(() => {
     const result: JSX.Element[] = [];
     if (user === null) {
       result.push(<MenuItem key="0" onClick={handleLogin}>Login</MenuItem>);
     } else {
-      result.push(<MenuItem key="1" onClick={handleSettings}>Settings</MenuItem>);
+      result.push(<MenuItem key="1" onClick={handleSettings} disabled>Settings</MenuItem>);
       result.push(<MenuItem key="2" onClick={handleLogout}>Logout</MenuItem>);
     }
     return result;
