@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import AssetId from "../../../types/AssetId";
-import PurchasedAsset, { PurchasedAssetUtils } from "../../../types/PurchasedAsset";
+import PurchasedAsset from "../../../types/PurchasedAsset";
 import AssetDetails from "../AssetDetails";
 
 export default function AssetList() {
@@ -39,7 +39,7 @@ export default function AssetList() {
         assets.length > 0 ? (
           assets.map((pa, index) => {
             console.debug("pa, index: ", pa, index);
-            const currentAssetId = PurchasedAssetUtils.getKey(factionId as string, pa);
+            const currentAssetId = PurchasedAsset.getKey(factionId as string, pa);
             const selectedAssetId = `${factionId}.${assetId}`;
             console.debug(currentAssetId, selectedAssetId);
             const expanded = currentAssetId === selectedAssetId;

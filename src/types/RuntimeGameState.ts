@@ -11,7 +11,7 @@ import GameMode, { isGameMode } from "./GameMode";
 import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
 import { Maybe } from "./Maybe";
-import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
+import PurchasedAsset from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
@@ -129,7 +129,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     keysToChange.forEach(key => {
       const asset = this.assets.get(key);
       if (asset) {
-        this.assets.set(PurchasedAssetUtils.getKey(newFactionId, asset), asset);
+        this.assets.set(PurchasedAsset.getKey(newFactionId, asset), asset);
       } else {
         console.warn("Found undefined mapping for ", key);
       }
