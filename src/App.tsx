@@ -29,7 +29,8 @@ function App() {
     }
   );
 
-  const gameState: RuntimeGameState = useMemo(() => new RuntimeGameState(storedState), [storedState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const gameState: RuntimeGameState = useMemo(() => new RuntimeGameState(storedState), []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const gameController: IGameController = useMemo(() => new GameController(gameState, setStoredState), [gameState]);
 
