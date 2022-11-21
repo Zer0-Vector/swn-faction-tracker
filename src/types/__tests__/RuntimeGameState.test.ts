@@ -1,3 +1,4 @@
+import AssetId from "../AssetId";
 import RuntimeGameState from "../RuntimeGameState";
 import StoredGameState from "../StoredGameState";
 
@@ -56,9 +57,37 @@ describe('getFaction', () => {
 });
 
 describe('getAssets', () => {
-  it.todo('is empty on init');
-  it.todo('contains asset after adding one');
-  it.todo('does not contain asset after removing it');
+  it('is empty if factionId=undefined', () => {
+    expect(state.getAssets(undefined).length).toEqual(0);
+  });
+  
+  it('is empty on init', () => {
+    state.addFaction("Test One");
+    expect(state.getAssets("test-one").length).toEqual(0);
+  });
+
+  it('is empty if faction DNE', () => {
+    expect(state.getAssets("test-dne").length).toEqual(0);
+  });
+
+  it('contains asset after adding one', () => {
+    const faction = state.addFaction("Test Two");
+    const asset = state.addAsset(faction.id, "Test Asset");
+    const assets = state.getAssets(faction.id);
+    expect(assets.length).toEqual(1);
+    expect(assets.at(0)?.id).toEqual(asset.id);
+  });
+
+  it('does not contain asset after removing it', () => {
+    const faction = state.addFaction("Test Two");
+    const asset = state.addAsset(faction.id, "Test Asset");
+    state.addAsset(faction.id, "Asset 2");
+    expect(state.getAssets(faction.id).length).toEqual(2);
+    state.removeAsset(faction.id, AssetId.toRefFormat(asset.id));
+    const assets = state.getAssets(faction.id);
+    expect(assets.length).toEqual(1);
+    expect(assets.at(0)?.id).not.toEqual(asset.id);
+  });
 });
 
 describe('getLocations', () => {
