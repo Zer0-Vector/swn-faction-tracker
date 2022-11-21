@@ -1,28 +1,31 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { UiStateContext } from "../../../contexts/UiStateContext";
+import { useSelection } from "../../../hooks/useSelection";
 import AddFactionDialog from "../../molecules/AddFactionDialog";
 import ConfirmDialog from "../../molecules/ConfirmDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function FactionListActionToolbar() {
   const { controller } = useContext(GameContext);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
 
   const [addOpen, setAddOpen] = useState<boolean>(false);
   const [removeOpen, setRemoveOpen] = useState<boolean>(false);
 
+  const { faction: selectedFaction } = useSelection();
+  const nav = useNavigate();
+
   const handleRemove = () => {
-    if (uiState.selectedFaction) {
-      controller.removeFaction(uiState.selectedFaction);
-      uiController.selectFaction(null);
+    if (selectedFaction) {
+      controller.removeFaction(selectedFaction.id);
+      nav("/factions");
     }
   };
 
   return (
     <ListActionToolbar
-      removable={!!uiState.selectedFaction}
+      removable={!!selectedFaction}
       onAddClick={() => setAddOpen(true)}
       onRemoveClick={() => setRemoveOpen(true)}
     >
@@ -34,7 +37,7 @@ export default function FactionListActionToolbar() {
       <ConfirmDialog
         id="delete-faction"
         title="Confirm Delete Faction"
-        message={`Delete faction "${uiState.selectedFaction}"`}
+        message={`Delete faction "${selectedFaction?.name}"`}
         buttonText="Remove"
         open={removeOpen}
         onCancel={() => setRemoveOpen(false)}
