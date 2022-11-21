@@ -31,7 +31,7 @@ export interface IGameController {
   updateHomeworld(name: string, homeworld: string): void;
 }
 
-type GameStateSetter = React.Dispatch<React.SetStateAction<StoredGameState>>;
+export type GameStateSetter = React.Dispatch<React.SetStateAction<StoredGameState>>;
 
 export class GameController implements IGameController {
 
