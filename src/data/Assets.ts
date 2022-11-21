@@ -213,6 +213,68 @@ const ASSETS: AssetMap = {
   },
   
   /* Cunning 3 */
+  "Cyberninjas": {
+    description: "TODO",
+    attribute: "CUNNING",
+    level: 3,
+    maxHp: 4,
+    cost: 6,
+    tl: 4,
+    type: "SPECIAL_FORCES",
+    attack: {
+      offense: "CUNNING",
+      defense: "CUNNING",
+      result: {
+        type: "DAMAGE",
+        damage: "2d6",
+      },
+    },
+    counter: null,
+    note: [],
+    upkeep: 0,
+    action: null,
+    restriction: null,
+  },
+  "Stealth": {
+    description: "TODO",
+    attribute: "CUNNING",
+    level: 3,
+    maxHp: null,
+    cost: 2,
+    tl: 0,
+    type: "TACTIC",
+    attack: null,
+    counter: null,
+    note: ["S"],
+    upkeep: 0,
+    restriction: null,
+    action: null,
+  },
+  "Covert Shipping": {
+    description: "TODO",
+    attribute: "CUNNING",
+    level: 3,
+    maxHp: 4,
+    cost: 8,
+    tl: 4,
+    type: "LOGISTICS_FACILITY",
+    attack: null,
+    counter: null,
+    upkeep: 0,
+    note: ["A", "S"],
+    restriction: null,
+    action: {
+      type: "MOVE",
+      cost: 1,
+      details: {
+        distance: 3,
+        includeSelf: false,
+        quantity: 1,
+        types: ["SPECIAL_FORCES"],
+      },
+    }
+  },
+
   /* Cunning 4 */
   /* Cunning 5 */
   /* Cunning 6 */
