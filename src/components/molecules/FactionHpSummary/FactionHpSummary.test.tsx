@@ -1,6 +1,6 @@
 import React from "react";
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
@@ -74,7 +74,22 @@ describe('<FactionHpSummary />', () => {
     expect(textfield).toBeInstanceOf(HTMLDivElement);
     expect(textfield).toHaveClass("MuiTextField-root");
   });
+  
+  it('updates hp on Enter and valid value', () => {
+    doMock();
+    renderIt();
+    const hp = screen.getByTestId("test123-hp");
+    fireEvent.doubleClick(hp);
+    const tfDiv = screen.getByTestId("test123-hp-textfield");
+    expect(tfDiv).toBeInTheDocument();
 
-  it.todo('does not accept invalid hp values');
-  it.todo('updates hp on Enter and valid value');
+    const textfield = within(tfDiv).getByDisplayValue("123");
+    expect(textfield).toBeInTheDocument();
+    expect(textfield).toBeInstanceOf(HTMLInputElement);
+    fireEvent.input(textfield, { target: { value: "321" } });
+    fireEvent.keyUp(textfield, { key: "Enter" });
+    expect(textfield).not.toBeInTheDocument();
+    expect(mockContext.controller.updateHp).toBeCalledTimes(1);
+    expect(mockContext.controller.updateHp).toBeCalledWith("tf123", 321);
+  });
 });
