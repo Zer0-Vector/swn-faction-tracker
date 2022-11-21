@@ -1,14 +1,27 @@
 import React from "react";
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+
+import { Maybe } from "../../../types/Maybe";
 
 import ConfirmDialog from "./ConfirmDialog";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const NOP = ()=>{};
+const mockCancel = jest.fn();
+const mockConfirm = jest.fn();
 
-function renderDumb(open = true, id = "test") {
-  render(<ConfirmDialog id={id} open={open} title="test-title" message="test-message" onCancel={NOP} onConfirm={NOP} />);
+function renderDumb(open = true, buttonText: Maybe<string> = undefined, id = "test") {
+  render(
+    <ConfirmDialog
+      id={id}
+      open={open}
+      title="test-title"
+      message="test-message"
+      onCancel={mockCancel}
+      onConfirm={mockConfirm}
+      buttonText={buttonText}
+    />
+  );
 }
 
 describe('default ConfirmDialog', () => {
@@ -36,8 +49,43 @@ describe('default ConfirmDialog', () => {
     expect(message.textContent).toEqual("test-message");
   });
 
-  it.todo('renders given button text');
-  it.todo('renders buttons');
-  it.todo('calls onClose when cancelled');
-  it.todo('calls onConfirm when confirmed');
+  it('renders buttons', () => {
+    renderDumb();
+    const cancel = screen.getByTestId("test-confirm-dialog-cancel-button");
+    expect(cancel).toBeInTheDocument();
+    expect(cancel).toBeInstanceOf(HTMLButtonElement);
+    expect(cancel).not.toBeDisabled();
+    expect(cancel.textContent).toEqual("Cancel");
+
+    const confirm = screen.getByTestId("test-confirm-dialog-confirm-button");
+    expect(confirm).toBeInTheDocument();
+    expect(confirm).toBeInstanceOf(HTMLButtonElement);
+    expect(confirm).not.toBeDisabled();
+    expect(confirm.textContent).toEqual("Confirm");
+  });
+
+  it('renders given button text', () => {
+    renderDumb(true, "OK");
+    const confirm = screen.getByTestId("test-confirm-dialog-confirm-button");
+    expect(confirm).toBeInTheDocument();
+    expect(confirm).toBeInstanceOf(HTMLButtonElement);
+    expect(confirm).not.toBeDisabled();
+    expect(confirm.textContent).toEqual("OK");
+  });
+
+  it('calls onCancel when cancelled', () => {
+    renderDumb();
+    const cancel = screen.getByTestId("test-confirm-dialog-cancel-button");
+    fireEvent.click(cancel);
+    expect(mockCancel).toBeCalledTimes(1);
+    expect(mockConfirm).not.toBeCalled();
+  });
+  
+  it('calls onConfirm when confirmed', () => {
+    renderDumb();
+    const confirm = screen.getByTestId("test-confirm-dialog-confirm-button");
+    fireEvent.click(confirm);
+    expect(mockConfirm).toBeCalledTimes(1);
+    expect(mockCancel).not.toBeCalled();
+  });
 });
