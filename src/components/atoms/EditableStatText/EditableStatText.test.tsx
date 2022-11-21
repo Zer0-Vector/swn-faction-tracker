@@ -7,7 +7,7 @@ import EditableStatText from "./EditableStatText";
 describe('default EditableStatText', () => {
   it('renders StatText initially', () => {
     const updateMethod = jest.fn();
-    render(<EditableStatText id="test1" updateValue={updateMethod} data-testid="edit-stattext-1">TEST 111</EditableStatText>);
+    render(<EditableStatText updateValue={updateMethod} data-testid="test1">TEST 111</EditableStatText>);
     const component = screen.getByText("TEST 111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
@@ -15,7 +15,7 @@ describe('default EditableStatText', () => {
   
   it('renders input after double-click', () => {
     const updateMethod = jest.fn();
-    render(<EditableStatText id="test2" updateValue={updateMethod} data-testid="edit-stattext-1">TEST 111</EditableStatText>);
+    render(<EditableStatText updateValue={updateMethod} data-testid="test2">TEST 111</EditableStatText>);
     let component = screen.getByText("TEST 111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
@@ -28,7 +28,7 @@ describe('default EditableStatText', () => {
 
   it('calls updateValue callback after Enter key', async () => {
     const updateMethod = jest.fn();
-    render(<EditableStatText id="test3" updateValue={updateMethod} data-testid="edit-stattext-1">111</EditableStatText>);
+    render(<EditableStatText data-testid="test3" updateValue={updateMethod}>111</EditableStatText>);
     let component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
@@ -55,7 +55,7 @@ describe('default EditableStatText', () => {
   });
 
   it('sets error when invalid input is given', () => {
-    render(<EditableStatText id="test4" updateValue={jest.fn()}>321</EditableStatText>);
+    render(<EditableStatText data-testid="test4" updateValue={jest.fn()}>321</EditableStatText>);
     let component = screen.getByText("321");
     expect(component).toBeInstanceOf(HTMLSpanElement);
     fireEvent.doubleClick(component);
