@@ -11,7 +11,7 @@ import GameMode, { isGameMode } from "./GameMode";
 import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
 import { Maybe } from "./Maybe";
-import PurchasedAsset, { PurchasedAssetUtils } from "./PurchasedAsset";
+import PurchasedAsset from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
@@ -70,7 +70,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.factionOrder.splice(destinationIndex, 0, removed);
   }
 
-  addFaction(name: string): void {
+  addFaction(name: string): FactionInfo {
     const currentIds = Array.from(this.factions.keys());
     const id = generateId(name, currentIds);
 
@@ -86,9 +86,11 @@ export default class RuntimeGameState implements IGameController, IGameState {
       }
     }
 
-    this.factions.set(id, new FactionInfo(id, name));
+    const result = new FactionInfo(id, name);
+    this.factions.set(id, result);
     this.factionOrder.push(id);
     console.info("Added faction:", id);
+    return result;
   }
 
   removeFaction(factionId: string): void {
@@ -129,7 +131,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     keysToChange.forEach(key => {
       const asset = this.assets.get(key);
       if (asset) {
-        this.assets.set(PurchasedAssetUtils.getKey(newFactionId, asset), asset);
+        this.assets.set(PurchasedAsset.getKey(newFactionId, asset), asset);
       } else {
         console.warn("Found undefined mapping for ", key);
       }
@@ -227,13 +229,14 @@ export default class RuntimeGameState implements IGameController, IGameState {
     }
   }
 
-  addAsset(selectedFactionId: string, assetName: string) {
+  addAsset(selectedFactionId: string, assetName: string): PurchasedAsset {
     const index = this.#nextAssetIndex(`${selectedFactionId}.${AssetId.toRefName(assetName)}`);
     const id: AssetId = new AssetId(assetName, index);
     const hp = ASSETS[assetName]?.maxHp || 0;
     const asset: PurchasedAsset = { id, hp };
-    this.assets.set(PurchasedAssetUtils.getKey(selectedFactionId, asset), asset);
+    this.assets.set(PurchasedAsset.getKey(selectedFactionId, asset), asset);
     console.info(`Added asset (${assetName}): ${AssetId.toRefFormat(id)}`);
+    return asset;
   }
 
   removeAsset(selectedFactionId: string, assetRef: string): void {

@@ -1,13 +1,13 @@
 import AssetId from "./AssetId";
 
-export default interface PurchasedAsset {
-  id: AssetId;
-  hp: number;
-  nickname?: string;
-  location?: string;
-}
-
-export class PurchasedAssetUtils {
+export default class PurchasedAsset {
+  
+  constructor(
+    public readonly id: AssetId,
+    public hp: number,
+    public nickname?: string,
+    public location?: string
+  ) {}
 
   static getKey(factionName: string, pa: PurchasedAsset): string {
     return `${factionName}.${AssetId.toRefFormat(pa.id)}`;

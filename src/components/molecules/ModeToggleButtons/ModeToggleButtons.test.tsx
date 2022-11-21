@@ -8,8 +8,9 @@ import { THEME } from "../../../style/Theme";
 import RuntimeGameState, { IGameState } from "../../../types/RuntimeGameState";
 import ModeToggleButtons from "../ModeToggleButtons";
 
+// enable tests when UI uses mode
 describe('default ModeToggleButtons', () => {
-  it('value is from context', () => {
+  it.skip('value is from context', () => {
     const mockGameContext = {
       state: { mode: "TURN" } as IGameState,
       controller: { setMode: jest.fn() } as unknown as RuntimeGameState,
@@ -33,7 +34,7 @@ describe('default ModeToggleButtons', () => {
     expect(btnView).not.toHaveClass("Mui-selected");
   });
 
-  it('calls setMode when clicked', () => {
+  it.skip('calls setMode when clicked', () => {
     const mockGameContext = {
       state: { mode: "EDIT" } as IGameState,
       controller: { setMode: jest.fn() } as unknown as RuntimeGameState,

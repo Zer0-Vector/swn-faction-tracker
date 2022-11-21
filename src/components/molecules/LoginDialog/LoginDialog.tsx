@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
 import { browserLocalPersistence, getAuth, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -25,10 +25,7 @@ export default function LoginDialog() {
   const emailRef = useRef<Nullable<HTMLInputElement>>(null);
   const passwordRef = useRef<Nullable<HTMLInputElement>>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const open = useMemo(() => 
-      uiState.loginState === "LOGGING_IN"
-      || uiState.loginState === "LOGIN_WAITING",
-    [uiState.loginState]);
+  const open = uiState.loginState === "LOGGING_IN" || uiState.loginState === "LOGIN_WAITING";
 
   const handleClearForm = () => {
     if (emailRef.current) {

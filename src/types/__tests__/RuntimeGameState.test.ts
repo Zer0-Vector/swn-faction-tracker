@@ -1,3 +1,4 @@
+import AssetId from "../AssetId";
 import RuntimeGameState from "../RuntimeGameState";
 import StoredGameState from "../StoredGameState";
 
@@ -16,7 +17,6 @@ beforeEach(() => {
 });
 
 describe('getFactions', () => {
-  // TODO add assertions on StoredGameState
   it('is empty on init', () => {
     expect(state.getFactions()).toEqual([]);
   });
@@ -40,7 +40,6 @@ describe('getFactions', () => {
 });
 
 describe('getFaction', () => {
-  // TODO add assertions on StoredGameState
   it('is undefined when requesting a non-existant faction name', () => {
     expect(state.getFactions().length).toBe(0);
     state.addFaction("test3");
@@ -56,17 +55,69 @@ describe('getFaction', () => {
 });
 
 describe('getAssets', () => {
-  it.todo('is empty on init');
-  it.todo('contains asset after adding one');
-  it.todo('does not contain asset after removing it');
+  it('is empty if factionId=undefined', () => {
+    expect(state.getAssets(undefined).length).toEqual(0);
+  });
+  
+  it('is empty on init', () => {
+    state.addFaction("Test One");
+    expect(state.getAssets("test-one").length).toEqual(0);
+  });
+
+  it('is empty if faction DNE', () => {
+    expect(state.getAssets("test-dne").length).toEqual(0);
+  });
+
+  it('contains asset after adding one', () => {
+    const faction = state.addFaction("Test Two");
+    const asset = state.addAsset(faction.id, "Test Asset");
+    const assets = state.getAssets(faction.id);
+    expect(assets.length).toEqual(1);
+    expect(assets.at(0)?.id).toEqual(asset.id);
+  });
+
+  it('does not contain asset after removing it', () => {
+    const faction = state.addFaction("Test Two");
+    const asset = state.addAsset(faction.id, "Test Asset");
+    state.addAsset(faction.id, "Asset 2");
+    expect(state.getAssets(faction.id).length).toEqual(2);
+    state.removeAsset(faction.id, AssetId.toRefFormat(asset.id));
+    const assets = state.getAssets(faction.id);
+    expect(assets.length).toEqual(1);
+    expect(assets.at(0)?.id).not.toEqual(asset.id);
+  });
 });
 
-// TODO getLocations
-// TODO getLocation
-// TODO reorderLocations
-// TODO updateLocationName
-// TODO removeLocation
-// TODO addLocation
+describe('getLocations', () => {
+  it.todo('is empty on init');
+  it.todo('contains location after adding one');
+  it.todo('does not contain location after removing it');
+});
+
+describe('getLocation', () => {
+  it.todo('is undefined if locationId DNE');
+  it.todo('returns location');
+});
+
+describe('reorderLocations', () => {
+  it.todo('updates location order array');
+});
+
+describe('updateLocationName', () => {
+  it.todo('updates location id and name in locations map');
+  it.todo('updates locationId in locationsOrder array');
+  it.todo('updates any factions which reference updated location');
+});
+
+describe('removeLocation', () => {
+  it.todo('removes location from location map');
+  it.todo('updates any factions which reference removed location');
+});
+
+describe('addLocation', () => {
+  it.todo('adds location to location map and locationsOrder array');
+});
+
 // TODO removeAsset
 // TODO addAsset
 // TODO updateTag

@@ -1,9 +1,11 @@
 import React from "react";
 import { DraggableLocation } from "react-beautiful-dnd";
 
+import FactionInfo from "../types/FactionInfo";
 import { isGameMode } from "../types/GameMode";
 import GoalInfo from "../types/GoalInfo";
 import LocationInfo from "../types/LocationInfo";
+import PurchasedAsset from "../types/PurchasedAsset";
 import RuntimeGameState from "../types/RuntimeGameState";
 import StoredGameState from "../types/StoredGameState";
 
@@ -15,10 +17,10 @@ export interface IGameController {
   removeLocation(selectedLocation: string): void;
   addLocation(info: LocationInfo): void;
   removeAsset(selectedFaction: string, assetRef: string): void;
-  addAsset(selectedFaction: string, assetName: string): void;
+  addAsset(selectedFaction: string, assetName: string): PurchasedAsset;
   updateTag(name: string, tag: string): void;
   reorderFactions(sourceIndex: number, destinationIndex: number): void;
-  addFaction(name: string): void;
+  addFaction(name: string): FactionInfo;
   removeFaction(name: string): void;
   updateFactionName(currentName: string, newName: string): void;
   updateForce(name: string, force: number): void;
@@ -29,7 +31,7 @@ export interface IGameController {
   updateHomeworld(name: string, homeworld: string): void;
 }
 
-type GameStateSetter = React.Dispatch<React.SetStateAction<StoredGameState>>;
+export type GameStateSetter = React.Dispatch<React.SetStateAction<StoredGameState>>;
 
 export class GameController implements IGameController {
 
@@ -133,13 +135,14 @@ export class GameController implements IGameController {
     this.#writeFactionOrder();
   }
 
-  addFaction(name: string): void {
+  addFaction(name: string): FactionInfo {
     if (name.trim().length === 0) {
-      return;
+      throw new Error("Faction name cannot be empty");
     }
     console.log("Adding Faction: " + name);
-    this.runtimeState.addFaction(name);
+    const result = this.runtimeState.addFaction(name);
     this.#writeFactions(true);
+    return result;
   }
 
   removeFaction(name: string): void {
@@ -210,9 +213,10 @@ export class GameController implements IGameController {
     this.#writeFactions();
   }
 
-  addAsset(selectedFaction: string, assetName: string): void {
-    this.runtimeState.addAsset(selectedFaction, assetName);
+  addAsset(selectedFaction: string, assetName: string): PurchasedAsset {
+    const result = this.runtimeState.addAsset(selectedFaction, assetName);
     this.#writeAssets();
+    return result;
   }
 
   removeAsset(selectedFaction: string, assetRef: string): void {
