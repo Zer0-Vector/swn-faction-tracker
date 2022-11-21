@@ -17,7 +17,6 @@ beforeEach(() => {
 });
 
 describe('getFactions', () => {
-  // TODO add assertions on StoredGameState
   it('is empty on init', () => {
     expect(state.getFactions()).toEqual([]);
   });
@@ -41,7 +40,6 @@ describe('getFactions', () => {
 });
 
 describe('getFaction', () => {
-  // TODO add assertions on StoredGameState
   it('is undefined when requesting a non-existant faction name', () => {
     expect(state.getFactions().length).toBe(0);
     state.addFaction("test3");
