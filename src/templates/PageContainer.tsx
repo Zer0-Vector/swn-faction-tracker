@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getAuth } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
 
@@ -28,12 +28,12 @@ export default function PageContainer({ children }: PageContainerProps) {
 
   console.debug("Rendering PageContainer...");
 
-  const tabSx: SxProps<Theme> = {
+  const tabSx: SxProps<Theme> = useMemo(() => ({
     color: "primary.contrastText",
     '&:hover': {
       color: "primary.light",
     }
-  };
+  }), []);
 
   return (
     <>
