@@ -4,17 +4,17 @@ import { SxProps, Theme } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
 import EditableState from "../../../types/EditableState";
+import TestableProps from "../../../types/TestableProps";
 import StatText from "../StatText";
 
-export interface EditableStatTextProps {
+export interface EditableStatTextProps extends TestableProps {
   children: string | number;
   updateValue: (newValue: string) => void;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
-  id: string;
 }
 
-export default function EditableStatText({ children, updateValue, sx, inputSx, id }: EditableStatTextProps) {
+export default function EditableStatText({ children, updateValue, sx, inputSx, "data-testid": dtid }: EditableStatTextProps) {
   const defaultState: EditableState = {
     editing: false,
     hasChanged: false,
@@ -103,8 +103,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, i
         error={!state.valid}
         sx={inputSx}
         size="small"
-        id={id}
-        data-testid={`editable-stat-text-textfield-${id}`}
+        data-testid={`${dtid}-textfield`}
       />
     );
   } else {
@@ -114,6 +113,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, i
         onDoubleClick={enterEditMode}
         title="Double-click to edit"
         sx={sx}
+        data-testid={dtid}
       >
         {children}
       </StatText>

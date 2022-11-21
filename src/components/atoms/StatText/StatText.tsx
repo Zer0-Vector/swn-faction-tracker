@@ -2,7 +2,9 @@ import React from "react";
 
 import Typography, { TypographyProps } from "@mui/material/Typography";
 
-type StatTextProps = TypographyProps & { component?: React.ElementType };
+import TestableProps from "../../../types/TestableProps";
+
+type StatTextProps = TypographyProps & { component?: React.ElementType } & TestableProps;
 
 export default function StatText(props: StatTextProps) {
   return (

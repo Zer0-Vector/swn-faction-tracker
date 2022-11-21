@@ -28,6 +28,7 @@ const LogoutConfirmDialog = () => {
 
   return (
     <ConfirmDialog
+      id="logout"
       title="Confirm Logout"
       message="Logout?"
       buttonText="Logout"

@@ -50,6 +50,7 @@ export default function AssetListActionsToolbar() {
         onAdd={handleAdd}
       />
       <ConfirmDialog
+        id="remove-asset"
         title="Confirm Remove Asset"
         message={`Remove asset ${asset?.id.displayName}`}
         buttonText="Remove"

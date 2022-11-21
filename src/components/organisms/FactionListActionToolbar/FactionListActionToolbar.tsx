@@ -31,7 +31,8 @@ export default function FactionListActionToolbar() {
         onClose={() => setAddOpen(false)}
         onCreate={v => controller.addFaction(v)}
       />
-      <ConfirmDialog 
+      <ConfirmDialog
+        id="delete-faction"
         title="Confirm Delete Faction"
         message={`Delete faction "${uiState.selectedFaction}"`}
         buttonText="Remove"
