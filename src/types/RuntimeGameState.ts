@@ -261,8 +261,8 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addLocation(info: LocationInfo) {
-    this.locations.set(info.name, info);
-    this.locationsOrder.push(info.name);
+    this.locations.set(info.id, info);
+    this.locationsOrder.push(info.id);
   }
 
   updateLocationName(curr: string, val: string) {
