@@ -17,11 +17,11 @@ import StoredGameState from "./StoredGameState";
 export interface IGameState {
   mode: GameMode;
   getFactions(): FactionInfo[];
-  getFaction(factionId: string): FactionInfo | undefined;
+  getFaction(factionId: string): Maybe<FactionInfo>;
   getAssets(factionId: Maybe<string>): PurchasedAsset[];
-  getAsset(factionId: string, assetId: string): PurchasedAsset | undefined;
+  getAsset(factionId: string, assetId: string): Maybe<PurchasedAsset>;
   getLocations(): LocationInfo[];
-  getLocation(locationName: string): LocationInfo | undefined;
+  getLocation(locationName: string): Maybe<LocationInfo>;
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
@@ -207,7 +207,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
         .map(entry => entry[1]);
   }
 
-  getAsset(factionId: string, assetRef: string): PurchasedAsset | undefined {
+  getAsset(factionId: string, assetRef: string): Maybe<PurchasedAsset> {
       const fqAssetId = `${factionId}.${assetRef}`;
       return this.assets.get(fqAssetId);
   }
@@ -247,7 +247,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     return this.factionOrder.map(factionId => this.factions.get(factionId)) as FactionInfo[];
   }
 
-  getFaction(factionId: string): FactionInfo | undefined {
+  getFaction(factionId: string): Maybe<FactionInfo> {
     return this.factions.get(factionId);
   }
 
@@ -311,7 +311,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.locationsOrder.splice(destination.index, 0, removed);
   }
 
-  getLocation(locationName: string): LocationInfo | undefined {
+  getLocation(locationName: string): Maybe<LocationInfo> {
     return this.locations.get(locationName);
   }
 
