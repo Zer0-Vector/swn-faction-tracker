@@ -1,3 +1,4 @@
+import GoalInfo from "../types/GoalInfo";
 import PurchasedAsset from "../types/PurchasedAsset";
 import RuntimeGameState from "../types/RuntimeGameState";
 import StoredGameState from "../types/StoredGameState";
@@ -54,4 +55,68 @@ describe('GameController', () => {
       hp: 0,
     } as PurchasedAsset);
   });
+
+  it('setGoal', () => {
+    const rtgsSetGoal = jest.spyOn(gameState, 'setGoal');
+    gameController.setGoal("test-faction", {
+      type: "Destroy the Foe",
+    } as GoalInfo);
+    expect(rtgsSetGoal).toBeCalledTimes(1);
+    expect(rtgsSetGoal).toBeCalledWith("test-faction", {
+      type: "Destroy the Foe",
+    });
+    expect(setFn).toBeCalledTimes(1);
+    const setter = setFn.mock.calls[0][0] as (prev: StoredGameState) => StoredGameState;
+    const result = setter({} as StoredGameState);
+    expect(result).toEqual({
+      factions: [
+        [
+          "test-faction",
+          {
+            id: "test-faction",
+            goal: {
+              type: "Destroy the Foe",
+            },
+            name: "Test Faction",
+            stats: {
+              cunning: 0,
+              force: 0,
+              hp: 4,
+              maxHp: 4,
+              wealth: 0,
+              xp: 0,
+            }
+          }
+        ]
+      ]
+    } as StoredGameState);
+  });
+
+  it('setMode', () => {
+    const rtgsSetMode = jest.spyOn(gameState, 'setMode');
+    gameController.setMode("EDIT");
+    expect(rtgsSetMode).toBeCalledTimes(1);
+    expect(rtgsSetMode).toBeCalledWith("EDIT");
+    expect(setFn).toBeCalledTimes(1);
+    const setter = setFn.mock.calls[0][0] as (prev: StoredGameState) => StoredGameState;
+    const result = setter({} as StoredGameState);
+    expect(result).not.toBeUndefined();
+    expect(result.mode).toEqual("EDIT");
+  });
+  
+  it.todo('reorderLocations');
+  it.todo('updateLocationName');
+  it.todo('removeLocation');
+  it.todo('addLocation');
+  it.todo('removeAsset');
+  it.todo('updateTag');
+  it.todo('reorderFactions');
+  it.todo('removeFaction');
+  it.todo('updateFactionName');
+  it.todo('updateForce');
+  it.todo('updateCunning');
+  it.todo('updateWealth');
+  it.todo('updateHp');
+  it.todo('updateMaxHp');
+  it.todo('updateHomeworld');
 });
