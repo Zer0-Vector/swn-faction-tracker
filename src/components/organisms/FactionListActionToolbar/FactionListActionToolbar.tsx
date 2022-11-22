@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
@@ -16,23 +16,32 @@ export default function FactionListActionToolbar() {
   const { faction: selectedFaction } = useSelection();
   const nav = useNavigate();
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     if (selectedFaction) {
       controller.removeFaction(selectedFaction.id);
       nav("/factions");
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controller, selectedFaction]);
+
+  const handleAddClick = useCallback(() => setAddOpen(true), []);
+  const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
+  const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
+  const handleAddDialogCreate = useCallback((v: string): void => {controller.addFaction(v);}, [controller]);
+  const handleConfirmCancel = useCallback(() => setRemoveOpen(false), []);
+
+  console.debug("Rendering FactionListActionToolbar...");
 
   return (
     <ListActionToolbar
       removable={!!selectedFaction}
-      onAddClick={() => setAddOpen(true)}
-      onRemoveClick={() => setRemoveOpen(true)}
+      onAddClick={handleAddClick}
+      onRemoveClick={handleRemoveClick}
     >
       <AddFactionDialog 
         open={addOpen}
-        onClose={() => setAddOpen(false)}
-        onCreate={v => controller.addFaction(v)}
+        onClose={handleAddDialogClose}
+        onCreate={handleAddDialogCreate}
       />
       <ConfirmDialog
         id="delete-faction"
@@ -40,7 +49,7 @@ export default function FactionListActionToolbar() {
         message={`Delete faction "${selectedFaction?.name}"`}
         buttonText="Remove"
         open={removeOpen}
-        onCancel={() => setRemoveOpen(false)}
+        onCancel={handleConfirmCancel}
         onConfirm={handleRemove}
       />
     </ListActionToolbar>
