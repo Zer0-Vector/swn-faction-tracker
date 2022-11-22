@@ -59,9 +59,9 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
     <Container disableGutters={true} sx={containerSx} data-testid="faction-details">
       {/* ROW 1 */}
         <ItemHeader data-testid="homeworld-label">Homeworld:</ItemHeader>
-        <Item data-testid="homeworld-item"><EditableNameText onUpdate={updateHomeworld} selectableOptions={homeworldOptions}>{homeworldText}</EditableNameText></Item>
+        <Item data-testid="homeworld-item"><EditableNameText onUpdate={updateHomeworld} selectableOptions={homeworldOptions} data-testid="homeworld">{homeworldText}</EditableNameText></Item>
         <ItemHeader data-testid="tag-label">Tag:</ItemHeader>
-        <Item data-testid="tag-item"><EditableNameText onUpdate={updateTag} selectableOptions={tagOptions}>{tagText}</EditableNameText></Item>
+        <Item data-testid="tag-item"><EditableNameText onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</EditableNameText></Item>
 
       {/* ROW 2 */}
         <ItemHeader data-testid="hp-label">HP:</ItemHeader>

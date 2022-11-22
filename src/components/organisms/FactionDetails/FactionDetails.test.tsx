@@ -87,7 +87,7 @@ describe('default FactionDetails', () => {
     expect(header.textContent).toEqual("Homeworld:");
     const item = within(container).getByTestId("homeworld-item");
     expect(item).toBeInTheDocument();
-    const child = within(item).getByTestId("editable-name-text-text");
+    const child = within(item).getByTestId("homeworld");
     expect(child).toBeInTheDocument();
     expect(child).toHaveTextContent("Unknown");
   });
@@ -100,7 +100,7 @@ describe('default FactionDetails', () => {
     expect(header.textContent).toEqual("Tag:");
     const item = within(container).getByTestId("tag-item");
     expect(item).toBeInTheDocument();
-    const child = within(item).getByTestId("editable-name-text-text");
+    const child = within(item).getByTestId("tag");
     expect(child).toBeInTheDocument();
     expect(child).toHaveTextContent("Unknown");
   });
@@ -154,7 +154,7 @@ describe('default FactionDetails', () => {
     const item = within(container).getByTestId("goal-item");
     expect(item).toBeInTheDocument();
     
-    const hp = within(item).getByTestId("editable-name-text-text");
+    const hp = within(item).getByTestId("goal-text");
     expect(hp).toBeInTheDocument();
     expect(hp).toHaveTextContent("None");
   });
