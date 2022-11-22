@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import { SxProps, Theme } from "@mui/material/styles";
@@ -32,15 +32,15 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
     }
   }, [state.editing]);
 
-  const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
+  const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     setState(prev => ({
       ...prev,
       editing: true,
     }));
-  };
+  }, []);
 
-  const clickHandler = (evt: React.MouseEvent<HTMLElement>) => {
+  const clickHandler = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     if (clicked) {
       evt.stopPropagation();
       setClicked(false);
@@ -48,7 +48,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
       setClicked(true);
       setTimeout(() => setClicked(false), 250);
     }
-  };
+  }, [clicked]);
 
   const exitEditMode = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
@@ -124,6 +124,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           options={selectableOptions}
           openOnFocus={true}
           onChange={dropdownChanged}
+          data-testid="editable-name-text-autocomplete"
           renderInput={params =>
             <TextField
               {...params}
@@ -135,6 +136,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               error={!state.valid}
               autoComplete="off"
               sx={inputSx}
+              data-testid="editable-name-text-autocomplete-textfield"
             />
           }
         />
@@ -151,6 +153,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           error={!state.valid}
           autoComplete="off"
           sx={inputSx}
+          data-testid="editable-name-text-textfield"
         />
       ); 
     }
@@ -163,6 +166,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
         sx={sx}
         component="span"
         title={children}
+        data-testid="editable-name-text-text"
       >
         {children}
       </Typography>
