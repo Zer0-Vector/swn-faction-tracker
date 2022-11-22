@@ -15,13 +15,13 @@ interface AssetDetailsProps {
   asset: PurchasedAsset;
 }
 
-const Item = styled(Paper)(({ theme }) => ({
+const Item = React.memo(styled(Paper)(() => ({
   textAlign: "center",
-  padding: theme.spacing(1),
+  padding: 1,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-}));
+})));
 
 interface LabeledItemProps {
   label: string;
@@ -29,25 +29,24 @@ interface LabeledItemProps {
   sx?: SxProps<Theme>;
   xsLabel?: GridSize;
   xsContent?: GridSize;
+  ["data-testid"]?: string;
 }
 
-const LabeledItemComponent = ({ label, children, sx, xsLabel, xsContent }: LabeledItemProps) => {
-  const gridSx = useMemo(() => ({
-    fontWeight: "bold",
-    textAlign: "right",
-    overflow: "clip",
-    textOverflow: "ellipsis",
-  }), []);
-
+const LabeledItemComponent = ({ label, children, sx, xsLabel, xsContent, "data-testid": dtid }: LabeledItemProps) => {
   return (
-    <Item sx={sx}>
+    <Item sx={sx} data-testid={dtid}>
       <Grid container columnSpacing={2}>
-        <Grid item xs={xsLabel || "auto"} sx={gridSx}>
+        <Grid item
+          xs={xsLabel || "auto"}
+          fontWeight="bold"
+          textAlign="right"
+          overflow="clip"
+          textOverflow="ellipsis"
+          data-testid="grid-item-label"
+        >
           {label}
         </Grid>
-        <Grid item xs={xsContent || "auto"} sx={{
-          textAlign: "left",
-        }}>
+        <Grid item xs={xsContent || "auto"} textAlign="left" data-testid="grid-item-content">
           {children}
         </Grid>
       </Grid>
@@ -98,15 +97,15 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
   const upkeepText = upkeep === 0 ? "None" : `${upkeep} FacCred`;
 
   return (
-    <Card sx={cardSx}>
-      <Item sx={descriptionSx}>{description}</Item>
-      <Item sx={attributeSx}>{attributeText}</Item>
+    <Card sx={cardSx} data-testid="asset-details">
+      <Item sx={descriptionSx} data-testid="description">{description}</Item>
+      <Item sx={attributeSx} data-testid="attribute">{attributeText}</Item>
       {/* TODO use HealthDisplay or refactor it */}
-      <Item>{hp}/{maxHp}</Item>
-      <Item>{typeText}</Item>
-      <LabeledItem label="Upkeep" xsLabel={6}>{upkeepText}</LabeledItem>
-      <LabeledItem label="Attack" xsLabel={4}>{attackText}</LabeledItem>
-      <LabeledItem label="Counter" xsLabel={6}>{counterText}</LabeledItem>
+      <Item data-testid="hp">{hp}/{maxHp}</Item>
+      <Item data-testid="type">{typeText}</Item>
+      <LabeledItem label="Upkeep" xsLabel={6} data-testid="upkeep">{upkeepText}</LabeledItem>
+      <LabeledItem label="Attack" xsLabel={4} data-testid="attack">{attackText}</LabeledItem>
+      <LabeledItem label="Counter" xsLabel={6} data-testid="counter">{counterText}</LabeledItem>
     </Card>
   );
 };
