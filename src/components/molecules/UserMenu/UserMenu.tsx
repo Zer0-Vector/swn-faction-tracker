@@ -49,15 +49,31 @@ export default function UserMenu({ user }: UserMenuProps) {
   }, [handleClose]);
 
   const menuItems: JSX.Element[] = useMemo(() => {
-    const result: JSX.Element[] = [];
     if (user === null) {
-      result.push(<MenuItem key="0" onClick={handleLogin}>Login</MenuItem>);
+      return [<MenuItem key="0" onClick={handleLogin}>Login</MenuItem>];
     } else {
-      result.push(<MenuItem key="1" onClick={handleSettings} disabled>Settings</MenuItem>);
-      result.push(<MenuItem key="2" onClick={handleLogout}>Logout</MenuItem>);
+      return [
+        <MenuItem key="1" onClick={handleSettings} disabled>Settings</MenuItem>,
+        <MenuItem key="2" onClick={handleLogout}>Logout</MenuItem>,
+      ];
     }
-    return result;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleLogin, handleLogout, handleSettings, user]);
+
+  const dialogItems: JSX.Element = useMemo(() => {
+    if (user === null) {
+      return (
+        <>
+          <LoginDialog />
+          <RegistrationDialog />
+          <NeedsVerificationDialog />
+          <VerificationEmailErrorDialog />
+        </>
+      );
+    } else {
+      return (
+        <LogoutConfirmDialog />
+      );
+    }
   }, [user]);
 
   console.debug("Rendering UserMenu... logged in? ", !!user);
@@ -70,11 +86,7 @@ export default function UserMenu({ user }: UserMenuProps) {
       <Menu open={open} anchorEl={btnRef.current} onClose={() => setOpen(false)}>
         {menuItems}
       </Menu>
-      <LoginDialog />
-      <LogoutConfirmDialog />
-      <RegistrationDialog />
-      <NeedsVerificationDialog />
-      <VerificationEmailErrorDialog />
+      {dialogItems}
     </div>
   );
 }
