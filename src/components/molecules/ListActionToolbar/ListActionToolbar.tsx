@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
+import { SxProps } from "@mui/material/styles";
 
 interface ListActionToolbarProps {
   removable: boolean;
@@ -13,28 +14,23 @@ interface ListActionToolbarProps {
 }
 
 export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children }: ListActionToolbarProps) {
+  const fabSx = useMemo<SxProps>(() => ({
+    backgroundColor: "secondary.main"
+  }), []);
+  
   return (
     <>
-      <Box sx={theme => ({ 
-        paddingBottom: "1rem",
-        display: "flex",
-        flexDirection: "row",
-        gap: theme.spacing(2),
-      })}>
+      <Box paddingBottom="1rem" display="flex" flexDirection="row" gap={2}>
         <Fab
           size="medium"
-          sx={{
-            backgroundColor: "secondary.main"
-          }}
+          sx={fabSx}
           onClick={onAddClick}
         >
           <AddIcon />
         </Fab>
         <Fab
           size="medium"
-          sx={{
-            backgroundColor: "secondary.main"
-          }}
+          sx={fabSx}
           disabled={!removable}
           onClick={onRemoveClick}
         >
