@@ -80,27 +80,34 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
     gridTemplateColumns: "1fr 75px"
   }), []);
 
+  const nameSx = useMemo(() => ({
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
+  }), []);
+  
   return (
     <Box
       onClick={getSelectFactionHandler(faction.id)}
       sx={containerBoxSx}
       ref={boxRef}
+      data-testid="faction-list-item"
     >
-      <ItemColumn {...dragHandleProps} >
+      <ItemColumn {...dragHandleProps} data-testid="faction-list-item-drag-handle-col">
         <DragHandleIcon />
       </ItemColumn>
-      <ItemColumn sx={factionNameColSx}>
-        <EditableNameText onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
+        <EditableNameText onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={nameSx} data-testid="faction-list-item-name">
           {faction.name}
         </EditableNameText>
       </ItemColumn>
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
-        <Box sx={statsBoxSx}>
-          <ItemColumn>
+        <Box sx={statsBoxSx} data-testid="faction-list-item-stats">
+          <ItemColumn data-testid="faction-list-item-health-col">
             <HealthDisplay factionId={faction.id} />
           </ItemColumn>
-          <ItemColumn>
-            <FactionStatSummary {...faction.stats} factionId={faction.id} />
+          <ItemColumn data-testid="faction-list-item-attributes-col">
+            <FactionStatSummary {...faction.stats} factionId={faction.id}  />
           </ItemColumn>
         </Box>
       </Slide>
