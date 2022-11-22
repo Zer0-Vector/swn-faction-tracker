@@ -49,6 +49,7 @@ export default function AssetListActionsToolbar() {
       removable={!!assetId}
       onAddClick={handleAddClick}
       onRemoveClick={handleRemoveClick}
+      data-testid="asset-lat"
     >
       <AddAssetDialog
         open={addOpen}
@@ -56,13 +57,13 @@ export default function AssetListActionsToolbar() {
         onAdd={handleAdd}
       />
       <ConfirmDialog
-        id="remove-asset"
         title="Confirm Remove Asset"
         message={`Remove asset ${asset?.id.displayName}`}
         buttonText="Remove"
         open={removeOpen}
         onCancel={handleConfirmCancel}
         onConfirm={handleRemove}
+        data-testid="remove-asset-dialog"
       />
     </ListActionToolbar>
   );
