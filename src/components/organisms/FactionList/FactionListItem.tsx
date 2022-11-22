@@ -1,11 +1,11 @@
-import React, { useContext, useRef } from "react";
+import React, { useCallback, useContext, useMemo, useRef } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
-import { styled } from "@mui/material/styles";
+import { styled, SxProps } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
@@ -20,12 +20,12 @@ interface FactionListRowProps {
   faction: FactionInfo;
 }
 
-const ItemColumn = styled(Box)(({ theme }) => ({
+const ItemColumn = React.memo(styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-}));
+})));
 
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
   const { controller } = useContext(GameContext);
@@ -33,14 +33,14 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   const { factionId: navFactionId } = useSelectionId();
   const nav = useNavigate();
 
-  const getEditNameHandler = (factionId: string) => (
+  const getEditNameHandler = useCallback((factionId: string) => (
     (val: string) => {
       console.debug(`Updating faction name '${factionId}' to '${val}'`);
       controller.updateFactionName(factionId, val);
     }
-  );
+  ), [controller]);
 
-  const getSelectFactionHandler = (factionId: string) => (
+  const getSelectFactionHandler = useCallback((factionId: string) => (
     () => {
       if (navFactionId === factionId) {
         console.debug("Deselecting faction: ", navFactionId);
@@ -50,45 +50,52 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         nav(`/factions/${factionId}`);
       }
     }
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [navFactionId]);
 
 
   const isSelected = navFactionId === faction.id;
+  const notDraggingBgColor = isSelected ? "action.selected" : "inherit";
+  const containerBoxSx = useMemo<SxProps>(() => ({
+    display: "grid",
+    gridTemplateColumns: "50px 1fr 30%",
+    backgroundColor: isDragging ? "action.dragging" : notDraggingBgColor,
+    overflow: "clip",
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: isSelected ? "action.selected-hover" : "action.hover",
+    },
+  }), [isDragging, isSelected, notDraggingBgColor]);
+
+  const factionNameColSx = useMemo<SxProps>(() => ({
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    gridColumnStart: "2",
+    gridColumnEnd: "3",
+    justifyContent: "flex-start",
+  }), []);
+
+  const statsBoxSx = useMemo<SxProps>(() => ({
+    display: "grid",
+    gridTemplateColumns: "1fr 75px"
+  }), []);
 
   return (
     <Box
       onClick={getSelectFactionHandler(faction.id)}
-      sx={{
-        display: "grid",
-        gridTemplateColumns: "50px 1fr 30%",
-        backgroundColor: isDragging ? "action.dragging" : (isSelected ? "action.selected" : "inherit"),
-        overflow: "clip",
-        "&:hover": {
-          cursor: "pointer",
-          backgroundColor: isSelected ? "action.selected-hover" : "action.hover",
-        },
-      }}
+      sx={containerBoxSx}
       ref={boxRef}
     >
       <ItemColumn {...dragHandleProps} >
         <DragHandleIcon />
       </ItemColumn>
-      <ItemColumn sx={{
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        gridColumnStart: "2",
-        gridColumnEnd: "3",
-        justifyContent: "flex-start",
-      }}>
+      <ItemColumn sx={factionNameColSx}>
         <EditableNameText onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {faction.name}
         </EditableNameText>
       </ItemColumn>
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
-        <Box sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 75px"
-        }}>
+        <Box sx={statsBoxSx}>
           <ItemColumn>
             <HealthDisplay factionId={faction.id} />
           </ItemColumn>
