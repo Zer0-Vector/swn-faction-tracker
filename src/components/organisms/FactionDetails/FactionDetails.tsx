@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -20,44 +20,50 @@ interface FactionDetailsProps {
 export default function FactionDetails({ faction }: FactionDetailsProps) {
   const { state, controller } = useContext(GameContext);
 
-  const Item = styled(Paper)(({ theme }) => ({
+  const Item = React.memo(styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
     padding: theme.spacing(0.5),
     margin: theme.spacing(0.5),
-  }));
+  })));
 
-  const ItemHeader = styled(Item)(({ theme }) => ({
+  const ItemHeader = React.memo(styled(Item)(() => ({
     fontWeight: "bold",
     textAlign: "right",
-  }));
+  })));
 
   const homeworldText = faction.homeworld ? faction.homeworld : "Unknown";
   const tagText = faction.tag ? faction.tag : "Unknown";
 
-  const updateHomeworld = (val: string) => {
+  const updateHomeworld = useCallback((val: string) => {
     controller.updateHomeworld(faction.id, val);
-  };
+  }, [controller, faction.id]);
 
-  const updateTag = (val: string) => {
+  const updateTag = useCallback((val: string) => {
     controller.updateTag(faction.id, val);
-  };
+  }, [controller, faction.id]);
+
+  const homeworldOptions = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
+
+  const containerSx = useMemo(() => ({
+    backgroundColor: "background.paper2",
+    m: 2,
+    p: 2,
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: 0.5,
+  }), []);
+  
+  const tagOptions = useMemo(() => Object.keys(TAGS), []);
 
   return (
     <Container disableGutters={true}
-      sx={{ 
-        backgroundColor: "background.paper2",
-        m: 2,
-        p: 2,
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: 0.5,
-      }}
+      sx={containerSx}
     >
       {/* ROW 1 */}
         <ItemHeader>Homeworld:</ItemHeader>
-        <Item><EditableNameText onUpdate={updateHomeworld} selectableOptions={state.getLocations().map(loc => loc.name)}>{homeworldText}</EditableNameText></Item>
+        <Item><EditableNameText onUpdate={updateHomeworld} selectableOptions={homeworldOptions}>{homeworldText}</EditableNameText></Item>
         <ItemHeader>Tag:</ItemHeader>
-        <Item><EditableNameText onUpdate={updateTag} selectableOptions={Object.keys(TAGS)}>{tagText}</EditableNameText></Item>
+        <Item><EditableNameText onUpdate={updateTag} selectableOptions={tagOptions}>{tagText}</EditableNameText></Item>
 
       {/* ROW 2 */}
         <ItemHeader>HP:</ItemHeader>
