@@ -16,7 +16,7 @@ export interface EditableNameTextProps {
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
-  selectableOptions?: string[];
+  selectableOptions?: readonly string[];
   validate?: (value: string)=>boolean;
 }
 

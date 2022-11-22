@@ -20,7 +20,7 @@ export default function GoalText({faction}: GoalTextProps) {
 
   return (
     <EditableNameText
-      selectableOptions={GoalTypes as unknown as string[]}
+      selectableOptions={GoalTypes}
       onUpdate={handleUpdate}
     >
       {faction.goal?.type || "None"}
