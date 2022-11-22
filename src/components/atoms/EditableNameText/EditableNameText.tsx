@@ -9,8 +9,9 @@ import { OverridableStringUnion } from "@mui/types";
 
 import EditableState from "../../../types/EditableState";
 import Nullable from "../../../types/Nullable";
+import TestableProps from "../../../types/TestableProps";
 
-export interface EditableNameTextProps {
+export interface EditableNameTextProps extends TestableProps {
   children: string;
   onUpdate: (newValue: string) => void;
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
@@ -20,7 +21,7 @@ export interface EditableNameTextProps {
   validate?: (value: string)=>boolean;
 }
 
-export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate }: EditableNameTextProps) {
+export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate, "data-testid": dtid }: EditableNameTextProps) {
   const defaultState: EditableState = { editing: false, hasChanged: false, valid: validate === undefined };
   const [state, setState] = useState<EditableState>(defaultState);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -124,7 +125,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           options={selectableOptions}
           openOnFocus={true}
           onChange={dropdownChanged}
-          data-testid="editable-name-text-autocomplete"
+          data-testid={dtid ? `${dtid}-autocomplete` : null}
           renderInput={params =>
             <TextField
               {...params}
@@ -136,7 +137,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               error={!state.valid}
               autoComplete="off"
               sx={inputSx}
-              data-testid="editable-name-text-autocomplete-textfield"
+              data-testid={dtid}
             />
           }
         />
@@ -153,7 +154,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           error={!state.valid}
           autoComplete="off"
           sx={inputSx}
-          data-testid="editable-name-text-textfield"
+          data-testid={dtid}
         />
       ); 
     }
@@ -166,7 +167,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
         sx={sx}
         component="span"
         title={children}
-        data-testid="editable-name-text-text"
+        data-testid={dtid}
       >
         {children}
       </Typography>
