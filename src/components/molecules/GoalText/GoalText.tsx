@@ -22,6 +22,7 @@ export default function GoalText({faction}: GoalTextProps) {
     <EditableNameText
       selectableOptions={GoalTypes}
       onUpdate={handleUpdate}
+      data-testid="goal-text"
     >
       {faction.goal?.type || "None"}
     </EditableNameText>
