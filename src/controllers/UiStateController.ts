@@ -5,7 +5,7 @@ export interface IUiStateController {
   setLoginState(state: LoginState): void;
 }
 
-type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>;
+export type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>;
 
 export class UiStateController implements IUiStateController {
 
