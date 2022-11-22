@@ -42,11 +42,11 @@ const LabeledItemComponent = ({ label, children, sx, xsLabel, xsContent, "data-t
           textAlign="right"
           overflow="clip"
           textOverflow="ellipsis"
-          data-testid="grid-item-label"
+          data-testid="label"
         >
           {label}
         </Grid>
-        <Grid item xs={xsContent || "auto"} textAlign="left" data-testid="grid-item-content">
+        <Grid item xs={xsContent || "auto"} textAlign="left" data-testid="content">
           {children}
         </Grid>
       </Grid>
