@@ -11,20 +11,22 @@ interface ListActionToolbarProps {
   onAddClick: React.MouseEventHandler<HTMLButtonElement>;
   onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactElement | React.ReactElement[];
+  ["data-testid"]?: string;
 }
 
-export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children }: ListActionToolbarProps) {
+export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children, "data-testid": dtid }: ListActionToolbarProps) {
   const fabSx = useMemo<SxProps>(() => ({
     backgroundColor: "secondary.main"
   }), []);
   
   return (
     <>
-      <Box paddingBottom="1rem" display="flex" flexDirection="row" gap={2}>
+      <Box paddingBottom="1rem" display="flex" flexDirection="row" gap={2} data-testid={dtid}>
         <Fab
           size="medium"
           sx={fabSx}
           onClick={onAddClick}
+          data-testid="lat-add"
         >
           <AddIcon />
         </Fab>
@@ -33,6 +35,7 @@ export default function ListActionToolbar({ removable, onAddClick, onRemoveClick
           sx={fabSx}
           disabled={!removable}
           onClick={onRemoveClick}
+          data-testid="lat-remove"
         >
           <RemoveIcon />
         </Fab>
