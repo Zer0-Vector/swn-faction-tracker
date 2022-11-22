@@ -2,20 +2,19 @@ import React, { useContext } from "react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import FactionInfo from "../../../types/FactionInfo";
-import TestableProps from "../../../types/TestableProps";
 import EditableStatText from "../../atoms/EditableStatText";
 import StatText from "../../atoms/StatText";
 
-interface GoalProgressProps extends TestableProps {
+interface GoalProgressProps {
   faction: FactionInfo;
 }
 
-export default function GoalProgress({ faction, "data-testid": dtid }: GoalProgressProps) {
+export default function GoalProgress({ faction }: GoalProgressProps) {
   const { controller } = useContext(GameContext);
 
   if (!faction.goal) {
     return (
-      <em>Select Goal</em>
+      <em data-testid="goal-progress">Select Goal</em>
     );
   }
 
@@ -45,10 +44,10 @@ export default function GoalProgress({ faction, "data-testid": dtid }: GoalProgr
   const { tally, target } = faction.goal;
 
   return (
-    <span data-testid={dtid}>
-      <EditableStatText data-testid={`${dtid}-progress`} updateValue={handleUpdateTally} inputSx={{ width: "3em" }}>{valueOrDefault(tally)}</EditableStatText>
+    <span data-testid="goal-progress">
+      <EditableStatText data-testid="goal-tally" updateValue={handleUpdateTally} inputSx={{ width: "3em" }}>{valueOrDefault(tally)}</EditableStatText>
       <StatText>/</StatText>
-      <EditableStatText data-testid={`${dtid}-target`} updateValue={handleUpdateTarget} inputSx={{ width: "3em" }}>{valueOrDefault(target)}</EditableStatText>
+      <EditableStatText data-testid="goal-target" updateValue={handleUpdateTarget} inputSx={{ width: "3em" }}>{valueOrDefault(target)}</EditableStatText>
     </span>
   );
 }
