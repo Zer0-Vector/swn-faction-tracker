@@ -25,7 +25,7 @@ export default function ConfirmDialog({ id, title, message, buttonText, open, on
     onConfirm();
   }, [onConfirm]);
 
-  const handleCancel = useCallback((evt: React.MouseEvent<HTMLElement>) => {
+  const handleCancel = useCallback<React.MouseEventHandler<HTMLButtonElement>>((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     onCancel();
   }, [onCancel]);
