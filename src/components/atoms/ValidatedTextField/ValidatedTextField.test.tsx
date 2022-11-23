@@ -69,7 +69,8 @@ describe('two ValidatedTextField', () => {
     const field1 = within(theDiv1).getByLabelText("Test One");
     expect(field1).toBeInTheDocument();
     expect(field1).toBeInstanceOf(HTMLInputElement);
-    const label1 = within(theDiv1).getAllByText("Test One")[0];
+    // eslint-disable-next-line testing-library/no-node-access
+    const label1 = theDiv1.querySelector("label");
     expect(label1).toBeInTheDocument();
     expect(label1).toBeInstanceOf(HTMLLabelElement);
     expect(label1).not.toHaveClass("Mui-error");
@@ -81,7 +82,8 @@ describe('two ValidatedTextField', () => {
     const field2 = within(theDiv2).getByLabelText("Test Two");
     expect(field2).toBeInTheDocument();
     expect(field2).toBeInstanceOf(HTMLInputElement);
-    const label2 = within(theDiv2).getAllByText("Test Two")[0];
+    // eslint-disable-next-line testing-library/no-node-access
+    const label2 = theDiv2.querySelector("label");
     expect(label2).toBeInTheDocument();
     expect(label2).toBeInstanceOf(HTMLLabelElement);
     expect(label2).not.toHaveClass("Mui-error");
@@ -95,6 +97,7 @@ describe('two ValidatedTextField', () => {
     // update field1 to invalid value
     fireEvent.change(field1, { target: { value: "1234" } });
     expect(label1).toHaveClass("Mui-error");
+    expect(label2).not.toHaveClass("Mui-error");
     expect(validator.isAllValid()).toBe(false);
     expect(validator.isValid("test1")).toBe(false);
 
