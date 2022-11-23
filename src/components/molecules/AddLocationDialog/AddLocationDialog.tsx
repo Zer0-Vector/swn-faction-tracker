@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
+import { SxProps } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 
 import { GameContext } from "../../../contexts/GameContext";
@@ -26,6 +27,9 @@ type Coordinate<T> = [x: T, y: T];
 const BLANK_FORM_INFO: FormInfo = { value: "", valid: false };
 const BLANK_COORDS: FormInfo<Coordinate<string>> = { value: ["", ""], valid: false };
 
+type FormInfoSetter = (val: FormInfo) => void;
+type StringValidator = (val: string) => boolean;
+
 export default function AddLocationDialog({ open, onClose, onCreate }: AddLocationDialogProps) {
   const { state } = useContext(GameContext);
   const [nameText, setNameText] = useState<FormInfo>(BLANK_FORM_INFO);
@@ -33,9 +37,9 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
   const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const locationsNames = state.getLocations().map(loc => loc.name);
+  const locationsNames = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
 
-  const handleChange = (setter: (val: FormInfo)=>void, valid?: (val: string)=>boolean) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (setter: FormInfoSetter, valid?: StringValidator) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
     console.log("validating...");
     const isValid = valid === undefined || valid(newText);
@@ -66,7 +70,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     setCoords(newState);
   };
 
-  const isNotDuplicateName = (val: string) => !locationsNames.includes(val.trim());
+  const isNotDuplicateName = useCallback((val: string) => !locationsNames.includes(val.trim()), [locationsNames]);
 
   const isInteger = (val: string) => {
     try {
@@ -77,20 +81,29 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     }
   };
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setNameText(BLANK_FORM_INFO);
     setTlText(BLANK_FORM_INFO);
     setCoords({ value: ["", ""], valid: false });
     inputRef.current?.focus();
     onClose();
-  };
+  }, [onClose]);
 
-  const handleCancel = (evt: React.MouseEvent<HTMLElement>) => {
+  const handleCancel = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     handleClose();
-  };
+  }, [handleClose]);
 
-  const handleCreate = () => {
+  const allValid = useCallback(() => {
+    return (
+      isNotDuplicateName(nameText.value)
+      && nameText.valid
+      && tlText.valid
+      && coords.valid
+    );
+  }, [coords.valid, isNotDuplicateName, nameText.valid, nameText.value, tlText.valid]);
+
+  const handleCreate = useCallback(() => {
     if (allValid()) {
       onCreate({
         id: nameText.value.toLowerCase().replaceAll(/[\W_]+/g, "-"),
@@ -101,32 +114,21 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
       });
     }
     handleClose();
-  };
+  }, [allValid, coords.value, handleClose, nameText.value, onCreate, tlText.value]);  
 
-  const allValid = () => {
-    try {
-      return (
-        isNotDuplicateName(nameText.value)
-        && nameText.valid
-        && tlText.valid
-        && coords.valid
-      );
-    } catch { // something did not parse to integer
-      return false;
-    }
-  };
+  const formCtrlSx = useMemo<SxProps>(() => ({
+    display: "flex",
+    gap: 2,
+  }), []);
 
   return (
     <Dialog open={open} onClose={onClose} data-testid="add-location-dialog">
       <DialogTitle data-testid="add-location-dialog-title">Add Location</DialogTitle>
       <DialogContent>
-        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })} data-testid="add-location-dialog-content-text">
+        <DialogContentText paddingBottom={2} data-testid="add-location-dialog-content-text">
           Enter the new location&apos;s details.
         </DialogContentText>
-        <FormControl sx={theme => ({
-          display: "flex",
-          gap: theme.spacing(2),
-        })}>
+        <FormControl sx={formCtrlSx}>
           <TextField
             id="location-name"
             label="Location Name"
@@ -163,7 +165,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
             <MenuItem value="4">4</MenuItem>
             <MenuItem value="5">5</MenuItem>
           </TextField>
-          <Box sx={theme => ({ display: "flex", gap: theme.spacing(2) })}>
+          <Box display="flex" gap={2}>
             <TextField
               id="location-x"
               label="X"
