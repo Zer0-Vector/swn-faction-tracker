@@ -10,7 +10,7 @@ import { styled, SxProps } from "@mui/material/styles";
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import FactionInfo from "../../../types/FactionInfo";
-import EditableNameText from "../../atoms/EditableNameText";
+import EditableNameText from "../../atoms/EditableText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
 

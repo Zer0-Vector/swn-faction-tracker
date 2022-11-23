@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { GameContext } from "../../../contexts/GameContext";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes, isGoalType } from "../../../types/GoalType";
-import EditableNameText from "../../atoms/EditableNameText";
+import EditableNameText from "../../atoms/EditableText";
 
 interface GoalTextProps {
   faction: FactionInfo;

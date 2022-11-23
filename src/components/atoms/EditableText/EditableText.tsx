@@ -11,7 +11,7 @@ import EditableState from "../../../types/EditableState";
 import Nullable from "../../../types/Nullable";
 import TestableProps from "../../../types/TestableProps";
 
-export interface EditableNameTextProps extends TestableProps {
+export interface EditableTextProps extends TestableProps {
   children: string;
   onUpdate: (newValue: string) => void;
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
@@ -21,7 +21,7 @@ export interface EditableNameTextProps extends TestableProps {
   validate?: (value: string)=>boolean;
 }
 
-export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate, "data-testid": dtid }: EditableNameTextProps) {
+export default function EditableText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate, "data-testid": dtid }: EditableTextProps) {
   const defaultState: EditableState = { editing: false, hasChanged: false, valid: validate === undefined };
   const [state, setState] = useState<EditableState>(defaultState);
   const textFieldRef = useRef<HTMLInputElement>(null);

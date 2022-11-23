@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import { GameContext } from "../../../contexts/GameContext";
 import { TAGS } from "../../../data/Tags";
 import FactionInfo from "../../../types/FactionInfo";
-import EditableNameText from "../../atoms/EditableNameText";
+import EditableNameText from "../../atoms/EditableText";
 import FactionHpSummary from "../../molecules/FactionHpSummary";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import GoalProgress from "../../molecules/GoalProgress";
