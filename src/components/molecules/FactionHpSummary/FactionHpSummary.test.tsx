@@ -42,9 +42,10 @@ function renderIt(factionId = "tf123") {
 describe('<FactionHpSummary />', () => {
   it('renders default value when faction does not exist', () => {
     renderIt("not-here");
-    const summary = screen.getByTestId("test123");
+    const summary = screen.getByTestId("faction-hp-box");
     expect(summary).toBeInTheDocument();
-    expect(summary.textContent).toEqual("??/??");
+    const stat = within(summary).getByText("??/??");
+    expect(stat).toBeInTheDocument();
   });
   
   it('renders hp and maxHp when faction exists', () => {
@@ -52,11 +53,12 @@ describe('<FactionHpSummary />', () => {
     renderIt();
     expect(mockContext.state.getFaction).toBeCalledTimes(1);
     expect(mockContext.state.getFaction).toBeCalledWith("tf123");
-    const hp = screen.getByTestId("test123-hp");
+    const box = screen.getByTestId("faction-hp-box");
+    const hp = within(box).getByTestId("hp");
     expect(hp).toBeInTheDocument();
     expect(hp.textContent).toEqual("123");
 
-    const maxHp = screen.getByTestId("test123-maxhp");
+    const maxHp = within(box).getByTestId("maxhp");
     expect(maxHp).toBeInTheDocument();
     expect(maxHp.textContent).toEqual("456");
   });
@@ -65,11 +67,13 @@ describe('<FactionHpSummary />', () => {
     doMock();
     renderIt();
 
-    const hp = screen.getByTestId("test123-hp");
+    const box = screen.getByTestId("faction-hp-box");
+
+    const hp = within(box).getByTestId("hp");
     expect(hp).toBeInTheDocument();
     fireEvent.doubleClick(hp);
 
-    const textfield = screen.getByTestId("test123-hp-textfield");
+    const textfield = within(box).getByTestId("hp-textfield");
     expect(textfield).toBeInTheDocument();
     expect(textfield).toBeInstanceOf(HTMLDivElement);
     expect(textfield).toHaveClass("MuiTextField-root");
@@ -78,9 +82,11 @@ describe('<FactionHpSummary />', () => {
   it('updates hp on Enter and valid value', () => {
     doMock();
     renderIt();
-    const hp = screen.getByTestId("test123-hp");
+    const box = screen.getByTestId("faction-hp-box");
+
+    const hp = within(box).getByTestId("hp");
     fireEvent.doubleClick(hp);
-    const tfDiv = screen.getByTestId("test123-hp-textfield");
+    const tfDiv = screen.getByTestId("hp-textfield");
     expect(tfDiv).toBeInTheDocument();
 
     const textfield = within(tfDiv).getByDisplayValue("123");

@@ -29,7 +29,7 @@ const mockFaction = {
 function renderIt() {
   render(
     <GameContext.Provider value={mockContext}>
-      <GoalProgress faction={mockFaction} data-testid="testy" />
+      <GoalProgress faction={mockFaction} />
     </GameContext.Provider>
   );
 }
@@ -37,23 +37,23 @@ function renderIt() {
 describe('GoalProgress', () => {
   it('renders faction goal', () => {
     renderIt();
-    const theSpan = screen.getByTestId("testy");
+    const theSpan = screen.getByTestId("goal-progress");
     expect(theSpan).toBeInTheDocument();
 
-    const prog = within(theSpan).getByTestId("testy-progress");
+    const prog = within(theSpan).getByTestId("goal-tally");
     expect(prog).toBeInTheDocument();
     expect(prog.textContent).toEqual("11");
 
-    const targ = within(theSpan).getByTestId("testy-target");
+    const targ = within(theSpan).getByTestId("goal-target");
     expect(targ).toBeInTheDocument();
     expect(targ.textContent).toEqual("22");
   });
 
   it('calls controller when tally is updated', () => {
     renderIt();
-    const prog = screen.getByTestId("testy-progress");
+    const prog = screen.getByTestId("goal-tally");
     fireEvent.doubleClick(prog);
-    const progTf = screen.getByTestId("testy-progress-textfield");
+    const progTf = screen.getByTestId("goal-tally-textfield");
     expect(progTf).toBeInTheDocument();
     const progTfInput = within(progTf).getByDisplayValue("11");
     expect(progTfInput).toBeInTheDocument();
@@ -70,9 +70,9 @@ describe('GoalProgress', () => {
 
   it('calls controller when target is updated', () => {
     renderIt();
-    const targ = screen.getByTestId("testy-target");
+    const targ = screen.getByTestId("goal-target");
     fireEvent.doubleClick(targ);
-    const targTf = screen.getByTestId("testy-target-textfield");
+    const targTf = screen.getByTestId("goal-target-textfield");
     expect(targTf).toBeInTheDocument();
     const targTfInput = within(targTf).getByDisplayValue("22");
     expect(targTfInput).toBeInTheDocument();

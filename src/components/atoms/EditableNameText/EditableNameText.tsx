@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import { SxProps, Theme } from "@mui/material/styles";
@@ -9,18 +9,19 @@ import { OverridableStringUnion } from "@mui/types";
 
 import EditableState from "../../../types/EditableState";
 import Nullable from "../../../types/Nullable";
+import TestableProps from "../../../types/TestableProps";
 
-export interface EditableNameTextProps {
+export interface EditableNameTextProps extends TestableProps {
   children: string;
   onUpdate: (newValue: string) => void;
   variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
-  selectableOptions?: string[];
+  selectableOptions?: readonly string[];
   validate?: (value: string)=>boolean;
 }
 
-export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate }: EditableNameTextProps) {
+export default function EditableNameText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate, "data-testid": dtid }: EditableNameTextProps) {
   const defaultState: EditableState = { editing: false, hasChanged: false, valid: validate === undefined };
   const [state, setState] = useState<EditableState>(defaultState);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -32,15 +33,15 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
     }
   }, [state.editing]);
 
-  const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
+  const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     setState(prev => ({
       ...prev,
       editing: true,
     }));
-  };
+  }, []);
 
-  const clickHandler = (evt: React.MouseEvent<HTMLElement>) => {
+  const clickHandler = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     if (clicked) {
       evt.stopPropagation();
       setClicked(false);
@@ -48,7 +49,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
       setClicked(true);
       setTimeout(() => setClicked(false), 250);
     }
-  };
+  }, [clicked]);
 
   const exitEditMode = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
@@ -124,6 +125,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           options={selectableOptions}
           openOnFocus={true}
           onChange={dropdownChanged}
+          data-testid={dtid ? `${dtid}-autocomplete` : null}
           renderInput={params =>
             <TextField
               {...params}
@@ -135,6 +137,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
               error={!state.valid}
               autoComplete="off"
               sx={inputSx}
+              data-testid={dtid}
             />
           }
         />
@@ -151,6 +154,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
           error={!state.valid}
           autoComplete="off"
           sx={inputSx}
+          data-testid={dtid}
         />
       ); 
     }
@@ -163,6 +167,7 @@ export default function EditableNameText({ children, onUpdate, variant, sx, inpu
         sx={sx}
         component="span"
         title={children}
+        data-testid={dtid}
       >
         {children}
       </Typography>

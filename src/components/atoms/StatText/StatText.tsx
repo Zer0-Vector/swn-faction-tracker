@@ -13,6 +13,7 @@ export default function StatText(props: StatTextProps) {
         variant="body2"
         component="span"
         {...props}
+        data-testid={props["data-testid"]}
       >
         {props.children}
       </Typography>

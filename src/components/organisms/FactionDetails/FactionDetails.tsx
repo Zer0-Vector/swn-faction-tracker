@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -20,50 +20,54 @@ interface FactionDetailsProps {
 export default function FactionDetails({ faction }: FactionDetailsProps) {
   const { state, controller } = useContext(GameContext);
 
-  const Item = styled(Paper)(({ theme }) => ({
+  const Item = React.memo(styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
     padding: theme.spacing(0.5),
     margin: theme.spacing(0.5),
-  }));
+  })));
 
-  const ItemHeader = styled(Item)(({ theme }) => ({
+  const ItemHeader = React.memo(styled(Item)(() => ({
     fontWeight: "bold",
     textAlign: "right",
-  }));
+  })));
 
   const homeworldText = faction.homeworld ? faction.homeworld : "Unknown";
   const tagText = faction.tag ? faction.tag : "Unknown";
 
-  const updateHomeworld = (val: string) => {
+  const updateHomeworld = useCallback((val: string) => {
     controller.updateHomeworld(faction.id, val);
-  };
+  }, [controller, faction.id]);
 
-  const updateTag = (val: string) => {
+  const updateTag = useCallback((val: string) => {
     controller.updateTag(faction.id, val);
-  };
+  }, [controller, faction.id]);
+
+  const homeworldOptions = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
+
+  const containerSx = useMemo(() => ({
+    backgroundColor: "background.paper2",
+    m: 2,
+    p: 2,
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: 0.5,
+  }), []);
+  
+  const tagOptions = useMemo(() => Object.keys(TAGS), []);
 
   return (
-    <Container disableGutters={true}
-      sx={{ 
-        backgroundColor: "background.paper2",
-        m: 2,
-        p: 2,
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: 0.5,
-      }}
-    >
+    <Container disableGutters={true} sx={containerSx} data-testid="faction-details">
       {/* ROW 1 */}
-        <ItemHeader>Homeworld:</ItemHeader>
-        <Item><EditableNameText onUpdate={updateHomeworld} selectableOptions={state.getLocations().map(loc => loc.name)}>{homeworldText}</EditableNameText></Item>
-        <ItemHeader>Tag:</ItemHeader>
-        <Item><EditableNameText onUpdate={updateTag} selectableOptions={Object.keys(TAGS)}>{tagText}</EditableNameText></Item>
+        <ItemHeader data-testid="homeworld-label">Homeworld:</ItemHeader>
+        <Item data-testid="homeworld-item"><EditableNameText onUpdate={updateHomeworld} selectableOptions={homeworldOptions} data-testid="homeworld">{homeworldText}</EditableNameText></Item>
+        <ItemHeader data-testid="tag-label">Tag:</ItemHeader>
+        <Item data-testid="tag-item"><EditableNameText onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</EditableNameText></Item>
 
       {/* ROW 2 */}
-        <ItemHeader>HP:</ItemHeader>
-        <Item><FactionHpSummary factionId={faction.id} /></Item>
-        <ItemHeader>F/C/W:</ItemHeader>
-        <Item>
+        <ItemHeader data-testid="hp-label">HP:</ItemHeader>
+        <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} data-testid="hp-summary" /></Item>
+        <ItemHeader data-testid="attr-label">F/C/W:</ItemHeader>
+        <Item data-testid="attr-item">
           <FactionStatSummary
             {...faction.stats}
             factionId={faction.id}
@@ -71,10 +75,10 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
         </Item>
 
       {/* ROW 3 */}
-        <ItemHeader>Goal:</ItemHeader>
-        <Item><GoalText faction={faction} /></Item>
-        <ItemHeader>Progress:</ItemHeader>
-        <Item><GoalProgress faction={faction} /></Item>
+        <ItemHeader data-testid="goal-label">Goal:</ItemHeader>
+        <Item data-testid="goal-item"><GoalText faction={faction} /></Item>
+        <ItemHeader data-testid="goal-progress-label">Progress:</ItemHeader>
+        <Item data-testid="goal-progress-item"><GoalProgress faction={faction} /></Item>
     </Container>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -8,7 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 interface ConfirmDialogProps {
-  id: string;
+  id?: string;
   title: string;
   message: string;
   buttonText?: string;
@@ -16,29 +16,30 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
   onCancel: () => void;
   children?: React.ReactNode;
+  ["data-testid"]?: string;
 }
 
-export default function ConfirmDialog({ id, title, message, buttonText, open, onCancel, onConfirm, children }: ConfirmDialogProps) {
-  const handleConfirm = (evt: React.MouseEvent<HTMLElement>) => {
+export default function ConfirmDialog({ id, title, message, buttonText, open, onCancel, onConfirm, children, "data-testid": dtid }: ConfirmDialogProps) {
+  const handleConfirm = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     onConfirm();
-  };
+  }, [onConfirm]);
 
-  const handleCancel = (evt: React.MouseEvent<HTMLElement>) => {
+  const handleCancel = useCallback<React.MouseEventHandler<HTMLButtonElement>>((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     onCancel();
-  };
+  }, [onCancel]);
   
   return (
-    <Dialog open={open} onClose={onCancel} data-testid={`${id}-confirm-dialog`}>
-      <DialogTitle data-testid={`${id}-confirm-dialog-title`}>{title}</DialogTitle>
-      <DialogContent data-testid={`${id}-confirm-dialog-content`}>
-        <DialogContentText data-testid={`${id}-confirm-dialog-content-text`}>{message}</DialogContentText>
+    <Dialog open={open} onClose={onCancel} data-testid={dtid}>
+      <DialogTitle data-testid="title">{title}</DialogTitle>
+      <DialogContent data-testid="content">
+        <DialogContentText data-testid="content-text">{message}</DialogContentText>
         {children}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCancel} data-testid={`${id}-confirm-dialog-cancel-button`}>Cancel</Button>
-        <Button onClick={handleConfirm} data-testid={`${id}-confirm-dialog-confirm-button`}>{buttonText || "Confirm"}</Button>
+      <DialogActions data-testid="actions">
+        <Button onClick={handleCancel} data-testid="cancel-button">Cancel</Button>
+        <Button onClick={handleConfirm} data-testid="confirm-button">{buttonText || "Confirm"}</Button>
       </DialogActions>
     </Dialog>
   );

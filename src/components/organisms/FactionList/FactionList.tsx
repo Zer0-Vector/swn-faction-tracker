@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
@@ -21,12 +21,12 @@ export default function FactionList(): JSX.Element {
   const theme = useTheme();
   const { faction: selectedFaction } = useSelection();
   
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) {
       return;
     }
     controller.reorderFactions(result.source.index, result.destination.index);
-  };
+  }, [controller]);
 
   const factions = state.getFactions();
 
@@ -47,10 +47,8 @@ export default function FactionList(): JSX.Element {
         {(provided, snapshot) => (
           <Stack
             spacing={theme.spacing(0.125)}
-            sx={{
-              padding: theme.spacing(2),
-              backgroundColor: snapshot.isDraggingOver ? "background.paper2" : "background.paper",
-            }}
+            padding={theme.spacing(2)}
+            bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
@@ -76,18 +74,11 @@ export default function FactionList(): JSX.Element {
                         in={selectedFaction?.id === faction.id}
                         unmountOnExit={true}
                       >
-                        <Box sx={{
-                          padding: 1,
-                        }}>
-                          <Box
-                            sx={{
-                              backgroundColor: "background.paper",
-                              padding: 3
-                            }}
-                          >
+                        <Box padding={1}>
+                          <Box padding={3} bgcolor="background.paper">
                             <FactionDetails faction={faction} />
                             <Box>
-                              <Typography variant="h3" sx={{ textAlign: "left" }}>Assets</Typography>
+                              <Typography variant="h3" textAlign="left">Assets</Typography>
                               <AssetListActionsToolbar />
                               <AssetList />
                             </Box>

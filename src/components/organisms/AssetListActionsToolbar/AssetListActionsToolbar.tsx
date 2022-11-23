@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
@@ -19,15 +19,15 @@ export default function AssetListActionsToolbar() {
 
   const nav = useNavigate();
 
-  const handleAdd = (assetName: string) => {
+  const handleAdd = useCallback((assetName: string) => {
     if (factionId) {
       controller.addAsset(factionId, assetName);
     } else {
       console.warn("No faction selected.");
     }
-  };
+  }, [controller, factionId]);
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     if (factionId && assetId) {
       console.debug(`handleRemove(${factionId}, ${assetId})`);
       controller.removeAsset(factionId, assetId);
@@ -36,27 +36,34 @@ export default function AssetListActionsToolbar() {
     } else {
       console.warn(`Illegal selection state. factionId=${factionId}, assetId=${assetId}`);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assetId, controller, factionId]);
 
+  const handleAddClick = useCallback(() => setAddOpen(true), []);
+  const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
+  const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
+  const handleConfirmCancel = useCallback(() => setRemoveOpen(false), []);
+  
   return (
     <ListActionToolbar
       removable={!!assetId}
-      onAddClick={() => setAddOpen(true)}
-      onRemoveClick={() => setRemoveOpen(true)}
+      onAddClick={handleAddClick}
+      onRemoveClick={handleRemoveClick}
+      data-testid="asset-lat"
     >
       <AddAssetDialog
         open={addOpen}
-        onClose={() => setAddOpen(false)}
+        onClose={handleAddDialogClose}
         onAdd={handleAdd}
       />
       <ConfirmDialog
-        id="remove-asset"
         title="Confirm Remove Asset"
         message={`Remove asset ${asset?.id.displayName}`}
         buttonText="Remove"
         open={removeOpen}
-        onCancel={() => setRemoveOpen(false)}
+        onCancel={handleConfirmCancel}
         onConfirm={handleRemove}
+        data-testid="remove-asset-dialog"
       />
     </ListActionToolbar>
   );

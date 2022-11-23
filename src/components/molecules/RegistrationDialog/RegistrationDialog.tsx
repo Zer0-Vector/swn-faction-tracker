@@ -110,8 +110,8 @@ const RegistrationDialog = () => {
       <form onSubmit={handleRegister}>
         <DialogTitle>Registration</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ marginBottom: 2 }}>Enter your email and create a password.</DialogContentText>
-          {errorMessage ? <Typography color="error" sx={{ marginBottom: 2}} data-testid="registration-dialog-error-message">{errorMessage}</Typography> : null}
+          <DialogContentText marginBottom={2}>Enter your email and create a password.</DialogContentText>
+          {errorMessage ? <Typography color="error" marginBottom={2} data-testid="registration-dialog-error-message">{errorMessage}</Typography> : null}
           <Container sx={{
             display: "grid",
             gridTemplateColumns: "1fr",
