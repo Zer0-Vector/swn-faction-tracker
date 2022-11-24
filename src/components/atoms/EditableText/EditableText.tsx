@@ -5,6 +5,7 @@ import Typography, { TypographyProps } from "@mui/material/Typography";
 
 import { ValidationContext } from "../../../contexts/ValidationContext";
 import { ValidationController } from "../../../controllers/ValidationController";
+import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
 import { ValidatedTextField } from "../ValidatedTextField";
 
@@ -12,10 +13,6 @@ export interface EditableTextBaseProps extends TestableProps {
   children: string;
   onUpdate: (newValue: string) => void;
 }
-
-type Prefixed<T, P extends string> = {
-  [K in keyof T as K extends string ? `${Lowercase<P>}${Capitalize<K>}` : never]: T[K]
-};
 
 type EditableTextProps = 
   & Prefixed<Pick<TextFieldProps, "variant" | "sx">, "input">
