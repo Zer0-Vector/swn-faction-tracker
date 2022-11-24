@@ -6,11 +6,11 @@ import { ValidationContext } from "../../../contexts/ValidationContext";
 import TestableProps from "../../../types/TestableProps";
 
 type ValidatedTextFieldProps =
-  & TextFieldProps
+  & Omit<TextFieldProps, "error">
   & Required<Pick<TextFieldProps, "id">>
   & TestableProps;
 
-export function ValidatedTextField({ onChange, error, id, ...others }: ValidatedTextFieldProps) {
+export function ValidatedTextField({ onChange, id, ...others }: ValidatedTextFieldProps) {
   const validation = useContext(ValidationContext);
   const [valid, setValid] = useState<boolean>(false);
   const [changed, setChanged] = useState<boolean>(false);
@@ -18,8 +18,8 @@ export function ValidatedTextField({ onChange, error, id, ...others }: Validated
   const handleChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
     !changed && setChanged(true);
     const valid = !!evt.target.value || !others.required;
-    const validationResult = validation.validate(id, evt.target.value);
     try {
+      const validationResult = validation.validate(id, evt.target.value);
       setValid(valid && validationResult);
     } catch (e) {
       console.error(e);
@@ -32,7 +32,7 @@ export function ValidatedTextField({ onChange, error, id, ...others }: Validated
     <TextField
       {...others}
       onChange={handleChange}
-      error={error === undefined ? changed && !valid : error}
+      error={changed && !valid}
     />
   );
 }

@@ -2,7 +2,7 @@ import { IValidationController } from "../../types/IValidationController";
 import { ValidationFn } from "../../types/ValidationFn";
 
 export class ValidationController implements IValidationController {
-
+  
   private valid;
 
   constructor(
@@ -35,6 +35,12 @@ export class ValidationController implements IValidationController {
     const result = validator(value);
     this.valid[id] = result;
     return result;
+  }
+
+  reset(): void {
+    for (const k in this.valid) {
+      this.valid[k] = false;
+    }
   }
 
 }

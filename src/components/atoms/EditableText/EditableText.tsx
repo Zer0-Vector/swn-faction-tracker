@@ -1,44 +1,47 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import Autocomplete from "@mui/material/Autocomplete";
-import { SxProps, Theme } from "@mui/material/styles";
-import { Variant } from "@mui/material/styles/createTypography";
-import TextField from "@mui/material/TextField";
-import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
-import { OverridableStringUnion } from "@mui/types";
+import { TextFieldProps } from "@mui/material/TextField";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
-import EditableState from "../../../types/EditableState";
-import Nullable from "../../../types/Nullable";
+import { ValidationContext } from "../../../contexts/ValidationContext";
+import { ValidationController } from "../../../controllers/ValidationController";
 import TestableProps from "../../../types/TestableProps";
+import { ValidatedTextField } from "../ValidatedTextField";
 
-export interface EditableTextProps extends TestableProps {
+export interface EditableTextBaseProps extends TestableProps {
   children: string;
   onUpdate: (newValue: string) => void;
-  variant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
-  sx?: SxProps<Theme>;
-  inputSx?: SxProps<Theme>;
-  selectableOptions?: readonly string[];
-  validate?: (value: string)=>boolean;
 }
 
-export default function EditableText({ children, onUpdate, variant, sx, inputSx, selectableOptions, validate, "data-testid": dtid }: EditableTextProps) {
-  const defaultState: EditableState = { editing: false, hasChanged: false, valid: validate === undefined };
-  const [state, setState] = useState<EditableState>(defaultState);
+type Prefixed<T, P extends string> = {
+  [K in keyof T as K extends string ? `${P}${Capitalize<K>}` : never]: T[K]
+};
+
+type EditableTextProps = 
+  & Prefixed<Pick<TextFieldProps, "variant" | "sx">, "input">
+  & Pick<TypographyProps, "variant" | "sx">
+  & Required<Pick<TextFieldProps, "id">>
+  & EditableTextBaseProps;
+
+export default function EditableText({ id, children, onUpdate, variant, sx, inputSx, inputVariant, "data-testid": dtid }: EditableTextProps) {
+  const [hasChanged, setHasChanged] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
   const [clicked, setClicked] = useState<boolean>(false);
 
   useEffect(() => {
-    if (state.editing) {
+    if (editing) {
       textFieldRef.current?.select();
     }
-  }, [state.editing]);
+  }, [editing]);
+
+  const validator = useMemo(() => new ValidationController({
+    [id]: (val: string) => val.trim().length > 0,
+  }), [id]);
 
   const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-    setState(prev => ({
-      ...prev,
-      editing: true,
-    }));
+    setEditing(true);
   }, []);
 
   const clickHandler = useCallback((evt: React.MouseEvent<HTMLElement>) => {
@@ -51,113 +54,63 @@ export default function EditableText({ children, onUpdate, variant, sx, inputSx,
     }
   }, [clicked]);
 
-  const exitEditMode = (evt: React.SyntheticEvent) => {
+  const handleCancel = useCallback(() => {
+    if (editing) {
+      setEditing(false);
+      setHasChanged(false);
+      validator.reset();
+    }
+  }, [editing, validator]);
+
+  const exitEditMode = useCallback((evt: React.SyntheticEvent) => {
     evt.preventDefault();
-    if (state.editing && state.valid) {
-      if (state.hasChanged) {
+    if (editing && validator.isAllValid()) {
+      if (hasChanged) {
         console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
         onUpdate(textFieldRef.current?.value as string);
       }
-      setState(defaultState);
+      setEditing(false);
+      setHasChanged(false);
+      validator.reset();
     }
-  };
+  }, [editing, hasChanged, onUpdate, validator]);
 
-  const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeyUp = useCallback((evt: React.KeyboardEvent<HTMLElement>) => {
     if (evt.key === 'Escape') {
       handleCancel();
     } else if (evt.key === 'Enter') {
       exitEditMode(evt);
     }
-  };
+  }, [exitEditMode, handleCancel]);
 
-  const textChanged = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (state.editing) {
-      const text = textFieldRef.current?.value as string;
-      console.assert(text !== undefined, "textFieldRef.current is undefined!!!");
-
-      
-      let isValid = false;
-      if (validate) {
-        isValid = text.trim().length > 0 && validate(text);
-      } else if (selectableOptions) {
-        isValid = selectableOptions.includes(text);
-      } else {
-        isValid = text.trim().length > 0;
-      }
-      console.debug("validating...", isValid);
-
-      if (!state.hasChanged) {
-        setState(prev => ({
-          ...prev,
-          hasChanged: true,
-          valid: isValid,
-        }));
-      } else {
-        setState(prev => ({
-          ...prev,
-          valid: isValid,
-        }));
-      }
+  const handleChange = useCallback(() => {
+    if (editing && !hasChanged) {
+      setHasChanged(true);
     }
-  };
+  }, [editing, hasChanged]);
 
-  const dropdownChanged = (evt: React.SyntheticEvent, val: Nullable<string>) => {
-    if (state.editing) {
-      if (val !== null && val.trim().length > 0) {
-        onUpdate(val);
-      }
-      setState(defaultState);
-    }
-  };
+  const handleInputClick = useCallback<React.MouseEventHandler>((evt) => {
+    evt.stopPropagation();
+  }, []);
 
-  const handleCancel = () => {
-    if (state.editing) {
-      setState(defaultState);
-    }
-  };
-
-  if (state.editing) {
-    if (selectableOptions) {
-      return (
-        <Autocomplete
-          disablePortal={true}
-          id="autocomplete-faction-homeworld"
-          options={selectableOptions}
-          openOnFocus={true}
-          onChange={dropdownChanged}
-          data-testid={dtid ? `${dtid}-autocomplete` : null}
-          renderInput={params =>
-            <TextField
-              {...params}
-              inputRef={textFieldRef}
-              onKeyUp={handleKeyUp}
-              onInput={textChanged}
-              onClick={evt => evt.stopPropagation()}
-              onBlur={handleCancel}
-              error={!state.valid}
-              autoComplete="off"
-              sx={inputSx}
-              data-testid={dtid}
-            />
-          }
-        />
-      );
-    } else {
-      return (
-        <TextField
+  if (editing) {
+    return (
+      <ValidationContext.Provider value={validator}>
+        <ValidatedTextField
+          id={id}
           inputRef={textFieldRef}
           onKeyUp={handleKeyUp}
-          onInput={textChanged}
-          onClick={evt => evt.stopPropagation()}
+          onChange={handleChange}
           onBlur={handleCancel}
+          onClick={handleInputClick}
           defaultValue={children}
-          error={!state.valid}
           autoComplete="off"
           sx={inputSx}
-          data-testid={dtid}
+          variant={inputVariant}
+          data-testid={`${dtid}-textfield`}
         />
-      ); 
-    }
+      </ValidationContext.Provider>
+    ); 
   } else {
     return (
       <Typography
