@@ -24,7 +24,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
-  const [clicked, setClicked] = useState<boolean>(false);
+  const [hovering, setHovering] = useState<boolean>(false);
 
   useEffect(() => {
     if (editing) {
@@ -36,20 +36,9 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     [id]: (val: string) => val.trim().length > 0,
   }), [id]);
 
-  const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
-    evt.stopPropagation();
+  const enterEditMode = useCallback<React.FocusEventHandler>(() => {
     setEditing(true);
   }, []);
-
-  const clickHandler = useCallback((evt: React.MouseEvent<HTMLElement>) => {
-    if (clicked) {
-      evt.stopPropagation();
-      setClicked(false);
-    } else {
-      setClicked(true);
-      setTimeout(() => setClicked(false), 250);
-    }
-  }, [clicked]);
 
   const handleCancel = useCallback(() => {
     if (editing) {
@@ -90,30 +79,45 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     evt.stopPropagation();
   }, []);
 
-  if (editing) {
+  const hoverIn = useCallback<React.MouseEventHandler>(() => {
+    if (!hovering) {
+      setHovering(true);
+    }
+  }, [hovering]);
+
+  const hoverOut = useCallback<React.MouseEventHandler>(() => {
+    if (hovering) {
+      setHovering(false);
+    }
+  }, [hovering]);
+
+  if (editing || hovering) {
     return (
       <ValidationContext.Provider value={validator}>
         <ValidatedTextField
           id={id}
           inputRef={textFieldRef}
+          onMouseLeave={hoverOut}
           onKeyUp={handleKeyUp}
           onChange={handleChange}
           onBlur={handleCancel}
+          onFocus={enterEditMode}
           onClick={handleInputClick}
           defaultValue={children}
           autoComplete="off"
           sx={inputSx}
           variant={inputVariant}
           data-testid={`${dtid}-textfield`}
+          size="small"
+          fullWidth={true}
         />
       </ValidationContext.Provider>
     ); 
   } else {
     return (
       <Typography
-        onDoubleClick={enterEditMode}
-        onClick={clickHandler}
         variant={variant}
+        onMouseEnter={hoverIn}
         sx={sx}
         component="span"
         title={children}
