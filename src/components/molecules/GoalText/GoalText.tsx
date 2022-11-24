@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { GameContext } from "../../../contexts/GameContext";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes, isGoalType } from "../../../types/GoalType";
-import EditableNameText from "../../atoms/EditableText";
+import EditableDropDownText from "../../atoms/EditableDropDownText";
 
 interface GoalTextProps {
   faction: FactionInfo;
@@ -19,12 +19,12 @@ export default function GoalText({faction}: GoalTextProps) {
   };
 
   return (
-    <EditableNameText
+    <EditableDropDownText
       selectableOptions={GoalTypes}
       onUpdate={handleUpdate}
       data-testid="goal-text"
     >
       {faction.goal?.type || "None"}
-    </EditableNameText>
+    </EditableDropDownText>
   );
 }

@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import { GameContext } from "../../../contexts/GameContext";
 import { TAGS } from "../../../data/Tags";
 import FactionInfo from "../../../types/FactionInfo";
-import EditableNameText from "../../atoms/EditableText";
+import EditableDropDownText from "../../atoms/EditableDropDownText";
 import FactionHpSummary from "../../molecules/FactionHpSummary";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import GoalProgress from "../../molecules/GoalProgress";
@@ -59,9 +59,9 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
     <Container disableGutters={true} sx={containerSx} data-testid="faction-details">
       {/* ROW 1 */}
         <ItemHeader data-testid="homeworld-label">Homeworld:</ItemHeader>
-        <Item data-testid="homeworld-item"><EditableNameText onUpdate={updateHomeworld} selectableOptions={homeworldOptions} data-testid="homeworld">{homeworldText}</EditableNameText></Item>
+        <Item data-testid="homeworld-item"><EditableDropDownText onUpdate={updateHomeworld} selectableOptions={homeworldOptions} data-testid="homeworld">{homeworldText}</EditableDropDownText></Item>
         <ItemHeader data-testid="tag-label">Tag:</ItemHeader>
-        <Item data-testid="tag-item"><EditableNameText onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</EditableNameText></Item>
+        <Item data-testid="tag-item"><EditableDropDownText onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</EditableDropDownText></Item>
 
       {/* ROW 2 */}
         <ItemHeader data-testid="hp-label">HP:</ItemHeader>
