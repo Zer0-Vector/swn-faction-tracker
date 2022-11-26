@@ -1,6 +1,6 @@
 import React from "react";
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import EditableText from "./EditableText";
 
@@ -15,32 +15,40 @@ describe('default EditableText', () => {
     renderIt("Test 123");
     const component = screen.getByTestId("test-text");
     expect(component).toBeInTheDocument();
-    expect(component).toBeInstanceOf(HTMLSpanElement);
-    expect(component).toHaveTextContent("Test 123");
+    expect(component).toBeInstanceOf(HTMLDivElement);
+    const text = within(component).getByTestId("editable-text-text");
+    expect(text).toHaveTextContent("Test 123");
   });
   
-  it('changes to text input after doubleclick', () => {
+  it('changes to text input after edit button click', () => {
     renderIt("Test 456");
-    let component: HTMLElement | null = screen.getByTestId("test-text");
-    expect(component).toBeInstanceOf(HTMLSpanElement);
+    const theDiv = screen.getByTestId("test-text");
+    expect(theDiv).toBeInstanceOf(HTMLDivElement);
     
-    fireEvent.doubleClick(component);
+    const button = within(theDiv).getByTestId("editable-text-button");
+    expect(button).toBeInTheDocument();
+    expect(button).not.toBeVisible();
+
+    fireEvent.click(button);
     expect(screen.queryByText("Test 456")).toBeNull();
 
-    component = screen.getByTestId("test-text-textfield");
-    // eslint-disable-next-line testing-library/no-node-access 
-    component = component.querySelector("input");
-    expect(component).toBeInstanceOf(HTMLInputElement);
-    expect(component).toHaveValue("Test 456");
+    const textfield = within(theDiv).getByTestId("editable-text-textfield");
+    // eslint-disable-next-line testing-library/no-node-access
+    const input = textfield.querySelector("input");
+    expect(input).toBeInstanceOf(HTMLInputElement);
+    expect(input).toHaveValue("Test 456");
   });
 
   it('calls onUpdate on `Enter`', () => {
     renderIt("Test 789");
-    let component = screen.getByTestId("test-text");
-    fireEvent.doubleClick(component);
-    component = screen.getByTestId("test-text-textfield");
-    // eslint-disable-next-line testing-library/no-node-access 
-    const input = component.querySelector("input") as HTMLInputElement;
+
+    const theDiv = screen.getByTestId("test-text");
+    const button = within(theDiv).getByTestId("editable-text-button");
+    fireEvent.click(button);
+    const textfield = within(theDiv).getByTestId("editable-text-textfield");
+    // eslint-disable-next-line testing-library/no-node-access
+    const input = textfield.querySelector("input") as HTMLInputElement;
+    expect(input).not.toBeNull();
     fireEvent.change(input, { target: { value: "Test 101112" } });
     fireEvent.keyUp(input, { key: "Enter" });
     expect(mockUpdate).toHaveBeenCalledTimes(1);

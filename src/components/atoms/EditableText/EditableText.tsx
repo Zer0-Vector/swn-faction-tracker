@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import EditIcon from "@mui/icons-material/Edit";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import { TextFieldProps } from "@mui/material/TextField";
 import Typography, { TypographyProps } from "@mui/material/Typography";
 
@@ -11,7 +14,7 @@ import { ValidatedTextField } from "../ValidatedTextField";
 
 export interface EditableTextBaseProps extends TestableProps {
   children: string;
-  onUpdate: (newValue: string) => void;
+  onUpdate?: (newValue: string) => void;
 }
 
 type EditableTextProps = 
@@ -24,7 +27,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
-  const [hovering, setHovering] = useState<boolean>(false);
+  const [fieldWidth, setFieldWidth] = useState<number>(children.length);
 
   useEffect(() => {
     if (editing) {
@@ -36,7 +39,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     [id]: (val: string) => val.trim().length > 0,
   }), [id]);
 
-  const enterEditMode = useCallback<React.FocusEventHandler>(() => {
+  const enterEditMode = useCallback<React.MouseEventHandler>(() => {
     setEditing(true);
   }, []);
 
@@ -51,7 +54,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
   const exitEditMode = useCallback((evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (editing && validator.isAllValid()) {
-      if (hasChanged) {
+      if (hasChanged && onUpdate) {
         console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
         onUpdate(textFieldRef.current?.value as string);
       }
@@ -79,52 +82,69 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     evt.stopPropagation();
   }, []);
 
-  const hoverIn = useCallback<React.MouseEventHandler>(() => {
-    if (!hovering) {
-      setHovering(true);
-    }
-  }, [hovering]);
+  const handleInput = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
+    setFieldWidth(evt.target.value.length);
+  }, []);
 
-  const hoverOut = useCallback<React.MouseEventHandler>(() => {
-    if (hovering) {
-      setHovering(false);
-    }
-  }, [hovering]);
-
-  if (editing || hovering) {
-    return (
+  let inner: React.ReactNode;
+  if (editing) {
+    inner = (
       <ValidationContext.Provider value={validator}>
         <ValidatedTextField
           id={id}
           inputRef={textFieldRef}
-          onMouseLeave={hoverOut}
+          InputProps={{ sx: {
+            minWidth: "3ch",
+            width: fieldWidth + "ch"
+          }}}
           onKeyUp={handleKeyUp}
           onChange={handleChange}
+          onInput={handleInput}
           onBlur={handleCancel}
-          onFocus={enterEditMode}
           onClick={handleInputClick}
           defaultValue={children}
           autoComplete="off"
           sx={inputSx}
-          variant={inputVariant}
-          data-testid={`${dtid}-textfield`}
+          variant={inputVariant || "standard"}
+          data-testid={"editable-text-textfield"}
           size="small"
-          fullWidth={true}
         />
       </ValidationContext.Provider>
     ); 
   } else {
-    return (
+    inner = (
       <Typography
         variant={variant}
-        onMouseEnter={hoverIn}
         sx={sx}
         component="span"
         title={children}
-        data-testid={dtid}
+        flexShrink={1}
+        data-testid="editable-text-text"
       >
         {children}
       </Typography>
     );
   }
+
+  return (
+    <Box
+      display="flex"
+      justifyContent="flex-start"
+      alignItems="center"
+      sx={{
+        "& .MuiIconButton-root": {
+          visibility: editing ? "unset" : "hidden",
+        },
+        "&:hover .MuiIconButton-root": {
+          visibility: editing ? "unset" : "visible",
+        }
+      }}
+      data-testid={dtid}
+    >
+      {inner}
+      <IconButton size="small" onClick={enterEditMode} data-testid="editable-text-button">
+        <EditIcon fontSize="inherit" />
+      </IconButton>
+    </Box>
+  );
 }
