@@ -15,7 +15,7 @@ export class ValidationController implements IValidationController {
   }
 
   isAllValid(): boolean {
-    const vals = Object.values(this.valid) as boolean[];
+    const vals: boolean[] = Object.values(this.valid);
     return vals.reduce((prev, curr) => curr && prev);
   }
 
