@@ -33,12 +33,16 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   const { factionId: navFactionId } = useSelectionId();
   const nav = useNavigate();
 
+  const isSelected = navFactionId === faction.id;
   const getEditNameHandler = useCallback((factionId: string) => (
     (val: string) => {
       console.debug(`Updating faction name '${factionId}' to '${val}'`);
-      controller.updateFactionName(factionId, val);
+      const newId = controller.updateFactionName(factionId, val);
+      if (isSelected && newId) {
+        nav(`/factions/${newId}`);
+      }
     }
-  ), [controller]);
+  ), [controller, isSelected, nav]);
 
   const getSelectFactionHandler = useCallback((factionId: string) => (
     () => {
@@ -54,7 +58,6 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   ), [navFactionId]);
 
 
-  const isSelected = navFactionId === faction.id;
   const notDraggingBgColor = isSelected ? "action.selected" : "inherit";
   const containerBoxSx = useMemo<SxProps>(() => ({
     display: "grid",
