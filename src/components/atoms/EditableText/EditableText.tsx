@@ -39,7 +39,8 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     [id]: (val: string) => val.trim().length > 0,
   }), [id]);
 
-  const enterEditMode = useCallback<React.MouseEventHandler>(() => {
+  const enterEditMode = useCallback<React.MouseEventHandler>((evt) => {
+    evt.stopPropagation();
     setEditing(true);
   }, []);
 
