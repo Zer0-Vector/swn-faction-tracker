@@ -10,6 +10,7 @@ import { styled, SxProps } from "@mui/material/styles";
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import FactionInfo from "../../../types/FactionInfo";
+import { ValidationFn } from "../../../types/ValidationFn";
 import EditableText from "../../atoms/EditableText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
@@ -28,7 +29,7 @@ const ItemColumn = React.memo(styled(Box)(({ theme }) => ({
 })));
 
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
-  const { controller } = useContext(GameContext);
+  const { state, controller } = useContext(GameContext);
   const boxRef = useRef<HTMLElement>(null);
   const { factionId: navFactionId } = useSelectionId();
   const nav = useNavigate();
@@ -36,9 +37,9 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   const isSelected = navFactionId === faction.id;
   const getEditNameHandler = useCallback((factionId: string) => (
     (val: string) => {
-      console.debug(`Updating faction name '${factionId}' to '${val}'`);
       const newId = controller.updateFactionName(factionId, val);
       if (isSelected && newId) {
+        console.debug(`Updated faction name for '${factionId}' to '${val}'`);
         nav(`/factions/${newId}`);
       }
     }
@@ -56,6 +57,10 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [navFactionId]);
+
+  const checkForDuplicates = useCallback<ValidationFn>(val => {
+    return !state.getFactions().filter(f => f.id !== faction.id).map(f => f.name.toLowerCase()).includes(val.toLowerCase());
+  }, [state, faction.id]);
 
 
   const notDraggingBgColor = isSelected ? "action.selected" : "inherit";
@@ -100,7 +105,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         <DragHandleIcon />
       </ItemColumn>
       <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
-        <EditableText id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={nameSx} data-testid="faction-list-item-name">
+        <EditableText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={nameSx} data-testid="faction-list-item-name">
           {faction.name}
         </EditableText>
       </ItemColumn>
