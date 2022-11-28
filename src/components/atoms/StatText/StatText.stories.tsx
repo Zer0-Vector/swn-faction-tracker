@@ -1,11 +1,14 @@
 import React from "react";
 
-import { Meta, Story } from "@storybook/react";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import StatText from "./StatText";
 
 export default {
   component: StatText,
-} as Meta;
+} as ComponentMeta<typeof StatText>;
 
-export const Default: Story = (args) => <StatText {...args}>Test 123</StatText>;
+export const Default: ComponentStory<typeof StatText> = (args) => <StatText {...args} />;
+Default.args = {
+  children: "Test 123",
+};
