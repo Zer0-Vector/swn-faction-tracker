@@ -112,7 +112,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
     const newFactionId = generateId(newFactionName);
     if (newFactionId === currentFactionId) {
-      return currentFactionId;
+      return undefined;
     }
     if (this.factions.has(newFactionId)) {
       throw new Error(`Duplicate faction id detected: ${newFactionId}`);
