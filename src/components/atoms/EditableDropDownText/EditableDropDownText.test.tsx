@@ -1,6 +1,6 @@
 import React from "react";
 
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import EditableDropDownText from "./EditableDropDownText";
 
@@ -47,7 +47,7 @@ describe('default EditableDropDownText', () => {
     expect(within(outer).getByTestId("editable-dropdown-textfield")).toBeInTheDocument();
   });
 
-  it('calls onUpdate if selection changes', () => {
+  it('calls onUpdate if option clicked', async () => {
     renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
@@ -67,13 +67,10 @@ describe('default EditableDropDownText', () => {
     expect(listbox).toBeInTheDocument();
     const options = within(listbox).getAllByRole("option");
     expect(options.length).toBe(5);
-    const selection = options[Math.floor(Math.random() * 5)];
+    const selection = options[Math.floor(Math.random() * 4) + 1];
     fireEvent.click(selection);
 
-    options.forEach(opt => {
-      expect(opt).not.toBeInTheDocument();
-    });
-    expect(listbox).not.toBeInTheDocument();
+    await waitFor(() => expect(listbox).not.toBeInTheDocument());
 
     expect(mockOnUpdate).toBeCalledTimes(1);
     expect(mockOnUpdate).toBeCalledWith(selection.textContent);
