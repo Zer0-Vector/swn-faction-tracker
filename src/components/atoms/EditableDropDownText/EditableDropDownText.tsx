@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
+import EditIcon from "@mui/icons-material/Edit";
 import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import { SxProps, Theme } from "@mui/material/styles";
 import { Variant } from "@mui/material/styles/createTypography";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
@@ -16,12 +19,11 @@ export interface EditableDropDownTextBaseProps {
   textVariant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
   inputSx?: SxProps<Theme>;
   selectableOptions: readonly string[];
-  validate?: (value: string)=>boolean;
 }
 
 type EditableDropDownTextProps =
   & EditableDropDownTextBaseProps
-  & TextFieldProps
+  & Pick<TextFieldProps, "sx">
   & TestableProps;
 
 export default function EditableDropDownText({ children, onUpdate, textVariant, sx, inputSx, selectableOptions,  "data-testid": dtid }: EditableDropDownTextProps) {
@@ -94,8 +96,13 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
     }
   }, [clicked]);
 
+  const inputClickHander = useCallback<React.MouseEventHandler>((evt) => {
+    evt.stopPropagation();
+  }, []);
+
+  let inner;
   if (editing) {
-    return (
+    inner = (
       <Autocomplete
         disablePortal={true}
         id="autocomplete-faction-homeworld"
@@ -103,13 +110,14 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
         openOnFocus={true}
         onChange={dropdownChanged}
         data-testid={dtid ? `${dtid}-autocomplete` : undefined}
+        value={children}
         renderInput={params =>
           <TextField
             {...params}
             inputRef={textFieldRef}
             onKeyUp={handleKeyUp}
             onInput={textChanged}
-            onClick={evt => evt.stopPropagation()}
+            onClick={inputClickHander}
             onBlur={handleCancel}
             autoComplete="off"
             sx={inputSx}
@@ -119,9 +127,8 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
       />
     );
   } else {
-    return (
+    inner = (
       <Typography
-        onDoubleClick={enterEditMode}
         onClick={clickHandler}
         variant={textVariant}
         sx={sx}
@@ -133,4 +140,25 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
       </Typography>
     );
   }
+
+  return (
+    <Box
+      display="flex"
+      justifyContent="flex-start"
+      alignItems="center"
+      sx={{
+        "& .MuiIconButton-root": {
+          visibility: editing ? "unset" : "hidden",
+        },
+        "&:hover .MuiIconButton-root": {
+          visibility: editing ? "unset" : "visible",
+        },
+      }}
+    >
+      {inner}
+      <IconButton size="small" onClick={enterEditMode}>
+        <EditIcon fontSize="inherit" />
+      </IconButton>
+    </Box>
+  );
 }
