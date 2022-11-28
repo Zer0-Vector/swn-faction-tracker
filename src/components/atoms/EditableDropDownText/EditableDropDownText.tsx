@@ -109,7 +109,7 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
         options={selectableOptions}
         openOnFocus={true}
         onChange={dropdownChanged}
-        data-testid={dtid ? `${dtid}-autocomplete` : undefined}
+        data-testid="editable-dropdown-autocomplete"
         value={children}
         renderInput={params =>
           <TextField
@@ -121,7 +121,7 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
             onBlur={handleCancel}
             autoComplete="off"
             sx={inputSx}
-            data-testid={`${dtid}-textfield`}
+            data-testid="editable-dropdown-textfield"
           />
         }
       />
@@ -134,7 +134,7 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
         sx={sx}
         component="span"
         title={children}
-        data-testid={dtid}
+        data-testid="editable-dropdown-text"
       >
         {children}
       </Typography>
@@ -154,9 +154,10 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
           visibility: editing ? "unset" : "visible",
         },
       }}
+      data-testid={dtid}
     >
       {inner}
-      <IconButton size="small" onClick={enterEditMode}>
+      <IconButton size="small" onClick={enterEditMode} data-testid="editable-dropdown-button">
         <EditIcon fontSize="inherit" />
       </IconButton>
     </Box>
