@@ -28,7 +28,6 @@ type EditableDropDownTextProps =
 
 export default function EditableDropDownText({ children, onUpdate, textVariant, sx, inputSx, selectableOptions,  "data-testid": dtid }: EditableDropDownTextProps) {
   const [editing, setEditing] = useState<boolean>(false);
-  const [hasChanged, setHasChanged] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
   const [clicked, setClicked] = useState<boolean>(false);
 
@@ -46,7 +45,6 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
   const handleCancel = useCallback(() => {
     if (editing) {
       setEditing(false);
-      setHasChanged(false);
     }
   }, [editing]);
 
@@ -56,19 +54,12 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
     }
   }, [handleCancel]);
 
-  const textChanged = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (editing && !hasChanged) {
-      setHasChanged(true);
-    }
-  }, [editing, hasChanged]);
-
   const dropdownChanged = useCallback((evt: React.SyntheticEvent, val: Nullable<string>) => {
     if (editing) {
       if (val !== null && val.trim().length > 0) {
         onUpdate(val);
       }
       setEditing(false);
-      setHasChanged(false);
     }
   }, [editing, onUpdate]);
 
@@ -102,7 +93,6 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
             {...params}
             inputRef={textFieldRef}
             onKeyUp={handleKeyUp}
-            onInput={textChanged}
             onClick={inputClickHander}
             onBlur={handleCancel}
             autoComplete="off"
