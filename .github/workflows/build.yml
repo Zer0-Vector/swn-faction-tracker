@@ -48,7 +48,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
   chromatic:
     name: Chromatic Deployment
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
