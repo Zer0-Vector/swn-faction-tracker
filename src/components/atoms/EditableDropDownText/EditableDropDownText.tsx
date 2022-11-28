@@ -43,18 +43,6 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
     setEditing(true);
   }, []);
 
-  const exitEditMode = useCallback((evt: React.SyntheticEvent) => {
-    evt.preventDefault();
-    if (editing) {
-      if (hasChanged) {
-        console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
-        onUpdate(textFieldRef.current?.value as string);
-      }
-      setEditing(false);
-      setHasChanged(false);
-    }
-  }, [editing, hasChanged, onUpdate]);
-
   const handleCancel = useCallback(() => {
     if (editing) {
       setEditing(false);
@@ -65,10 +53,8 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
   const handleKeyUp = useCallback((evt: React.KeyboardEvent<HTMLElement>) => {
     if (evt.key === 'Escape') {
       handleCancel();
-    } else if (evt.key === 'Enter') {
-      exitEditMode(evt);
     }
-  }, [exitEditMode, handleCancel]);
+  }, [handleCancel]);
 
   const textChanged = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
     if (editing && !hasChanged) {
