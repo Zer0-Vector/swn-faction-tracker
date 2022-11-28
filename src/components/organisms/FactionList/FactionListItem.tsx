@@ -10,7 +10,7 @@ import { styled, SxProps } from "@mui/material/styles";
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import FactionInfo from "../../../types/FactionInfo";
-import EditableNameText from "../../atoms/EditableNameText";
+import EditableText from "../../atoms/EditableText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
 
@@ -97,9 +97,9 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         <DragHandleIcon />
       </ItemColumn>
       <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
-        <EditableNameText onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={nameSx} data-testid="faction-list-item-name">
+        <EditableText id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={nameSx} data-testid="faction-list-item-name">
           {faction.name}
-        </EditableNameText>
+        </EditableText>
       </ItemColumn>
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={statsBoxSx} data-testid="faction-list-item-stats">

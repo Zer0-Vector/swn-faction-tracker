@@ -5,7 +5,6 @@ import { Meta, Story } from "@storybook/react";
 import StatText from "./StatText";
 
 export default {
-  title: "StatText",
   component: StatText,
 } as Meta;
 

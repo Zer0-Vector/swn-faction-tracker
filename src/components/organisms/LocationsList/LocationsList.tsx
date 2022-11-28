@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
-import EditableNameText from "../../atoms/EditableNameText";
+import EditableText from "../../atoms/EditableText";
 
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);
@@ -79,7 +79,7 @@ export default function LocationsList() {
                         gap: theme.spacing(2),
                       })}>
                         <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
-                        <EditableNameText onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableNameText>
+                        <EditableText id="location-name" onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableText>
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
