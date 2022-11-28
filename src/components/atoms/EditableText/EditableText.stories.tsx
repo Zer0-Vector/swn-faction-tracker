@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ComponentMeta, ComponentStory, Meta, Story } from "@storybook/react";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import EditableText from "./EditableText";
 
