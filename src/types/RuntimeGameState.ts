@@ -70,20 +70,19 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.factionOrder.splice(destinationIndex, 0, removed);
   }
 
+  /**
+   * Adds a faction, if name is unique.
+   * 
+   * @param name the faction name
+   * @returns `FactionInfo` for created faction
+   * @throws `Error`, if duplicate faction id/name
+   */
   addFaction(name: string): FactionInfo {
-    const currentIds = Array.from(this.factions.keys());
-    const id = generateId(name, currentIds);
+    const id = generateId(name);
 
-    // indicates bug in id generation
-    if (currentIds.includes(id)) {
-      throw new Error(`duplicate faction id: "${id}"`);
-    }
-
-    // indicates bug in form validation
-    for (const val of this.factions.values()) {
-      if (val.name === name) {
-        throw new Error(`Duplicat faction name: "${name}"`);
-      }
+    // indicates duplicate name
+    if (this.factions.has(id)) {
+      throw new Error(`duplicate faction id/name: "${id}"`);
     }
 
     const result = new FactionInfo(id, name);
@@ -105,14 +104,17 @@ export default class RuntimeGameState implements IGameController, IGameState {
     });
   }
 
-  updateFactionName(currentFactionId: string, newFactionName: string): void {
+  updateFactionName(currentFactionId: string, newFactionName: string): Maybe<string> {
     const faction = this.factions.get(currentFactionId);
     if (!faction) {
-      return;
+      return undefined;
     }
-    const currentIds = Array.from(this.factions.keys()).filter(val => val !== currentFactionId);
-    const newFactionId = generateId(newFactionName, currentIds);
-    if (currentIds.includes(newFactionId)) {
+
+    const newFactionId = generateId(newFactionName);
+    if (newFactionId === currentFactionId) {
+      return currentFactionId;
+    }
+    if (this.factions.has(newFactionId)) {
       throw new Error(`Duplicate faction id detected: ${newFactionId}`);
     }
 
@@ -138,6 +140,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       this.assets.delete(key);
     });
     console.info(`Renamed ${faction.name} (${currentFactionId}) to ${newFactionName} (${newFactionId})`);
+    return newFactionId;
   }
 
   #updateStat(factionId: string, statName: FactionStat, value: number) {

@@ -5,6 +5,7 @@ import FactionInfo from "../types/FactionInfo";
 import { isGameMode } from "../types/GameMode";
 import GoalInfo from "../types/GoalInfo";
 import LocationInfo from "../types/LocationInfo";
+import { Maybe } from "../types/Maybe";
 import PurchasedAsset from "../types/PurchasedAsset";
 import RuntimeGameState from "../types/RuntimeGameState";
 import StoredGameState from "../types/StoredGameState";
@@ -22,7 +23,7 @@ export interface IGameController {
   reorderFactions(sourceIndex: number, destinationIndex: number): void;
   addFaction(name: string): FactionInfo;
   removeFaction(name: string): void;
-  updateFactionName(currentName: string, newName: string): void;
+  updateFactionName(currentName: string, newName: string): Maybe<string>;
   updateForce(name: string, force: number): void;
   updateCunning(name: string, cunning: number): void;
   updateWealth(name: string, wealth: number): void;
@@ -151,10 +152,13 @@ export class GameController implements IGameController {
     this.#writeFactionsAndAssets();
   }
 
-  updateFactionName(currentName: string, newName: string): void {
+  updateFactionName(currentName: string, newName: string): Maybe<string> {
     console.debug("GameController.updateFactionName");
-    this.runtimeState.updateFactionName(currentName, newName);
-    this.#writeFactionsAndAssets();
+    const result = this.runtimeState.updateFactionName(currentName, newName);
+    if (result) {
+      this.#writeFactionsAndAssets();
+    }
+    return result;
   }
 
   updateForce(name: string, force: number): void {
