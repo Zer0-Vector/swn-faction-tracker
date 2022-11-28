@@ -10,11 +10,13 @@ import { ValidationContext } from "../../../contexts/ValidationContext";
 import { ValidationController } from "../../../controllers/ValidationController";
 import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
+import { ValidationFn } from "../../../types/ValidationFn";
 import { ValidatedTextField } from "../ValidatedTextField";
 
 export interface EditableTextBaseProps extends TestableProps {
   children: string;
   onUpdate?: (newValue: string) => void;
+  validate?: ValidationFn;
 }
 
 type EditableTextProps = 
@@ -23,7 +25,7 @@ type EditableTextProps =
   & Required<Pick<TextFieldProps, "id">>
   & EditableTextBaseProps;
 
-export default function EditableText({ id, children, onUpdate, variant, sx, inputSx, inputVariant, "data-testid": dtid }: EditableTextProps) {
+export default function EditableText({ id, children, onUpdate, variant, sx, inputSx, inputVariant, validate, "data-testid": dtid }: EditableTextProps) {
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -36,10 +38,11 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
   }, [editing]);
 
   const validator = useMemo(() => new ValidationController({
-    [id]: (val: string) => val.trim().length > 0,
-  }), [id]);
+    [id]: (val: string) => val.trim().length > 0 && (validate === undefined || validate(val.trim())),
+  }), [id, validate]);
 
-  const enterEditMode = useCallback<React.MouseEventHandler>(() => {
+  const enterEditMode = useCallback<React.MouseEventHandler>((evt) => {
+    evt.stopPropagation();
     setEditing(true);
   }, []);
 

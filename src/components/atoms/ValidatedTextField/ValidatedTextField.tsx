@@ -6,11 +6,11 @@ import { ValidationContext } from "../../../contexts/ValidationContext";
 import TestableProps from "../../../types/TestableProps";
 
 type ValidatedTextFieldProps =
-  & Omit<TextFieldProps, "error">
+  & TextFieldProps
   & Required<Pick<TextFieldProps, "id">>
   & TestableProps;
 
-export function ValidatedTextField({ onChange, id, ...others }: ValidatedTextFieldProps) {
+export function ValidatedTextField({ onChange, id, error, ...others }: ValidatedTextFieldProps) {
   const validation = useContext(ValidationContext);
   const [valid, setValid] = useState<boolean>(false);
   const [changed, setChanged] = useState<boolean>(false);
@@ -32,7 +32,7 @@ export function ValidatedTextField({ onChange, id, ...others }: ValidatedTextFie
     <TextField
       {...others}
       onChange={handleChange}
-      error={changed && !valid}
+      error={changed && !valid && (error === undefined || error)}
     />
   );
 }

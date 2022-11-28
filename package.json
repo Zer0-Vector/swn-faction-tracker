@@ -18,12 +18,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build --verbose",
-    "test": "react-scripts test --verbose --watchAll",
+    "test": "react-scripts test --verbose",
     "ci-test": "react-scripts test --verbose --watchAll=false",
     "lint": "npx eslint --ext .tsx,.ts .",
     "lint-fix": "npx eslint --ext .tsx,.ts --fix .",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "chromatic": "npx chromatic"
   },
   "eslintConfig": {
     "plugins": [
@@ -177,10 +178,13 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/parser": "^5.41.0",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "chromatic": "^6.11.4",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "prop-types": "^15.8.1",
     "react-test-renderer": "^18.2.0",
     "typescript": "^4.9.3",
     "webpack": "^5.75.0"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "swn-faction-tracker@0.2.0"
 }

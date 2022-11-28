@@ -1,6 +1,6 @@
 import { generateId } from "../IdGenerator";
 
-describe('hyphenate(*, [])', () => {
+describe('generateId(*)', () => {
   describe('returns input when only aphanumeric', () => {
     it.each(
       [
@@ -39,7 +39,7 @@ describe('hyphenate(*, [])', () => {
   });
 });
 
-describe('hyphenate("hw", [x, ...])', () => {
+describe('generateId("hw", [x, ...])', () => {
   it.each([ // input will be "hw" for each
     [["hw"], 1],
     [["hw-1"], 2],
@@ -54,7 +54,7 @@ describe('hyphenate("hw", [x, ...])', () => {
   });
 });
 
-describe('hyphenate(*, [*, ...])', () => {
+describe('generateId(*, [*, ...])', () => {
   it.each([
     ["hw-1", ["hw-1", "hw-2"], "hw-3"],
     ["hw-2", ["hw-1", "hw-2", "hw-3"], "hw-4"],
