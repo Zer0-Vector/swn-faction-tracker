@@ -3,8 +3,8 @@ import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/material/styles";
 
-import FactionList from "../components/organisms/FactionList";
-import FactionListActionToolbar from "../components/organisms/FactionListActionToolbar";
+import FactionList from "../../components/organisms/FactionList";
+import FactionListActionToolbar from "../../components/organisms/FactionListActionToolbar";
 
 export default function PrimaryPanel() {
   console.debug("Rendering PrimaryPanel...");
