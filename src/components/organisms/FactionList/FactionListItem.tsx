@@ -106,7 +106,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={statsBoxSx} data-testid="faction-list-item-stats">
           <ItemColumn data-testid="faction-list-item-health-col">
-            <HealthDisplay factionId={faction.id} />
+            <HealthDisplay factionId={faction.id} hp={faction.stats.hp} maxHp={faction.stats.maxHp} />
           </ItemColumn>
           <ItemColumn data-testid="faction-list-item-attributes-col">
             <FactionStatSummary {...faction.stats} factionId={faction.id}  />

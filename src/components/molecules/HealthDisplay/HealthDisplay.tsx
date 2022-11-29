@@ -3,31 +3,24 @@ import React, { useContext } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 
-import { GameContext } from "../../../contexts/GameContext";
 import FactionHpSummary from "../FactionHpSummary";
 
 interface HealthDisplayProps {
   factionId: string;
+  hp: number;
+  maxHp: number;
 }
 
-export default function HealthDisplay({ factionId: factionName }: HealthDisplayProps) {
-  const { state } = useContext(GameContext);
-  const faction = state.getFaction(factionName);
-  if (!faction) {
-    return (<>No Faction Selected</>);
-  }
-
-  const { hp, maxHp } = faction.stats;
-
+export default function HealthDisplay(props: HealthDisplayProps) {
   return (
     <>
       <Tooltip
-        title={ <FactionHpSummary factionId={factionName} /> }
+        title={ <FactionHpSummary {...props} /> }
         arrow={true}
       >
         <LinearProgress
           color="error"
-          value={100 * hp / maxHp}
+          value={100 * props.hp / props.maxHp}
           variant="determinate"
           sx={{
             minWidth: "50px",
