@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 
 import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
 import EditableStatText from "../../atoms/EditableStatText";
@@ -11,13 +10,23 @@ interface FactionHpSummaryProps {
   factionId: string;
 }
 
+const HpBoxComponent = ({ children, "data-testid": dtid }: { children: React.ReactNode, "data-testid": string }) => (
+  <Box display="flex" alignItems="center" data-testid={dtid}>
+    {children}
+  </Box>
+);
+
+const HpBox = React.memo(HpBoxComponent);
+
 export default function FactionHpSummary({ factionId }: FactionHpSummaryProps) {
   const { state, controller } = useContext(GameContext);
-
-  const HpBox = styled(Box)(theme => ({
-    display: "flex",
-    alignItems: "center",
-  }));
+  const handleUpdate = useCallback((val: string) => {
+    try {
+      controller.updateHp(factionId, parseInt(val));
+    } catch {
+      console.error("Could not parse faction hp input: ", val);
+    }
+  }, [controller, factionId]);
 
   const faction = state.getFaction(factionId);
   console.debug(`faction(${factionId}) =`, faction);
@@ -30,19 +39,13 @@ export default function FactionHpSummary({ factionId }: FactionHpSummaryProps) {
   }
 
   const { hp, maxHp } = faction.stats;
-  const handleUpdate = (val: string) => {
-    try {
-      controller.updateHp(factionId, parseInt(val));
-    } catch {
-      console.error("Could not parse faction hp input: ", val);
-    }
-  };
+  
 
   return (
     <HpBox data-testid="faction-hp-box">
       <EditableStatText
         updateValue={handleUpdate}
-        inputSx={{ maxWidth: "4em"}}
+        inputSx={{ maxWidth: "5ch"}}
         data-testid="hp"
       >
         {hp}
