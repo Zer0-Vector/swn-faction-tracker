@@ -83,8 +83,9 @@ export default function EditableStatText({ children, onUpdate, sx, inputSx, plac
     return result;
   };
 
-  const val = children || placeholder || "??";
-    
+  const placeholderValue = placeholder === undefined ? "??" : placeholder;
+  const val = children === undefined ? placeholderValue : children;
+
   if (editing) {
     return (
       <TextField
