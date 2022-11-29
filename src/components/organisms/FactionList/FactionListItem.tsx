@@ -87,12 +87,6 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
     display: "grid",
     gridTemplateColumns: "1fr 75px"
   }), []);
-
-  const nameSx = useMemo(() => ({
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  }), []);
   
   return (
     <Box
@@ -105,7 +99,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         <DragHandleIcon />
       </ItemColumn>
       <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
-        <EditableText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" sx={nameSx} data-testid="faction-list-item-name">
+        <EditableText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" data-testid="faction-list-item-name">
           {faction.name}
         </EditableText>
       </ItemColumn>
