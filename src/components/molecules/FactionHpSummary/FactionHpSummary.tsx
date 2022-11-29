@@ -8,6 +8,8 @@ import StatText from "../../atoms/StatText";
 
 interface FactionHpSummaryProps {
   factionId: string;
+  hp: number;
+  maxHp: number;
 }
 
 const HpBoxComponent = ({ children, "data-testid": dtid }: { children: React.ReactNode, "data-testid": string }) => (
@@ -18,29 +20,16 @@ const HpBoxComponent = ({ children, "data-testid": dtid }: { children: React.Rea
 
 const HpBox = React.memo(HpBoxComponent);
 
-export default function FactionHpSummary({ factionId }: FactionHpSummaryProps) {
-  const { state, controller } = useContext(GameContext);
+export default function FactionHpSummary({ factionId, hp, maxHp }: FactionHpSummaryProps) {
+  const { controller } = useContext(GameContext);
   const handleUpdate = useCallback((val: number) => {
       controller.updateHp(factionId, val);
-  }, [controller, factionId]);
-
-  const faction = state.getFaction(factionId);
-  console.debug(`faction(${factionId}) =`, faction);
-  if (!faction) {
-    return (
-      <HpBox data-testid="faction-hp-box">
-        <StatText color="warning.main">??/??</StatText>
-      </HpBox>
-    );
-  }
-
-  const { hp, maxHp } = faction.stats;
-  
+  }, [controller, factionId]);  
 
   return (
     <HpBox data-testid="faction-hp-box">
       <EditableStatText
-        updateValue={handleUpdate}
+        onUpdate={handleUpdate}
         inputSx={{ maxWidth: "5ch"}}
         data-testid="hp"
       >

@@ -65,7 +65,7 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
 
       {/* ROW 2 */}
         <ItemHeader data-testid="hp-label">HP:</ItemHeader>
-        <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} data-testid="hp-summary" /></Item>
+        <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} {...faction.stats} data-testid="hp-summary" /></Item>
         <ItemHeader data-testid="attr-label">F/C/W:</ItemHeader>
         <Item data-testid="attr-item">
           <FactionStatSummary

@@ -12,47 +12,23 @@ import { IGameState } from "../../../types/RuntimeGameState";
 import FactionHpSummary from "./FactionHpSummary";
 
 const mockContext = {
-  state: {
-    getFaction: jest.fn() as (fid: string)=>Maybe<FactionInfo>,
-  } as IGameState,
+  state: {} as IGameState,
   controller: {
     updateHp: jest.fn() as (id: string, hp: number)=>void,
   } as IGameController,
 } as GameContextType;
 
-
-function doMock() {
-  const mock = mockContext.state.getFaction as jest.MockedFn<typeof mockContext.state.getFaction>;
-  mock.mockImplementationOnce((_:string) => ({
-    stats: {
-      hp: 123,
-      maxHp: 456,
-    } as FactionStatsInfo
-  } as FactionInfo));
-}
-
 function renderIt(factionId = "tf123") {
   render(
     <GameContext.Provider value={mockContext}>
-      <FactionHpSummary data-testid="test123" factionId={factionId} />
+      <FactionHpSummary data-testid="test123" hp={123} maxHp={456} factionId={factionId} />
     </GameContext.Provider>
   );
 }
 
 describe('<FactionHpSummary />', () => {
-  it('renders default value when faction does not exist', () => {
-    renderIt("not-here");
-    const summary = screen.getByTestId("faction-hp-box");
-    expect(summary).toBeInTheDocument();
-    const stat = within(summary).getByText("??/??");
-    expect(stat).toBeInTheDocument();
-  });
-  
   it('renders hp and maxHp when faction exists', () => {
-    doMock();
     renderIt();
-    expect(mockContext.state.getFaction).toBeCalledTimes(1);
-    expect(mockContext.state.getFaction).toBeCalledWith("tf123");
     const box = screen.getByTestId("faction-hp-box");
     const hp = within(box).getByTestId("hp");
     expect(hp).toBeInTheDocument();
@@ -64,7 +40,6 @@ describe('<FactionHpSummary />', () => {
   });
 
   it('renders TextField after double click on hp', () => {
-    doMock();
     renderIt();
 
     const box = screen.getByTestId("faction-hp-box");
@@ -80,7 +55,6 @@ describe('<FactionHpSummary />', () => {
   });
   
   it('updates hp on Enter and valid value', () => {
-    doMock();
     renderIt();
     const box = screen.getByTestId("faction-hp-box");
 

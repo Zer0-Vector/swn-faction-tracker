@@ -37,17 +37,13 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
     }
   };
 
-  const valueOrDefault = (val: number | undefined) => {
-    return val === undefined || val === null ? "??" : val;
-  };
-
   const { tally, target } = faction.goal;
 
   return (
     <span data-testid="goal-progress">
-      <EditableStatText data-testid="goal-tally" updateValue={handleUpdateTally} inputSx={{ width: "3em" }}>{valueOrDefault(tally)}</EditableStatText>
+      <EditableStatText data-testid="goal-tally" onUpdate={handleUpdateTally} inputSx={{ width: "3em" }}>{tally}</EditableStatText>
       <StatText>/</StatText>
-      <EditableStatText data-testid="goal-target" updateValue={handleUpdateTarget} inputSx={{ width: "3em" }}>{valueOrDefault(target)}</EditableStatText>
+      <EditableStatText data-testid="goal-target" onUpdate={handleUpdateTarget} inputSx={{ width: "3em" }}>{target}</EditableStatText>
     </span>
   );
 }

@@ -28,7 +28,7 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
     <>
       <EditableStatText
         data-testid="faction-force"
-        updateValue={handleUpdateForce}
+        onUpdate={handleUpdateForce}
         inputSx={handleInputSx}
       >
         {force}
@@ -36,7 +36,7 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
       <StatText variant="body2">/</StatText>
       <EditableStatText
         data-testid="faction-cunning"
-        updateValue={handleUpdateCunning}
+        onUpdate={handleUpdateCunning}
         inputSx={handleInputSx}
       >
         {cunning}
@@ -44,7 +44,7 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
       <StatText variant="body2">/</StatText>
       <EditableStatText
         data-testid="faction-wealth"
-        updateValue={handleUpdateWealth}
+        onUpdate={handleUpdateWealth}
         inputSx={handleInputSx}
       >
         {wealth}

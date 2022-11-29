@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
+import { InputBaseProps, SxProps, Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { TextFieldProps } from "@mui/material/TextField";
@@ -71,6 +72,9 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     if (evt.key === 'Escape') {
       handleCancel();
     } else if (evt.key === 'Enter') {
+      if (textFieldRef.current) {
+        setFieldWidth(textFieldRef.current.value.length);
+      }
       exitEditMode(evt);
     }
   }, [exitEditMode, handleCancel]);
@@ -89,6 +93,31 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     setFieldWidth(evt.target.value.length);
   }, []);
 
+  const boxSx = useMemo<SxProps<Theme>>(() => ({
+    "& .MuiIconButton-root": {
+      visibility: editing ? "unset" : "hidden",
+    },
+    "&:hover .MuiIconButton-root": {
+      visibility: editing ? "unset" : "visible",
+    },
+    overflow: "clip",
+  }), [editing]);
+
+  const textFieldInputProps = useMemo<Partial<InputBaseProps>>(() => ({
+    sx: {
+      minWidth: "3ch",
+      width: fieldWidth + "ch",
+      maxWidth: "100%",
+    }
+  }), [fieldWidth]);
+
+  const textStyle = useMemo<SxProps<Theme>>(() => ({
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    ...sx
+  }), [sx]);
+
   let inner: React.ReactNode;
   if (editing) {
     inner = (
@@ -96,10 +125,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
         <ValidatedTextField
           id={id}
           inputRef={textFieldRef}
-          InputProps={{ sx: {
-            minWidth: "3ch",
-            width: fieldWidth + "ch"
-          }}}
+          InputProps={textFieldInputProps}
           onKeyUp={handleKeyUp}
           onChange={handleChange}
           onInput={handleInput}
@@ -118,7 +144,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
     inner = (
       <Typography
         variant={variant}
-        sx={sx}
+        sx={textStyle}
         component="span"
         title={children}
         flexShrink={1}
@@ -134,14 +160,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
       display="flex"
       justifyContent="flex-start"
       alignItems="center"
-      sx={{
-        "& .MuiIconButton-root": {
-          visibility: editing ? "unset" : "hidden",
-        },
-        "&:hover .MuiIconButton-root": {
-          visibility: editing ? "unset" : "visible",
-        }
-      }}
+      sx={boxSx}
       data-testid={dtid}
     >
       {inner}
