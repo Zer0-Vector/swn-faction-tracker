@@ -35,7 +35,10 @@ const GridItem = ({ xs, children }: { xs: GridSize, children: React.ReactNode })
 export default function PageContainer({ children }: PageContainerProps) {
   const location = useLocation();
 
-  const tab = location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS";
+  const tab = useMemo(
+    () => location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS", 
+    [location.pathname]
+  );
 
   console.debug("Rendering PageContainer...");
 
