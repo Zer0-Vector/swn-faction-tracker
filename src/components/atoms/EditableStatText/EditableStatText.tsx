@@ -3,53 +3,48 @@ import React, { useEffect, useRef, useState } from "react";
 import { SxProps, Theme } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
-import EditableState from "../../../types/EditableState";
 import TestableProps from "../../../types/TestableProps";
 import StatText from "../StatText";
 
 export interface EditableStatTextProps extends TestableProps {
-  children: string | number;
-  updateValue: (newValue: number) => void;
+  children?: number;
+  onUpdate: (newValue: number) => void;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
+  placeholder?: string;
 }
 
-export default function EditableStatText({ children, updateValue, sx, inputSx, "data-testid": dtid }: EditableStatTextProps) {
-  const defaultState: EditableState = {
-    editing: false,
-    hasChanged: false,
-    valid: true
-  };
-  const [state, setState] = useState<EditableState>(defaultState);
+export default function EditableStatText({ children, onUpdate, sx, inputSx, placeholder, "data-testid": dtid }: EditableStatTextProps) {
+  const [editing, setEditing] = useState<boolean>(false);
+  const [hasChanged, setHasChanged] = useState<boolean>(false);
+  const [valid, setValid] = useState<boolean>(true);
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (state.editing) {
+    if (editing) {
       textFieldRef.current?.select();
     }
-  }, [state.editing]);
+  }, [editing]);
   
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
-    if (state.editing && state.valid) {
-      if (state.hasChanged && textFieldRef.current) {
+    if (editing && valid) {
+      if (hasChanged && textFieldRef.current) {
         try {
           const val = parseInt(textFieldRef.current.value);
-          updateValue(val);
+          onUpdate(val);
         } catch (e) {
           console.error("Invalid stat value:", textFieldRef.current.value);
         }
       }
-      setState(defaultState);
+      setEditing(false);
+      setHasChanged(false);
     }
   };
 
   const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-    setState(prev => ({
-      ...prev,
-      editing: true,
-    }));
+    setEditing(true);
   };
 
   const handleClick = (evt: React.MouseEvent<HTMLElement>) => {
@@ -57,12 +52,9 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, "
   };
 
   const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
-    if (state.editing) {
+    if (editing) {
       if (evt.key === 'Escape') {
-        setState(prev => ({
-          ...prev,
-          editing: false,
-        }));
+        setEditing(false);
       } else if (evt.key === 'Enter') {
         exitEditMode(evt);
       }
@@ -73,12 +65,9 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, "
     if (!textFieldRef.current) {
       return;
     }
+    setHasChanged(true);
     const valid = validate(textFieldRef.current.value);
-    setState(prev => ({
-      ...prev,
-      hasChanged: true,
-      valid: valid,
-    }));
+    setValid(valid);
     textFieldRef.current.focus();
   };
 
@@ -93,11 +82,13 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, "
     console.debug(`Validated text: '${val}', valid=${result}`);
     return result;
   };
+
+  const val = children || placeholder || "??";
     
-  if (state.editing) {
+  if (editing) {
     return (
       <TextField
-        defaultValue={children?.toString()}
+        defaultValue={val}
         inputRef={textFieldRef}
         variant="filled"
         onBlur={exitEditMode}
@@ -105,7 +96,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, "
         onClick={handleClick}
         onKeyUp={handleKeyUp}
         autoComplete="off"
-        error={!state.valid}
+        error={hasChanged && !valid}
         sx={inputSx}
         size="small"
         data-testid={`${dtid}-textfield`}
@@ -120,7 +111,7 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, "
         sx={sx}
         data-testid={dtid}
       >
-        {children}
+        {val}
       </StatText>
     );
   }

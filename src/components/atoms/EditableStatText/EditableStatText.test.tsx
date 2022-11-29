@@ -7,28 +7,28 @@ import EditableStatText from "./EditableStatText";
 describe('default EditableStatText', () => {
   it('renders StatText initially', () => {
     const updateMethod = jest.fn();
-    render(<EditableStatText updateValue={updateMethod} data-testid="test1">TEST 111</EditableStatText>);
-    const component = screen.getByText("TEST 111");
+    render(<EditableStatText onUpdate={updateMethod} data-testid="test1">{111}</EditableStatText>);
+    const component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
   });
   
   it('renders input after double-click', () => {
     const updateMethod = jest.fn();
-    render(<EditableStatText updateValue={updateMethod} data-testid="test2">TEST 111</EditableStatText>);
-    let component = screen.getByText("TEST 111");
+    render(<EditableStatText onUpdate={updateMethod} data-testid="test2">{111}</EditableStatText>);
+    let component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
     fireEvent.doubleClick(component);
     
-    component = screen.getByDisplayValue("TEST 111");
+    component = screen.getByDisplayValue("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLInputElement);
   });
 
   it('calls updateValue callback after Enter key', async () => {
     const updateMethod = jest.fn();
-    render(<EditableStatText data-testid="test3" updateValue={updateMethod}>111</EditableStatText>);
+    render(<EditableStatText data-testid="test3" onUpdate={updateMethod}>{111}</EditableStatText>);
     let component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
@@ -55,7 +55,7 @@ describe('default EditableStatText', () => {
   });
 
   it('sets error when invalid input is given', () => {
-    render(<EditableStatText data-testid="test4" updateValue={jest.fn()}>321</EditableStatText>);
+    render(<EditableStatText data-testid="test4" onUpdate={jest.fn()}>{321}</EditableStatText>);
     let component = screen.getByText("321");
     expect(component).toBeInstanceOf(HTMLSpanElement);
     fireEvent.doubleClick(component);
