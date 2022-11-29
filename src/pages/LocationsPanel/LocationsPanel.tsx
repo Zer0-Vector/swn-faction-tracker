@@ -3,8 +3,8 @@ import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/material/styles";
 
-import LocationsActionToolbar from "../components/organisms/LocationsActionToolbar";
-import LocationsList from "../components/organisms/LocationsList";
+import LocationsActionToolbar from "../../components/organisms/LocationsActionToolbar";
+import LocationsList from "../../components/organisms/LocationsList";
 
 export default function LocationsPanel() {
   const boxSx = useMemo<SxProps<Theme>>(() => ({
