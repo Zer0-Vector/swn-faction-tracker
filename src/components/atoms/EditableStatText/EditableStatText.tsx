@@ -9,7 +9,7 @@ import StatText from "../StatText";
 
 export interface EditableStatTextProps extends TestableProps {
   children: string | number;
-  updateValue: (newValue: string) => void;
+  updateValue: (newValue: number) => void;
   sx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
 }
@@ -32,8 +32,13 @@ export default function EditableStatText({ children, updateValue, sx, inputSx, "
   const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
     if (state.editing && state.valid) {
-      if (state.hasChanged) {
-        updateValue(textFieldRef.current?.value || children?.toString() || "");
+      if (state.hasChanged && textFieldRef.current) {
+        try {
+          const val = parseInt(textFieldRef.current.value);
+          updateValue(val);
+        } catch (e) {
+          console.error("Invalid stat value:", textFieldRef.current.value);
+        }
       }
       setState(defaultState);
     }
