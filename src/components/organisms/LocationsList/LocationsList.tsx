@@ -84,7 +84,7 @@ export default function LocationsList() {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable-location">
         {(provided, snapshot) => (
-          <Box {...provided.droppableProps} ref={provided.innerRef}>
+          <Box {...provided.droppableProps} ref={provided.innerRef} data-testid="locations-list-container">
             {locations.map((val, index) => (
               <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
                 {(provided, snapshot) => (

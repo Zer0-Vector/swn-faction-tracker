@@ -47,6 +47,7 @@ export default function LocationsActionToolbar() {
       removable={!!selectedLocation}
       onAddClick={handleOpenAddDialog}
       onRemoveClick={handleOpenRemoveDialog}
+      data-testid="locations-action-toolbar"
     >
       <AddLocationDialog
         open={addDialogOpen}
