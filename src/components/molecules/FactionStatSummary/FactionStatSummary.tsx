@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
+
+import { Theme } from "@mui/material";
 
 import { GameContext } from "../../../contexts/GameContext";
 import EditableStatText from "../../atoms/EditableStatText";
@@ -14,38 +16,36 @@ interface FactionStatSummaryProps {
 
 export default function FactionStatSummary({ factionId, force, cunning, wealth }: FactionStatSummaryProps) {
   const { controller } = useContext(GameContext);
-  
+  const handleUpdateForce = useCallback((val: number) => controller.updateForce(factionId, val), [controller, factionId]);
+  const handleUpdateCunning = useCallback((val: number) => controller.updateCunning(factionId, val), [controller, factionId]);
+  const handleUpdateWealth = useCallback((val: number) => controller.updateWealth(factionId, val), [controller, factionId]);
+  const handleInputSx = useCallback((theme: Theme) => ({ 
+    ...theme.typography.body2,
+    width: "3em",
+   }), []);
+   
   return (
     <>
       <EditableStatText
         data-testid="faction-force"
-        updateValue={val => controller.updateForce(factionId, +val)}
-        inputSx={theme => ({ 
-          ...theme.typography.body2,
-          width: "3em",
-         })}
+        updateValue={handleUpdateForce}
+        inputSx={handleInputSx}
       >
         {force}
       </EditableStatText>
       <StatText variant="body2">/</StatText>
       <EditableStatText
         data-testid="faction-cunning"
-        updateValue={val => controller.updateCunning(factionId, +val)}
-        inputSx={theme => ({ 
-          ...theme.typography.body2,
-          width: "3em",
-         })}
+        updateValue={handleUpdateCunning}
+        inputSx={handleInputSx}
       >
         {cunning}
       </EditableStatText>
       <StatText variant="body2">/</StatText>
       <EditableStatText
         data-testid="faction-wealth"
-        updateValue={val => controller.updateWealth(factionId, +val)}
-        inputSx={theme => ({ 
-          ...theme.typography.body2,
-          width: "3em",
-         })}
+        updateValue={handleUpdateWealth}
+        inputSx={handleInputSx}
       >
         {wealth}
       </EditableStatText>

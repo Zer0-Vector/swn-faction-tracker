@@ -18,21 +18,21 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
     );
   }
 
-  const handleUpdateTally = (val: string) => {
+  const handleUpdateTally = (val: number) => {
     if (faction.goal) {
       console.debug(`setting tally: '${val}'`);
       controller.setGoal(faction.id, {
         ...faction.goal,
-        tally: parseInt(val),
+        tally: val,
       });
     }
   };
 
-  const handleUpdateTarget = (val: string) => {
+  const handleUpdateTarget = (val: number) => {
     if (faction.goal) {
       controller.setGoal(faction.id, {
         ...faction.goal,
-        target: parseInt(val),
+        target: val,
       });
     }
   };

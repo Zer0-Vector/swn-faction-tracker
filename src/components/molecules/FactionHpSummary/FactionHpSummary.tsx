@@ -20,12 +20,8 @@ const HpBox = React.memo(HpBoxComponent);
 
 export default function FactionHpSummary({ factionId }: FactionHpSummaryProps) {
   const { state, controller } = useContext(GameContext);
-  const handleUpdate = useCallback((val: string) => {
-    try {
-      controller.updateHp(factionId, parseInt(val));
-    } catch {
-      console.error("Could not parse faction hp input: ", val);
-    }
+  const handleUpdate = useCallback((val: number) => {
+      controller.updateHp(factionId, val);
   }, [controller, factionId]);
 
   const faction = state.getFaction(factionId);
