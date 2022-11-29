@@ -10,28 +10,46 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import EditableText from "../../atoms/EditableText";
 
+const ItemComp = ({ children }: { children: React.ReactNode }) => (
+  <Paper sx={theme => ({
+    ...theme.typography.body1,
+    px: 1,
+  })}>
+    {children}
+  </Paper>
+);
+
+const ItemHeaderComp = ({ children }: { children: React.ReactNode }) => (
+  <Paper sx={theme => ({
+    ...theme.typography.body1,
+    fontWeight: "bold",
+    textAlign: "right",
+    px: 1,
+    whiteSpace: "nowrap",
+    overflow: "clip",
+    textOverflow: "ellipsis",
+  })}>
+    {children}
+  </Paper>
+);
+
+const Item = React.memo(ItemComp);
+const ItemHeader = React.memo(ItemHeaderComp);
+
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);
   const { locationId: selectedLocationId } = useSelectionId();
   const nav = useNavigate();
+  const hasSmallWidth = useMediaQuery("(max-width:600px)");
 
   const locations = state.getLocations();
-
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body1,
-  }));
-
-  const ItemHeader = styled(Item)(({ theme }) => ({
-    fontWeight: "bold",
-    textAlign: "right",
-  }));
 
   const handleUpdateName = (curr: string) => (val: string) => {
     controller.updateLocationName(curr, val);
@@ -60,6 +78,8 @@ export default function LocationsList() {
     );
   }
 
+  const cellWidth = hasSmallWidth ? 6 : 3;
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable-location">
@@ -68,26 +88,33 @@ export default function LocationsList() {
             {locations.map((val, index) => (
               <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
                 {(provided, snapshot) => (
-                  <Accordion {...provided.draggableProps} ref={provided.innerRef} expanded={selectedLocationId === val.id}>
+                  <Accordion 
+                    {...provided.draggableProps}
+                    ref={provided.innerRef}
+                    expanded={selectedLocationId === val.id}
+                    disableGutters={true}
+                  >
                     <AccordionSummary
                       onClick={() => handleSelect(val.id)}
-                      sx={theme => ({ backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (selectedLocationId === val.id ? theme.palette.action.selected : "inherit")})}
+                      sx={theme => ({
+                        backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (selectedLocationId === val.id ? theme.palette.action.selected : "inherit"),
+                        justifyContent: "flex-start",
+                        gap: 2,
+                        "& .MuiAccordionSummary-content": {
+                          alignItems: "center",
+                          width: "100%"
+                        },
+                      })}
                     >
-                      <Box sx={theme => ({
-                        display: "flex",
-                        alignContent: "center",
-                        gap: theme.spacing(2),
-                      })}>
-                        <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
-                        <EditableText id="location-name" onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableText>
-                      </Box>
+                      <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
+                      <EditableText id="location-name" onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableText>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Grid container spacing={2}>
-                        <Grid item xs={3}><ItemHeader>Tech Level</ItemHeader></Grid>
-                        <Grid item xs={3}><Item>{val.tl}</Item></Grid>
-                        <Grid item xs={3}><ItemHeader>Coordinates</ItemHeader></Grid>
-                        <Grid item xs={3}><Item>{val.x}, {val.y}</Item></Grid>
+                      <Grid container spacing={1}>
+                        <Grid item xs={cellWidth}><ItemHeader>Tech Level</ItemHeader></Grid>
+                        <Grid item xs={cellWidth}><Item>{val.tl}</Item></Grid>
+                        <Grid item xs={cellWidth}><ItemHeader>Coordinates</ItemHeader></Grid>
+                        <Grid item xs={cellWidth}><Item>{val.x}, {val.y}</Item></Grid>
                       </Grid>
                     </AccordionDetails>
                   </Accordion>
