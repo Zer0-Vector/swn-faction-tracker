@@ -13,9 +13,9 @@ import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import ModeToggleButtons from "../components/molecules/ModeToggleButtons";
-import UserMenu from "../components/molecules/UserMenu";
-import { FirebaseApp } from "../firebase-init";
+import ModeToggleButtons from "../../components/molecules/ModeToggleButtons";
+import UserMenu from "../../components/molecules/UserMenu";
+import { FirebaseApp } from "../../firebase-init";
 
 export interface PageContainerProps {
   children?: React.ReactNode;
