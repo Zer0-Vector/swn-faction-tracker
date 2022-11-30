@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
+import { MockAction } from "../../components/__tests__/MockAction";
 import { GameContext } from "../../contexts/GameContext";
 import { IGameController } from "../../controllers/GameController";
 import FactionInfo from "../../types/FactionInfo";
@@ -95,28 +96,22 @@ const getMockedState = (factions: FactionInfo[] = [], assetMap: { [id: string]: 
   },
 } as IGameState);
 
-const MockFunc = (funcName: string) => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [funcName]: (...args: any[]) => action(funcName)(args),
-});
-
-
 const MockProvider = ({ children, state }: { children: React.ReactNode, state: IGameState }) => (
   <GameContext.Provider value={{
     state,
     controller: {
-      ...MockFunc("reorderFactions"),
-      ...MockFunc("updateFactionName"),
-      ...MockFunc("addFaction"),
-      ...MockFunc("removeFaction"),
-      ...MockFunc("addAsset"),
-      ...MockFunc("updateHp"),
-      ...MockFunc("updateForce"),
-      ...MockFunc("setGoal"),
-      ...MockFunc("updateCunning"),
-      ...MockFunc("updateWealth"),
-      ...MockFunc("updateHomeworld"),
-      ...MockFunc("removeAsset"),
+      ...MockAction("reorderFactions"),
+      ...MockAction("updateFactionName"),
+      ...MockAction("addFaction"),
+      ...MockAction("removeFaction"),
+      ...MockAction("addAsset"),
+      ...MockAction("updateHp"),
+      ...MockAction("updateForce"),
+      ...MockAction("setGoal"),
+      ...MockAction("updateCunning"),
+      ...MockAction("updateWealth"),
+      ...MockAction("updateHomeworld"),
+      ...MockAction("removeAsset"),
     } as unknown as IGameController,
   }}>
     {children}
