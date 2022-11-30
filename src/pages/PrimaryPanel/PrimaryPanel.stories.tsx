@@ -95,26 +95,29 @@ const getMockedState = (factions: FactionInfo[] = [], assetMap: { [id: string]: 
   },
 } as IGameState);
 
+const MockFunc = (funcName: string) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [funcName]: (...args: any[]) => action(funcName)(args),
+});
+
+
 const MockProvider = ({ children, state }: { children: React.ReactNode, state: IGameState }) => (
   <GameContext.Provider value={{
     state,
     controller: {
-      reorderFactions(sourceIndex, destinationIndex) {
-        action("reorderFactions")(sourceIndex, destinationIndex);
-      },
-      updateFactionName(id, newName) {
-        action("updateFactionName")(id, newName);
-      },
-      addFaction(name) {
-        action("addFaction")(name);
-      },
-      removeFaction(id) {
-        action("removeFaction")(id);
-      },
-      addAsset(selectedFaction, assetName) {
-        action("addAsset")(selectedFaction, assetName);
-      },
-    } as IGameController,
+      ...MockFunc("reorderFactions"),
+      ...MockFunc("updateFactionName"),
+      ...MockFunc("addFaction"),
+      ...MockFunc("removeFaction"),
+      ...MockFunc("addAsset"),
+      ...MockFunc("updateHp"),
+      ...MockFunc("updateForce"),
+      ...MockFunc("setGoal"),
+      ...MockFunc("updateCunning"),
+      ...MockFunc("updateWealth"),
+      ...MockFunc("updateHomeworld"),
+      ...MockFunc("removeAsset"),
+    } as unknown as IGameController,
   }}>
     {children}
   </GameContext.Provider>
