@@ -30,7 +30,7 @@ export default function FactionHpSummary({ factionId, hp, maxHp }: FactionHpSumm
     <HpBox data-testid="faction-hp-box">
       <EditableStatText
         onUpdate={handleUpdate}
-        inputSx={{ maxWidth: "5ch"}}
+        inputSx={{ maxWidth: "3rem"}}
         data-testid="hp"
       >
         {hp}
