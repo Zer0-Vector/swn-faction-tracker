@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 
+import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -19,7 +20,9 @@ export default function HealthDisplay({ factionId, hp, maxHp}: HealthDisplayProp
   }), []);
 
   const tooltip = useMemo(() => (
-    <FactionHpSummary factionId={factionId} hp={hp} maxHp={maxHp} />
+    <Box paddingX={1.25} paddingY={1}>
+      <FactionHpSummary factionId={factionId} hp={hp} maxHp={maxHp} />
+    </Box>
   ), [factionId, hp, maxHp]);
 
   return (
