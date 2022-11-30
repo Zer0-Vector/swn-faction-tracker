@@ -1,7 +1,7 @@
 import React from "react";
 import { Auth, getAuth, sendEmailVerification, signOut, User } from "firebase/auth";
 
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
@@ -108,17 +108,19 @@ describe('<NeedsVerificationDialog />', () => {
   it('signs out when on close button clicked', async () => {
     renderOpened();
     mockSignOut.mockImplementationOnce(() => Promise.resolve());
-    const closeButton = screen.getByTestId("verification-dialog-close-button");
+    const dialog = screen.getByTestId("verification-dialog");
+    const closeButton = within(dialog).getByTestId("message-dialog-close-button");
     fireEvent.click(closeButton);
     expect(mockSignOut).toBeCalledTimes(1);
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_OUT");
   });
-
+  
   it('stays logged in if signout fails', async () => {
     renderOpened();
     mockSignOut.mockImplementationOnce(() => Promise.reject());
-    const closeButton = screen.getByTestId("verification-dialog-close-button");
+    const dialog = screen.getByTestId("verification-dialog");
+    const closeButton = within(dialog).getByTestId("message-dialog-close-button");
     fireEvent.click(closeButton);
     expect(mockSignOut).toBeCalledTimes(1);
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));

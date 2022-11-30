@@ -24,7 +24,7 @@ const VerificationEmailErrorDialog = () => {
 
   return (
     <MessageDialog
-      id="verification-error"
+      data-testid="verification-error-dialog"
       open={open}
       onClose={handleClose}
       title="Error"
