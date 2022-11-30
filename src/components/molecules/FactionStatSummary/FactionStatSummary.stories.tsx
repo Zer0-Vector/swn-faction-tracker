@@ -5,7 +5,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { GameContext } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import { IGameState } from "../../../types/RuntimeGameState";
-import { MockAction } from "../../__tests__/MockAction";
+import { MockAction } from "../../__mocks__/MockAction";
 
 import FactionStatSummary from "./FactionStatSummary";
 

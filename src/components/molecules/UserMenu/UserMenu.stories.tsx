@@ -6,7 +6,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import UiState from "../../../types/UiState";
-import { MockAction } from "../../__tests__/MockAction";
+import { MockAction } from "../../__mocks__/MockAction";
 
 import UserMenu from "./UserMenu";
 

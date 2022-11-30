@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { MockAction } from "../../components/__tests__/MockAction";
+import { MockAction } from "../../components/__mocks__/MockAction";
 import { GameContext } from "../../contexts/GameContext";
 import { IGameController } from "../../controllers/GameController";
 import FactionInfo from "../../types/FactionInfo";

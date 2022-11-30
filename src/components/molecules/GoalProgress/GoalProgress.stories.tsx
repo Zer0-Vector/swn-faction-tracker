@@ -6,7 +6,7 @@ import { GameContext } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import FactionInfo from "../../../types/FactionInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
-import { MockAction } from "../../__tests__/MockAction";
+import { MockAction } from "../../__mocks__/MockAction";
 
 import GoalProgress from "./GoalProgress";
 
