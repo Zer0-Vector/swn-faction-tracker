@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
+
+import { SxProps, Theme } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
 import FactionInfo from "../../../types/FactionInfo";
@@ -11,6 +13,9 @@ interface GoalProgressProps {
 
 export default function GoalProgress({ faction }: GoalProgressProps) {
   const { controller } = useContext(GameContext);
+  const inputSx = useMemo<SxProps<Theme>>(() => ({
+    width: "5ch",
+  }), []);
 
   if (!faction.goal) {
     return (
