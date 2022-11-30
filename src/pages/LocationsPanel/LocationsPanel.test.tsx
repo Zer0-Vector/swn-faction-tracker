@@ -42,7 +42,7 @@ describe('default LocationsPanel', () => {
         tl: 1,
         x: 2,
         y: 3,
-      }
+      },
     ]);
     const lat = screen.getByTestId("locations-action-toolbar");
     expect(lat).toBeInTheDocument();

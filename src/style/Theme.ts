@@ -33,7 +33,7 @@ export const THEME = createTheme({
       paper2: COLORS["greyish darkest"].primary[LIGHTER],
     },
     text: {
-    }
+    },
   },
   typography: {
     body1: {
@@ -67,19 +67,19 @@ export const THEME = createTheme({
       color: COLORS.pastel.tertiary[LIGHTER],
     },
     subtitle1: {
-      fontSize: "2.25rem"
+      fontSize: "2.25rem",
     },
     subtitle2: {
-      fontSize: "2rem"
-    }
+      fontSize: "2rem",
+    },
   },
   components: {
     MuiLinearProgress: {
       styleOverrides: {
         root: {
-          borderRadius: "1rem"
-        }
-      }
-    }
-  }
+          borderRadius: "1rem",
+        },
+      },
+    },
+  },
 });

@@ -17,7 +17,7 @@ interface ListActionToolbarProps {
 
 export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children, "data-testid": dtid }: ListActionToolbarProps) {
   const fabSx = useMemo<SxProps>(() => ({
-    backgroundColor: "secondary.main"
+    backgroundColor: "secondary.main",
   }), []);
   const isSmallViewport = useMediaQuery("(max-width:600px)");
   const buttonSize = isSmallViewport ? "small" : "medium";

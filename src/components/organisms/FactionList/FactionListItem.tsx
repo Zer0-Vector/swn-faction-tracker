@@ -85,7 +85,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
 
   const statsBoxSx = useMemo<SxProps>(() => ({
     display: "grid",
-    gridTemplateColumns: "1fr 75px"
+    gridTemplateColumns: "1fr 75px",
   }), []);
   
   return (

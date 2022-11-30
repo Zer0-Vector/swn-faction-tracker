@@ -145,5 +145,5 @@ export const COLORS: PaletteMap = {
       [LIGHT]: "#FF709B",
       [LIGHTER]: "#FFA4BF",
     },
-  }
+  },
 };

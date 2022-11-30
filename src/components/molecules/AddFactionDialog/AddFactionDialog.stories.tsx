@@ -35,7 +35,7 @@ const MockState = {
     {
       id: "test-2",
       name: "Test 2",
-    }
+    },
   ]),
 } as IGameState;
 
@@ -48,5 +48,5 @@ Default.decorators = [
     <MockProvider state={MockState}>
       {story()}
     </MockProvider>
-  )
+  ),
 ];

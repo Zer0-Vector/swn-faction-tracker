@@ -108,14 +108,14 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
       minWidth: "3ch",
       width: fieldWidth + "ch",
       maxWidth: "100%",
-    }
+    },
   }), [fieldWidth]);
 
   const textStyle = useMemo<SxProps<Theme>>(() => ({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     overflow: "hidden",
-    ...sx
+    ...sx,
   }), [sx]);
 
   let inner: React.ReactNode;

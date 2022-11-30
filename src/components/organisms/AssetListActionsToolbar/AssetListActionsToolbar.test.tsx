@@ -52,7 +52,7 @@ describe('default AssetListActionsToolbar', () => {
   beforeEach(() => {
     mockUseLocation.mockImplementation(() => (
       {
-        pathname: "/factions/test-faction/assets"
+        pathname: "/factions/test-faction/assets",
       } as RDom.Location
     ));
   });
@@ -118,7 +118,7 @@ describe('asset selected AssetListActionsToolbar', () => {
   beforeEach(() => {
     mockUseLocation.mockImplementation(() => (
       {
-        pathname: "/factions/test-faction/assets/test-asset-1"
+        pathname: "/factions/test-faction/assets/test-asset-1",
       } as RDom.Location
     ));
     mockUseNavigate.mockImplementationOnce(() => mockNav);

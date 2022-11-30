@@ -47,7 +47,7 @@ export default function PageContainer({ children }: PageContainerProps) {
     '&:hover': {
       color: "primary.light",
       backgroundColor: "action.hover",
-    }
+    },
   }), []);
 
   const boxSx = useMemo<SxProps<Theme>>(() => ({
@@ -65,7 +65,7 @@ export default function PageContainer({ children }: PageContainerProps) {
   const appTitleSx = useMemo<SxProps<Theme>>(() => ({
     mr: 2,
     color: "primary.contrastText",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   }), []);
 
   const containerSx = useMemo<SxProps<Theme>>(() => ({

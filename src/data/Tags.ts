@@ -11,17 +11,17 @@ export const TAGS: TagsMap = {
       {
         type: "ASSUME_STAT",
         details: {
-          tl: 4
-        }
+          tl: 4,
+        },
       },
       {
         type: "ASSUME_TAG",
         details: {
           tag: "Planetary Government",
-          target: "homeworld"
-        }
-      }
-    ]
+          target: "homeworld",
+        },
+      },
+    ],
   },
   "Deep Rooted": {
     name: "Deep Rooted",
@@ -31,10 +31,10 @@ export const TAGS: TagsMap = {
         details: {
           when: "DEFENDING",
           target: "homeworld",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Eugenics Cult": {
     name: "Eugenics Cult",
@@ -42,18 +42,18 @@ export const TAGS: TagsMap = {
       {
         type: "BONUS_ASSET_AVAILABLE",
         details: {
-          asset: "Gengineered Slaves"
-        }
+          asset: "Gengineered Slaves",
+        },
       },
       {
         type: "BONUS_DIE",
         details: {
           when: "DEFENDING",
           with: "Gengineered Slaves",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Exchange Consulate": {
     name: "Exchange Consulate",
@@ -69,9 +69,9 @@ export const TAGS: TagsMap = {
           },
           bonus: {
             type: "XP",
-            amount: 1
-          }
-        }
+            amount: 1,
+          },
+        },
       },
       {
         type: "BONUS_DIE",
@@ -79,10 +79,10 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "DEFENDING",
           versus: "WEALTH",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Fanatical": {
     name: "Fanatical",
@@ -90,16 +90,16 @@ export const TAGS: TagsMap = {
       {
         type: "REROLL",
         details: {
-          dieValue: 1
-        }
+          dieValue: 1,
+        },
       },
       {
         type: "LOSE_TIES",
         details: {
-          when: "ATTACKING"
-        }
-      }
-    ]
+          when: "ATTACKING",
+        },
+      },
+    ],
   },
   "Imperialists": {
     name: "Imperialists",
@@ -109,10 +109,10 @@ export const TAGS: TagsMap = {
         details: {
           when: "ATTACKING",
           during: "SIEZE_PLANET",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Machiavellian": {
     name: "Machiavellian",
@@ -123,10 +123,10 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "ATTACKING",
           with: "CUNNING",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Mercenary Group": {
     name: "Mercenary Group",
@@ -135,10 +135,10 @@ export const TAGS: TagsMap = {
         type: "ASSET_ABILITY",
         details: {
           type: "MOVE",
-          distance: 1
-        }
-      }
-    ]
+          distance: 1,
+        },
+      },
+    ],
   },
   "Perimeter Agency": {
     name: "Perimeter Agency",
@@ -149,19 +149,19 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "ATTACKING",
           versus: {
-            tl: 5
+            tl: 5,
           },
-          die: "1d10"
-        }
+          die: "1d10",
+        },
       },
       {
         type: "BONUS_DIE",
         details: {
           when: "DETECT_STEALTH",
-          die: "*"
-        }
-      }
-    ]
+          die: "*",
+        },
+      },
+    ],
   },
   "Pirates": {
     name: "Pirates",
@@ -171,27 +171,27 @@ export const TAGS: TagsMap = {
         details: {
           when: "MOVE",
           onto: {
-            contains: "Base of Influence"
+            contains: "Base of Influence",
           },
           pay: 1,
-          to: "FACTION"
-        }
-      }
-    ]
+          to: "FACTION",
+        },
+      },
+    ],
   },
   "Planetary Government": {
     name: "Planetary Government",
     attributes: [
       {
         name: "location",
-        type: "LOCATION"
-      }
+        type: "LOCATION",
+      },
     ],
     effects: [
       {
-        type: "PERMISSION"
-      }
-    ]
+        type: "PERMISSION",
+      },
+    ],
   },
   "Plutocratic": {
     name: "Plutocratic",
@@ -202,10 +202,10 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "ATTACKING",
           with: "WEALTH",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Preceptor Archive": {
     name: "Preceptor Archive",
@@ -214,18 +214,18 @@ export const TAGS: TagsMap = {
         type: "DISCOUNT",
         details: {
           on: {
-            tl: 4
+            tl: 4,
           },
-          discount: 1
-        }
+          discount: 1,
+        },
       },
       {
         type: "BONUS_ACTION_AVAILABLE",
         details: {
-          action: "Teach Planetary Population"
-        }
-      }
-    ]
+          action: "Teach Planetary Population",
+        },
+      },
+    ],
   },
   "Psychic Academy": {
     name: "Psychic Academy",
@@ -234,10 +234,10 @@ export const TAGS: TagsMap = {
         type: "FORCE_REROLL",
         details: {
           limitPerTurn: 1,
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Savage": {
     name: "Savage",
@@ -248,12 +248,12 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "DEFENDING",
           target: {
-            tl: 0
+            tl: 0,
           },
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Scavengers": {
     name: "Scavengers",
@@ -263,26 +263,26 @@ export const TAGS: TagsMap = {
         details: {
           amount: 1,
           when: "ASSET_DESTROYED",
-          owner: "SELF"
-        }
+          owner: "SELF",
+        },
       },
       {
         type: "GAIN_CREDIT",
         details: {
           amount: 1,
           when: "ASSET_DESTROYED",
-          owner: "ENEMY"
-        }
-      }
-    ]
+          owner: "ENEMY",
+        },
+      },
+    ],
   },
   "Secretive": {
     name: "Secretive",
     effects: [
       {
         type: "STEALTH_ASSETS",
-      }
-    ]
+      },
+    ],
   },
   "Technical Expertise": {
     name: "Technical Expertise",
@@ -293,10 +293,10 @@ export const TAGS: TagsMap = {
       {
         type: "BUILD_STARSHIP",
         details: {
-          population: 10000
-        }
-      }
-    ]
+          population: 10000,
+        },
+      },
+    ],
   },
   "Theocratic": {
     name: "Theocratic",
@@ -307,10 +307,10 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "DEFENDING",
           versus: "CUNNING",
-          die: "1d10"
-        }
-      }
-    ]
+          die: "1d10",
+        },
+      },
+    ],
   },
   "Warlike": {
     name: "Warlike",
@@ -321,9 +321,9 @@ export const TAGS: TagsMap = {
           limitPerTurn: 1,
           when: "ATTACKING",
           with: "FORCE",
-          die: "1d10"
-        }
-      }
-    ]
-  }
+          die: "1d10",
+        },
+      },
+    ],
+  },
 };

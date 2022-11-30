@@ -31,7 +31,7 @@ describe('generateId(*)', () => {
         ["hello world", "hello-world"],
         ["hello*&^world", "hello-world"],
         ["hello---world", "hello-world"],
-        ["123-3.2", "123-3-2"]
+        ["123-3.2", "123-3-2"],
       ]
     )('converts %p into %p', (input: string, expected: string) => {
       expect(generateId(input)).toEqual(expected);

@@ -102,7 +102,7 @@ export default function LocationsList() {
                         gap: 2,
                         "& .MuiAccordionSummary-content": {
                           alignItems: "center",
-                          width: "100%"
+                          width: "100%",
                         },
                       })}
                     >

@@ -35,12 +35,12 @@ Boxed.args = {
     textOverflow: "ellipsis",
     overflow: "hidden",
     whiteSpace: "nowrap",
-  }
+  },
 };
 Boxed.decorators = [
   story => (
     <div style={{ maxWidth: "10ch", border: "solid black 1px" }}>
       {story()}
     </div>
-  )
+  ),
 ];

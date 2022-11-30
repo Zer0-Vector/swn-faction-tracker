@@ -39,7 +39,7 @@ Default.args = {
       tally: 1,
       target: 2,
     },
-  } as FactionInfo
+  } as FactionInfo,
 };
 
 export const NoGoal = Template.bind({});
