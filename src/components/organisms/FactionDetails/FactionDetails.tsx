@@ -18,20 +18,20 @@ interface FactionDetailsProps {
   faction: FactionInfo;
 }
 
+const Item = React.memo(styled(Paper)(({ theme }) => ({
+  ...theme.typography.body1,
+  padding: theme.spacing(0.5),
+  margin: theme.spacing(0.5),
+})));
+
+const ItemHeader = React.memo(styled(Item)(() => ({
+  fontWeight: "bold",
+  textAlign: "right",
+})));
+
 export default function FactionDetails({ faction }: FactionDetailsProps) {
   const { state, controller } = useContext(GameContext);
   const isSmallViewport = useMediaQuery("(max-width:600px)");
-
-  const Item = React.memo(styled(Paper)(({ theme }) => ({
-    ...theme.typography.body1,
-    padding: theme.spacing(0.5),
-    margin: theme.spacing(0.5),
-  })));
-
-  const ItemHeader = React.memo(styled(Item)(() => ({
-    fontWeight: "bold",
-    textAlign: "right",
-  })));
 
   const homeworldText = faction.homeworld ? faction.homeworld : "Unknown";
   const tagText = faction.tag ? faction.tag : "Unknown";
