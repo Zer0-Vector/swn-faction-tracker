@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
-import * as Auth from "firebase/auth";
+import { User } from "firebase/auth";
 
 import PersonIcon from '@mui/icons-material/Person';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -16,7 +16,7 @@ import RegistrationDialog from "../RegistrationDialog";
 import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
 
 interface UserMenuProps {
-  user: Auth.User | null;
+  user: User | null;
 }
 
 export default function UserMenu({ user }: UserMenuProps) {
