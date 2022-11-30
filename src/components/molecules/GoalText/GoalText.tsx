@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import FactionInfo from "../../../types/FactionInfo";
@@ -12,11 +12,11 @@ interface GoalTextProps {
 export default function GoalText({faction}: GoalTextProps) {
   const { controller } = useContext(GameContext);
   
-  const handleUpdate = (val: string) => {
+  const handleUpdate = useCallback((val: string) => {
     if (isGoalType(val)) {
       controller.setGoal(faction.id, { type: val });
     }
-  };
+  }, [controller, faction.id]);
 
   return (
     <EditableDropDownText
