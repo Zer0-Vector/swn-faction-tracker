@@ -131,7 +131,20 @@
         }
       ],
       "simple-import-sort/exports": "warn",
-      "prefer-const": "warn"
+      "prefer-const": "warn",
+      "@typescript-eslint/comma-dangle": [
+        "warn",
+        {
+          "arrays": "always-multiline",
+          "objects": "always-multiline",
+          "imports": "always-multiline",
+          "exports": "always-multiline",
+          "functions": "never",
+          "enums": "always-multiline",
+          "generics": "never",
+          "tuples": "always-multiline"
+        }
+      ]
     },
     "overrides": [
       {
