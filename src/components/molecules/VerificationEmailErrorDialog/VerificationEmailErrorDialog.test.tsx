@@ -1,7 +1,7 @@
 import React from "react";
 import { Auth, getAuth, signOut } from "firebase/auth";
 
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
@@ -59,7 +59,7 @@ describe('VerificationEmailErrorDialog', () => {
 
     mockGetAuth.mockImplementationOnce(() => (
       {
-        currentUser: mockUser
+        currentUser: mockUser,
       } as Auth
     ));
     mockSignOut.mockImplementationOnce(() => Promise.resolve());
@@ -69,7 +69,8 @@ describe('VerificationEmailErrorDialog', () => {
         <VerificationEmailErrorDialog />
       </UiStateContext.Provider>
     );
-    const button = screen.getByTestId("verification-error-dialog-close-button");
+    const dialog = screen.getByTestId("verification-error-dialog");
+    const button = within(dialog).getByTestId("message-dialog-close-button");
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));

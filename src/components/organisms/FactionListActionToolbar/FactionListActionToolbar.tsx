@@ -37,6 +37,7 @@ export default function FactionListActionToolbar() {
       removable={!!selectedFaction}
       onAddClick={handleAddClick}
       onRemoveClick={handleRemoveClick}
+      data-testid="faction-list-action-toolbar"
     >
       <AddFactionDialog 
         open={addOpen}

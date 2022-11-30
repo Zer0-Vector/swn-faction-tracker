@@ -26,15 +26,15 @@ const mockFaction = {
   } as GoalInfo,
 } as FactionInfo;
 
-function renderIt() {
+function renderIt(faction = mockFaction) {
   render(
     <GameContext.Provider value={mockContext}>
-      <GoalProgress faction={mockFaction} />
+      <GoalProgress faction={faction} />
     </GameContext.Provider>
   );
 }
 
-describe('GoalProgress', () => {
+describe('default GoalProgress', () => {
   it('renders faction goal', () => {
     renderIt();
     const theSpan = screen.getByTestId("goal-progress");
@@ -85,5 +85,14 @@ describe('GoalProgress', () => {
       tally: expect.anything(),
       target: 332211,
     });
+  });
+});
+
+describe('empty GoalProgress', () => {
+  it('renders instruction text', () => {
+    renderIt({} as FactionInfo);
+    const elem = screen.getByTestId("goal-progress-empty");
+    expect(elem).toBeInTheDocument();
+    expect(elem.textContent?.length).toBeGreaterThan(0);
   });
 });

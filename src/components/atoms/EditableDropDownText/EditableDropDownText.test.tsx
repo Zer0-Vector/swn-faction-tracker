@@ -58,10 +58,6 @@ describe('default EditableDropDownText', () => {
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
-    const open = within(autocomplete).getByTitle("Open");
-    expect(open).toBeInTheDocument();
-    expect(open).toBeInstanceOf(HTMLButtonElement);
-    fireEvent.click(open);
     
     const listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
@@ -87,10 +83,6 @@ describe('default EditableDropDownText', () => {
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
-    const open = within(autocomplete).getByTitle("Open");
-    expect(open).toBeInTheDocument();
-    expect(open).toBeInstanceOf(HTMLButtonElement);
-    fireEvent.click(open);
     
     const listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();

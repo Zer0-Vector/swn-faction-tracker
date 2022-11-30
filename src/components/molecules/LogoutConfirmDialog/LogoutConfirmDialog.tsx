@@ -10,12 +10,14 @@ const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const handleLogout = useCallback(() => {
     uiController.setLoginState("LOGOUT_WAITING");
-    getAuth(FirebaseApp).signOut().then(() => {
-      uiController.setLoginState("LOGGED_OUT");
-    }).catch((reason: FirebaseError) => {
-      console.error("Logout failed: ", reason);
-      uiController.setLoginState("LOGGED_IN");
-    });
+    getAuth(FirebaseApp).signOut()
+      .then(() => {
+        uiController.setLoginState("LOGGED_OUT");
+      })
+      .catch((reason: FirebaseError) => {
+        console.error("Logout failed: ", reason);
+        uiController.setLoginState("LOGGED_IN");
+      });
   }, [uiController]);
 
   const handleCancel = useCallback(() => {

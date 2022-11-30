@@ -7,26 +7,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-interface MessageDialogProps {
+import TestableProps from "../../../types/TestableProps";
+
+interface MessageDialogProps extends TestableProps {
   open: boolean;
   title: string;
   message: string;
   onClose: () => void;
-  id: string;
   buttonText?: string;
   children?: React.ReactNode;
 }
 
-const MessageDialog = ({ open, title, message, onClose, id, buttonText, children }: MessageDialogProps) => {
+const MessageDialog = ({ open, title, message, onClose, buttonText, children, "data-testid": dtid }: MessageDialogProps) => {
   return (
-    <Dialog open={open} fullWidth={true} maxWidth="xs" data-testid={`${id}-dialog`}>
-      <DialogTitle data-testid={`${id}-dialog-title`}>{title}</DialogTitle>
+    <Dialog open={open} fullWidth={true} maxWidth="xs" data-testid={dtid}>
+      <DialogTitle data-testid="message-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText data-testid={`${id}-dialog-message`}>{message}</DialogContentText>
+        <DialogContentText data-testid="message-dialog-message">{message}</DialogContentText>
         {children}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} data-testid={`${id}-dialog-close-button`}>{buttonText || "Close"}</Button>
+        <Button onClick={onClose} data-testid="message-dialog-close-button">{buttonText || "Close"}</Button>
       </DialogActions>
     </Dialog>
   );

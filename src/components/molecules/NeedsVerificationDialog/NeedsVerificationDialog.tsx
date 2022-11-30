@@ -36,7 +36,7 @@ const NeedsVerificationDialog = () => {
 
   return (
     <MessageDialog
-      id="verification"
+      data-testid="verification-dialog"
       open={open}
       title="Email Verification Required"
       message="Please check your email to verify your email address."
