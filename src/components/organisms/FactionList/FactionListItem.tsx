@@ -45,7 +45,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
     }
   ), [controller, isSelected, nav]);
 
-  const getSelectFactionHandler = useCallback((factionId: string) => (
+  const getSelectFactionHandler = (factionId: string) => (
     () => {
       if (navFactionId === factionId) {
         console.debug("Deselecting faction: ", navFactionId);
@@ -55,8 +55,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         nav(`/factions/${factionId}`);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [navFactionId]);
+  );
 
   const checkForDuplicates = useCallback<ValidationFn>(val => {
     return !state.getFactions().filter(f => f.id !== faction.id).map(f => f.name.toLowerCase()).includes(val.toLowerCase());
