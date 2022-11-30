@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
@@ -11,22 +11,28 @@ interface HealthDisplayProps {
   maxHp: number;
 }
 
-export default function HealthDisplay(props: HealthDisplayProps) {
+export default function HealthDisplay({ factionId, hp, maxHp}: HealthDisplayProps) {
+  const sx = useMemo(() => ({
+    minWidth: "50px",
+    width: "100%",
+    height: "1.25rem",
+  }), []);
+
+  const tooltip = useMemo(() => (
+    <FactionHpSummary factionId={factionId} hp={hp} maxHp={maxHp} />
+  ), [factionId, hp, maxHp]);
+
   return (
     <>
       <Tooltip
-        title={ <FactionHpSummary {...props} /> }
+        title={tooltip}
         arrow={true}
       >
         <LinearProgress
           color="error"
-          value={100 * props.hp / props.maxHp}
+          value={100 * hp / maxHp}
           variant="determinate"
-          sx={{
-            minWidth: "50px",
-            width: "100%",
-            height: "1.25rem"
-          }}
+          sx={sx}
         />
       </Tooltip>
     </>
