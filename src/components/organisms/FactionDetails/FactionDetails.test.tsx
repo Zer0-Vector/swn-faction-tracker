@@ -169,7 +169,7 @@ describe('default FactionDetails', () => {
     const item = within(container).getByTestId("goal-progress-item");
     expect(item).toBeInTheDocument();
     
-    const tally = within(item).getByTestId("goal-progress");
+    const tally = within(item).getByTestId("goal-progress-empty");
     expect(tally).toBeInTheDocument();
     expect(tally).toHaveTextContent("Select Goal");
   });
