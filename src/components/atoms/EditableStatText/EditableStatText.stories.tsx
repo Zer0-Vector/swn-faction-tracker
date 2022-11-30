@@ -21,7 +21,7 @@ const Template: ComponentStory<typeof EditableStatText> = args => {
 
 export const Default = Template.bind({});
 Default.args = {
-  children: 123
+  children: 123,
 };
 
 export const Placeholder = Template.bind({});

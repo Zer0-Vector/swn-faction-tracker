@@ -71,6 +71,6 @@ export const f: AssetActionInfo = {
   details: {
     effect: [],
     test: null,
-    trigger: []
-  }
+    trigger: [],
+  },
 };

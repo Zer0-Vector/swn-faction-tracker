@@ -18,7 +18,7 @@ interface MockProviderProps {
 const MockProvider = ({ state, children }: MockProviderProps) => (
   <GameContext.Provider value={{
     state,
-    controller: {} as IGameController
+    controller: {} as IGameController,
   }}>
     {children}
   </GameContext.Provider>
@@ -30,7 +30,7 @@ const MockedState = {
       {
         id: "test-faction-stored",
         name: "Test Faction Stored",
-      }
+      },
     ];
   },
 } as IGameState;
@@ -48,7 +48,7 @@ export default {
         {story()}
       </MockProvider>
     ),
-  ]
+  ],
 } as ComponentMeta<typeof FactionListItem>;
 
 const Template: ComponentStory<typeof FactionListItem> = args => {
@@ -67,6 +67,6 @@ Default.args = {
       hp: 8,
       maxHp: 16,
       xp: 999,
-    }
-  }
+    },
+  },
 };

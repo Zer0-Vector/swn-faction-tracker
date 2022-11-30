@@ -19,7 +19,7 @@ const ASSETS: AssetMap = {
     note: ["S"],
     upkeep: 0,
     action: null,
-    restriction: null
+    restriction: null,
   },
 
   /* Cunning 1 */
@@ -36,8 +36,8 @@ const ASSETS: AssetMap = {
       defense: "WEALTH",
       result: {
         type: "DAMAGE",
-        damage: "1d4"
-      }
+        damage: "1d4",
+      },
     },
     counter: null,
     note: ["A"],
@@ -49,10 +49,10 @@ const ASSETS: AssetMap = {
         distance: 2,
         types: ["SPECIAL_FORCES"],
         quantity: 1,
-        includeSelf: true
-      }
+        includeSelf: true,
+      },
     },
-    restriction: null
+    restriction: null,
   },
   "Informers": {
     description: "Minions that lace a planet's underworld, watchful for intruders. They can choose to Attack a faction without specifying a target asset. On a successful Cunning vs. Cunning attack, all Stealthed assets on the planet belonging to that faction are revealed. Informers can target a faction even if none of their assets are visible on a world; at worst, they simply learn that there are no stealthed assets.",
@@ -66,14 +66,14 @@ const ASSETS: AssetMap = {
       offense: "CUNNING",
       defense: "CUNNING",
       result: {
-        type: "REVEAL_STEALTHED"
-      }
+        type: "REVEAL_STEALTHED",
+      },
     },
     counter: null,
     note: ["S"],
     upkeep: 0,
     action: null,
-    restriction: null
+    restriction: null,
   },
   "False Front": {
     description: "This asset allows a faction to preserve more valuable resources. If another asset on the planet suffers enough damage to destroy it, the faction can sacrifice the false front instead to nullify the killing blow.",
@@ -90,9 +90,9 @@ const ASSETS: AssetMap = {
     action: {
       type: "SACRIFICE",
       cost: 0,
-      details: null
+      details: null,
     },
-    restriction: null
+    restriction: null,
   },
 
   /* Cunning 2 */
@@ -115,12 +115,12 @@ const ASSETS: AssetMap = {
         trigger: ["PERMISSION_GRANTED"],
         test: {
           offense: "CUNNING",
-          defense: "CUNNING"
+          defense: "CUNNING",
         },
-        effect: ["PERMISSION_DENIED"]
-      }
+        effect: ["PERMISSION_DENIED"],
+      },
     },
-    restriction: null
+    restriction: null,
   },
   "Saboteurs": {
     description: "Minions rained in launching strikes against enemy operations. An asset attacked by saboteurs cannot apply any Use Asset Ability action until the start of the attacking faction's next turn. This applies whether or not the attack was successful.",
@@ -135,8 +135,8 @@ const ASSETS: AssetMap = {
       defense: "CUNNING",
       result: {
         type: "DAMAGE",
-        damage: "2d4"
-      }
+        damage: "2d4",
+      },
     },
     counter: null,
     note: ["S"],
@@ -144,9 +144,9 @@ const ASSETS: AssetMap = {
     action: {
       type: "SABOTAGE",
       cost: 0,
-      details: null
+      details: null,
     },
-    restriction: null
+    restriction: null,
   },
   "Blackmail": {
     description: "Selectively degrade the effectiveness of an asset. Any attempt to attack or defend against Blackmail loses any bonus dice earned by tags.",
@@ -161,8 +161,8 @@ const ASSETS: AssetMap = {
       defense: "CUNNING",
       result: {
         type: "DAMAGE",
-        damage: "1d4+1"
-      }
+        damage: "1d4+1",
+      },
     },
     counter: null,
     note: ["S"],
@@ -173,10 +173,10 @@ const ASSETS: AssetMap = {
       details: {
         trigger: ["ATTACK", "DEFEND"],
         test: null,
-        effect: ["PREVENT_TAG_DICE"]
-      }
+        effect: ["PREVENT_TAG_DICE"],
+      },
     },
-    restriction: null
+    restriction: null,
   },
   "Seductress": {
     description: "They and their male equivalents subvert the leadership of enemy assets. As an action, a Seductress can travel to any world within one hex. As an attack, a Seductress does no damage, but an asset that has been successfully attacked immediately reveals any other Stealthed assets of that faction on the planet. Only Special Forces units can attack a Seductress.",
@@ -189,7 +189,7 @@ const ASSETS: AssetMap = {
     attack: {
       offense: "CUNNING",
       defense: "CUNNING",
-      result: { type: "REVEAL_STEALTHED" }
+      result: { type: "REVEAL_STEALTHED" },
     },
     counter: null,
     note: ["S", "A"],
@@ -201,15 +201,15 @@ const ASSETS: AssetMap = {
         distance: 1,
         types: [],
         quantity: 1,
-        includeSelf: true
-      }
+        includeSelf: true,
+      },
     },
     restriction: {
       type: "ATTACKER",
       details: {
-        only: "SPECIAL_FORCES"
-      }
-    }
+        only: "SPECIAL_FORCES",
+      },
+    },
   },
   
   /* Cunning 3 */
@@ -272,7 +272,7 @@ const ASSETS: AssetMap = {
         quantity: 1,
         types: ["SPECIAL_FORCES"],
       },
-    }
+    },
   },
 
   /* Cunning 4 */

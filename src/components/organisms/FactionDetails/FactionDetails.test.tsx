@@ -57,7 +57,7 @@ describe('default FactionDetails', () => {
         name: "Test Location 2",
         tl: 1, 
         x: 1, y: 1,
-      }
+      },
     ]);
     mockGetFaction.mockImplementation((f: string) => {
       if (f !== mockFaction.id) {

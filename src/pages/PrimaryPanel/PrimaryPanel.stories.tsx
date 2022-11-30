@@ -1,7 +1,6 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
-import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { MockAction } from "../../components/__mocks__/MockAction";
@@ -35,7 +34,7 @@ const factions: FactionInfo[] = [
       maxHp: 4,
       wealth: 5,
       xp: 6,
-    }
+    },
   },
   {
     id: "test-faction-2",
@@ -47,7 +46,7 @@ const factions: FactionInfo[] = [
       maxHp: 4,
       wealth: 5,
       xp: 6,
-    }
+    },
   },
   {
     id: "test-faction-3",
@@ -59,7 +58,7 @@ const factions: FactionInfo[] = [
       maxHp: 4,
       wealth: 5,
       xp: 6,
-    }
+    },
   },
 ];
 

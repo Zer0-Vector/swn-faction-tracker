@@ -90,7 +90,7 @@ export class GameController implements IGameController {
   #writeFactionOrder() {
     this.setState(prev => ({
       ...prev,
-      factionOrder: this.runtimeState.factionOrder
+      factionOrder: this.runtimeState.factionOrder,
     }));
   }
 

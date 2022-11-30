@@ -85,10 +85,10 @@ describe('GameController', () => {
               maxHp: 4,
               wealth: 0,
               xp: 0,
-            }
-          }
-        ]
-      ]
+            },
+          },
+        ],
+      ],
     } as StoredGameState);
   });
 

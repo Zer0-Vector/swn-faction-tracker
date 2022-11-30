@@ -25,7 +25,7 @@ const mockContext = {
     setLoginState: jest.fn((state: LoginState) => {
       console.debug("mockContext.controller.setLoginState: ", state);
     }) as (state: LoginState)=>void,
-  }
+  },
 } as UiStateContextType;
 function renderOpened() {
   render(

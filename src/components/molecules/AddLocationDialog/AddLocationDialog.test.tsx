@@ -13,7 +13,7 @@ const EMPTY_CONTEXT: GameContextType = {
   state: {
     getLocations: () => [] as LocationInfo[],
   } as IGameState,
-  controller: {} as IGameController
+  controller: {} as IGameController,
 };
 
 function renderWithContext(context?: GameContextType) {
@@ -153,7 +153,7 @@ describe('default AddLocationDialog', () => {
   it('marks the field with error class when duplicate name given', () => {
     const context: GameContextType = {
       state: {
-        getLocations: () => [{ name: "abc" }] as LocationInfo[]
+        getLocations: () => [{ name: "abc" }] as LocationInfo[],
       } as IGameState,
       controller: {} as IGameController,
     };

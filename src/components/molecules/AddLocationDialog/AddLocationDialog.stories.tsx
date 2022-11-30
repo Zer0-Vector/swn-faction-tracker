@@ -21,7 +21,7 @@ const MockedState = {
     {
       id: "test-two",
       name: "Test Two",
-    }
+    },
   ]),
 } as IGameState;
 

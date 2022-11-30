@@ -12,7 +12,7 @@ export default function LocationsPanel() {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    width: "100%"
+    width: "100%",
   }), []);
   
   console.debug("Rendering LocationsPanel...");

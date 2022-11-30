@@ -277,7 +277,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
         this.locations.delete(curr);
         this.locations.set(val, {
           ...loc,
-          name: val
+          name: val,
         });
         break;
       }

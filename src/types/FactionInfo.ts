@@ -6,48 +6,48 @@ interface StatInfo { xpCost: number, hpValue: number }
 export const STAT_INFO: {[rating: number]:StatInfo} = {
   0: {
     xpCost: 0,
-    hpValue: 0
+    hpValue: 0,
   },
   1: {
     xpCost: 0,
-    hpValue: 1
+    hpValue: 1,
   },
   2: {
     xpCost: 2,
-    hpValue: 2
+    hpValue: 2,
   },
   3: {
     xpCost: 4,
-    hpValue: 4
+    hpValue: 4,
   },
   4: {
     xpCost: 6,
-    hpValue: 6
+    hpValue: 6,
   },
   5: {
     xpCost: 9,
-    hpValue: 9
+    hpValue: 9,
   },
   6: {
     xpCost: 12,
-    hpValue: 12
+    hpValue: 12,
   },
   7: {
     xpCost: 16,
-    hpValue: 16
+    hpValue: 16,
   },
   8: {
     xpCost: 20,
-    hpValue: 20
+    hpValue: 20,
   },
   9: {
     xpCost: 25,
-    hpValue: 25
+    hpValue: 25,
   },
   10: {
     xpCost: 30,
-    hpValue: 30
-  }
+    hpValue: 30,
+  },
 };
 
 export default class FactionInfo {

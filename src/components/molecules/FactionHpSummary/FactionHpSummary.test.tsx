@@ -4,9 +4,6 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
-import FactionInfo from "../../../types/FactionInfo";
-import FactionStatsInfo from "../../../types/FactionStatsInfo";
-import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionHpSummary from "./FactionHpSummary";

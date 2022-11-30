@@ -13,7 +13,7 @@ const EMPTY_CONTEXT: GameContextType = {
   state: {
     getFactions: () => [] as FactionInfo[],
   } as IGameState,
-  controller: {} as IGameController
+  controller: {} as IGameController,
 };
 
 function renderWithContext(context?: GameContextType) {
@@ -129,7 +129,7 @@ describe('default AddFactionDialog', () => {
   it('marks the field with error class when duplicate name given', () => {
     const context: GameContextType = {
       state: {
-        getFactions: () => [{ name: "abc" }] as FactionInfo[]
+        getFactions: () => [{ name: "abc" }] as FactionInfo[],
       } as IGameState,
       controller: {} as IGameController,
     };

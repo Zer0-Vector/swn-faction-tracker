@@ -19,7 +19,7 @@ export default {
           ...MockAction("updateForce"),
           ...MockAction("updateCunning"),
           ...MockAction("updateWealth"),
-        } as unknown as IGameController
+        } as unknown as IGameController,
       }}>
         {story()}
       </GameContext.Provider>

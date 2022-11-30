@@ -11,7 +11,7 @@ beforeEach(() => {
     assets: [],
     factionOrder: [],
     locations: [],
-    locationsOrder: []
+    locationsOrder: [],
   };
   state = new RuntimeGameState(storedState);
 });

@@ -115,7 +115,7 @@ const RegistrationDialog = () => {
           <Container sx={{
             display: "grid",
             gridTemplateColumns: "1fr",
-            gap: 1
+            gap: 1,
           }}>
             <TextField
               label="Email"
