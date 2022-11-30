@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
@@ -28,7 +28,7 @@ export default function FactionList(): JSX.Element {
     controller.reorderFactions(result.source.index, result.destination.index);
   }, [controller]);
 
-  const factions = state.getFactions();
+  const factions = useMemo(() => state.getFactions(), [state]);
 
   if (factions.length === 0) {
     return (
@@ -49,15 +49,15 @@ export default function FactionList(): JSX.Element {
             spacing={theme.spacing(0.125)}
             padding={theme.spacing(2)}
             bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
+            data-testid="faction-list-stack"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
             {factions.map((faction: FactionInfo, index: number) => {
-              const { name } = faction;
               return (
                 <Draggable
-                  key={name}
-                  draggableId={`draggable-faction-${name.replaceAll(/\W/g, "-")}`}
+                  key={faction.id}
+                  draggableId={`draggable-faction-${faction.id}`}
                   index={index}
                 >
                   {(itemProvided, itemSnapshot) => (
@@ -74,14 +74,12 @@ export default function FactionList(): JSX.Element {
                         in={selectedFaction?.id === faction.id}
                         unmountOnExit={true}
                       >
-                        <Box padding={1}>
-                          <Box padding={3} bgcolor="background.paper">
-                            <FactionDetails faction={faction} />
-                            <Box>
-                              <Typography variant="h3" textAlign="left">Assets</Typography>
-                              <AssetListActionsToolbar />
-                              <AssetList />
-                            </Box>
+                        <Box padding={1} bgcolor="background.paper">
+                          <FactionDetails faction={faction} />
+                          <Box>
+                            <Typography variant="h3" textAlign="left">Assets</Typography>
+                            <AssetListActionsToolbar />
+                            <AssetList />
                           </Box>
                         </Box>
                       </Collapse>
