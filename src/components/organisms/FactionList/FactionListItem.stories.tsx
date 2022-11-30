@@ -6,6 +6,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { GameContext } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import { IGameState } from "../../../types/RuntimeGameState";
+import { MockAction } from "../../__mocks__/MockAction";
 
 import FactionListItem from "./FactionListItem";
 
@@ -18,7 +19,13 @@ interface MockProviderProps {
 const MockProvider = ({ state, children }: MockProviderProps) => (
   <GameContext.Provider value={{
     state,
-    controller: {} as IGameController,
+    controller: {
+      ...MockAction("updateFactionName"),
+      ...MockAction("updateHp"),
+      ...MockAction("updateCunning"),
+      ...MockAction("updateWealth"),
+      ...MockAction("updateForce"),
+    } as unknown as IGameController,
   }}>
     {children}
   </GameContext.Provider>
