@@ -5,6 +5,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import { SxProps } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface ListActionToolbarProps {
   removable: boolean;
@@ -18,12 +19,13 @@ export default function ListActionToolbar({ removable, onAddClick, onRemoveClick
   const fabSx = useMemo<SxProps>(() => ({
     backgroundColor: "secondary.main"
   }), []);
-  
+  const isSmallViewport = useMediaQuery("(max-width:600px)");
+  const buttonSize = isSmallViewport ? "small" : "medium";
   return (
     <>
-      <Box paddingBottom="1rem" display="flex" flexDirection="row" gap={2} data-testid={dtid}>
+      <Box padding={1} display="flex" flexDirection="row" alignItems="center" gap={2} data-testid={dtid}>
         <Fab
-          size="medium"
+          size={buttonSize}
           sx={fabSx}
           onClick={onAddClick}
           data-testid="lat-add"
@@ -31,7 +33,7 @@ export default function ListActionToolbar({ removable, onAddClick, onRemoveClick
           <AddIcon />
         </Fab>
         <Fab
-          size="medium"
+          size={buttonSize}
           sx={fabSx}
           disabled={!removable}
           onClick={onRemoveClick}
