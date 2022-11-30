@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
 import { browserLocalPersistence, getAuth, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -9,6 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { SxProps } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
@@ -27,7 +28,7 @@ export default function LoginDialog() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const open = uiState.loginState === "LOGGING_IN" || uiState.loginState === "LOGIN_WAITING";
 
-  const handleClearForm = () => {
+  const handleClearForm = useCallback(() => {
     if (emailRef.current) {
       emailRef.current.value = "";
     }
@@ -43,14 +44,14 @@ export default function LoginDialog() {
       valid: false,
     });
     setErrorMessage(null);
-  };
+  }, []);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     uiController.setLoginState("LOGGED_OUT");
     handleClearForm();
-  };
+  }, [handleClearForm, uiController]);
 
-  const handleLogin: React.FormEventHandler<HTMLFormElement> = (evt) => {
+  const handleLogin = useCallback<React.FormEventHandler<HTMLFormElement>>((evt) => {
     evt.preventDefault();
     const username = emailRef.current?.value;
     const password = passwordRef.current?.value;
@@ -93,21 +94,21 @@ export default function LoginDialog() {
       }
       uiController.setLoginState("LOGGING_IN");
     });
-  };
+  }, [handleClearForm, uiController]);
 
-  const handleUsernameChange: React.ChangeEventHandler<HTMLInputElement> = (evt) => {
+  const handleUsernameChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
     setUsernameValid({
       hasChanged: true,
       valid: evt.target.value !== "",
     });
-  };
+  }, []);
 
-  const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (evt) => {
+  const handlePasswordChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
     setPasswordValid({
       hasChanged: true,
       valid: evt.target.value !== "",
     });
-  };
+  }, []);
 
   const usernameError = usernameValid.hasChanged && !usernameValid.valid;
   const passwordError = passwordValid.hasChanged && !passwordValid.valid;
@@ -117,6 +118,27 @@ export default function LoginDialog() {
       || !passwordValid.hasChanged
       || !passwordValid.valid;
 
+  const containerSx = useMemo<SxProps>(() => ({
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 2,
+    textAlign: "center",
+  }), []);
+
+  const tfSx = useMemo<SxProps>(() => ({
+    gridColumn: "1 / 3",
+  }), []);
+
+  const handleRegisterClick = useCallback(
+    () => uiController.setLoginState("REGISTERING"), 
+    [uiController]
+  );
+  
+  const handlePasswordResetClick = useCallback(
+    () => uiController.setLoginState("RESETTING_PASSWORD"),
+    [uiController]
+  );
+  
   console.debug("Rendering LoginDialog...");
 
   return (
@@ -124,16 +146,11 @@ export default function LoginDialog() {
       <form onSubmit={handleLogin} data-testid="login-dialog-form">
         <DialogTitle data-testid="login-dialog-title">Login</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ marginBottom: 2 }} >Enter your credentials.</DialogContentText>
-          {errorMessage ? <Typography color="error" sx={{ marginBottom: 2}} data-testid="login-dialog-error-message">{errorMessage}</Typography> : null}
+          <DialogContentText marginBottom={2}>Enter your credentials.</DialogContentText>
+          {errorMessage ? <Typography color="error" marginBottom={2} data-testid="login-dialog-error-message">{errorMessage}</Typography> : null}
           <Container
             disableGutters
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 2,
-              textAlign: "center"
-          }}>
+            sx={containerSx}>
             <TextField
               id="email"
               label="Email"
@@ -142,7 +159,7 @@ export default function LoginDialog() {
               autoComplete="email"
               autoFocus={true}
               inputRef={emailRef}
-              sx={{ gridColumn: "1 / 3" }}
+              sx={tfSx}
               data-testid="login-dialog-email-field"
             />
             <TextField
@@ -153,11 +170,11 @@ export default function LoginDialog() {
               onChange={handlePasswordChange}
               autoComplete="current-password"
               inputRef={passwordRef}
-              sx={{ gridColumn: "1 / 3" }}
+              sx={tfSx}
               data-testid="login-dialog-password-field"
             />
-            <Link onClick={() => uiController.setLoginState("REGISTERING")}>Register</Link>
-            <Link onClick={() => uiController.setLoginState("RESETTING_PASSWORD")}>Reset Password</Link>
+            <Link onClick={handleRegisterClick}>Register</Link>
+            <Link onClick={handlePasswordResetClick}>Reset Password</Link>
           </Container>
         </DialogContent>
         <DialogActions>
