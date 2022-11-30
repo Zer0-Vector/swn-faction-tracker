@@ -32,8 +32,9 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
   const [clicked, setClicked] = useState<boolean>(false);
 
   useEffect(() => {
-    if (editing) {
-      textFieldRef.current?.select();
+    if (editing && textFieldRef.current) {
+      textFieldRef.current.focus();
+      textFieldRef.current.select();
     }
   }, [editing]);
 
