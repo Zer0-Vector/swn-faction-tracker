@@ -64,10 +64,10 @@ describe('GoalText', () => {
     expect(listbox).toBeInTheDocument();
     const options = within(listbox).getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
-    const selection = options[Math.floor(Math.random() * options.length)];
+    const selection = options[0];
     fireEvent.click(selection);
 
-    await waitFor(() => expect(mockSetGoal).toBeCalledTimes(1));
+    await waitFor(() => expect(mockSetGoal).toBeCalledTimes(1), { timeout: 2000 });
     expect(mockSetGoal).toBeCalledWith("test-faction", { type: selection.textContent });
   });
 });
