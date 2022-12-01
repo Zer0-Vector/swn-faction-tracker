@@ -104,7 +104,11 @@ describe('FactionListItem', () => {
   });
 });
 
-describe('FactionListItem behaviors', () => { 
+describe('FactionListItem behaviors', () => {
+  beforeEach(() => {
+    window.history.pushState({}, "", "/");
+  });
+
   it('editing the faction name calls controller', async () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
@@ -123,12 +127,35 @@ describe('FactionListItem behaviors', () => {
     expect(mockUpdateFactionName).toBeCalledWith("test-faction", "blah");
   });
 
+  it('editing a selected name redirect to new name', async () => {
+    mockUpdateFactionName.mockImplementationOnce(() => "blah");
+    renderIt();
+    expect(window.location.pathname).toBe("/");
+    const col = screen.getByTestId("faction-list-item-name-col");
+    const name = within(col).getByTestId("faction-list-item-name");
+    fireEvent.click(name);
+    expect(window.location.pathname).toBe("/factions/test-faction");
+
+    const button = within(name).getByTestId("editable-text-button");
+    fireEvent.click(button);
+
+    const textfield = within(name).getByTestId("editable-text-textfield");
+    // eslint-disable-next-line testing-library/no-node-access
+    const textinput = textfield.querySelector("input") as HTMLInputElement;
+    fireEvent.change(textinput, { target: { value: "blah" } });
+    fireEvent.keyUp(textinput, { key: 'Enter' });
+    await waitFor(() => expect(mockUpdateFactionName).toBeCalledTimes(1));
+    expect(mockUpdateFactionName).toBeCalledWith("test-faction", "blah");
+    expect(window.location.pathname).toBe("/factions/blah");
+  });
+
   it('clicking on the faction row selects it, the deselects it', () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
     const name = within(col).getByTestId("faction-list-item-name");
     fireEvent.click(name);
     expect(window.location.pathname).toBe("/factions/test-faction");
+    // TODO: expect list item to be selected
     fireEvent.click(name);
     expect(window.location.pathname).toBe("/factions");
   });
