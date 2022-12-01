@@ -2,11 +2,12 @@ import React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import * as RouterDom from "react-router-dom";
 
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import FactionInfo from "../../../types/FactionInfo";
+import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionListItem from "./FactionListItem";
@@ -14,11 +15,15 @@ import FactionListItem from "./FactionListItem";
 jest.mock("react-router-dom");
 
 const mockGetFaction = jest.fn();
+const mockUpdateFactionName = jest.fn();
 const mockContext: GameContextType = {
   state: {
     getFaction: mockGetFaction as (f:string)=>FactionInfo,
+    getFactions: () => [] as FactionInfo[],
   } as IGameState,
-  controller: {} as IGameController,
+  controller: {
+    updateFactionName: mockUpdateFactionName as (c:string, v:string)=>Maybe<string>,
+  } as IGameController,
 };
 
 const mockUseNavigate = RouterDom.useNavigate as jest.MockedFn<typeof RouterDom.useNavigate>;
@@ -118,5 +123,44 @@ describe('FactionListItem', () => {
 });
 
 describe('FactionListItem behaviors', () => {
-  it.todo('implement stuff');
+  const mockNav = jest.fn();
+  beforeEach(() => {
+    mockUseNavigate.mockImplementationOnce(() => {
+      return mockNav;
+    });
+    mockUseLocation.mockImplementation(() => {
+      return {
+        pathname: "/factions",
+      } as RouterDom.Location;
+    });
+    mockGetFaction.mockImplementationOnce(() => {
+      return mockFaction;
+    });
+  });
+  
+  it('editing the faction name calls controller', async () => {
+    renderIt();
+    const col = screen.getByTestId("faction-list-item-name-col");
+    const name = within(col).getByTestId("faction-list-item-name");
+    const button = within(name).getByTestId("editable-text-button");
+    fireEvent.click(button);
+
+    const textfield = within(name).getByTestId("editable-text-textfield");
+    // eslint-disable-next-line testing-library/no-node-access
+    const textinput = textfield.querySelector("input") as HTMLInputElement;
+    expect(textinput).toBeInTheDocument();
+    expect(textinput).toHaveValue("Test Faction");
+    fireEvent.change(textinput, { target: { value: "blah" } });
+    fireEvent.keyUp(textinput, { key: 'Enter' });
+    await waitFor(() => expect(mockUpdateFactionName).toBeCalledTimes(1));
+    expect(mockUpdateFactionName).toBeCalledWith("test-faction", "blah");
+  });
+
+  it('clicking on the faction row selects it', () => {
+    renderIt();
+    const col = screen.getByTestId("faction-list-item-name-col");
+    const name = within(col).getByTestId("faction-list-item-name");
+    fireEvent.click(name);
+    expect(mockNav).toBeCalledWith("/factions/test-faction");
+  });
 });
