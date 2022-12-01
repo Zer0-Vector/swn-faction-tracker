@@ -4,12 +4,13 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { TagsList } from "../../../data/Tags";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import { IGameState } from "../../../types/RuntimeGameState";
 import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionDetails from "./FactionDetails";
 
-const MockProvider = ({ children }: { children: React.ReactNode }) => (
+const MockProvider = ({ children }: RequiredChildrenProps) => (
   <GameContext.Provider value={{
     controller: MockActionController,
     state: {

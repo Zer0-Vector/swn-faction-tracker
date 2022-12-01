@@ -9,12 +9,12 @@ import Typography from "@mui/material/Typography";
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import AssetId from "../../../types/AssetId";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 import AssetDetails from "../AssetDetails";
 
-interface AssetSummaryProps {
+interface AssetSummaryProps extends RequiredChildrenProps<string> {
   expanded: boolean;
-  children: string;
 }
 
 const AssetSummaryComponent = ({ expanded, children }: AssetSummaryProps) => {

@@ -9,13 +9,13 @@ import Typography, { TypographyProps } from "@mui/material/Typography";
 
 import { ValidationContext } from "../../../contexts/ValidationContext";
 import { ValidationController } from "../../../controllers/ValidationController";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
 import { ValidationFn } from "../../../types/ValidationFn";
 import { ValidatedTextField } from "../ValidatedTextField";
 
-export interface EditableTextBaseProps extends TestableProps {
-  children: string;
+export interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<string> {
   onUpdate?: (newValue: string) => void;
   validate?: ValidationFn;
 }

@@ -5,12 +5,17 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import AssetList from "./AssetList";
 
-const MockProvider = ({ children, assetList }: { children: React.ReactNode, assetList: PurchasedAsset[] }) => (
+interface MockProviderProps extends RequiredChildrenProps {
+  assetList: PurchasedAsset[];
+}
+
+const MockProvider = ({ children, assetList }: MockProviderProps) => (
   <GameContext.Provider value={{
     controller: {} as IGameController,
     state: {

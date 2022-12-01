@@ -4,6 +4,7 @@ import { Meta, Story } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import LocationInfo from "../../../types/LocationInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
 
@@ -15,8 +16,7 @@ export default {
   component: AddLocationDialog,
 } as Meta<PropsType>;
 
-interface MockProviderProps {
-  children: React.ReactNode;
+interface MockProviderProps extends RequiredChildrenProps {
   locations: LocationInfo[];
 }
 

@@ -4,14 +4,14 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import { IGameState } from "../../../types/RuntimeGameState";
 import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionListItem from "./FactionListItem";
 
 
-interface MockProviderProps {
-  children: React.ReactNode;
+interface MockProviderProps extends RequiredChildrenProps {
   state: IGameState;
 }
 

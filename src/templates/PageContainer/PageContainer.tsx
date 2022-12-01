@@ -16,12 +16,15 @@ import Typography from "@mui/material/Typography";
 import ModeToggleButtons from "../../components/molecules/ModeToggleButtons";
 import UserMenu from "../../components/molecules/UserMenu";
 import { FirebaseApp } from "../../firebase-init";
+import { RequiredChildrenProps } from "../../types/ChildrenProps";
 
 export interface PageContainerProps {
   children?: React.ReactNode;
 }
 
-const GridItem = ({ xs, children }: { xs: GridSize, children: React.ReactNode }) => (
+type GridItemProps = { xs: GridSize } & RequiredChildrenProps;
+
+const GridItem = ({ xs, children }: GridItemProps) => (
   <Grid item
     xs={xs}
     display="flex"

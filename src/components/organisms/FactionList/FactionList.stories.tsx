@@ -5,6 +5,7 @@ import { ComponentMeta, Story } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { TagsList } from "../../../data/Tags";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes } from "../../../types/GoalType";
 import PurchasedAsset from "../../../types/PurchasedAsset";
@@ -13,7 +14,11 @@ import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionList from "./FactionList";
 
-const MockProvider = ({ children, factions }: { children: React.ReactNode, factions: FactionInfo[] }) => (
+interface MockProviderProps extends RequiredChildrenProps {
+  factions: FactionInfo[];
+}
+
+const MockProvider = ({ children, factions }: MockProviderProps) => (
   <GameContext.Provider value={{
     state: {
       getFactions() {

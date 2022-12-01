@@ -15,9 +15,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import EditableText from "../../atoms/EditableText";
 
-const ItemComp = ({ children }: { children: React.ReactNode }) => (
+const ItemComp = ({ children }: RequiredChildrenProps) => (
   <Paper sx={theme => ({
     ...theme.typography.body1,
     px: 1,
@@ -26,7 +27,7 @@ const ItemComp = ({ children }: { children: React.ReactNode }) => (
   </Paper>
 );
 
-const ItemHeaderComp = ({ children }: { children: React.ReactNode }) => (
+const ItemHeaderComp = ({ children }: RequiredChildrenProps) => (
   <Paper sx={theme => ({
     ...theme.typography.body1,
     fontWeight: "bold",

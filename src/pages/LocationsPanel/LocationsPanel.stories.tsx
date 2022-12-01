@@ -6,13 +6,13 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../contexts/GameContext";
 import { IGameController } from "../../controllers/GameController";
+import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import LocationInfo from "../../types/LocationInfo";
 import { IGameState } from "../../types/RuntimeGameState";
 
 import LocationsPanel from "./LocationsPanel";
 
-interface MockProviderProps {
-  children: React.ReactNode;
+interface MockProviderProps extends RequiredChildrenProps {
   state: IGameState;
   controller: IGameController;
 }

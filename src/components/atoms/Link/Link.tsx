@@ -2,10 +2,10 @@ import React from "react";
 
 import MuiLink from "@mui/material/Link";
 
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import TestableProps from "../../../types/TestableProps";
 
-export interface LinkProps extends TestableProps {
-  children: React.ReactNode;
+export interface LinkProps extends TestableProps, RequiredChildrenProps {
   onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
