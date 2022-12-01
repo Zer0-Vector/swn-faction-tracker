@@ -4,9 +4,8 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
 import { IGameState } from "../../../types/RuntimeGameState";
-import { MockAction } from "../../__mocks__/MockAction";
+import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionListItem from "./FactionListItem";
 
@@ -19,13 +18,7 @@ interface MockProviderProps {
 const MockProvider = ({ state, children }: MockProviderProps) => (
   <GameContext.Provider value={{
     state,
-    controller: {
-      ...MockAction("updateFactionName"),
-      ...MockAction("updateHp"),
-      ...MockAction("updateCunning"),
-      ...MockAction("updateWealth"),
-      ...MockAction("updateForce"),
-    } as unknown as IGameController,
+    controller: MockActionController,
   }}>
     {children}
   </GameContext.Provider>

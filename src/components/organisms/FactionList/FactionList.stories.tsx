@@ -4,13 +4,12 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, Story } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
 import { TagsList } from "../../../data/Tags";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes } from "../../../types/GoalType";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 import { IGameState } from "../../../types/RuntimeGameState";
-import { MockAction } from "../../__mocks__/MockAction";
+import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionList from "./FactionList";
 
@@ -43,18 +42,7 @@ const MockProvider = ({ children, factions }: { children: React.ReactNode, facti
         return [] as PurchasedAsset[];
       },
     } as IGameState,
-    controller: {
-      ...MockAction("reorderFactions"),
-      ...MockAction("updateHp"),
-      ...MockAction("updateCunning"),
-      ...MockAction("updateWealth"),
-      ...MockAction("updateForce"),
-      ...MockAction("updateFactionName"),
-      ...MockAction("addAsset"),
-      ...MockAction("setGoal"),
-      ...MockAction("updateHomeworld"),
-      ...MockAction("updateTag"),
-    } as unknown as IGameController,
+    controller: MockActionController,
   }}>
     {children}
   </GameContext.Provider>

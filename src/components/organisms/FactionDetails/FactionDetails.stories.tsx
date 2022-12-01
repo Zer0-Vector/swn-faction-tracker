@@ -3,24 +3,15 @@ import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
 import { TagsList } from "../../../data/Tags";
 import { IGameState } from "../../../types/RuntimeGameState";
-import { MockAction } from "../../__mocks__/MockAction";
+import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionDetails from "./FactionDetails";
 
 const MockProvider = ({ children }: { children: React.ReactNode }) => (
   <GameContext.Provider value={{
-    controller: {
-      ...MockAction("updateHomeworld"),
-      ...MockAction("setGoal"),
-      ...MockAction("updateTag"),
-      ...MockAction("updateForce"),
-      ...MockAction("updateCunning"),
-      ...MockAction("updateWealth"),
-      ...MockAction("updateHp"),
-    } as unknown as IGameController,
+    controller: MockActionController,
     state: {
       getLocations() {
         return [
