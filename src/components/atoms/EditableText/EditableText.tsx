@@ -135,7 +135,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
           autoComplete="off"
           sx={inputSx}
           variant={inputVariant || "standard"}
-          data-testid={"editable-text-textfield"}
+          data-testid="editable-text-textfield"
           size="small"
         />
       </ValidationContext.Provider>
