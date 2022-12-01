@@ -3,9 +3,9 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { MockAction } from "../../components/__mocks__/MockAction";
+import { MockActionController } from "../../components/__mocks__/MockActionController";
 import { GameContext } from "../../contexts/GameContext";
-import { IGameController } from "../../controllers/GameController";
+import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import FactionInfo from "../../types/FactionInfo";
 import PurchasedAsset from "../../types/PurchasedAsset";
 import { IGameState } from "../../types/RuntimeGameState";
@@ -95,23 +95,14 @@ const getMockedState = (factions: FactionInfo[] = [], assetMap: { [id: string]: 
   },
 } as IGameState);
 
-const MockProvider = ({ children, state }: { children: React.ReactNode, state: IGameState }) => (
+interface MockProviderProps extends RequiredChildrenProps {
+  state: IGameState;
+}
+
+const MockProvider = ({ children, state }: MockProviderProps) => (
   <GameContext.Provider value={{
     state,
-    controller: {
-      ...MockAction("reorderFactions"),
-      ...MockAction("updateFactionName"),
-      ...MockAction("addFaction"),
-      ...MockAction("removeFaction"),
-      ...MockAction("addAsset"),
-      ...MockAction("updateHp"),
-      ...MockAction("updateForce"),
-      ...MockAction("setGoal"),
-      ...MockAction("updateCunning"),
-      ...MockAction("updateWealth"),
-      ...MockAction("updateHomeworld"),
-      ...MockAction("removeAsset"),
-    } as unknown as IGameController,
+    controller: MockActionController,
   }}>
     {children}
   </GameContext.Provider>

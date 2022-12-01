@@ -8,7 +8,9 @@ import Typography from "@mui/material/Typography";
 
 import ASSETS from "../../../data/Assets";
 import { AssetAttackResult } from "../../../types/AssetInfo";
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import PurchasedAsset from "../../../types/PurchasedAsset";
+import TestableProps from "../../../types/TestableProps";
 import TextUtils from "../../../utils/TextUtils";
 
 interface AssetDetailsProps {
@@ -23,13 +25,11 @@ const Item = React.memo(styled(Paper)(() => ({
   alignItems: "center",
 })));
 
-interface LabeledItemProps {
+interface LabeledItemProps extends RequiredChildrenProps, TestableProps{
   label: string;
-  children: React.ReactNode;
   sx?: SxProps<Theme>;
   xsLabel?: GridSize;
   xsContent?: GridSize;
-  ["data-testid"]?: string;
 }
 
 const LabeledItemComponent = ({ label, children, sx, xsLabel, xsContent, "data-testid": dtid }: LabeledItemProps) => {

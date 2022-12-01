@@ -13,8 +13,7 @@ import FactionInfo from "../../../types/FactionInfo";
 import AssetList from "../AssetList";
 import AssetListActionsToolbar from "../AssetListActionsToolbar";
 import FactionDetails from "../FactionDetails";
-
-import FactionListItem from "./FactionListItem";
+import FactionListItem from "../FactionListItem";
 
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);

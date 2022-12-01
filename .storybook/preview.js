@@ -1,3 +1,6 @@
+import { ThemeProvider } from "@mui/material";
+import { THEME } from "../src/style/Theme"
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -7,3 +10,11 @@ export const parameters = {
     },
   },
 }
+
+export const decorators = [
+  Story => (
+    <ThemeProvider theme={THEME}>
+      <Story />
+    </ThemeProvider>
+  ),
+];

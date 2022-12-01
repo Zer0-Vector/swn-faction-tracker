@@ -3,6 +3,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautif
 import { useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { styled } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -17,31 +18,18 @@ import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import EditableText from "../../atoms/EditableText";
 
-const ItemComp = ({ children }: { children: React.ReactNode }) => (
-  <Paper sx={theme => ({
-    ...theme.typography.body1,
-    px: 1,
-  })}>
-    {children}
-  </Paper>
-);
+const Item = React.memo(styled(Paper)(({ theme }) => ({
+  ...theme.typography.body1,
+  px: theme.spacing(1),
+})));
 
-const ItemHeaderComp = ({ children }: { children: React.ReactNode }) => (
-  <Paper sx={theme => ({
-    ...theme.typography.body1,
-    fontWeight: "bold",
-    textAlign: "right",
-    px: 1,
-    whiteSpace: "nowrap",
-    overflow: "clip",
-    textOverflow: "ellipsis",
-  })}>
-    {children}
-  </Paper>
-);
-
-const Item = React.memo(ItemComp);
-const ItemHeader = React.memo(ItemHeaderComp);
+const ItemHeader = React.memo(styled(Item)(() => ({
+  fontWeight: "bold",
+  textAlign: "right",
+  whiteSpace: "nowrap",
+  overflow: "clip",
+  textOverflow: "ellipsis",
+})));
 
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);

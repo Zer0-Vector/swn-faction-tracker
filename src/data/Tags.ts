@@ -1,8 +1,33 @@
 import TagInfo from "../types/TagInfo";
 
-interface TagsMap {
-  [key: string]: TagInfo;
-}
+export const TagsList = [
+  "Colonists",
+  "Deep Rooted",
+  "Eugenics Cult",
+  "Exchange Consulate",
+  "Fanatical",
+  "Imperialists",
+  "Machiavellian",
+  "Mercenary Group",
+  "Perimeter Agency",
+  "Pirates",
+  "Planetary Government",
+  "Plutocratic",
+  "Preceptor Archive",
+  "Psychic Academy",
+  "Savage",
+  "Scavengers",
+  "Secretive",
+  "Technical Expertise",
+  "Theocratic",
+  "Warlike",
+] as const;
+
+export type Tag = typeof TagsList[number];
+
+type TagsMap = {
+  [K in Tag]: TagInfo;
+};
 
 export const TAGS: TagsMap = {
   "Colonists": {

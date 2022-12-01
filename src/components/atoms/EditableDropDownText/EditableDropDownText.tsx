@@ -10,11 +10,11 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Typography, { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 import { OverridableStringUnion } from "@mui/types";
 
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import Nullable from "../../../types/Nullable";
 import TestableProps from "../../../types/TestableProps";
 
-export interface EditableDropDownTextBaseProps {
-  children: string;
+export interface EditableDropDownTextBaseProps extends RequiredChildrenProps<string> {
   onUpdate: (newValue: string) => void;
   textVariant?: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
   inputSx?: SxProps<Theme>;

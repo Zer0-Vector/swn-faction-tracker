@@ -7,12 +7,14 @@ import Fab from "@mui/material/Fab";
 import { SxProps } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-interface ListActionToolbarProps {
+import { RequiredChildrenProps } from "../../../types/ChildrenProps";
+import TestableProps from "../../../types/TestableProps";
+
+interface ListActionToolbarProps 
+  extends RequiredChildrenProps<React.ReactElement | React.ReactElement[]>, TestableProps {
   removable: boolean;
   onAddClick: React.MouseEventHandler<HTMLButtonElement>;
   onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
-  children: React.ReactElement | React.ReactElement[];
-  ["data-testid"]?: string;
 }
 
 export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children, "data-testid": dtid }: ListActionToolbarProps) {
