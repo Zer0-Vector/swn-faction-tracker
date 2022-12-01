@@ -1,6 +1,6 @@
 import React from "react";
 
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
@@ -50,7 +50,7 @@ describe('GoalText', () => {
     expect(text).toHaveTextContent(goalType);
   });
 
-  it('calls controller when goal is updated', () => {
+  it('calls controller when goal is updated', async () => {
     const goalType: GoalType = "Commercial Expansion";
     renderIt(goalType);
     const outer = screen.getByTestId("goal-text");
@@ -67,7 +67,7 @@ describe('GoalText', () => {
     const selection = options[Math.floor(Math.random() * options.length)];
     fireEvent.click(selection);
 
-    expect(mockSetGoal).toBeCalledTimes(1);
+    await waitFor(() => expect(mockSetGoal).toBeCalledTimes(1));
     expect(mockSetGoal).toBeCalledWith("test-faction", { type: selection.textContent });
   });
 });
