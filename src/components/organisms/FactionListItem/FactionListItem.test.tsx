@@ -1,6 +1,6 @@
 import React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
-import * as RouterDom from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
@@ -11,8 +11,6 @@ import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionListItem from "./FactionListItem";
-
-jest.mock("react-router-dom");
 
 const mockGetFaction = jest.fn();
 const mockUpdateFactionName = jest.fn();
@@ -25,9 +23,6 @@ const mockContext: GameContextType = {
     updateFactionName: mockUpdateFactionName as (c:string, v:string)=>Maybe<string>,
   } as IGameController,
 };
-
-const mockUseNavigate = RouterDom.useNavigate as jest.MockedFn<typeof RouterDom.useNavigate>;
-const mockUseLocation = RouterDom.useLocation as jest.MockedFn<typeof RouterDom.useLocation>;
 
 const mockFaction: FactionInfo = {
   id: "test-faction",
@@ -50,25 +45,12 @@ function renderIt() {
         faction={mockFaction}
         isDragging={false}
       />
-    </GameContext.Provider>
+    </GameContext.Provider>,
+    { wrapper: BrowserRouter }
   );
 }
 
 describe('FactionListItem', () => {
-  beforeEach(() => {
-    mockUseNavigate.mockImplementationOnce(() => {
-      return () => { /* NOP */ };
-    });
-    mockUseLocation.mockImplementation(() => {
-      return {
-        pathname: "/factions",
-      } as RouterDom.Location;
-    });
-    mockGetFaction.mockImplementationOnce(() => {
-      return mockFaction;
-    });
-  });
-
   it('renders item container', () => {
     renderIt();
     const listItem = screen.getByTestId("faction-list-item");
@@ -122,22 +104,7 @@ describe('FactionListItem', () => {
   });
 });
 
-describe('FactionListItem behaviors', () => {
-  const mockNav = jest.fn();
-  beforeEach(() => {
-    mockUseNavigate.mockImplementationOnce(() => {
-      return mockNav;
-    });
-    mockUseLocation.mockImplementation(() => {
-      return {
-        pathname: "/factions",
-      } as RouterDom.Location;
-    });
-    mockGetFaction.mockImplementationOnce(() => {
-      return mockFaction;
-    });
-  });
-  
+describe('FactionListItem behaviors', () => { 
   it('editing the faction name calls controller', async () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
@@ -156,11 +123,13 @@ describe('FactionListItem behaviors', () => {
     expect(mockUpdateFactionName).toBeCalledWith("test-faction", "blah");
   });
 
-  it('clicking on the faction row selects it', () => {
+  it('clicking on the faction row selects it, the deselects it', () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
     const name = within(col).getByTestId("faction-list-item-name");
     fireEvent.click(name);
-    expect(mockNav).toBeCalledWith("/factions/test-faction");
+    expect(window.location.pathname).toBe("/factions/test-faction");
+    fireEvent.click(name);
+    expect(window.location.pathname).toBe("/factions");
   });
 });
