@@ -6,7 +6,7 @@ import { IUiStateController } from "../../controllers/UiStateController";
 import { FirebaseApp } from "../../firebase-init";
 import { ProvidedAuth } from "../../types/ProvidedAuth";
 
-export function useProvideAuth(controller: IUiStateController): ProvidedAuth {
+export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   const [user, setUser] = useState<User>();
 
   const AUTH = getAuth(FirebaseApp);
