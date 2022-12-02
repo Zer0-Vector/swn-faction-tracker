@@ -1,14 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { browserLocalPersistence, getAuth, User } from "firebase/auth";
 import * as fauth from "firebase/auth";
 
-import { UiStateContext } from "../contexts/UiStateContext";
-import { FirebaseApp } from "../firebase-init";
-import { ProvidedAuth } from "../types/ProvidedAuth";
+import { IUiStateController } from "../../controllers/UiStateController";
+import { FirebaseApp } from "../../firebase-init";
+import { ProvidedAuth } from "../../types/ProvidedAuth";
 
-export function useProvideAuth(): ProvidedAuth {
+export function useProvideAuth(controller: IUiStateController): ProvidedAuth {
   const [user, setUser] = useState<User>();
-  const { controller } = useContext(UiStateContext);
 
   const AUTH = getAuth(FirebaseApp);
 
