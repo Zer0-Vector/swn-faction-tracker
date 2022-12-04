@@ -12,5 +12,9 @@ module.exports = {
   "framework": "@storybook/react",
   "core": {
     "builder": "@storybook/builder-webpack5"
-  }
+  },
+  env: config => ({
+    ...config,
+    REACT_APP_FIREBASE_CONFIG: "{\"apiKey\": \"storybook\", \"projectId\": \"swn-faction-tracker-test\", \"messagingSenderId\": \"123\", \"appId\": \"test\"}"
+  }),
 }
