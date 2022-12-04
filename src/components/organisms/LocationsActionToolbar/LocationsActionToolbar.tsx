@@ -55,7 +55,7 @@ export default function LocationsActionToolbar() {
         onCreate={handleCreate}
       />
       <ConfirmDialog
-        id="remove-location"
+        data-testid="remove-location-confirmation"
         open={removeDialogOpen}
         onCancel={handleCloseRemoveDialog}
         onConfirm={handleRemove}
