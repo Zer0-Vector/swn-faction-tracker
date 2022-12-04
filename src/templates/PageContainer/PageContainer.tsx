@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { getAuth } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -15,7 +14,7 @@ import Typography from "@mui/material/Typography";
 
 import ModeToggleButtons from "../../components/molecules/ModeToggleButtons";
 import UserMenu from "../../components/molecules/UserMenu";
-import { FirebaseApp } from "../../firebase-init";
+import { useAuth } from "../../hooks/useAuth";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
 
 export interface PageContainerProps {
@@ -24,7 +23,7 @@ export interface PageContainerProps {
 
 type GridItemProps = { xs: GridSize } & RequiredChildrenProps;
 
-const GridItem = ({ xs, children }: GridItemProps) => (
+const GridItemComp = ({ xs, children }: GridItemProps) => (
   <Grid item
     xs={xs}
     display="flex"
@@ -35,8 +34,11 @@ const GridItem = ({ xs, children }: GridItemProps) => (
   </Grid>
 );
 
+const GridItem = React.memo(GridItemComp);
+
 export default function PageContainer({ children }: PageContainerProps) {
   const location = useLocation();
+  const { currentUser } = useAuth();
 
   const tab = useMemo(
     () => location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS", 
@@ -110,7 +112,7 @@ export default function PageContainer({ children }: PageContainerProps) {
                 <ModeToggleButtons />
               </GridItem>
               <GridItem xs={1}>
-                <UserMenu user={getAuth(FirebaseApp).currentUser} />
+                <UserMenu user={currentUser} />
               </GridItem>
             </Grid>
           </Toolbar>

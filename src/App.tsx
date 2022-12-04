@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo } from 'react';
-import { getAuth, User } from "firebase/auth";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
+import { AuthContext } from './contexts/AuthContext';
 import { GameContext } from './contexts/GameContext';
 import { UiStateContext } from './contexts/UiStateContext';
 import { GameController, IGameController } from './controllers/GameController';
 import { IUiStateController, UiStateController } from './controllers/UiStateController';
+import { useAuthProvider } from './hooks/useAuthProvider';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import LocationsPanel from './pages/LocationsPanel';
 import PrimaryPanel from './pages/PrimaryPanel';
@@ -44,18 +45,10 @@ function App() {
   const uiController: IUiStateController = useMemo(() => new UiStateController(setUiState), []);
 
   useEffect(() => {
-    console.debug("Registering onAuthStateChanged");
-    getAuth().onAuthStateChanged((user: User | null) => {
-      console.debug("Checking login status: ", user);
-      if (user) {
-        uiController.setLoginState("LOGGED_IN");
-      }
-    });
-  }, [uiController]);
-
-  useEffect(() => {
     console.debug("LoginState: ", uiState.loginState);
   }, [uiState.loginState]);
+
+  const auth = useAuthProvider(uiController);
 
   console.debug("Rendering App...");
 
@@ -63,30 +56,32 @@ function App() {
     <ThemeProvider theme={THEME}>
       <GameContext.Provider value={{state: gameState, controller: gameController}}>
         <UiStateContext.Provider value={{ state: uiState, controller: uiController }}>
-          <Router>
-            <PageContainer>
-              <Routes>
-                {/* UGLY is there another way???? */}
-                <Route path="/">
-                  <Route index element={<PrimaryPanel />} />
-                  <Route path="factions">
+          <AuthContext.Provider value={auth}>
+            <Router>
+              <PageContainer>
+                <Routes>
+                  {/* UGLY is there another way???? */}
+                  <Route path="/">
                     <Route index element={<PrimaryPanel />} />
-                    <Route path=":factionId">
+                    <Route path="factions">
                       <Route index element={<PrimaryPanel />} />
-                      <Route path="assets">
+                      <Route path=":factionId">
                         <Route index element={<PrimaryPanel />} />
-                        <Route path=":assetId" element={<PrimaryPanel />} />
+                        <Route path="assets">
+                          <Route index element={<PrimaryPanel />} />
+                          <Route path=":assetId" element={<PrimaryPanel />} />
+                        </Route>
                       </Route>
                     </Route>
+                    <Route path="locations">
+                      <Route index element={<LocationsPanel />} />
+                      <Route path=":locationId" element={<LocationsPanel />} />
+                    </Route>
                   </Route>
-                  <Route path="locations">
-                    <Route index element={<LocationsPanel />} />
-                    <Route path=":locationId" element={<LocationsPanel />} />
-                  </Route>
-                </Route>
-              </Routes>
-            </PageContainer>
-          </Router>
+                </Routes>
+              </PageContainer>
+            </Router>
+          </AuthContext.Provider>
         </UiStateContext.Provider>
       </GameContext.Provider>
     </ThemeProvider>
