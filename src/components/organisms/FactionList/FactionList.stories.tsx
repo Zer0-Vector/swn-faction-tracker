@@ -74,7 +74,6 @@ export default {
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type AdditionalArgs = { numberOfFactions: number };
-const randomStat = (max = 9) => Math.floor(Math.random() * max) + 1;
 
 const Template: Story<ComponentProps<typeof FactionList> & AdditionalArgs> = (args) => (
   <MockProvider factions={
@@ -82,19 +81,19 @@ const Template: Story<ComponentProps<typeof FactionList> & AdditionalArgs> = (ar
       id: `faction-${n}`,
       name: `Faction ${n}`,
       stats: {
-        cunning: randomStat(),
-        force: randomStat(),
-        hp: randomStat(10) - 1,
-        maxHp: randomStat(11) + 10,
-        wealth: randomStat(),
+        cunning: n % 3,
+        force: n % 4,
+        hp: n % 10,
+        maxHp: n % 5 + 1,
+        wealth: n % 5,
         xp: 0,
       },
       goal: {
-        type: GoalTypes[randomStat(GoalTypes.length)],
-        tally: randomStat(5),
-        target: randomStat(5) + 5,
+        type: GoalTypes[n % GoalTypes.length],
+        tally: n % 6,
+        target: n % 3,
       },
-      tag: TagsList[randomStat(TagsList.length)],
+      tag: TagsList[n % TagsList.length],
     } as FactionInfo))
   }>
     <FactionList />
