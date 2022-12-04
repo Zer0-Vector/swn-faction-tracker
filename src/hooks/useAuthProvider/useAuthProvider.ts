@@ -4,10 +4,11 @@ import * as fauth from "firebase/auth";
 
 import { IUiStateController } from "../../controllers/UiStateController";
 import { FirebaseApp } from "../../firebase-init";
+import Nullable from "../../types/Nullable";
 import { ProvidedAuth } from "../../types/ProvidedAuth";
 
 export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<Nullable<User>>(null);
 
   const AUTH = getAuth(FirebaseApp);
 
@@ -23,15 +24,13 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
       if (user) {
         setUser(user);
         controller.setLoginState("LOGGED_IN");
-      } else {
-        setUser(undefined);
       }
     });
     return () => unsub();
   }, [AUTH, controller]);
 
   return {
-    user,
+    currentUser: user,
     
     login: async (email: string, password: string) => {
       const { user } = await fauth.signInWithEmailAndPassword(AUTH, email, password);
@@ -41,7 +40,7 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
     
     logout: async () => {
       await fauth.signOut(AUTH);
-      setUser(undefined);
+      setUser(null);
     },
 
     signup: async (email: string, password: string) => {
