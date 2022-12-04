@@ -54,12 +54,7 @@ describe('VerificationEmailErrorDialog', () => {
     const mockLogout = jest.fn() as jest.MockedFn<()=>Promise<void>>;
     const mockAuth = {
       currentUser: {} as User,
-      logout: mockLogout,
-      confirmPasswordReset: jest.fn(),
-      login: jest.fn(),
-      sendEmailVerification: jest.fn(),
-      sendPasswordResetEmail: jest.fn(),
-      signup: jest.fn(),
+      logout: mockLogout as ()=>Promise<void>,
     } as ProvidedAuth;
     mockLogout.mockResolvedValueOnce();
 

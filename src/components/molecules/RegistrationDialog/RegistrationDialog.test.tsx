@@ -21,15 +21,10 @@ const mockContext = {
 
 const mockSignUp = jest.fn();
 const mockSendEmailVerification = jest.fn();
-const mockAuth: ProvidedAuth = {
-  signup: mockSignUp,
-  sendEmailVerification: mockSendEmailVerification,
-  login: jest.fn(),
-  confirmPasswordReset: jest.fn(),
-  currentUser: null,
-  logout: jest.fn(),
-  sendPasswordResetEmail: jest.fn(),
-};
+const mockAuth = {
+  signup: mockSignUp as (e: string, p: string)=>Promise<User>,
+  sendEmailVerification: mockSendEmailVerification as ()=>Promise<void>,
+} as ProvidedAuth;
 
 function renderOpened() {
   render(

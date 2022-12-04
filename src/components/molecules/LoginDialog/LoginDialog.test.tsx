@@ -22,15 +22,9 @@ const mockContext = {
 } as UiStateContextType;
 
 const mockLogin = jest.fn();
-const mockAuth: ProvidedAuth = {
-  confirmPasswordReset: jest.fn(),
-  currentUser: null,
-  login: mockLogin,
-  logout: jest.fn(),
-  sendEmailVerification: jest.fn(),
-  sendPasswordResetEmail: jest.fn(),
-  signup: jest.fn(),
-};
+const mockAuth = {
+  login: mockLogin as (e: string, p: string)=>Promise<User>,
+} as ProvidedAuth;
 
 function renderOpened() {
   render(
