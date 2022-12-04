@@ -1,12 +1,12 @@
 import { User } from "firebase/auth";
 
-import { Maybe } from "./Maybe";
+import Nullable from "./Nullable";
 
 export interface ProvidedAuth {
   /**
    * The current logged in User.
    */
-  user: Maybe<User>;
+  currentUser: Nullable<User>;
 
   /**
    * User Login
