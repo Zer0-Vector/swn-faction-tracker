@@ -45,7 +45,7 @@ export default function FactionListActionToolbar() {
         onCreate={handleAddDialogCreate}
       />
       <ConfirmDialog
-        id="delete-faction"
+        data-testid="delete-faction-confirmation"
         title="Confirm Delete Faction"
         message={`Delete faction "${selectedFaction?.name}"`}
         buttonText="Remove"

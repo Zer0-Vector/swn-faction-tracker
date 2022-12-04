@@ -1,36 +1,35 @@
-import React, { useCallback, useContext, useMemo } from "react";
-import { FirebaseError } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import React, { useCallback, useContext } from "react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { FirebaseApp } from "../../../firebase-init";
+import { useAuth } from "../../../hooks/useAuth";
 import ConfirmDialog from "../ConfirmDialog";
 
 const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
-  const handleLogout = useCallback(() => {
+  const { logout } = useAuth();
+
+  const handleLogout = useCallback(async () => {
     uiController.setLoginState("LOGOUT_WAITING");
-    getAuth(FirebaseApp).signOut()
-      .then(() => {
-        uiController.setLoginState("LOGGED_OUT");
-      })
-      .catch((reason: FirebaseError) => {
-        console.error("Logout failed: ", reason);
-        uiController.setLoginState("LOGGED_IN");
-      });
-  }, [uiController]);
+    try {
+      await logout();
+      uiController.setLoginState("LOGGED_OUT");
+    } catch (reason) {
+      console.error("Logout failed: ", reason);
+      uiController.setLoginState("LOGGED_IN");
+    }
+  }, [logout, uiController]);
 
   const handleCancel = useCallback(() => {
     uiController.setLoginState("LOGGED_IN");
   }, [uiController]);
 
-  const open = useMemo(() => uiState.loginState === "LOGGING_OUT", [uiState.loginState]);
+  const open = uiState.loginState === "LOGGING_OUT";
 
   console.log("Rendering LogoutConfirmDialog...");
 
   return (
     <ConfirmDialog
-      id="logout"
+      data-testid="logout-confirmation"
       title="Confirm Logout"
       message="Logout?"
       buttonText="Logout"

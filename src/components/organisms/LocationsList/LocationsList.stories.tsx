@@ -9,7 +9,6 @@ import LocationInfo from "../../../types/LocationInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
 import { MockActionController } from "../../__mocks__/MockActionController";
-import { RandomInt } from "../../__mocks__/RandomNumber";
 
 import LocationsList from "./LocationsList";
 
@@ -18,9 +17,9 @@ const MockLocations: (n: number)=>LocationInfo[] = numLocations =>
   .map(n => ({
     id: `test-location-${n}`,
     name: `Test Location ${n}`,
-    tl: RandomInt(5),
-    x: RandomInt(10),
-    y: RandomInt(8),
+    tl: n % 6,
+    x: n % 10,
+    y: n % 8,
   }));
 
 // eslint-disable-next-line react/display-name

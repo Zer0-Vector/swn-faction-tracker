@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -13,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { FirebaseApp } from "../../../firebase-init";
+import { useAuth } from "../../../hooks/useAuth";
 import Nullable from "../../../types/Nullable";
 import { ValidationInfo } from "../../../types/ValidationInfo";
 
@@ -32,6 +31,7 @@ const RegistrationDialog = () => {
   const passwordRef = useRef<Nullable<HTMLInputElement>>(null);
   const emailRef = useRef<Nullable<HTMLInputElement>>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { signup, sendEmailVerification } = useAuth();
 
   const open = uiState.loginState === "REGISTERING"
     || uiState.loginState === "REGISTER_WAITING";
@@ -54,7 +54,7 @@ const RegistrationDialog = () => {
     setErrorMessage(null);
   }, []);
 
-  const handleRegister = useCallback((evt: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = useCallback(async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setErrorMessage(null);
     if (!emailRef.current || !passwordRef.current || submitDisabled) {
@@ -63,28 +63,34 @@ const RegistrationDialog = () => {
     }
 
     uiController.setLoginState("REGISTER_WAITING");
-    createUserWithEmailAndPassword(getAuth(FirebaseApp), emailRef.current.value, passwordRef.current.value)
-      .then(cred => {
-        return sendEmailVerification(cred.user)
-          .then(() => {
-            console.info("Registered and verification sent.");
-            uiController.setLoginState("REGISTERED"); // show email verification instructions
-            handleClearForm();
-          }, (reason: FirebaseError) => {
-            console.error("Could not send email verification: ", reason);
-            uiController.setLoginState("VERIFICATION_ERROR"); //  show error dialog with resend link
-          });
-      }, (reason: FirebaseError) => {
-        console.error("Could not register: ", reason);
-        setErrorMessage(`Error registering (${reason.code}).`);
-        uiController.setLoginState("REGISTERING");
-      });
-  }, [handleClearForm, submitDisabled, uiController]);
+    try {
+      await signup(emailRef.current.value, passwordRef.current.value);
+      console.info("Register success.");
+    } catch (reason) {
+      console.error("Could not register: ", reason);
+      if (reason instanceof FirebaseError) {
+        setErrorMessage(`Error registering (${reason.code}). ${reason.message}`);
+      } else {
+        setErrorMessage(`Error registering (${reason})`);
+      }
+      uiController.setLoginState("REGISTERING");
+      return;
+    }
+    
+    try {
+      await sendEmailVerification();
+      console.info("Email verification sent.");
+      uiController.setLoginState("REGISTERED"); // show email verification instructions
+      handleClearForm();
+    } catch (reason) {
+      console.error("Could not send email verification: ", reason);
+      uiController.setLoginState("VERIFICATION_ERROR"); //  show error dialog with resend link
+    }
+  }, [handleClearForm, sendEmailVerification, signup, submitDisabled, uiController]);
 
   const handleCancel = useCallback(() => {
     uiController.setLoginState("LOGGING_IN");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uiController]);
 
   const getChangeHandler = (setter: React.Dispatch<React.SetStateAction<ValidationInfo>>) => (
     (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,9 +101,9 @@ const RegistrationDialog = () => {
     }
   );
 
-  const isValid = (info: ValidationInfo) => {
+  const isValid = useCallback((info: ValidationInfo) => {
     return !info.hasChanged || info.valid;
-  };
+  }, []);
 
   useEffect(() => {
     setMatchingValid(!(passwordValid.hasChanged && confirmValid.hasChanged) || (confirmRef.current !== null && passwordRef.current !== null && confirmRef.current.value === passwordRef.current.value));

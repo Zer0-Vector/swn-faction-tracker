@@ -1,23 +1,14 @@
 import React from "react";
-import { setPersistence, signInWithEmailAndPassword, User, UserCredential } from "firebase/auth";
+import { User } from "firebase/auth";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
+import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
 import LoginState from "../../../types/LoginState";
+import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 import LoginDialog from "../LoginDialog";
-
-jest.mock("firebase/app");
-jest.mock("firebase/analytics");
-jest.mock("firebase/auth");
-
-const mockSetPersistence = setPersistence as jest.MockedFn<typeof setPersistence>;
-const mockSignIn = signInWithEmailAndPassword as jest.MockedFn<typeof signInWithEmailAndPassword>;
-
-//   getAuth: () => ({} as FBAuth.Auth),
-//   signInWithEmailAndPassword: () => Promise.resolve({ user: {} as FBAuth.User } as FBAuth.UserCredential),
-// TODO define mockSignIn so it can be change to fail login
 
 const mockContext = {
   state: {
@@ -30,19 +21,22 @@ const mockContext = {
   },
 } as UiStateContextType;
 
+const mockLogin = jest.fn();
+const mockAuth = {
+  login: mockLogin as (e: string, p: string)=>Promise<User>,
+} as ProvidedAuth;
+
 function renderOpened() {
   render(
-    <UiStateContext.Provider value={mockContext}>
-      <LoginDialog />
-    </UiStateContext.Provider>
+    <AuthContext.Provider value={mockAuth}>
+      <UiStateContext.Provider value={mockContext}>
+        <LoginDialog />
+      </UiStateContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
 describe('default LoginDialog', () => {
-  beforeEach(() => {
-    mockSetPersistence.mockImplementationOnce(() => Promise.resolve());
-  });
-
   it('displays nothing when not open', () => {
     render(
       <UiStateContext.Provider value={
@@ -115,7 +109,7 @@ describe('default LoginDialog', () => {
   });
 
   it('after login click with verified credentails, LoginState=LOGGED_IN', async () => {
-    mockSignIn.mockImplementationOnce(() => Promise.resolve({ user: { emailVerified: true } as User } as UserCredential));
+    mockLogin.mockImplementationOnce(() => Promise.resolve({ emailVerified: true } as User));
     renderOpened();
     const emailField = screen.getByLabelText("Email") as HTMLInputElement;
     const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
@@ -125,13 +119,13 @@ describe('default LoginDialog', () => {
     fireEvent.input(passwordField, { target: { value: "123" } });
     fireEvent.click(loginButton);
 
-    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
+    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_IN");
   });
 
   it('after login with unverified credentials, LoginState=NEEDS_VERIFICATION', async () => {
-    mockSignIn.mockImplementationOnce(() => Promise.resolve({ user: { emailVerified: false } as User } as UserCredential));
+    mockLogin.mockImplementationOnce(() => Promise.resolve({ emailVerified: false } as User));
     renderOpened();
     const emailField = screen.getByLabelText("Email") as HTMLInputElement;
     const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
@@ -147,7 +141,7 @@ describe('default LoginDialog', () => {
   });
 
   it('after failed login, LoginState=LOGGING_IN with error message', async () => {
-    mockSignIn.mockImplementationOnce(() => Promise.reject({ code: "testing" }));
+    mockLogin.mockImplementationOnce(() => Promise.reject({ code: "testing" }));
     renderOpened();
     const emailField = screen.getByLabelText("Email") as HTMLInputElement;
     const passwordField = screen.getByLabelText("Password") as HTMLInputElement;

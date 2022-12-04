@@ -1,18 +1,15 @@
 import React from "react";
-import { Auth, getAuth, signOut } from "firebase/auth";
+import { User } from "firebase/auth";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
+import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import LoginState, { LoginStates } from "../../../types/LoginState";
+import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
-
-jest.mock("firebase/auth");
-
-const mockGetAuth = getAuth as jest.MockedFn<typeof getAuth>;
-const mockSignOut = signOut as jest.MockedFn<typeof signOut>;
 
 describe('VerificationEmailErrorDialog', () => {
   it.each(
@@ -45,9 +42,7 @@ describe('VerificationEmailErrorDialog', () => {
     expect(screen.getByTestId("verification-error-dialog")).toBeInTheDocument();
   });
   
-  it.each(
-    [[undefined], [{}]]
-  )('sets LoginState to LOGGED_OUT after close (w/ user=%p)', async (mockUser) => {
+  it('sets LoginState to LOGGED_OUT after close (w/ user={})', async () => {
     const mockContext = {
       state: {
         loginState: "VERIFICATION_ERROR",
@@ -56,18 +51,19 @@ describe('VerificationEmailErrorDialog', () => {
         setLoginState: jest.fn() as (state: LoginState)=>void,
       } as UiStateController,
     };
-
-    mockGetAuth.mockImplementationOnce(() => (
-      {
-        currentUser: mockUser,
-      } as Auth
-    ));
-    mockSignOut.mockImplementationOnce(() => Promise.resolve());
+    const mockLogout = jest.fn() as jest.MockedFn<()=>Promise<void>>;
+    const mockAuth = {
+      currentUser: {} as User,
+      logout: mockLogout as ()=>Promise<void>,
+    } as ProvidedAuth;
+    mockLogout.mockResolvedValueOnce();
 
     render(
-      <UiStateContext.Provider value={mockContext}>
-        <VerificationEmailErrorDialog />
-      </UiStateContext.Provider>
+      <AuthContext.Provider value={mockAuth}>
+        <UiStateContext.Provider value={mockContext}>
+          <VerificationEmailErrorDialog />
+        </UiStateContext.Provider>
+      </AuthContext.Provider>
     );
     const dialog = screen.getByTestId("verification-error-dialog");
     const button = within(dialog).getByTestId("message-dialog-close-button");

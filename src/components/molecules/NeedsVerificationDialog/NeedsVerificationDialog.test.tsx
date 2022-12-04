@@ -1,21 +1,15 @@
 import React from "react";
-import { Auth, getAuth, sendEmailVerification, signOut, User } from "firebase/auth";
+import { User } from "firebase/auth";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
+import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import LoginState, { LoginStates } from "../../../types/LoginState";
+import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 import NeedsVerificationDialog from "../NeedsVerificationDialog";
-
-jest.mock("firebase/app");
-jest.mock("firebase/analytics");
-jest.mock("firebase/auth");
-
-const mockGetAuth = getAuth as jest.MockedFn<typeof getAuth>;
-const mockSignOut = signOut as jest.MockedFn<typeof signOut>;
-const mockSendEmailVerification = sendEmailVerification as jest.MockedFn<typeof sendEmailVerification>;
 
 const mockContext = {
   state: {
@@ -27,15 +21,29 @@ const mockContext = {
     }) as (state: LoginState)=>void,
   },
 } as UiStateContextType;
+
+const mockSendEmailVerification = jest.fn();
+const mockLogout = jest.fn();
+const mockAuth = {
+  logout: mockLogout as ()=>Promise<void>,
+  sendEmailVerification: mockSendEmailVerification as ()=>Promise<void>,
+} as ProvidedAuth;
+
 function renderOpened() {
   render(
-    <UiStateContext.Provider value={mockContext}>
-      <NeedsVerificationDialog />
-    </UiStateContext.Provider>
+    <AuthContext.Provider value={mockAuth}>
+      <UiStateContext.Provider value={mockContext}>
+        <NeedsVerificationDialog />
+      </UiStateContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
 describe('<NeedsVerificationDialog />', () => {
+  beforeEach(() => {
+    mockAuth.currentUser = null;
+  });
+
   it.each(
     [...LoginStates].filter(s => s !== "REGISTERED" && s !== "NEEDS_VERIFICATION")
   )('is not rendered when LoginState=%p', s => {
@@ -74,32 +82,22 @@ describe('<NeedsVerificationDialog />', () => {
   });
 
   it('sends verification email when link.click', () => {
+    mockAuth.currentUser = {} as User;
     renderOpened();
-    mockGetAuth.mockImplementationOnce(() => {
-      return {
-        currentUser: {} as User,
-      } as Auth;
-    });
     mockSendEmailVerification.mockImplementationOnce(() => Promise.resolve());
     
     const link = screen.getByTestId("verification-dialog-resend-link");
     fireEvent.click(link);
-    expect(mockGetAuth).toBeCalledTimes(1);
     expect(mockSendEmailVerification).toBeCalledTimes(1);
   });
   
   it('LoginState=VERIFICATION_ERROR when sendEmailVerification fails', async () => {
+    mockAuth.currentUser = {} as User;
     renderOpened();
-    mockGetAuth.mockImplementationOnce(() => {
-      return {
-        currentUser: {} as User,
-      } as Auth;
-    });
     mockSendEmailVerification.mockImplementationOnce(() => Promise.reject());
     
     const link = screen.getByTestId("verification-dialog-resend-link");
     fireEvent.click(link);
-    expect(mockGetAuth).toBeCalledTimes(1);
     expect(mockSendEmailVerification).toBeCalledTimes(1);
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));
     expect(mockContext.controller.setLoginState).toBeCalledWith("VERIFICATION_ERROR");
@@ -107,22 +105,22 @@ describe('<NeedsVerificationDialog />', () => {
 
   it('signs out when on close button clicked', async () => {
     renderOpened();
-    mockSignOut.mockImplementationOnce(() => Promise.resolve());
+    mockLogout.mockImplementationOnce(() => Promise.resolve());
     const dialog = screen.getByTestId("verification-dialog");
     const closeButton = within(dialog).getByTestId("message-dialog-close-button");
     fireEvent.click(closeButton);
-    expect(mockSignOut).toBeCalledTimes(1);
+    expect(mockLogout).toBeCalledTimes(1);
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_OUT");
   });
   
   it('stays logged in if signout fails', async () => {
     renderOpened();
-    mockSignOut.mockImplementationOnce(() => Promise.reject());
+    mockLogout.mockImplementationOnce(() => Promise.reject());
     const dialog = screen.getByTestId("verification-dialog");
     const closeButton = within(dialog).getByTestId("message-dialog-close-button");
     fireEvent.click(closeButton);
-    expect(mockSignOut).toBeCalledTimes(1);
+    expect(mockLogout).toBeCalledTimes(1);
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_IN");
   });

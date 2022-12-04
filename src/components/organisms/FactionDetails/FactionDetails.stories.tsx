@@ -102,7 +102,7 @@ Full.args = {
       reward: 11,
       unit: "FacCred",
     },
-    tag: TagsList[Math.floor(Math.random() * TagsList.length)],
+    tag: TagsList[2],
     homeworld: "Location 1",
   },
 };
