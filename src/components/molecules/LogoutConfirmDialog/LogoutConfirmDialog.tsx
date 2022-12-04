@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext } from "react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
@@ -23,13 +23,13 @@ const LogoutConfirmDialog = () => {
     uiController.setLoginState("LOGGED_IN");
   }, [uiController]);
 
-  const open = useMemo(() => uiState.loginState === "LOGGING_OUT", [uiState.loginState]);
+  const open = uiState.loginState === "LOGGING_OUT";
 
   console.log("Rendering LogoutConfirmDialog...");
 
   return (
     <ConfirmDialog
-      id="logout"
+      data-testid="logout-confirmation"
       title="Confirm Logout"
       message="Logout?"
       buttonText="Logout"
