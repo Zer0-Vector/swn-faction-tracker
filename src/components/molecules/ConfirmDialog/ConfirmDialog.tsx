@@ -8,7 +8,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 interface ConfirmDialogProps {
-  id?: string;
   title: string;
   message: string;
   buttonText?: string;
@@ -19,7 +18,7 @@ interface ConfirmDialogProps {
   ["data-testid"]?: string;
 }
 
-export default function ConfirmDialog({ id, title, message, buttonText, open, onCancel, onConfirm, children, "data-testid": dtid }: ConfirmDialogProps) {
+export default function ConfirmDialog({ title, message, buttonText, open, onCancel, onConfirm, children, "data-testid": dtid }: ConfirmDialogProps) {
   const handleConfirm = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
     onConfirm();
