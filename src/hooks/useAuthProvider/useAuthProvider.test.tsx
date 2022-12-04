@@ -12,6 +12,8 @@ jest.mock("firebase/auth");
 // eslint-disable-next-line import/first
 import {
   Auth,
+  confirmPasswordReset,
+  createUserWithEmailAndPassword,
   getAuth,
   NextOrObserver,
   sendEmailVerification,
@@ -21,6 +23,7 @@ import {
   signOut,
   Unsubscribe,
   User,
+  UserCredential,
 } from "firebase/auth";
 
 const mockSetPersistence = setPersistence as jest.MockedFn<typeof setPersistence>;
@@ -40,6 +43,8 @@ const mockSignIn = signInWithEmailAndPassword as jest.MockedFn<typeof signInWith
 const mockSignOut = signOut as jest.MockedFn<typeof signOut>;
 const mockSendEmailVerification = sendEmailVerification as jest.MockedFn<typeof sendEmailVerification>;
 const mockSendPasswordResetEmail = sendPasswordResetEmail as jest.MockedFn<typeof sendPasswordResetEmail>;
+const mockCreateUser = createUserWithEmailAndPassword as jest.MockedFn<typeof createUserWithEmailAndPassword>;
+const mockConfirmReset = confirmPasswordReset as jest.MockedFn<typeof confirmPasswordReset>;
 
 
 function TestComp({ name }: { name: string }) {
@@ -77,6 +82,7 @@ function TestComp({ name }: { name: string }) {
       <button onClick={couldThrow(() => auth.signup("email@signup.com", "789789"))}>signup</button>
       <button onClick={couldThrow(() => auth.sendEmailVerification())}>verify email</button>
       <button onClick={couldThrow(() => auth.sendPasswordResetEmail("pw@reset.com"))}>pw reset</button>
+      <button onClick={couldThrow(() => auth.confirmPasswordReset("confirm@pw.reset", "654321"))}>confirm reset</button>
     </div>
   );
 }
@@ -213,5 +219,27 @@ describe('useAuthProvider', () => {
     await waitFor(() => expect(isDone).toHaveTextContent("yes"));
     expect(mockSendPasswordResetEmail).toBeCalledTimes(1);
     expect(mockSendPasswordResetEmail).toBeCalledWith(expect.anything(), "pw@reset.com");
+  });
+
+  it('creates user', async () => {
+    mockCreateUser.mockResolvedValueOnce({ user: { email: "test@test.test" } } as UserCredential);
+    render(<TestComp name="signup" />);
+    const button = screen.getByText("signup");
+    const isDone = screen.getByTestId("is-done");
+    fireEvent.click(button);
+    await waitFor(() => expect(isDone).toHaveTextContent("yes"));
+    expect(mockCreateUser).toBeCalledTimes(1);
+    expect(mockCreateUser).toBeCalledWith(expect.anything(), "email@signup.com", "789789");
+  });
+
+  it('confirms password reset', async () => {
+    mockConfirmReset.mockResolvedValueOnce();
+    render(<TestComp name="confirm password reset" />);
+    const button = screen.getByText("confirm reset");
+    const isDone = screen.getByTestId("is-done");
+    fireEvent.click(button);
+    await waitFor(() => expect(isDone).toHaveTextContent("yes"));
+    expect(mockConfirmReset).toBeCalledTimes(1);
+    expect(mockConfirmReset).toBeCalledWith(expect.anything(), "confirm@pw.reset", "654321");
   });
 });
