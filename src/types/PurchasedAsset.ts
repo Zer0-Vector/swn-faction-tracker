@@ -6,7 +6,7 @@ export default class PurchasedAsset {
     public readonly id: AssetId,
     public hp: number,
     public nickname?: string,
-    public location?: string
+    public locationId?: string
   ) {}
 
   static getKey(factionName: string, pa: PurchasedAsset): string {

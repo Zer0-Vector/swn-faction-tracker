@@ -33,7 +33,8 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
   const { state, controller } = useContext(GameContext);
   const isSmallViewport = useMediaQuery("(max-width:600px)");
 
-  const homeworldText = faction.homeworld ? faction.homeworld : "Unknown";
+  
+  const homeworldText = state.getLocation(faction.homeworldId || "")?.name || "Unknown";
   const tagText = faction.tag ? faction.tag : "Unknown";
 
   const updateHomeworld = useCallback((val: string) => {

@@ -37,7 +37,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
   const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const locationsNames = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
+  const locationsNames = state.getLocations().map(loc => loc.name.toLowerCase());
 
   const handleChange = (setter: FormInfoSetter, valid?: StringValidator) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
@@ -70,7 +70,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     setCoords(newState);
   };
 
-  const isNotDuplicateName = useCallback((val: string) => !locationsNames.includes(val.trim()), [locationsNames]);
+  const isNotDuplicateName = useCallback((val: string) => !locationsNames.includes(val.trim().toLowerCase()), [locationsNames]);
 
   const isInteger = (val: string) => {
     try {
@@ -105,13 +105,12 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
 
   const handleCreate = useCallback(() => {
     if (allValid()) {
-      onCreate({
-        id: nameText.value.toLowerCase().replaceAll(/[\W_]+/g, "-"),
-        name: nameText.value,
-        tl: parseInt(tlText.value),
-        x: parseInt(coords.value[0]),
-        y: parseInt(coords.value[1]),
-      });
+      onCreate(new LocationInfo(
+        nameText.value,
+        parseInt(tlText.value),
+        parseInt(coords.value[0]),
+        parseInt(coords.value[1])
+      ));
     }
     handleClose();
   }, [allValid, coords.value, handleClose, nameText.value, onCreate, tlText.value]);  

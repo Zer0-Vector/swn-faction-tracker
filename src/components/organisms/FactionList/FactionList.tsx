@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
@@ -27,7 +27,7 @@ export default function FactionList(): JSX.Element {
     controller.reorderFactions(result.source.index, result.destination.index);
   }, [controller]);
 
-  const factions = useMemo(() => state.getFactions(), [state]);
+  const factions = state.getFactions();
 
   if (factions.length === 0) {
     return (

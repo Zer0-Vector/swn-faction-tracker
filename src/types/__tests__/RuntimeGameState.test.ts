@@ -1,4 +1,6 @@
+import { generateId } from "../../utils/IdGenerator";
 import AssetId from "../AssetId";
+import LocationInfo from "../LocationInfo";
 import RuntimeGameState from "../RuntimeGameState";
 import StoredGameState from "../StoredGameState";
 
@@ -104,9 +106,49 @@ describe('reorderLocations', () => {
 });
 
 describe('updateLocationName', () => {
-  it.todo('updates location id and name in locations map');
-  it.todo('updates locationId in locationsOrder array');
-  it.todo('updates any factions which reference updated location');
+  beforeEach(() => {
+    state.addLocation(new LocationInfo("Location One", 1, 1, 1));
+  });
+  
+  it('updates location id and name in locations map', () => {
+    const oldInfo = state.getLocation("location-one");
+    expect(oldInfo).not.toBeUndefined();
+    expect(state.getLocation("location-two")).toBeUndefined();
+    state.updateLocationName("location-one", "Location Two");
+    expect(state.getLocation("location-one")).toBeUndefined();
+    
+    const info = state.getLocation("location-two");
+    expect(info).not.toBeUndefined();
+    expect(info?.name).toBe("Location Two");
+    expect(info?.tl).toBe(oldInfo?.tl);
+    expect(info?.x).toBe(oldInfo?.x);
+    expect(info?.y).toBe(oldInfo?.y);
+  });
+
+  it('updates locationId in locationsOrder array', () => {
+    expect(storedState.locationsOrder.length).toBe(1);
+    expect(storedState.locationsOrder).toContain("location-one");
+    state.updateLocationName("location-one", "Location Two");
+    expect(storedState.locationsOrder.length).toBe(1);
+    expect(storedState.locationsOrder).toContain("location-two");
+  });
+  
+  it('updates any factions which reference updated location', () => {
+    const faction = state.addFaction("Faction One");
+    faction.homeworldId = "location-one";
+    state.updateLocationName("location-one", "Location Two");
+    const updatedFaction = state.getFaction("faction-one");
+    expect(updatedFaction?.homeworldId).toBe("location-two");
+  });
+
+  it('updates any assets which reference updated location', () => {
+    const faction = state.addFaction("Faction Two");
+    const asset = state.addAsset(faction.id, "Smugglers");
+    asset.locationId = "location-one";
+    state.updateLocationName("location-one", "Location Three");
+    const updatedAsset = state.getAsset(faction.id, "smugglers-1");
+    expect(updatedAsset?.locationId).toBe("location-three");
+  });
 });
 
 describe('removeLocation', () => {

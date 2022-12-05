@@ -10,23 +10,28 @@ import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionDetails from "./FactionDetails";
 
+const locations = [
+  {
+    id: "location-1",
+    name: "Location 1",
+    tl: 1, x: 2, y: 3,
+  },
+  {
+    id: "location-2",
+    name: "Location 2",
+    tl: 4, x: 5, y: 6,
+  },
+];
+
 const MockProvider = ({ children }: RequiredChildrenProps) => (
   <GameContext.Provider value={{
     controller: MockActionController,
     state: {
       getLocations() {
-        return [
-          {
-            id: "location-1",
-            name: "Location 1",
-            tl: 1, x: 2, y: 3,
-          },
-          {
-            id: "location-2",
-            name: "Location 2",
-            tl: 4, x: 5, y: 6,
-          },
-        ];
+        return locations;
+      },
+      getLocation(locationId: string) {
+        return locations.find(loc => loc.id === locationId);
       },
     } as IGameState,
   }}>
@@ -103,6 +108,6 @@ Full.args = {
       unit: "FacCred",
     },
     tag: TagsList[2],
-    homeworld: "Location 1",
+    homeworldId: "location-1",
   },
 };

@@ -19,8 +19,9 @@ export const MockActionController: IGameController = {
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation | undefined): void {
     action(this.reorderLocations.name)(source, destination);
   },
-  updateLocationName(curr: string, val: string): void {
+  updateLocationName(curr: string, val: string): Maybe<LocationInfo> {
     action(this.updateLocationName.name)(curr, val);
+    return {} as LocationInfo;
   },
   removeLocation(selectedLocation: string): void {
     action(this.removeLocation.name)(selectedLocation);

@@ -14,7 +14,7 @@ export interface IGameController {
   setGoal(faction: string, goal: GoalInfo): void;
   setMode(value: string): void;
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void;
-  updateLocationName(curr: string, val: string): void;
+  updateLocationName(currId: string, val: string): Maybe<LocationInfo>;
   removeLocation(selectedLocation: string): void;
   addLocation(info: LocationInfo): void;
   removeAsset(selectedFaction: string, assetRef: string): void;
@@ -241,10 +241,11 @@ export class GameController implements IGameController {
     this.#writeLocations();
   }
 
-  updateLocationName(curr: string, val: string): void {
-    console.debug(`Renaming location '${curr}' to '${val}'`);
-    this.runtimeState.updateLocationName(curr, val);
+  updateLocationName(currId: string, val: string): Maybe<LocationInfo> {
+    console.debug(`Renaming location '${currId}' to '${val}'`);
+    const info = this.runtimeState.updateLocationName(currId, val);
     this.#writeLocationDependecies();
+    return info;
   }
 
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void {

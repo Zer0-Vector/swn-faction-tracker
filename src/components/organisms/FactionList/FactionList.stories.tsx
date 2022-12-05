@@ -18,6 +18,21 @@ interface MockProviderProps extends RequiredChildrenProps {
   factions: FactionInfo[];
 }
 
+const locations = [
+  {
+    id: "loc-1",
+    name: "Loc 1",
+  },
+  {
+    id: "loc-2",
+    name: "Loc 1",
+  },
+  {
+    id: "loc-3",
+    name: "Loc 1",
+  },
+];
+
 const MockProvider = ({ children, factions }: MockProviderProps) => (
   <GameContext.Provider value={{
     state: {
@@ -28,20 +43,10 @@ const MockProvider = ({ children, factions }: MockProviderProps) => (
         return factions.find(f => f.id === factionId);
       },
       getLocations() {
-        return [
-          {
-            id: "loc-1",
-            name: "Loc 1",
-          },
-          {
-            id: "loc-2",
-            name: "Loc 1",
-          },
-          {
-            id: "loc-3",
-            name: "Loc 1",
-          },
-        ];
+        return locations;
+      },
+      getLocation(locationId) {
+        return locations.find(loc => loc.id === locationId);
       },
       getAssets(factionId) {
         return [] as PurchasedAsset[];
