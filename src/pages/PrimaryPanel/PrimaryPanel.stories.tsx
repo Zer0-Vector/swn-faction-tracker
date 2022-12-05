@@ -62,6 +62,23 @@ const factions: FactionInfo[] = [
   },
 ];
 
+const locations = [
+  {
+    id: "test-location-1",
+    name: "Test Location 1",
+    tl: 1,
+    x: 1,
+    y: 1,
+  },
+  {
+    id: "test-location-2",
+    name: "Test Location 2",
+    tl: 2,
+    x: 2,
+    y: 2,
+  },
+];
+
 const getMockedState = (factions: FactionInfo[] = [], assetMap: { [id: string]: PurchasedAsset[] } = {}) => ({
   getFactions() {
     return factions;
@@ -70,22 +87,10 @@ const getMockedState = (factions: FactionInfo[] = [], assetMap: { [id: string]: 
     return factions.find(f => f.id === factionId);
   },
   getLocations() {
-    return [
-      {
-        id: "test-location-1",
-        name: "Test Location 1",
-        tl: 1,
-        x: 1,
-        y: 1,
-      },
-      {
-        id: "test-location-2",
-        name: "Test Location 2",
-        tl: 2,
-        x: 2,
-        y: 2,
-      },
-    ];
+    return locations;
+  },
+  getLocation(locationId) {
+    return locations.find(loc => loc.id === locationId);
   },
   getAssets(factionId) {
     if (factionId === undefined || assetMap[factionId] === undefined) {
