@@ -77,10 +77,15 @@ const AssetList = [
   ...WealthAssetList,
 ] as const;
 
-type AssetKeys = typeof AssetList[number];
+
+type AssetKey = typeof AssetList[number];
+
+export function isAsset(name: string): name is AssetKey {
+  return AssetList.includes(name as AssetKey);
+}
 
 type AssetMap = {
-  [key in AssetKeys]: AssetInfo;
+  [key in AssetKey]: AssetInfo;
 };
 
 const ASSETS: AssetMap = {
