@@ -60,9 +60,5 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
     sendPasswordResetEmail: async (email: string) => {
       await fauth.sendPasswordResetEmail(AUTH, email);
     },
-
-    confirmPasswordReset: async (code: string, password: string) => {
-      await fauth.confirmPasswordReset(AUTH, code, password);
-    },
   };
 }
