@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
 import { Meta, Story } from "@storybook/react";
