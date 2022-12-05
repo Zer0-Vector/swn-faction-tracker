@@ -2,7 +2,6 @@ import React from "react";
 import { DraggableLocation } from "react-beautiful-dnd";
 
 import FactionInfo from "../types/FactionInfo";
-import { isGameMode } from "../types/GameMode";
 import GoalInfo from "../types/GoalInfo";
 import LocationInfo from "../types/LocationInfo";
 import { Maybe } from "../types/Maybe";
@@ -58,9 +57,6 @@ export class GameController implements IGameController {
   }
 
   setMode(mode: string) {
-    if (!isGameMode(mode)) {
-      throw new Error(`Invalid GameMode: '${mode}'`);
-    }
     this.runtimeState.setMode(mode);
     this.#writeMode();
   }
