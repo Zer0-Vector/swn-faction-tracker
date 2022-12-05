@@ -16,12 +16,12 @@ import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
   mode: GameMode;
-  getFactions(): FactionInfo[];
-  getFaction(factionId: string): Maybe<FactionInfo>;
-  getAssets(factionId: Maybe<string>): PurchasedAsset[];
-  getAsset(factionId: string, assetId: string): Maybe<PurchasedAsset>;
-  getLocations(): LocationInfo[];
-  getLocation(locationName: string): Maybe<LocationInfo>;
+  getFactions: () => FactionInfo[];
+  getFaction: (factionId: string) => Maybe<FactionInfo>;
+  getAssets: (factionId: Maybe<string>) => PurchasedAsset[];
+  getAsset: (factionId: string, assetId: string) => Maybe<PurchasedAsset>;
+  getLocations: () => LocationInfo[];
+  getLocation: (locationId: string) => Maybe<LocationInfo>;
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
@@ -191,10 +191,17 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
   updateHomeworld(factionId: string, homeworld: string): void {
     const faction = this.factions.get(factionId);
+    const location = Array.from(this.locations.values()).find(loc => loc.name === homeworld);
+    if (location === undefined) {
+      console.warn(`Unknown location, "${homeworld}"`);
+      // if the location doesn't exist, do nothing.
+      return;
+    }
+
     if (faction) {
-      faction.homeworld = homeworld;
+      faction.homeworldId = location.id;
       this.factions.set(factionId, faction);
-      console.info(`Homeworld set for ${faction?.name} (${factionId}):`, homeworld);
+      console.info(`Homeworld set for ${faction?.name} (${factionId}):`, location);
     } else {
       console.warn("Unknown faction id: ", factionId);
     }
@@ -271,41 +278,46 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.locationsOrder.push(info.id);
   }
 
-  updateLocationName(curr: string, val: string) {
+  updateLocationName(currId: string, val: string) {
+    const oldInfo = this.locations.get(currId);
+    if (oldInfo === undefined) {
+      return undefined;
+    }
+
+    const info = new LocationInfo(val, oldInfo.tl, oldInfo.x, oldInfo.y);
     for (const loc of this.locations.values()) {
-      if (loc.name === curr) {
-        this.locations.delete(curr);
-        this.locations.set(val, {
-          ...loc,
-          name: val,
-        });
+      if (loc.id === oldInfo.id) {
+        this.locations.delete(oldInfo.id);
+        this.locations.set(info.id, info);
         break;
       }
     }
 
     this.locationsOrder.forEach((loc, index) => {
-      if (loc === curr) {
-        this.locationsOrder[index] = val;
+      if (loc === currId) {
+        this.locationsOrder[index] = info.id;
       }
     });
 
     for (const faction of this.factions.values()) {
-      if (faction.homeworld === curr) {
+      if (faction.homeworldId === currId) {
         this.factions.set(faction.id, {
           ...faction,
-          homeworld: val,
+          homeworldId: info.id,
         });
       }
     }
 
     for (const entry of this.assets.entries()) {
-      if (entry[1].location === curr) {
+      if (entry[1].locationId === currId) {
         this.assets.set(entry[0], {
           ...entry[1],
-          location: val,
+          locationId: info.id,
         });
       }
     }
+
+    return info;
   }
 
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void {

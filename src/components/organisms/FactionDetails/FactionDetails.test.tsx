@@ -6,6 +6,7 @@ import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import FactionInfo from "../../../types/FactionInfo";
 import LocationInfo from "../../../types/LocationInfo";
+import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionDetails from "./FactionDetails";
@@ -14,11 +15,13 @@ let mockFaction: FactionInfo;
 
 const mockGetLocations = jest.fn();
 const mockGetFaction = jest.fn();
+const mockGetLocation = jest.fn();
 
 const mockContext: GameContextType = {
   state: {
+    getLocation: mockGetLocation as (lid: string)=>Maybe<LocationInfo>,
     getLocations: mockGetLocations as ()=>LocationInfo[],
-    getFaction: mockGetFaction as (fid: string)=>FactionInfo,
+    getFaction: mockGetFaction as (fid: string)=>Maybe<FactionInfo>,
   } as IGameState,
   controller: {} as IGameController,
 };
@@ -175,7 +178,11 @@ describe('default FactionDetails', () => {
   });
 });
 
-describe('FactionDetails with goal/homeworld set', () => {
+describe('FactionDetails with homeworld set', () => {
+  it.todo('check stuff');
+});
+
+describe('FactionDetails with goal set', () => {
   it.todo('check stuff');
 });
 
