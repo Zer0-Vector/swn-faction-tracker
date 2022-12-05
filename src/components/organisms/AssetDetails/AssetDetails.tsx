@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import { styled, SxProps, Theme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import ASSETS from "../../../data/Assets";
+import ASSETS, { isAsset } from "../../../data/Assets";
 import { AssetAttackResult } from "../../../types/AssetInfo";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import PurchasedAsset from "../../../types/PurchasedAsset";
@@ -82,11 +82,13 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
     : "Special"
   ), []);
   
-  const assetInfo = ASSETS[asset.id.displayName];
-  if (!assetInfo) {
+
+  
+  if (!isAsset(asset.id.displayName)) {
     console.error(`Could not find asset named '${asset.id.displayName}'`);
     return (<Typography color="error" fontWeight="bold" fontStyle="italic">Could not load asset info</Typography>);
   }
+  const assetInfo = ASSETS[asset.id.displayName];
 
   const { hp } = asset;
   const { description, attack, counter, attribute, level, maxHp, type, upkeep /*note*/ } = assetInfo;

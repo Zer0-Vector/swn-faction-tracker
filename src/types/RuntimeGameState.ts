@@ -1,7 +1,7 @@
 import { DraggableLocation } from "react-beautiful-dnd";
 
 import { IGameController } from "../controllers/GameController";
-import ASSETS from "../data/Assets";
+import ASSETS, { isAsset } from "../data/Assets";
 import { generateId } from "../utils/IdGenerator";
 
 import AssetId from "./AssetId";
@@ -242,7 +242,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   addAsset(selectedFactionId: string, assetName: string): PurchasedAsset {
     const index = this.#nextAssetIndex(`${selectedFactionId}.${AssetId.toRefName(assetName)}`);
     const id: AssetId = new AssetId(assetName, index);
-    const hp = ASSETS[assetName]?.maxHp || 0;
+    const hp = (isAsset(assetName) && ASSETS[assetName]?.maxHp) || 0;
     const asset: PurchasedAsset = { id, hp };
     this.assets.set(PurchasedAsset.getKey(selectedFactionId, asset), asset);
     console.info(`Added asset (${assetName}): ${AssetId.toRefFormat(id)}`);

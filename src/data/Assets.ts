@@ -1,8 +1,92 @@
 import AssetInfo from "../types/AssetInfo";
 
-interface AssetMap {
-  [key: string]: AssetInfo;
+const WealthAssetList = [
+  // 1
+  "Franchise",
+  "Harvesters",
+  "Local Investments",
+
+  // 2
+
+  // 3
+
+  // 4
+
+  // 5
+
+  // 6
+
+  // 7
+
+  // 8
+] as const;
+
+const ForceAssetList = [
+  // 1
+  "Security Personnel",
+  "Hitmen",
+  "Militia Unit",
+
+  // 2
+
+  // 3
+
+  // 4
+
+  // 5
+
+  // 6
+
+  // 7
+
+  // 8
+] as const;
+
+const CunningAssetList = [
+  // 1
+  "Smugglers",
+  "Informers",
+  "False Front",
+
+  // 2
+  "Lobbyists",
+  "Saboteurs",
+  "Blackmail",
+  "Seductress",
+  
+  // 3
+  "Cyberninjas",
+  "Stealth",
+  "Covert Shipping",
+
+  // 4
+
+  // 5
+
+  // 6
+
+  // 7
+
+  // 8
+] as const;
+
+const AssetList = [
+  "Base of Influence",
+  ...CunningAssetList,
+  ...ForceAssetList,
+  ...WealthAssetList,
+] as const;
+
+
+type AssetKey = typeof AssetList[number];
+
+export function isAsset(name: string): name is AssetKey {
+  return AssetList.includes(name as AssetKey);
 }
+
+type AssetMap = {
+  [key in AssetKey]: AssetInfo;
+};
 
 const ASSETS: AssetMap = {
   /* Base of Influence */
@@ -358,6 +442,85 @@ const ASSETS: AssetMap = {
   /* Force 8 */
   
   /* Wealth 1 */
+  "Franchise": {
+    description: "TODO",
+    attribute: "WEALTH",
+    level: 1,
+    maxHp: 3,
+    cost: 2,
+    tl: 2,
+    type: "FACILITY",
+    attack: {
+      offense: "WEALTH",
+      defense: "WEALTH",
+      result: {
+        type: "DAMAGE",
+        damage: "1d4",
+      },
+    },
+    counter: "1d4-1",
+    note: ["S"],
+    restriction: null,
+    upkeep: 0,
+    action: {
+      type: "ATTACK_SIDE_EFFECT",
+      cost: 0,
+      details: {
+        defenderCharged: 1,
+      },
+    },
+  },
+  "Harvesters": {
+    description: "TODO",
+    attribute: "WEALTH",
+    level: 1,
+    maxHp: 4,
+    cost: 2,
+    tl: 0,
+    type: "FACILITY",
+    attack: null,
+    counter: "1d4",
+    note: ["A"],
+    upkeep: 0,
+    restriction: null,
+    action: {
+      type: "HARVEST",
+      cost: 0,
+      details: {
+        roll: "1d6",
+        threshold: 3,
+      },
+    },
+  },
+  "Local Investments": {
+    description: "TODO",
+    attribute: "WEALTH",
+    level: 1,
+    maxHp: 2,
+    cost: 1,
+    tl: 2,
+    type: "FACILITY",
+    attack: {
+      offense: "WEALTH",
+      defense: "WEALTH",
+      result: {
+        type: "DAMAGE",
+        damage: "1d4-1",
+      },
+    },
+    counter: null,
+    note: ["S"],
+    upkeep: 0,
+    restriction: null,
+    action: {
+      type: "PURCHASE_TAX",
+      cost: 0,
+      details: {
+        tax: 1,
+      },
+    },
+  },
+
   /* Wealth 2 */
   /* Wealth 3 */
   /* Wealth 4 */
