@@ -11,6 +11,9 @@ export const LoginStates = [
   "NEEDS_VERIFICATION", // showing instructional dialog with resend link
   "VERIFICATION_ERROR", // error sending verification, showing error dialog
   "RESETTING_PASSWORD", // showing reset password dialog
+  "PASSWORD_RESET_WAITING", // after reset pw button click, sending pw reset email
+  "PASSWORD_RESET_SENT", // showing sent reset email dialog
+  "PASSWORD_RESET_ERROR", // showing error dialog; email may not be sent
 ] as const;
 
 type LoginState = typeof LoginStates[number];
