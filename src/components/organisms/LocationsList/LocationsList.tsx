@@ -39,8 +39,11 @@ export default function LocationsList() {
 
   const locations = state.getLocations();
 
-  const handleUpdateName = (curr: string) => (val: string) => {
-    controller.updateLocationName(curr, val);
+  const handleUpdateName = (currId: string) => (val: string) => {
+    const info = controller.updateLocationName(currId, val);
+    if (info !== undefined) {
+      nav(`/locations/${info.id}`);
+    }
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -95,7 +98,7 @@ export default function LocationsList() {
                       })}
                     >
                       <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
-                      <EditableText id="location-name" onUpdate={handleUpdateName(val.name)} variant="body2">{val.name}</EditableText>
+                      <EditableText id="location-name" onUpdate={handleUpdateName(val.id)} variant="body2">{val.name}</EditableText>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Grid container spacing={1}>
