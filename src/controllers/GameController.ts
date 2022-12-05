@@ -2,7 +2,6 @@ import React from "react";
 import { DraggableLocation } from "react-beautiful-dnd";
 
 import FactionInfo from "../types/FactionInfo";
-import { isGameMode } from "../types/GameMode";
 import GoalInfo from "../types/GoalInfo";
 import LocationInfo from "../types/LocationInfo";
 import { Maybe } from "../types/Maybe";
