@@ -58,9 +58,6 @@ export class GameController implements IGameController {
   }
 
   setMode(mode: string) {
-    if (!isGameMode(mode)) {
-      throw new Error(`Invalid GameMode: '${mode}'`);
-    }
     this.runtimeState.setMode(mode);
     this.#writeMode();
   }
