@@ -69,7 +69,7 @@ describe('VerificationEmailErrorDialog', () => {
     const button = within(dialog).getByTestId("message-dialog-close-button");
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
-    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));
+    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_OUT");
   });
 });

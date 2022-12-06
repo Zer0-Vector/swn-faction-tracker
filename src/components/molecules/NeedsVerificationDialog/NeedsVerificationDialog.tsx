@@ -42,7 +42,8 @@ const NeedsVerificationDialog = () => {
       open={open}
       title="Email Verification Required"
       message="Please check your email to verify your email address."
-      onClose={handleClose}
+      onAction={handleClose}
+      buttons={["OK"]}
     >
       <Link onClick={handleResend} data-testid="verification-dialog-resend-link">Resend Verification Email</Link>
     </MessageDialog>

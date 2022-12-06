@@ -26,10 +26,10 @@ const VerificationEmailErrorDialog = () => {
     <MessageDialog
       data-testid="verification-error-dialog"
       open={open}
-      onClose={handleClose}
+      onAction={handleClose}
       title="Error"
       message="An error occurred sending the verification email. Try logging in again later."
-      buttonText="Logout"
+      buttons={["Logout"]}
     />
   );
 };

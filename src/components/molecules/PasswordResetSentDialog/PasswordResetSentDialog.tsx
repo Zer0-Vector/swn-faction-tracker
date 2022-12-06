@@ -14,7 +14,7 @@ export function PasswordResetSentDialog() {
       open={state.loginState === "PASSWORD_RESET_SENT"}
       title="Password Reset"
       message="Password reset link sent."
-      onClose={handleClose}
+      onAction={handleClose}
       data-testid="reset-sent-dialog"
     />
   );
