@@ -5,8 +5,9 @@ import { GameContext } from "../../../contexts/GameContext";
 import { useSelection } from "../../../hooks/useSelection";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import AddAssetDialog from "../../molecules/AddAssetDialog";
-import ConfirmDialog from "../../molecules/ConfirmDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
+import MessageDialog from "../../molecules/MessageDialog";
+import { DialogActionHandler } from "../../molecules/MessageDialog/MessageDialog";
 
 export default function AssetListActionsToolbar() {
   const { controller } = useContext(GameContext);
@@ -27,23 +28,23 @@ export default function AssetListActionsToolbar() {
     }
   }, [controller, factionId]);
 
-  const handleRemove = useCallback(() => {
-    if (factionId && assetId) {
-      console.debug(`handleRemove(${factionId}, ${assetId})`);
-      controller.removeAsset(factionId, assetId);
-      setRemoveOpen(false);
-      nav(`/factions/${factionId}`);
-    } else {
-      console.warn(`Illegal selection state. factionId=${factionId}, assetId=${assetId}`);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assetId, controller, factionId]);
-
   const handleAddClick = useCallback(() => setAddOpen(true), []);
   const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
   const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
-  const handleConfirmCancel = useCallback(() => setRemoveOpen(false), []);
   
+  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+    setRemoveOpen(false);
+    if (reason === "Remove") {
+      if (factionId && assetId) {
+        console.debug(`RemoveAsset: faction=${factionId}, asset=${assetId}`);
+        controller.removeAsset(factionId, assetId);
+        nav(`/factions/${factionId}`);
+      } else {
+        console.error(`Illegal selection state. factionId=${factionId}, assetId=${assetId}`);
+      }
+    }
+  }, [assetId, controller, factionId, nav]);
+
   return (
     <ListActionToolbar
       removable={!!assetId}
@@ -56,13 +57,12 @@ export default function AssetListActionsToolbar() {
         onClose={handleAddDialogClose}
         onAdd={handleAdd}
       />
-      <ConfirmDialog
+      <MessageDialog
         title="Confirm Remove Asset"
         message={`Remove asset ${asset?.id.displayName}`}
-        buttonText="Remove"
+        buttons={["Cancel", "Remove"]}
         open={removeOpen}
-        onCancel={handleConfirmCancel}
-        onConfirm={handleRemove}
+        onAction={handleRemoveAction}
         data-testid="remove-asset-dialog"
       />
     </ListActionToolbar>

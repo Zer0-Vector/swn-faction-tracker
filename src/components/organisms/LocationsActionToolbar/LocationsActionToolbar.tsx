@@ -1,12 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelection } from "../../../hooks/useSelection";
 import LocationInfo from "../../../types/LocationInfo";
 import AddLocationDialog from "../../molecules/AddLocationDialog";
-import ConfirmDialog from "../../molecules/ConfirmDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
+import MessageDialog from "../../molecules/MessageDialog";
+import { DialogActionHandler } from "../../molecules/MessageDialog/MessageDialog";
 
 export default function LocationsActionToolbar() {
   const { controller } = useContext(GameContext);
@@ -15,32 +16,30 @@ export default function LocationsActionToolbar() {
   const { location: selectedLocation } = useSelection();
   const nav = useNavigate();
 
-  const handleOpenAddDialog: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
+  const handleOpenAddDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {
     evt.stopPropagation();
     setAddDialogOpen(true);
-  };
+  }, []);
 
-  const handleCloseAdd = () => setAddDialogOpen(false);
+  const handleCloseAdd = useCallback(() => setAddDialogOpen(false), []);
 
-  const handleCreate = (info: LocationInfo) => {
+  const handleCreate = useCallback((info: LocationInfo) => {
     controller.addLocation(info);
     handleCloseAdd();
-  };
+  }, [controller, handleCloseAdd]);
 
-  const handleOpenRemoveDialog: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
+  const handleOpenRemoveDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {
     evt.stopPropagation();
     setRemoveDialogOpen(true);
-  };
+  }, []);
 
-  const handleCloseRemoveDialog = () => setRemoveDialogOpen(false);
-
-  const handleRemove = () => {
-    if (selectedLocation) {
+  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+    setRemoveDialogOpen(false);
+    if (selectedLocation && reason === "Remove") {
       controller.removeLocation(selectedLocation.id);
       nav("/locations");
     }
-    handleCloseRemoveDialog();
-  };
+  }, [controller, nav, selectedLocation]);
 
   return (
     <ListActionToolbar
@@ -54,14 +53,13 @@ export default function LocationsActionToolbar() {
         onClose={handleCloseAdd}
         onCreate={handleCreate}
       />
-      <ConfirmDialog
+      <MessageDialog
         data-testid="remove-location-confirmation"
         open={removeDialogOpen}
-        onCancel={handleCloseRemoveDialog}
-        onConfirm={handleRemove}
+        onAction={handleRemoveAction}
         title="Confirm Remove Location"
         message={`Remove location '${selectedLocation?.name}'?`}
-        buttonText="Remove"
+        buttons={["Cancel", "Remove"]}
       />
     </ListActionToolbar>
   );
