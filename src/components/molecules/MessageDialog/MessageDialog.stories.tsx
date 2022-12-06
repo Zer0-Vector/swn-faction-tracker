@@ -13,7 +13,6 @@ const Template: ComponentStory<typeof MessageDialog> = args => <MessageDialog {.
 export const Default = Template.bind({});
 Default.args = {
   open: true,
-  buttonText: "Button-Text",
   title: "Dialog Title",
   message: "Dialog Message",
 };
@@ -21,8 +20,25 @@ Default.args = {
 export const WithChildren = Template.bind({});
 WithChildren.args = {
   open: true,
-  buttonText: "Button-Text",
   title: "Dialog Title",
   message: "Dialog Message",
   children: <div>child <b>bold</b>, more text</div>,
+};
+
+export const WithButtons = Template.bind({});
+WithButtons.args = {
+  open: true,
+  title: "Dialog Title",
+  message: "Dialog Message",
+  buttons: ["No", "Yes"],
+  closeable: false,
+};
+
+export const NonModal = Template.bind({});
+NonModal.args = {
+  open: true,
+  title: "Dialog Title",
+  message: "Dialog Message",
+  buttons: ["No", "Yes"],
+  modal: false,
 };

@@ -10,7 +10,7 @@ describe('<MessageDialog />', () => {
     const titleText = "Test Title";
     const messageText = "Hello, World!";
 
-    render(<MessageDialog open={true} data-testid="test" title={titleText} message={messageText} onClose={closer} />);
+    render(<MessageDialog open={true} data-testid="test" title={titleText} message={messageText} onAction={closer} />);
     
     const dialog = screen.getByTestId("test");
     expect(dialog).toBeInTheDocument();
@@ -25,27 +25,28 @@ describe('<MessageDialog />', () => {
 
     const button = within(dialog).getByTestId("message-dialog-close-button");
     expect(button).toBeInTheDocument();
-    expect(button.textContent).toEqual("Close");
+    expect(button).toBeInstanceOf(HTMLButtonElement);
   });
 
   it('does not render when not open', () => {
-    render(<MessageDialog open={false} data-testid="test2" title="test2-title" message="test2-message" onClose={jest.fn()} />);
+    render(<MessageDialog open={false} data-testid="test2" title="test2-title" message="test2-message" onAction={jest.fn()} />);
     expect(screen.queryByTestId("test2")).not.toBeInTheDocument();
     expect(screen.queryByText("message-dialog-title")).not.toBeInTheDocument();
     expect(screen.queryByText("message-dialog-message")).not.toBeInTheDocument();
   });
   
   it('can use custom button text', () => {
-    render(<MessageDialog open={true} data-testid="test3" title="test3-title" message="test3-message" onClose={jest.fn()} buttonText="OK-Test3" />);
+    render(<MessageDialog open={true} data-testid="test3" title="test3-title" message="test3-message" onAction={jest.fn()} buttons={["OK-Test3"]} />);
     const dialog = screen.getByTestId("test3");
-    const button = within(dialog).getByTestId("message-dialog-close-button");
+    const actions = within(dialog).getByTestId("actions");
+    const button = within(actions).getByText("OK-Test3");
     expect(button).toBeInTheDocument();
-    expect(button.textContent).toEqual("OK-Test3");
+    expect(button).toBeInstanceOf(HTMLButtonElement);
   });
   
   it('calls onClose callback when close button clicked', () => {
     const closer = jest.fn();
-    render(<MessageDialog open={true} data-testid="test4" title="test4-title" message="test4-message" onClose={closer} />);
+    render(<MessageDialog open={true} data-testid="test4" title="test4-title" message="test4-message" onAction={closer} />);
     const dialog = screen.getByTestId("test4");
     const button = within(dialog).getByTestId("message-dialog-close-button");
     fireEvent.click(button);
