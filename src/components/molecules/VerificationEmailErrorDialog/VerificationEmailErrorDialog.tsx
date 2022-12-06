@@ -12,10 +12,12 @@ const VerificationEmailErrorDialog = () => {
   const handleClose = useCallback(async () => {
     if (currentUser) {
       try {
+        uiController.setLoginState("LOGOUT_WAITING");
         await logout();
         uiController.setLoginState("LOGGED_OUT");
       } catch (reason) {
         console.error("Error signing out: ", reason);
+        uiController.setLoginState("LOGGED_IN");
       }
     }
   }, [logout, uiController, currentUser]);
@@ -27,6 +29,7 @@ const VerificationEmailErrorDialog = () => {
       onClose={handleClose}
       title="Error"
       message="An error occurred sending the verification email. Try logging in again later."
+      buttonText="Logout"
     />
   );
 };

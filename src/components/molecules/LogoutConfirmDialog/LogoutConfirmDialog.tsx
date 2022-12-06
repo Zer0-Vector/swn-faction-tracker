@@ -9,8 +9,8 @@ const LogoutConfirmDialog = () => {
   const { logout } = useAuth();
 
   const handleLogout = useCallback(async () => {
-    uiController.setLoginState("LOGOUT_WAITING");
     try {
+      uiController.setLoginState("LOGOUT_WAITING");
       await logout();
       uiController.setLoginState("LOGGED_OUT");
     } catch (reason) {

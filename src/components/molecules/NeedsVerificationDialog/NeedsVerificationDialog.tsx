@@ -26,6 +26,7 @@ const NeedsVerificationDialog = () => {
 
   const handleClose = useCallback(async () => {
     try {
+      uiController.setLoginState("LOGOUT_WAITING");
       await logout();
       uiController.setLoginState("LOGGED_OUT");
       console.info("User logged out.");
