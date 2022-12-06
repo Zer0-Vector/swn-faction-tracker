@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -23,7 +23,7 @@ const MessageDialog = ({ open, title, message, onClose, buttonText, children, "d
     <Dialog open={open} fullWidth={true} maxWidth="xs" data-testid={dtid}>
       <DialogTitle data-testid="message-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText data-testid="message-dialog-message">{message}</DialogContentText>
+        <DialogContentText marginBottom={theme => theme.spacing(1.5)} data-testid="message-dialog-message">{message}</DialogContentText>
         {children}
       </DialogContent>
       <DialogActions>

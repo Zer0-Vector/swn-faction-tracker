@@ -14,7 +14,15 @@ export const Default = Template.bind({});
 Default.args = {
   open: true,
   buttonText: "Button-Text",
-  children: <p>child <b>bold</b>, more text</p>,
   title: "Dialog Title",
   message: "Dialog Message",
+};
+
+export const WithChildren = Template.bind({});
+WithChildren.args = {
+  open: true,
+  buttonText: "Button-Text",
+  title: "Dialog Title",
+  message: "Dialog Message",
+  children: <div>child <b>bold</b>, more text</div>,
 };
