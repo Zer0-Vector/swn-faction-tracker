@@ -51,11 +51,12 @@ export function PasswordResetDialog() {
     setReady(validator.isAllValid());
   }, [validator]);
 
+  /* TODO: use MessageDialog; refactor to take buttons as args */
   return (
     <Dialog open={open} data-testid="password-reset-dialog">
       <DialogTitle>Password Reset</DialogTitle>
       <DialogContent>
-        <DialogContentText data-testid="message">
+        <DialogContentText marginBottom={theme => theme.spacing(1.5)} data-testid="message">
           Enter the email for your account:
         </DialogContentText>
         <ValidationContext.Provider value={validator}>
