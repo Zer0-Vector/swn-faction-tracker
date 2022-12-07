@@ -14,7 +14,7 @@ state RegisterWaiting #LightGreen
 RegisterWaiting: still showing registration dialog
 state verify <<choice>>
 state NeedsVerification #LightSeaGreen : show instruction dialog\nwith resend link
-state SendVerificationWaiting #LightGreen : waiting on server
+state SendVerificationWaiting #LightGreen
 state SendVerificationError #Salmon : show error dialog
 state LoggedIn #LightBlue
 state PasswordResetting #LightSeaGreen : show dialog to confirm/cancel
@@ -39,7 +39,6 @@ LoginWaiting --> LoggingIn : Failure
 LoggingIn --> Registering : RequestRegister
 Registering --> RegisterWaiting : DoRegister
 RegisterWaiting --> SendVerificationWaiting : Success
-SendVerificationError --> LoggingIn : Close
 RegisterWaiting --> Registering : Failure
 Registered --> LoggingIn : RequestLogin
 Registering --> LoggingIn : Cancel
@@ -52,5 +51,6 @@ PasswordResetWaiting --> PasswordResetSent : Success
 PasswordResetWaiting --> PasswordResetError : Failure
 PasswordResetSent --> LoggingIn : Close
 PasswordResetError --> LoggingIn : Close
+SendVerificationError --> LogoutWaiting : Close
 
 @enduml

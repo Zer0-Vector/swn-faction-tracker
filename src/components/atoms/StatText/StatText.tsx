@@ -16,6 +16,7 @@ export default function StatText(props: StatTextProps) {
       <Typography
         variant="body2"
         component="span"
+        color="text.primary"
         {...props}
         data-testid={props["data-testid"]}
       >

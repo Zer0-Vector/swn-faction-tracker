@@ -12,6 +12,9 @@ import Nullable from "../../../types/Nullable";
 import LoginDialog from "../LoginDialog";
 import LogoutConfirmDialog from "../LogoutConfirmDialog";
 import NeedsVerificationDialog from "../NeedsVerificationDialog";
+import { PasswordResetDialog } from "../PasswordResetDialog";
+import { PasswordResetErrorDialog } from "../PasswordResetErrorDialog";
+import { PasswordResetSentDialog } from "../PasswordResetSentDialog";
 import RegistrationDialog from "../RegistrationDialog";
 import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
 
@@ -67,6 +70,9 @@ export default function UserMenu({ user }: UserMenuProps) {
           <RegistrationDialog />
           <NeedsVerificationDialog />
           <VerificationEmailErrorDialog />
+          <PasswordResetDialog />
+          <PasswordResetErrorDialog />
+          <PasswordResetSentDialog />
         </>
       );
     } else {
@@ -76,14 +82,17 @@ export default function UserMenu({ user }: UserMenuProps) {
     }
   }, [user]);
 
+  const iconClickHandler = useCallback(() => setOpen(prev => !prev), []);
+  const menuCloseHandler = useCallback(() => setOpen(false), []);
+
   console.debug("Rendering UserMenu... logged in? ", !!user);
 
   return (
     <div>
-      <IconButton ref={btnRef} onClick={() => setOpen(prev => !prev)}>
+      <IconButton ref={btnRef} onClick={iconClickHandler}>
         {icon}
       </IconButton>
-      <Menu open={open} anchorEl={btnRef.current} onClose={() => setOpen(false)}>
+      <Menu open={open} anchorEl={btnRef.current} onClose={menuCloseHandler}>
         {menuItems}
       </Menu>
       {dialogItems}

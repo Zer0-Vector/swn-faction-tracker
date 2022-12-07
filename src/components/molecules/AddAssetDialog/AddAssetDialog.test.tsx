@@ -25,12 +25,12 @@ describe('default AddAssetDialog', () => {
   it('renders buttons', () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
-    const btnAdd = within(dialog).getByTestId("add-button");
+    const btnAdd = within(dialog).getByText("Add");
     expect(btnAdd).toBeInTheDocument();
     expect(btnAdd).toBeInstanceOf(HTMLButtonElement);
     expect(btnAdd).toHaveTextContent("Add");
     
-    const btnCancel = within(dialog).getByTestId("cancel-button");
+    const btnCancel = within(dialog).getByText("Cancel");
     expect(btnCancel).toBeInTheDocument();
     expect(btnCancel).toBeInstanceOf(HTMLButtonElement);
     expect(btnCancel).toHaveTextContent("Cancel");
@@ -40,7 +40,7 @@ describe('default AddAssetDialog', () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
-    const divTitle = within(dialog).getByTestId("title");
+    const divTitle = within(dialog).getByTestId("message-dialog-title");
     expect(divTitle).toBeInTheDocument();
     expect(divTitle).toBeInstanceOf(HTMLHeadingElement);
     expect(divTitle.textContent).toEqual("Add Asset");
@@ -50,7 +50,7 @@ describe('default AddAssetDialog', () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
-    const divInst = within(dialog).getByTestId("content-text");
+    const divInst = within(dialog).getByTestId("message-dialog-message");
     expect(divInst).toBeInTheDocument();
     expect(divInst).toBeInstanceOf(HTMLParagraphElement);
     expect(divInst).toHaveTextContent("add");
@@ -103,7 +103,7 @@ describe('default AddAssetDialog', () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
-    const btnCancel = within(dialog).getByTestId("cancel-button");
+    const btnCancel = within(dialog).getByText("Cancel");
     expect(btnCancel).toBeInTheDocument();
     
     fireEvent.click(btnCancel);
@@ -115,19 +115,18 @@ describe('default AddAssetDialog', () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
-    const btnAdd = within(dialog).getByTestId("add-button");
+    const btnAdd = within(dialog).getByText("Add");
     expect(btnAdd).toBeInTheDocument();
     
     fireEvent.click(btnAdd);
     expect(mockAdd).not.toBeCalled();
-    expect(mockClose).not.toBeCalled();
   });
   
   it('calls onAdd when confirming selection', () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
-    const btnAdd = within(dialog).getByTestId("add-button");
+    const btnAdd = within(dialog).getByText("Add");
     expect(btnAdd).toBeInTheDocument();
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();

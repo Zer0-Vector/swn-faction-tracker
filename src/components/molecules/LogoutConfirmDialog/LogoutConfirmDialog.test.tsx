@@ -69,7 +69,7 @@ describe('LogoutConfirmDialog', () => {
     mockLogout.mockResolvedValueOnce();
     renderIt();
     const dialog = screen.getByTestId("logout-confirmation");
-    const confirm = within(dialog).getByTestId("confirm-button");
+    const confirm = within(dialog).getByText("Logout");
     expect(confirm).toBeInstanceOf(HTMLButtonElement);
     fireEvent.click(confirm);
     await waitFor(() => expect(mockSetLoginState).toBeCalledWith("LOGGED_OUT"));
@@ -79,7 +79,7 @@ describe('LogoutConfirmDialog', () => {
   it('calls controller on cancel', async () => {
     renderIt();
     const dialog = screen.getByTestId("logout-confirmation");
-    const cancel = within(dialog).getByTestId("cancel-button");
+    const cancel = within(dialog).getByText("Cancel");
     expect(cancel).toBeInstanceOf(HTMLButtonElement);
     fireEvent.click(cancel);
     await waitFor(() => expect(mockSetLoginState).toBeCalledWith("LOGGED_IN"));
@@ -89,7 +89,7 @@ describe('LogoutConfirmDialog', () => {
     mockLogout.mockRejectedValueOnce("fake-error");
     renderIt();
     const dialog = screen.getByTestId("logout-confirmation");
-    const confirm = within(dialog).getByTestId("confirm-button");
+    const confirm = within(dialog).getByText("Logout");
     expect(confirm).toBeInstanceOf(HTMLButtonElement);
     fireEvent.click(confirm);
     await waitFor(() => expect(mockSetLoginState).toBeCalledWith("LOGGED_IN"));

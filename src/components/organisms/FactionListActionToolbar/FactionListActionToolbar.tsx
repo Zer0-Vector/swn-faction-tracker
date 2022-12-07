@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelection } from "../../../hooks/useSelection";
+import MessageDialog from "../../atoms/MessageDialog";
+import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 import AddFactionDialog from "../../molecules/AddFactionDialog";
-import ConfirmDialog from "../../molecules/ConfirmDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function FactionListActionToolbar() {
@@ -16,19 +17,19 @@ export default function FactionListActionToolbar() {
   const { faction: selectedFaction } = useSelection();
   const nav = useNavigate();
 
-  const handleRemove = useCallback(() => {
-    if (selectedFaction) {
-      controller.removeFaction(selectedFaction.id);
-      nav("/factions");
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controller, selectedFaction]);
-
   const handleAddClick = useCallback(() => setAddOpen(true), []);
   const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
   const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
   const handleAddDialogCreate = useCallback((v: string): void => {controller.addFaction(v);}, [controller]);
-  const handleConfirmCancel = useCallback(() => setRemoveOpen(false), []);
+
+  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+    setRemoveOpen(false);
+    console.debug("handleRemoveAction: ", selectedFaction, reason);
+    if (selectedFaction && reason === "Remove") {
+      controller.removeFaction(selectedFaction.id);
+      nav("/factions");
+    }
+  }, [controller, nav, selectedFaction]);
 
   console.debug("Rendering FactionListActionToolbar...");
 
@@ -44,14 +45,13 @@ export default function FactionListActionToolbar() {
         onClose={handleAddDialogClose}
         onCreate={handleAddDialogCreate}
       />
-      <ConfirmDialog
+      <MessageDialog
         data-testid="delete-faction-confirmation"
         title="Confirm Delete Faction"
         message={`Delete faction "${selectedFaction?.name}"`}
-        buttonText="Remove"
+        buttons={["Cancel", "Remove"]}
         open={removeOpen}
-        onCancel={handleConfirmCancel}
-        onConfirm={handleRemove}
+        onAction={handleRemoveAction}
       />
     </ListActionToolbar>
   );

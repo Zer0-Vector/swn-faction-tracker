@@ -1,5 +1,5 @@
 import React from "react";
-import * as RDom from "react-router-dom";
+import { MemoryRouter, useLocation } from "react-router-dom";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
@@ -11,10 +11,6 @@ import { IGameState } from "../../../types/RuntimeGameState";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
 
-jest.mock("react-router-dom");
-
-const mockUseNavigate = RDom.useNavigate as jest.MockedFn<typeof RDom.useNavigate>;
-const mockUseLocation = RDom.useLocation as jest.MockedFn<typeof RDom.useLocation>;
 const mockAddAsset = jest.fn();
 const mockRemoveAsset = jest.fn();
 const mockGetFaction = jest.fn();
@@ -36,11 +32,23 @@ const mockFaction = {
   name: "Test Faction",
 } as FactionInfo;
 
-function renderIt() {
+const  TestComp = () => {
+  const { pathname } = useLocation();
+  return (
+    <>
+      <div data-testid="test-location">{pathname}</div>
+      <GameContext.Provider value={mockContext}>
+        <AssetListActionsToolbar />
+      </GameContext.Provider>
+    </>
+  );
+};
+
+function renderIt(routes = ["/"]) {
   render(
-    <GameContext.Provider value={mockContext}>
-      <AssetListActionsToolbar />
-    </GameContext.Provider>
+    <MemoryRouter initialEntries={routes}>
+      <TestComp />
+    </MemoryRouter>
   );
 }
 
@@ -49,14 +57,6 @@ beforeEach(() => {
 });
 
 describe('default AssetListActionsToolbar', () => {
-  beforeEach(() => {
-    mockUseLocation.mockImplementation(() => (
-      {
-        pathname: "/factions/test-faction/assets",
-      } as RDom.Location
-    ));
-  });
-
   it('renders', () => {
     renderIt();
     const alat = screen.getByTestId("asset-lat");
@@ -88,7 +88,7 @@ describe('default AssetListActionsToolbar', () => {
   });
 
   it('adding asset calls controller', () => {
-    renderIt();
+    renderIt(["/factions/test-faction"]);
     const alat = screen.getByTestId("asset-lat");
     const add = within(alat).getByTestId("lat-add");
     fireEvent.click(add);
@@ -105,7 +105,7 @@ describe('default AssetListActionsToolbar', () => {
     const optionText = option.textContent;
     fireEvent.click(option);
 
-    const btnAdd = within(dialog).getByTestId("add-button");
+    const btnAdd = within(dialog).getByText("Add");
     fireEvent.click(btnAdd);
     expect(mockContext.controller.addAsset).toBeCalledTimes(1);
     expect(mockContext.controller.addAsset).toBeCalledWith("test-faction", optionText);
@@ -113,19 +113,8 @@ describe('default AssetListActionsToolbar', () => {
 });
 
 describe('asset selected AssetListActionsToolbar', () => {
-  const mockNav = jest.fn();
-
-  beforeEach(() => {
-    mockUseLocation.mockImplementation(() => (
-      {
-        pathname: "/factions/test-faction/assets/test-asset-1",
-      } as RDom.Location
-    ));
-    mockUseNavigate.mockImplementationOnce(() => mockNav);
-  });
-
   it('when asset selected, remove button is enabled', () => {
-    renderIt();
+    renderIt(["/factions/test-faction/assets/test-asset-1"]);
     const alat = screen.getByTestId("asset-lat");
     const add = within(alat).getByTestId("lat-add");
     expect(add).toBeInTheDocument();
@@ -137,7 +126,7 @@ describe('asset selected AssetListActionsToolbar', () => {
   });
 
   it('when remove button enabled, click shows confirm dialog', () => {
-    renderIt();
+    renderIt(["/factions/test-faction/assets/test-asset-1"]);
     const alat = screen.getByTestId("asset-lat");
     const fabRemove = within(alat).getByTestId("lat-remove");
     let dlgRemove = screen.queryByTestId("remove-asset-dialog");
@@ -149,16 +138,19 @@ describe('asset selected AssetListActionsToolbar', () => {
   });
 
   it('confirm remove asset calls controller and navs to faction', () => {
-    renderIt();
+    renderIt(["/factions/test-faction/assets/test-asset-1"]);
     const alat = screen.getByTestId("asset-lat");
     const fabRemove = within(alat).getByTestId("lat-remove");
+    expect(fabRemove).not.toBeDisabled();
     fireEvent.click(fabRemove);
     const dlgRemove = screen.getByTestId("remove-asset-dialog");
-    const btnConfirm = within(dlgRemove).getByTestId("confirm-button");
+    expect(dlgRemove).toBeInTheDocument();
+    const btnConfirm = within(dlgRemove).getByText("Remove");
+    expect(btnConfirm).toBeInstanceOf(HTMLButtonElement);
     fireEvent.click(btnConfirm);
     expect(mockContext.controller.removeAsset).toBeCalledTimes(1);
     expect(mockContext.controller.removeAsset).toBeCalledWith("test-faction", "test-asset-1");
-    expect(mockNav).toBeCalledTimes(1);
-    expect(mockNav).lastCalledWith("/factions/test-faction");
+    const loc = screen.getByTestId("test-location");
+    expect(loc.textContent).toBe("/factions/test-faction");
   });
 });

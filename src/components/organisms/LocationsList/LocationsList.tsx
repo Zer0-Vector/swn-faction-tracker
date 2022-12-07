@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 
@@ -39,26 +39,30 @@ export default function LocationsList() {
 
   const locations = state.getLocations();
 
-  const handleUpdateName = (currId: string) => (val: string) => {
-    const info = controller.updateLocationName(currId, val);
-    if (info !== undefined) {
-      nav(`/locations/${info.id}`);
+  const updateNameHandlers = useMemo(() => locations.map(loc => (
+    (val: string) => {
+      const info = controller.updateLocationName(loc.id, val);
+      if (info !== undefined && selectedLocationId === loc.id) {
+        nav(`/locations/${info.id}`);
+      }
     }
-  };
+  )), [controller, locations, nav, selectedLocationId]);
 
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = useCallback((result: DropResult) => {
     if (result.reason === 'DROP') {
       controller.reorderLocations(result.source, result.destination);
     }
-  };
+  }, [controller]);
 
-  const handleSelect = (locationId: string) => {
-    if (locationId === selectedLocationId) {
-      nav("/locations");
-    } else {
-      nav(`/locations/${locationId}`);
-    }
-  };
+  const selectionHandlers = useMemo(() => (
+    locations.map(val => () => {
+      if (val.id === selectedLocationId) {
+        nav("/locations");
+      } else {
+        nav(`/locations/${val.id}`);
+      }
+    })
+  ), [locations, nav, selectedLocationId]);
 
   if (locations.length === 0) {
     return (
@@ -86,19 +90,27 @@ export default function LocationsList() {
                     disableGutters={true}
                   >
                     <AccordionSummary
-                      onClick={() => handleSelect(val.id)}
-                      sx={theme => ({
-                        backgroundColor: snapshot.isDragging ? theme.palette.action.dragging : (selectedLocationId === val.id ? theme.palette.action.selected : "inherit"),
+                      onClick={selectionHandlers[index]}
+                      sx={{
+                        backgroundColor: snapshot.isDragging ? "action.dragging" : (selectedLocationId === val.id ? "action.selected" : "inherit"),
                         justifyContent: "flex-start",
                         gap: 2,
                         "& .MuiAccordionSummary-content": {
                           alignItems: "center",
                           width: "100%",
                         },
-                      })}
+                      }}
                     >
-                      <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
-                      <EditableText id="location-name" onUpdate={handleUpdateName(val.id)} variant="body2">{val.name}</EditableText>
+                      <Icon
+                        {...provided.dragHandleProps}
+                        component="div"
+                        sx={{
+                          display: "flex",
+                        }}
+                      >
+                        <DragHandleIcon />
+                      </Icon>
+                      <EditableText id="location-name" onUpdate={updateNameHandlers[index]} variant="body2">{val.name}</EditableText>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Grid container spacing={1}>

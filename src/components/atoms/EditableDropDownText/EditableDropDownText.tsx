@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { SxProps, Theme } from "@mui/material/styles";
@@ -78,6 +78,21 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
     evt.stopPropagation();
   }, []);
 
+  const autocompleteTextField = useCallback<(params: AutocompleteRenderInputParams) => React.ReactNode>(
+    params =>
+      <TextField
+        {...params}
+        inputRef={textFieldRef}
+        onKeyUp={handleKeyUp}
+        onClick={inputClickHander}
+        onBlur={handleCancel}
+        autoComplete="off"
+        sx={inputSx}
+        data-testid="editable-dropdown-textfield"
+      />,
+    [handleCancel, handleKeyUp, inputClickHander, inputSx]
+  );
+
   let inner;
   if (editing) {
     inner = (
@@ -89,18 +104,7 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
         onChange={dropdownChanged}
         data-testid="editable-dropdown-autocomplete"
         value={children}
-        renderInput={params =>
-          <TextField
-            {...params}
-            inputRef={textFieldRef}
-            onKeyUp={handleKeyUp}
-            onClick={inputClickHander}
-            onBlur={handleCancel}
-            autoComplete="off"
-            sx={inputSx}
-            data-testid="editable-dropdown-textfield"
-          />
-        }
+        renderInput={autocompleteTextField}
       />
     );
   } else {
@@ -112,6 +116,7 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
         component="span"
         title={children}
         data-testid="editable-dropdown-text"
+        color="text.primary"
       >
         {children}
       </Typography>

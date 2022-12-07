@@ -3,7 +3,7 @@ import React, { useCallback, useContext } from "react";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
 import Link from "../../atoms/Link";
-import MessageDialog from "../MessageDialog";
+import MessageDialog from "../../atoms/MessageDialog";
 
 const NeedsVerificationDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
@@ -26,6 +26,7 @@ const NeedsVerificationDialog = () => {
 
   const handleClose = useCallback(async () => {
     try {
+      uiController.setLoginState("LOGOUT_WAITING");
       await logout();
       uiController.setLoginState("LOGGED_OUT");
       console.info("User logged out.");
@@ -41,7 +42,8 @@ const NeedsVerificationDialog = () => {
       open={open}
       title="Email Verification Required"
       message="Please check your email to verify your email address."
-      onClose={handleClose}
+      onAction={handleClose}
+      buttons={["OK"]}
     >
       <Link onClick={handleResend} data-testid="verification-dialog-resend-link">Resend Verification Email</Link>
     </MessageDialog>

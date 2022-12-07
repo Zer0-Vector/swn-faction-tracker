@@ -2,40 +2,39 @@ import React, { useCallback, useContext } from "react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
-import ConfirmDialog from "../ConfirmDialog";
+import MessageDialog from "../../atoms/MessageDialog";
+import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const { logout } = useAuth();
 
-  const handleLogout = useCallback(async () => {
-    uiController.setLoginState("LOGOUT_WAITING");
-    try {
-      await logout();
-      uiController.setLoginState("LOGGED_OUT");
-    } catch (reason) {
-      console.error("Logout failed: ", reason);
+  const handleAction = useCallback<DialogActionHandler>(async (action, reason) => {
+    if (reason !== "Logout") {
       uiController.setLoginState("LOGGED_IN");
+    } else {
+      try {
+        uiController.setLoginState("LOGOUT_WAITING");
+        await logout();
+        uiController.setLoginState("LOGGED_OUT");
+      } catch (reason) {
+        console.error("Logout failed: ", reason);
+        uiController.setLoginState("LOGGED_IN");
+      }
     }
   }, [logout, uiController]);
-
-  const handleCancel = useCallback(() => {
-    uiController.setLoginState("LOGGED_IN");
-  }, [uiController]);
-
-  const open = uiState.loginState === "LOGGING_OUT";
 
   console.log("Rendering LogoutConfirmDialog...");
 
   return (
-    <ConfirmDialog
+    <MessageDialog 
       data-testid="logout-confirmation"
       title="Confirm Logout"
       message="Logout?"
-      buttonText="Logout"
-      onConfirm={handleLogout}
-      onCancel={handleCancel}
-      open={open}
+      buttons={["Cancel", "Logout"]}
+      closeable={false}
+      onAction={handleAction}
+      open={uiState.loginState === "LOGGING_OUT"}
     />
   );
 };

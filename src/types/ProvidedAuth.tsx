@@ -41,11 +41,4 @@ export interface ProvidedAuth {
    * @param email The user's email
    */
   sendPasswordResetEmail: (email: string) => Promise<void>;
-
-  /**
-   * Confirm password reset with given code and new password.
-   * @param code The confirmation code given to the User.
-   * @param password The User's new password.
-   */
-  confirmPasswordReset: (code: string, password: string) => Promise<void>;
 }

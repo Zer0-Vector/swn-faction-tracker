@@ -1,20 +1,14 @@
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
-import { SxProps } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 
 import { GameContext } from "../../../contexts/GameContext";
 import FormInfo from "../../../types/FormInfo";
 import LocationInfo from "../../../types/LocationInfo";
+import MessageDialog from "../../atoms/MessageDialog";
+import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddLocationDialogProps {
   open: boolean;
@@ -89,11 +83,6 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     onClose();
   }, [onClose]);
 
-  const handleCancel = useCallback((evt: React.MouseEvent<HTMLElement>) => {
-    evt.stopPropagation();
-    handleClose();
-  }, [handleClose]);
-
   const allValid = useCallback(() => {
     return (
       isNotDuplicateName(nameText.value)
@@ -112,92 +101,96 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
         parseInt(coords.value[1])
       ));
     }
-    handleClose();
-  }, [allValid, coords.value, handleClose, nameText.value, onCreate, tlText.value]);  
+  }, [allValid, coords.value, nameText.value, onCreate, tlText.value]);
 
-  const formCtrlSx = useMemo<SxProps>(() => ({
-    display: "flex",
-    gap: 2,
-  }), []);
+  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
+    if (reason === "Create") {
+      handleCreate();
+    }
+    handleClose();
+  }, [handleClose, handleCreate]);
+
+  const buttons = useMemo(() => ["Cancel", "Create"], []);
+  const disabledButtons = useMemo(() => !allValid() ? ["Create"] : [], [allValid]);
 
   return (
-    <Dialog open={open} onClose={onClose} data-testid="add-location-dialog">
-      <DialogTitle data-testid="add-location-dialog-title">Add Location</DialogTitle>
-      <DialogContent>
-        <DialogContentText paddingBottom={2} data-testid="add-location-dialog-content-text">
-          Enter the new location&apos;s details.
-        </DialogContentText>
-        <FormControl sx={formCtrlSx}>
+    <MessageDialog
+      open={open}
+      message="Enter the new location's details."
+      title="Add Location"
+      buttons={buttons}
+      disabledButtons={disabledButtons}
+      onAction={handleAction}
+      data-testid="add-location-dialog"
+    >
+      <Box display="flex" flexDirection="column" gap={2}>
+        <TextField
+          id="location-name"
+          label="Location Name"
+          variant="filled"
+          inputRef={inputRef}
+          type="text"
+          placeholder="Enter Location Name"
+          autoFocus={true}
+          value={nameText.value}
+          onInput={handleChange(setNameText, isNotDuplicateName)}
+          error={!nameText.valid}
+          fullWidth={true}
+          autoComplete="off"
+          data-testid="location-name-field"
+        />
+        <TextField
+          id="location-tl"
+          label="Tech Level"
+          variant="filled"
+          inputRef={inputRef}
+          autoFocus={false}
+          value={tlText.value}
+          onChange={handleChange(setTlText, isInteger)}
+          error={!tlText.valid}
+          fullWidth={true}
+          autoComplete="off"
+          select={true}
+          data-testid="location-tl-field"
+        >
+          <MenuItem value="0">0</MenuItem>
+          <MenuItem value="1">1</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+          <MenuItem value="3">3</MenuItem>
+          <MenuItem value="4">4</MenuItem>
+          <MenuItem value="5">5</MenuItem>
+        </TextField>
+        <Box display="flex" justifyContent="space-between" gap={2}>
           <TextField
-            id="location-name"
-            label="Location Name"
+            id="location-x"
+            label="X"
             variant="filled"
-            inputRef={inputRef}
-            type="text"
-            placeholder="Enter Location Name"
-            autoFocus={true}
-            value={nameText.value}
-            onInput={handleChange(setNameText, isNotDuplicateName)}
-            error={!nameText.valid}
-            fullWidth={true}
+            type="number"
+            placeholder="X Coordinate"
+            autoFocus={false}
+            value={coords.value[0]}
+            onInput={handleCoordsChange(0)}
+            error={!coords.valid}
             autoComplete="off"
-            data-testid="add-location-dialog-location-name-field"
+            fullWidth={true}
+            data-testid="location-x-field"
           />
           <TextField
-            id="location-tl"
-            label="Tech Level"
+            id="location-y"
+            label="Y"
             variant="filled"
-            inputRef={inputRef}
+            type="number"
+            placeholder="Y Coordinate"
             autoFocus={false}
-            value={tlText.value}
-            onChange={handleChange(setTlText, isInteger)}
-            error={!tlText.valid}
-            fullWidth={true}
+            value={coords.value[1]}
+            onInput={handleCoordsChange(1)}
+            error={!coords.valid}
             autoComplete="off"
-            select={true}
-            data-testid="add-location-dialog-location-tl-field"
-          >
-            <MenuItem value="0">0</MenuItem>
-            <MenuItem value="1">1</MenuItem>
-            <MenuItem value="2">2</MenuItem>
-            <MenuItem value="3">3</MenuItem>
-            <MenuItem value="4">4</MenuItem>
-            <MenuItem value="5">5</MenuItem>
-          </TextField>
-          <Box display="flex" gap={2}>
-            <TextField
-              id="location-x"
-              label="X"
-              variant="filled"
-              type="number"
-              placeholder="X Coordinate"
-              autoFocus={false}
-              value={coords.value[0]}
-              onInput={handleCoordsChange(0)}
-              error={!coords.valid}
-              autoComplete="off"
-              data-testid="add-location-dialog-location-x-field"
-            />
-            <TextField
-              id="location-y"
-              label="Y"
-              variant="filled"
-              type="number"
-              placeholder="Y Coordinate"
-              autoFocus={false}
-              value={coords.value[1]}
-              onInput={handleCoordsChange(1)}
-              error={!coords.valid}
-              autoComplete="off"
-              data-testid="add-location-dialog-location-y-field"
-            />
-          </Box>
-        </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCancel}  data-testid="add-location-dialog-cancel-button">Cancel</Button>
-        <Button onClick={handleCreate} disabled={!allValid()}  data-testid="add-location-dialog-confirm-button">Create</Button>
-      </DialogActions>
-    </Dialog>
+            fullWidth={true}
+            data-testid="location-y-field"
+          />
+        </Box>
+      </Box>
+    </MessageDialog>
   );
 }

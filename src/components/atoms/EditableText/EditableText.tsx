@@ -149,6 +149,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
         title={children}
         flexShrink={1}
         data-testid="editable-text-text"
+        color="text.primary"
       >
         {children}
       </Typography>
