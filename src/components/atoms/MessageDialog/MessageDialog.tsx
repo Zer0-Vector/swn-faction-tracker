@@ -94,7 +94,7 @@ const MessageDialog = ({
         <DialogContentText sx={contentTextSx} data-testid="message-dialog-message">{message}</DialogContentText>
         {children}
       </DialogContent>
-      <DialogActions data-testid="actions">
+      <DialogActions data-testid="message-dialog-actions">
         {renderedButtons}
       </DialogActions>
     </Dialog>

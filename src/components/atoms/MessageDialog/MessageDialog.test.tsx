@@ -38,7 +38,7 @@ describe('<MessageDialog />', () => {
   it('can use custom button text', () => {
     render(<MessageDialog open={true} data-testid="test3" title="test3-title" message="test3-message" onAction={jest.fn()} buttons={["OK-Test3"]} />);
     const dialog = screen.getByTestId("test3");
-    const actions = within(dialog).getByTestId("actions");
+    const actions = within(dialog).getByTestId("message-dialog-actions");
     const button = within(actions).getByText("OK-Test3");
     expect(button).toBeInTheDocument();
     expect(button).toBeInstanceOf(HTMLButtonElement);
