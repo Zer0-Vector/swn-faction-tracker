@@ -45,12 +45,13 @@ describe('default AddFactionDialog', () => {
   
   it('renders buttons', () => {
     renderWithContext();
-    const btnAdd = screen.getByTestId("add-faction-dialog-confirm-button");
+    const dialog = screen.getByTestId("add-faction-dialog");
+    const btnAdd = within(dialog).getByText("Create");
     expect(btnAdd).toBeInTheDocument();
     expect(btnAdd).toBeInstanceOf(HTMLButtonElement);
     expect(btnAdd).toHaveTextContent("Create");
     
-    const btnCancel = screen.getByTestId("add-faction-dialog-cancel-button");
+    const btnCancel = within(dialog).getByText("Cancel");
     expect(btnCancel).toBeInTheDocument();
     expect(btnCancel).toBeInstanceOf(HTMLButtonElement);
     expect(btnCancel).toHaveTextContent("Cancel");
@@ -58,7 +59,7 @@ describe('default AddFactionDialog', () => {
   
   it('renders title', () => {
     renderWithContext();
-    const divTitle = screen.getByTestId("add-faction-dialog-title");
+    const divTitle = screen.getByTestId("message-dialog-title");
     expect(divTitle).toBeInTheDocument();
     expect(divTitle).toBeInstanceOf(HTMLHeadingElement);
     expect(divTitle.textContent).toEqual("Add Faction");
@@ -66,7 +67,7 @@ describe('default AddFactionDialog', () => {
   
   it('renders instructions content text', () => {
     renderWithContext();
-    const divInst = screen.getByTestId("add-faction-dialog-content-text");
+    const divInst = screen.getByTestId("message-dialog-message");
     expect(divInst).toBeInTheDocument();
     expect(divInst).toBeInstanceOf(HTMLParagraphElement);
     expect(divInst).toHaveTextContent("name");
@@ -75,7 +76,7 @@ describe('default AddFactionDialog', () => {
 
   it('renders input field faction name', () => {
     renderWithContext();
-    const inAsset = screen.getByTestId("add-faction-dialog-faction-name-field");
+    const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
     expect(inAsset).toHaveClass("MuiTextField-root");
@@ -87,7 +88,8 @@ describe('default AddFactionDialog', () => {
 
   it('does nothing when the field is empty', () => {
     const { mockCreate, mockClose } = renderWithContext();
-    const inAsset = screen.getByTestId("add-faction-dialog-faction-name-field");
+    const dialog = screen.getByTestId("add-faction-dialog");
+    const inAsset = within(dialog).getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
     expect(inAsset).toHaveClass("MuiTextField-root");
@@ -96,7 +98,7 @@ describe('default AddFactionDialog', () => {
     expect(field).toBeInTheDocument();
     expect(field).not.toHaveValue();
     
-    const btnCreate = screen.getByTestId("add-faction-dialog-confirm-button");
+    const btnCreate = within(dialog).getByText("Create");
     expect(btnCreate).toBeInTheDocument();
     expect(btnCreate).toBeInstanceOf(HTMLButtonElement);
     expect(btnCreate).toBeDisabled();
@@ -108,7 +110,8 @@ describe('default AddFactionDialog', () => {
 
   it('enables Create button when field is non-empty', () => {
     renderWithContext();
-    const inAsset = screen.getByTestId("add-faction-dialog-faction-name-field");
+    const dialog = screen.getByTestId("add-faction-dialog");
+    const inAsset = within(dialog).getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
     expect(inAsset).toHaveClass("MuiTextField-root");
@@ -120,7 +123,7 @@ describe('default AddFactionDialog', () => {
     fireEvent.input(field, { target: { value: "abc" } });
     expect(field).toHaveValue("abc");
     
-    const btnCreate = screen.getByTestId("add-faction-dialog-confirm-button");
+    const btnCreate = within(dialog).getByText("Create");
     expect(btnCreate).toBeInTheDocument();
     expect(btnCreate).toBeInstanceOf(HTMLButtonElement);
     expect(btnCreate).not.toBeDisabled();
@@ -134,7 +137,7 @@ describe('default AddFactionDialog', () => {
       controller: {} as IGameController,
     };
     renderWithContext(context);
-    const inAsset = screen.getByTestId("add-faction-dialog-faction-name-field");
+    const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
     expect(inAsset).toHaveClass("MuiTextField-root");
@@ -151,7 +154,8 @@ describe('default AddFactionDialog', () => {
     fireEvent.input(field, { target: { value: "abc" } });
     expect(field).toHaveValue("abc");
 
-    const btnCreate = screen.getByTestId("add-faction-dialog-confirm-button");
+    const dialog = screen.getByTestId("add-faction-dialog");
+    const btnCreate = within(dialog).getByText("Create");
     expect(btnCreate).toBeInTheDocument();
     expect(btnCreate).toBeInstanceOf(HTMLButtonElement);
     expect(btnCreate).toBeDisabled();
@@ -162,7 +166,7 @@ describe('default AddFactionDialog', () => {
 
   it('calls onClose when cancelled', () => {
     const { mockCreate, mockClose } = renderWithContext();
-    const inAsset = screen.getByTestId("add-faction-dialog-faction-name-field");
+    const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
     expect(inAsset).toHaveClass("MuiTextField-root");
@@ -171,7 +175,8 @@ describe('default AddFactionDialog', () => {
     expect(field).toBeInTheDocument();
     expect(field).not.toHaveValue();
     
-    const btnCancel = screen.getByTestId("add-faction-dialog-cancel-button");
+    const dialog = screen.getByTestId("add-faction-dialog");
+    const btnCancel = within(dialog).getByText("Cancel");
     expect(btnCancel).toBeInTheDocument();
     expect(btnCancel).toBeInstanceOf(HTMLButtonElement);
     expect(btnCancel).not.toBeDisabled();
@@ -183,7 +188,7 @@ describe('default AddFactionDialog', () => {
 
   it('calls onCreate when given a unique name', () => {
     const { mockClose, mockCreate } = renderWithContext();
-    const inAsset = screen.getByTestId("add-faction-dialog-faction-name-field");
+    const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
     expect(inAsset).toHaveClass("MuiTextField-root");
@@ -195,7 +200,8 @@ describe('default AddFactionDialog', () => {
     fireEvent.input(field, { target: { value: "abc" } });
     expect(field).toHaveValue("abc");
     
-    const btnCreate = screen.getByTestId("add-faction-dialog-confirm-button");
+    const dialog = screen.getByTestId("add-faction-dialog");
+    const btnCreate = within(dialog).getByText("Create");
     expect(btnCreate).toBeInTheDocument();
     expect(btnCreate).toBeInstanceOf(HTMLButtonElement);
     expect(btnCreate).not.toBeDisabled();

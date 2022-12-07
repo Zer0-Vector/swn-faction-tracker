@@ -1,15 +1,11 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
 
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 
 import { GameContext } from "../../../contexts/GameContext";
 import FormInfo from "../../../types/FormInfo";
+import MessageDialog from "../../atoms/MessageDialog";
+import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddFactionDialogProps {
   open: boolean;
@@ -24,7 +20,7 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
 
   const factions = state.getFactions().map(f => f.name);
 
-  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
     console.debug("input changed!", factions);
     const newText = evt.target.value;
     const nameExists = factions.includes(newText);
@@ -35,53 +31,49 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     };
     console.debug(isNotBlank, !nameExists);
     setFormState(newState);
-  };
+  }, [factions]);
   
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setFormState({ value: "", valid: false });
     inputRef.current?.focus();
     onClose();
-  };
+  }, [onClose]);
 
-  const handleCancel = (evt: React.MouseEvent<HTMLElement>) => {
-    evt.stopPropagation();
-    handleClose();
-  };
-
-  const handleCreate = () => {
-    if (formState.valid) {
+  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
+    if (reason === "Create" && formState.valid) {
       onCreate(formState.value);
     }
     handleClose();
-  };
+  }, [formState.valid, formState.value, handleClose, onCreate]);
+
+  const buttons = useMemo(() => ["Cancel", "Create"], []);
+  const disabledButtons = useMemo(() => !formState.valid ? ["Create"] : [], [formState.valid]);
 
   return (
-    <Dialog open={open} onClose={onClose} data-testid="add-faction-dialog">
-      <DialogTitle data-testid="add-faction-dialog-title">Add Faction</DialogTitle>
-      <DialogContent>
-        <DialogContentText sx={theme => ({ paddingBottom: theme.spacing(2) })} data-testid="add-faction-dialog-content-text">
-          Enter a unique name for the new faction.
-        </DialogContentText>
-        <TextField
-          id="faction-name"
-          label="Faction Name"
-          variant="filled"
-          inputRef={inputRef}
-          type="text"
-          placeholder="Enter Faction Name"
-          autoFocus={true}
-          value={formState.value}
-          onInput={handleInputChange}
-          error={!formState.valid && formState.value !== ""}
-          fullWidth={true}
-          autoComplete="off"
-          data-testid="add-faction-dialog-faction-name-field"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCancel} data-testid="add-faction-dialog-cancel-button">Cancel</Button>
-        <Button onClick={handleCreate} disabled={!formState.valid} data-testid="add-faction-dialog-confirm-button">Create</Button>
-      </DialogActions>
-    </Dialog>
+    <MessageDialog
+      open={open}
+      title="Add Faction"
+      message="Enter a unique name for the new faction."
+      onAction={handleAction}
+      buttons={buttons}
+      disabledButtons={disabledButtons}
+      data-testid="add-faction-dialog"
+    >
+      <TextField
+        id="faction-name"
+        label="Faction Name"
+        variant="filled"
+        inputRef={inputRef}
+        type="text"
+        placeholder="Enter Faction Name"
+        autoFocus={true}
+        value={formState.value}
+        onInput={handleInputChange}
+        error={!formState.valid && formState.value !== ""}
+        fullWidth={true}
+        autoComplete="off"
+        data-testid="faction-name-field"
+      />
+    </MessageDialog>
   );
 }
