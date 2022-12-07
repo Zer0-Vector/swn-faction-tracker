@@ -105,7 +105,7 @@ describe('default AssetListActionsToolbar', () => {
     const optionText = option.textContent;
     fireEvent.click(option);
 
-    const btnAdd = within(dialog).getByTestId("add-button");
+    const btnAdd = within(dialog).getByText("Add");
     fireEvent.click(btnAdd);
     expect(mockContext.controller.addAsset).toBeCalledTimes(1);
     expect(mockContext.controller.addAsset).toBeCalledWith("test-faction", optionText);
