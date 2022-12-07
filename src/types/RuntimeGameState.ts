@@ -227,7 +227,8 @@ export default class RuntimeGameState implements IGameController, IGameState {
   #nextAssetIndex(prefix: string): number {
     const currentIds = Array.from(this.assets.keys())
       .filter(item => item.startsWith(prefix))
-      .map(item => parseInt(item.split(/[.-]/)[2]));
+      .map(item => item.match(`${prefix}-(\\d+)`)?.at(1))
+      .map(item => item === undefined ? 0 : parseInt(item));
     if (currentIds.length === 0) {
       return 1;
     } else {
