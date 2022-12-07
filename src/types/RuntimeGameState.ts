@@ -224,11 +224,12 @@ export default class RuntimeGameState implements IGameController, IGameState {
       return this.assets.get(fqAssetId);
   }
 
-  #nextAssetIndex(prefix: string): number {
+  nextAssetIndex(prefix: string): number {
     const currentIds = Array.from(this.assets.keys())
       .filter(item => item.startsWith(prefix))
-      .map(item => item.match(`${prefix}-(\\d+)`)?.at(1))
-      .map(item => item === undefined ? 0 : parseInt(item));
+      .map(item => item.match(`${prefix}-(\\d+)`)?.at(1) || "0")
+      .map(item => parseInt(item))
+      .filter(item => item > 0);
     if (currentIds.length === 0) {
       return 1;
     } else {
@@ -241,7 +242,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addAsset(selectedFactionId: string, assetName: string): PurchasedAsset {
-    const index = this.#nextAssetIndex(`${selectedFactionId}.${AssetId.toRefName(assetName)}`);
+    const index = this.nextAssetIndex(`${selectedFactionId}.${AssetId.toRefName(assetName)}`);
     const id: AssetId = new AssetId(assetName, index);
     const hp = (isAsset(assetName) && ASSETS[assetName]?.maxHp) || 0;
     const asset: PurchasedAsset = { id, hp };
