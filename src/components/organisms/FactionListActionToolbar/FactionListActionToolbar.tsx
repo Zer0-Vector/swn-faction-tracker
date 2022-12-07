@@ -24,6 +24,7 @@ export default function FactionListActionToolbar() {
 
   const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
     setRemoveOpen(false);
+    console.debug("handleRemoveAction: ", selectedFaction, reason);
     if (selectedFaction && reason === "Remove") {
       controller.removeFaction(selectedFaction.id);
       nav("/factions");
