@@ -68,8 +68,6 @@ export default function UserMenu({ user }: UserMenuProps) {
         <>
           <LoginDialog />
           <RegistrationDialog />
-          <NeedsVerificationDialog />
-          <VerificationEmailErrorDialog />
           <PasswordResetDialog />
           <PasswordResetErrorDialog />
           <PasswordResetSentDialog />
@@ -77,7 +75,11 @@ export default function UserMenu({ user }: UserMenuProps) {
       );
     } else {
       return (
-        <LogoutConfirmDialog />
+        <>
+          <NeedsVerificationDialog />
+          <VerificationEmailErrorDialog />
+          <LogoutConfirmDialog />
+        </>
       );
     }
   }, [user]);
