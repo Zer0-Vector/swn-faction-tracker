@@ -73,6 +73,7 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
       buttons={["Cancel", "Add"]}
       onAction={handleAction}
       data-testid="add-asset-dialog"
+      fullWidth={false}
     >
       <FormControl sx={formControlSx}>
         <Autocomplete
