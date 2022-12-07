@@ -27,8 +27,8 @@ export default {
     story => (
       <AuthContext.Provider value={{
         currentUser: {} as User,
-        sendEmailVerification: () => {
-          action("sendEmailVerification")([]);
+        sendEmailVerification: (u: User) => {
+          action("sendEmailVerification")(u);
           return Promise.resolve();
         },
       } as ProvidedAuth}>

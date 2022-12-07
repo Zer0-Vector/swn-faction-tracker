@@ -34,7 +34,7 @@ export interface ProvidedAuth {
   /**
    * Send verification email for current logged in user.
    */
-  sendEmailVerification: () => Promise<void>;
+  sendEmailVerification: (user: User) => Promise<void>;
 
   /**
    * Send password reset instructions to the given email.

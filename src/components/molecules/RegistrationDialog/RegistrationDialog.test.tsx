@@ -7,6 +7,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
 import LoginState from "../../../types/LoginState";
+import Nullable from "../../../types/Nullable";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import RegistrationDialog from "../RegistrationDialog";
 
@@ -23,7 +24,7 @@ const mockSignUp = jest.fn();
 const mockSendEmailVerification = jest.fn();
 const mockAuth = {
   signup: mockSignUp as (e: string, p: string)=>Promise<User>,
-  sendEmailVerification: mockSendEmailVerification as ()=>Promise<void>,
+  sendEmailVerification: mockSendEmailVerification as (u:Nullable<User>)=>Promise<void>,
 } as ProvidedAuth;
 
 function renderOpened() {
