@@ -82,14 +82,17 @@ export default function UserMenu({ user }: UserMenuProps) {
     }
   }, [user]);
 
+  const iconClickHandler = useCallback(() => setOpen(prev => !prev), []);
+  const menuCloseHandler = useCallback(() => setOpen(false), []);
+
   console.debug("Rendering UserMenu... logged in? ", !!user);
 
   return (
     <div>
-      <IconButton ref={btnRef} onClick={() => setOpen(prev => !prev)}>
+      <IconButton ref={btnRef} onClick={iconClickHandler}>
         {icon}
       </IconButton>
-      <Menu open={open} anchorEl={btnRef.current} onClose={() => setOpen(false)}>
+      <Menu open={open} anchorEl={btnRef.current} onClose={menuCloseHandler}>
         {menuItems}
       </Menu>
       {dialogItems}
