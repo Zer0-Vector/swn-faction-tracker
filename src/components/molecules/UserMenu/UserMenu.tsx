@@ -12,6 +12,9 @@ import Nullable from "../../../types/Nullable";
 import LoginDialog from "../LoginDialog";
 import LogoutConfirmDialog from "../LogoutConfirmDialog";
 import NeedsVerificationDialog from "../NeedsVerificationDialog";
+import { PasswordResetDialog } from "../PasswordResetDialog";
+import { PasswordResetErrorDialog } from "../PasswordResetErrorDialog";
+import { PasswordResetSentDialog } from "../PasswordResetSentDialog";
 import RegistrationDialog from "../RegistrationDialog";
 import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
 
@@ -67,6 +70,9 @@ export default function UserMenu({ user }: UserMenuProps) {
           <RegistrationDialog />
           <NeedsVerificationDialog />
           <VerificationEmailErrorDialog />
+          <PasswordResetDialog />
+          <PasswordResetErrorDialog />
+          <PasswordResetSentDialog />
         </>
       );
     } else {
