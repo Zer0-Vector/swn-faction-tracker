@@ -1,5 +1,6 @@
 import AssetId from "../AssetId";
 import LocationInfo from "../LocationInfo";
+import PurchasedAsset from "../PurchasedAsset";
 import RuntimeGameState from "../RuntimeGameState";
 import StoredGameState from "../StoredGameState";
 
@@ -160,7 +161,27 @@ describe('addLocation', () => {
 });
 
 // TODO removeAsset
-// TODO addAsset
+describe('addAssset', () => {
+  it('addAsset adds asset', () => {
+    const result = state.addAsset("test-faction", "Test Asset");
+    expect(result.id.displayName).toBe("Test Asset");
+    expect(result.id.index).toBe(1);
+    const ref = AssetId.toRefFormat(result.id);
+    expect(ref).toBe("test-asset-1");
+    const value = state.assets.get(PurchasedAsset.getKey("test-faction", result));
+    expect(value).not.toBeUndefined();
+    expect(value).toBe(result);
+  });
+
+  it('addAsset with same name is indexed', () => {
+    const result1 = state.addAsset("test-faction", "Asset Tester");
+    expect(result1.id.index).toBe(1);
+    const result2 = state.addAsset("test-faction", "Asset Tester");
+    expect(result2.id.index).toBe(2);
+    const result3 = state.addAsset("test-faction", "Asset Tester");
+    expect(result3.id.index).toBe(3);
+  });
+});
 // TODO updateTag
 // TODO reorderFactions
 // TODO addFaction
