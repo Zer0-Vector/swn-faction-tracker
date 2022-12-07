@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelection } from "../../../hooks/useSelection";
 import LocationInfo from "../../../types/LocationInfo";
-import AddLocationDialog from "../../molecules/AddLocationDialog";
-import ListActionToolbar from "../../molecules/ListActionToolbar";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
+import AddLocationDialog from "../../molecules/AddLocationDialog";
+import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function LocationsActionToolbar() {
   const { controller } = useContext(GameContext);

@@ -1,4 +1,3 @@
-import { generateId } from "../../utils/IdGenerator";
 import AssetId from "../AssetId";
 import LocationInfo from "../LocationInfo";
 import RuntimeGameState from "../RuntimeGameState";

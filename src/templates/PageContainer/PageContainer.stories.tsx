@@ -47,7 +47,7 @@ export default {
       }}>
         {story()}
       </GameContext.Provider>
-    )
+    ),
   ],
 } as ComponentMeta<typeof PageContainer>;
 

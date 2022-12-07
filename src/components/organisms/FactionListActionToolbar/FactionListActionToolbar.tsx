@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelection } from "../../../hooks/useSelection";
-import AddFactionDialog from "../../molecules/AddFactionDialog";
-import ListActionToolbar from "../../molecules/ListActionToolbar";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
+import AddFactionDialog from "../../molecules/AddFactionDialog";
+import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function FactionListActionToolbar() {
   const { controller } = useContext(GameContext);
