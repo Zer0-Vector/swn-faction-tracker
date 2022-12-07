@@ -42,11 +42,11 @@ export default function LocationsList() {
   const updateNameHandlers = useMemo(() => locations.map(loc => (
     (val: string) => {
       const info = controller.updateLocationName(loc.id, val);
-      if (info !== undefined) {
+      if (info !== undefined && selectedLocationId === loc.id) {
         nav(`/locations/${info.id}`);
       }
     }
-  )), [controller, locations, nav]);
+  )), [controller, locations, nav, selectedLocationId]);
 
   const handleDragEnd = useCallback((result: DropResult) => {
     if (result.reason === 'DROP') {
