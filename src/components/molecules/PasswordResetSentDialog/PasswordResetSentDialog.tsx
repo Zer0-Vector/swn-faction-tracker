@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from "react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import MessageDialog from "../MessageDialog";
+import MessageDialog from "../../atoms/MessageDialog";
 
 export function PasswordResetSentDialog() {
   const { state, controller } = useContext(UiStateContext);

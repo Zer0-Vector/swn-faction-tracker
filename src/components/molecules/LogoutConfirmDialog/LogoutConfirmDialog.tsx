@@ -2,8 +2,8 @@ import React, { useCallback, useContext } from "react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
-import MessageDialog from "../MessageDialog";
-import { DialogActionHandler } from "../MessageDialog/MessageDialog";
+import MessageDialog from "../../atoms/MessageDialog";
+import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);

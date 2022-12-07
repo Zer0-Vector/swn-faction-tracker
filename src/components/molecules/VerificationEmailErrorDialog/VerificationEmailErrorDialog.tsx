@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
-import MessageDialog from "../MessageDialog";
+import MessageDialog from "../../atoms/MessageDialog";
 
 const VerificationEmailErrorDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);

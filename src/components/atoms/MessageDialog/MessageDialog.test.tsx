@@ -2,7 +2,7 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import MessageDialog from "../MessageDialog";
+import MessageDialog from "./MessageDialog";
 
 describe('<MessageDialog />', () => {
   it('renders with title, message, and default button', () => {

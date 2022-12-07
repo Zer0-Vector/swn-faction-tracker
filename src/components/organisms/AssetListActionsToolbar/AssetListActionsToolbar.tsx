@@ -6,8 +6,8 @@ import { useSelection } from "../../../hooks/useSelection";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import AddAssetDialog from "../../molecules/AddAssetDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
-import MessageDialog from "../../molecules/MessageDialog";
-import { DialogActionHandler } from "../../molecules/MessageDialog/MessageDialog";
+import MessageDialog from "../../atoms/MessageDialog";
+import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 export default function AssetListActionsToolbar() {
   const { controller } = useContext(GameContext);

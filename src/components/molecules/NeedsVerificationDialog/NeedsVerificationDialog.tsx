@@ -3,7 +3,7 @@ import React, { useCallback, useContext } from "react";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
 import Link from "../../atoms/Link";
-import MessageDialog from "../MessageDialog";
+import MessageDialog from "../../atoms/MessageDialog";
 
 const NeedsVerificationDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
