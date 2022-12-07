@@ -112,6 +112,7 @@ export default function EditableDropDownText({ children, onUpdate, textVariant, 
         component="span"
         title={children}
         data-testid="editable-dropdown-text"
+        color="text.primary"
       >
         {children}
       </Typography>
