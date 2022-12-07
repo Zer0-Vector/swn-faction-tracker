@@ -25,6 +25,7 @@ interface MessageDialogProps extends TestableProps {
   onAction: DialogActionHandler;
   buttons?: string[];
   children?: React.ReactNode;
+  fullWidth?: boolean;
 }
 
 const MessageDialog = ({ 
@@ -35,6 +36,7 @@ const MessageDialog = ({
   buttons,
   closeable = true,
   modal = true,
+  fullWidth = true,
   children,
   "data-testid": dtid,
 }: MessageDialogProps) => {
@@ -81,7 +83,7 @@ const MessageDialog = ({
   ), [closeButtonSx, closeable, handleCloseClick]);
 
   return (
-    <Dialog open={open} fullWidth={true} maxWidth="xs" onClose={handleClose} data-testid={dtid}>
+    <Dialog open={open} fullWidth={fullWidth} maxWidth="xs" onClose={handleClose} data-testid={dtid}>
       <DialogTitle data-testid="message-dialog-title">
         {title}
         {closeButton}
