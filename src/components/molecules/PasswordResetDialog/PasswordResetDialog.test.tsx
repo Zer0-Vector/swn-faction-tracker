@@ -60,7 +60,7 @@ describe('PasswordResetDialog', () => {
   it('asks for email', () => {
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
-    const message = within(dialog).getByTestId("message");
+    const message = within(dialog).getByTestId("message-dialog-message");
     expect(message).toHaveTextContent("email");
   });
 
