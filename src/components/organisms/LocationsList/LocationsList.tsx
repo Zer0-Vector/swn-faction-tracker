@@ -97,7 +97,15 @@ export default function LocationsList() {
                         },
                       })}
                     >
-                      <Icon {...provided.dragHandleProps}><DragHandleIcon /></Icon>
+                      <Icon
+                        {...provided.dragHandleProps}
+                        component="div"
+                        sx={{
+                          display: "flex",
+                        }}
+                      >
+                        <DragHandleIcon />
+                      </Icon>
                       <EditableText id="location-name" onUpdate={handleUpdateName(val.id)} variant="body2">{val.name}</EditableText>
                     </AccordionSummary>
                     <AccordionDetails>
