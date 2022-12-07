@@ -59,9 +59,13 @@ const MessageDialog = ({
     }
   }, [modal, onAction]);
 
+  const buttonsClickHandlers = useMemo(() => (
+    buttons?.map(b => (evt: React.SyntheticEvent) => handleButtonClick(b, evt)) || []
+  ), [buttons, handleButtonClick]);
+
   const renderedButtons = useMemo(() => (
-    buttons?.map((b, i) => <Button key={i} disabled={disabledButtons.includes(b)} onClick={(evt) => handleButtonClick(b, evt)}>{b}</Button>)
-  ), [buttons, disabledButtons, handleButtonClick]);
+    buttons?.map((b, i) => <Button key={b} disabled={disabledButtons.includes(b)} onClick={buttonsClickHandlers[i]}>{b}</Button>)
+  ), [buttons, buttonsClickHandlers, disabledButtons]);
 
   const closeButtonSx = useMemo<SxProps<Theme>>(() => ({
     position: "absolute",
