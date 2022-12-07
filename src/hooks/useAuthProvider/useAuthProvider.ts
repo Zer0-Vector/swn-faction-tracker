@@ -49,12 +49,8 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
       return user;
     },
 
-    sendEmailVerification: async () => {
-      if (user) {
-        await fauth.sendEmailVerification(user);
-      } else {
-        throw new Error("User not logged in.");
-      }
+    sendEmailVerification: (user: User) => {
+      return fauth.sendEmailVerification(user);
     },
 
     sendPasswordResetEmail: async (email: string) => {

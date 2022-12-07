@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FirebaseError } from "firebase/app";
+import { User } from "firebase/auth";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -63,8 +64,9 @@ const RegistrationDialog = () => {
     }
 
     uiController.setLoginState("REGISTER_WAITING");
+    let user: User;
     try {
-      await signup(emailRef.current.value, passwordRef.current.value);
+      user = await signup(emailRef.current.value, passwordRef.current.value);
       console.info("Register success.");
     } catch (reason) {
       console.error("Could not register: ", reason);
@@ -78,7 +80,7 @@ const RegistrationDialog = () => {
     }
     
     try {
-      await sendEmailVerification();
+      await sendEmailVerification(user);
       console.info("Email verification sent.");
       uiController.setLoginState("REGISTERED"); // show email verification instructions
       handleClearForm();

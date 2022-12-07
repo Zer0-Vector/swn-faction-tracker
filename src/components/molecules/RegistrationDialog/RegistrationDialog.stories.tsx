@@ -1,4 +1,5 @@
 import React from "react";
+import { User } from "firebase/auth";
 
 import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
@@ -19,8 +20,8 @@ const mockAuth = {
       emailVerified: false,
     });
   },
-  sendEmailVerification: () => {
-    action("sendEmailVerification")([]);
+  sendEmailVerification: (u: User) => {
+    action("sendEmailVerification")(u);
     return Promise.resolve();
   },
 } as ProvidedAuth;

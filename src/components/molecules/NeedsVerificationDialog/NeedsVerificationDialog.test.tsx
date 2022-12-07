@@ -26,7 +26,7 @@ const mockSendEmailVerification = jest.fn();
 const mockLogout = jest.fn();
 const mockAuth = {
   logout: mockLogout as ()=>Promise<void>,
-  sendEmailVerification: mockSendEmailVerification as ()=>Promise<void>,
+  sendEmailVerification: mockSendEmailVerification as (u:User)=>Promise<void>,
 } as ProvidedAuth;
 
 function renderOpened() {

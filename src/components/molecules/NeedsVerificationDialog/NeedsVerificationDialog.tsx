@@ -1,4 +1,6 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
+
+import Typography from "@mui/material/Typography";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { useAuth } from "../../../hooks/useAuth";
@@ -9,12 +11,14 @@ const NeedsVerificationDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const { currentUser, sendEmailVerification, logout } = useAuth();
   const open = uiState.loginState === "NEEDS_VERIFICATION" || uiState.loginState === "REGISTERED";
+  const [sent, setSent] = useState<boolean>(false);
   
   const handleResend = useCallback(async () => {
     if (currentUser) {
       try {
-        await sendEmailVerification();
+        await sendEmailVerification(currentUser);
         console.log("Email sent.");
+        setSent(true);
       } catch (reason) {
         console.error("Error sending email verification: ", reason);
         uiController.setLoginState("VERIFICATION_ERROR");
@@ -33,8 +37,16 @@ const NeedsVerificationDialog = () => {
     } catch (reason) {
       console.warn("Log out failed: ", reason);
       uiController.setLoginState("LOGGED_IN");
+    } finally {
+      setSent(false);
     }
   }, [logout, uiController]);
+
+  const sendLink = useMemo(() => 
+    sent
+    ? <Typography color="info" fontStyle="italic">Sent!</Typography>
+    : <Link onClick={handleResend} data-testid="verification-dialog-resend-link">Resend Verification Email</Link>,
+  [handleResend, sent]);
 
   return (
     <MessageDialog
@@ -43,9 +55,9 @@ const NeedsVerificationDialog = () => {
       title="Email Verification Required"
       message="Please check your email to verify your email address."
       onAction={handleClose}
-      buttons={["OK"]}
+      buttons={["Logout"]}
     >
-      <Link onClick={handleResend} data-testid="verification-dialog-resend-link">Resend Verification Email</Link>
+      {sendLink}
     </MessageDialog>
   );
 };

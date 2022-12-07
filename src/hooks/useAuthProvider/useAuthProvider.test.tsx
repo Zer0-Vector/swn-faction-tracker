@@ -78,7 +78,7 @@ function TestComp({ name }: { name: string }) {
       <button onClick={couldThrow(() => auth.login("email@test.com", "123456"))}>login</button>
       <button onClick={couldThrow(() => auth.logout())}>logout</button>
       <button onClick={couldThrow(() => auth.signup("email@signup.com", "789789"))}>signup</button>
-      <button onClick={couldThrow(() => auth.sendEmailVerification())}>verify email</button>
+      <button onClick={couldThrow(() => { if (!auth.currentUser) throw new Error("NULL USER!"); return auth.sendEmailVerification(auth.currentUser); })}>verify email</button>
       <button onClick={couldThrow(() => auth.sendPasswordResetEmail("pw@reset.com"))}>pw reset</button>
     </div>
   );
