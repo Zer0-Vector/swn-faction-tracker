@@ -26,6 +26,7 @@ interface MessageDialogProps extends TestableProps {
   buttons?: string[];
   children?: React.ReactNode;
   fullWidth?: boolean;
+  disabledButtons?: string[];
 }
 
 const MessageDialog = ({ 
@@ -34,6 +35,7 @@ const MessageDialog = ({
   message,
   onAction,
   buttons,
+  disabledButtons = [],
   closeable = true,
   modal = true,
   fullWidth = true,
@@ -58,8 +60,8 @@ const MessageDialog = ({
   }, [modal, onAction]);
 
   const renderedButtons = useMemo(() => (
-    buttons?.map((b, i) => <Button key={i} onClick={(evt) => handleButtonClick(b, evt)}>{b}</Button>)
-  ), [buttons, handleButtonClick]);
+    buttons?.map((b, i) => <Button key={i} disabled={disabledButtons.includes(b)} onClick={(evt) => handleButtonClick(b, evt)}>{b}</Button>)
+  ), [buttons, disabledButtons, handleButtonClick]);
 
   const closeButtonSx = useMemo<SxProps<Theme>>(() => ({
     position: "absolute",

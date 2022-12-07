@@ -42,3 +42,13 @@ NonModal.args = {
   buttons: ["No", "Yes"],
   modal: false,
 };
+
+export const DisabledButton = Template.bind({});
+DisabledButton.args = {
+  open: true,
+  title: "Dialog Title",
+  message: "Dialog Message",
+  buttons: ["Cancel", "No", "Yes"],
+  modal: false,
+  disabledButtons: ["No", "Yes"],
+};
