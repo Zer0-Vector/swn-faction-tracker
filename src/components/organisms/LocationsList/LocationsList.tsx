@@ -16,7 +16,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
-import EditableText from "../../atoms/EditableText";
+import { ControlledText } from "../../molecules/ControlledText";
 
 const Item = React.memo(styled(Paper)(({ theme }) => ({
   ...theme.typography.body1,
@@ -110,7 +110,7 @@ export default function LocationsList() {
                       >
                         <DragHandleIcon />
                       </Icon>
-                      <EditableText id="location-name" onUpdate={updateNameHandlers[index]} variant="body2">{val.name}</EditableText>
+                      <ControlledText id="location-name" onUpdate={updateNameHandlers[index]} variant="body2">{val.name}</ControlledText>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Grid container spacing={1}>
