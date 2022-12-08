@@ -3,14 +3,14 @@ import React, { useContext } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 
 export default function ModeToggleButtons() {
-  const { state, controller } = useContext(GameContext);
+  const { state, controller } = useContext(UiStateContext);
 
   const handleChange = (_: React.MouseEvent, value: string) => {
     if (value) {
-      controller.setMode(value);
+      controller.setEditMode(value);
     }
   };
 
@@ -18,12 +18,12 @@ export default function ModeToggleButtons() {
 
   return (
     <ToggleButtonGroup
-      value={state.mode}
+      value={state.editMode}
       exclusive={true}
       color="tertiary"
       onChange={handleChange}
     >
-      <ToggleButton value="VIEW" fullWidth={true} disabled>View</ToggleButton>
+      <ToggleButton value="VIEW" fullWidth={true}>View</ToggleButton>
       <ToggleButton value="EDIT" fullWidth={true}>Free Edit</ToggleButton>
       <ToggleButton value="TURN" fullWidth={true} disabled>Take Turn</ToggleButton>
     </ToggleButtonGroup>

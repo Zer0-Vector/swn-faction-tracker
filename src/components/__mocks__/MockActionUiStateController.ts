@@ -6,4 +6,7 @@ export const MockActionUiStateController: IUiStateController = {
   setLoginState(...args) {
     action(this.setLoginState.name)(...args);
   },
+  setEditMode(...args) {
+    action(this.setEditMode.name)(...args);
+  },
 };

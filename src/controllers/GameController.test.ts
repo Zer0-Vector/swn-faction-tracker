@@ -13,7 +13,6 @@ const gameState = new RuntimeGameState({
   factions: [],
   locations: [],
   locationsOrder: [],
-  mode: "EDIT",
 });
 
 const setFn = jest.fn();
@@ -91,19 +90,7 @@ describe('GameController', () => {
       ],
     } as StoredGameState);
   });
-
-  it('setMode', () => {
-    const rtgsSetMode = jest.spyOn(gameState, 'setMode');
-    gameController.setMode("EDIT");
-    expect(rtgsSetMode).toBeCalledTimes(1);
-    expect(rtgsSetMode).toBeCalledWith("EDIT");
-    expect(setFn).toBeCalledTimes(1);
-    const setter = setFn.mock.calls[0][0] as (prev: StoredGameState) => StoredGameState;
-    const result = setter({} as StoredGameState);
-    expect(result).not.toBeUndefined();
-    expect(result.mode).toEqual("EDIT");
-  });
-  
+ 
   it.todo('reorderLocations');
   it.todo('updateLocationName');
   it.todo('removeLocation');
