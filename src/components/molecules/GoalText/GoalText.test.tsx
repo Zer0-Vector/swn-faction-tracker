@@ -11,6 +11,8 @@ import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import GoalText from "./GoalText";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { UiStateController } from "../../../controllers/UiStateController";
 
 const mockSetGoal = jest.fn();
 const mockContext = {
@@ -22,15 +24,23 @@ const mockContext = {
 
 function renderIt(goalType: Maybe<GoalType> = undefined) {
   render(
-    <GameContext.Provider value={mockContext}>
-      <GoalText faction={{
-          id: "test-faction",
-          goal: {
-            type: goalType,
-          } as GoalInfo,
-        } as FactionInfo}
-      />
-    </GameContext.Provider>
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
+      <GameContext.Provider value={mockContext}>
+        <GoalText faction={{
+            id: "test-faction",
+            goal: {
+              type: goalType,
+            } as GoalInfo,
+          } as FactionInfo}
+        />
+      </GameContext.Provider>
+    </UiStateContext.Provider>
   );
 }
 

@@ -3,7 +3,9 @@ import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import { IGameController } from "../../../controllers/GameController";
+import { UiStateController } from "../../../controllers/UiStateController";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionHpSummary from "./FactionHpSummary";
@@ -17,9 +19,17 @@ const mockContext = {
 
 function renderIt(factionId = "tf123") {
   render(
-    <GameContext.Provider value={mockContext}>
-      <FactionHpSummary data-testid="test123" hp={123} maxHp={456} factionId={factionId} />
-    </GameContext.Provider>
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
+      <GameContext.Provider value={mockContext}>
+        <FactionHpSummary data-testid="test123" hp={123} maxHp={456} factionId={factionId} />
+      </GameContext.Provider>
+    </UiStateContext.Provider>
   );
 }
 
