@@ -34,8 +34,11 @@ describe('default ModeToggleButtons', () => {
     expect(btnView).not.toHaveClass("Mui-selected");
   });
 
-  // remove skip when Turn button is enabled
-  it.skip('calls setEditMode when clicked', () => {
+  it.todo('calls setEditMode when %p is clicked');
+  it.todo('does not call setEditMode when clicking selected value');
+
+  // remove this when the above are implemented
+  it('calls setEditMode when clicked', () => {
     const mockGameContext = {
       state: { editMode: "EDIT" },
       controller: { setEditMode: jest.fn() as LoginStateSetter },
@@ -56,12 +59,12 @@ describe('default ModeToggleButtons', () => {
     expect(mockGameContext.controller.setEditMode).toBeCalledWith("VIEW");
     jest.resetAllMocks();
     
-    const btnTurn = screen.getByText("Take Turn");
-    expect(btnTurn).not.toBeDisabled();
-    fireEvent.click(btnTurn);
-    expect(mockGameContext.controller.setEditMode).toBeCalledTimes(1);
-    expect(mockGameContext.controller.setEditMode).toBeCalledWith("TURN");
-    jest.resetAllMocks();
+    // const btnTurn = screen.getByText("Take Turn");
+    // expect(btnTurn).not.toBeDisabled();
+    // fireEvent.click(btnTurn);
+    // expect(mockGameContext.controller.setEditMode).toBeCalledTimes(1);
+    // expect(mockGameContext.controller.setEditMode).toBeCalledWith("TURN");
+    // jest.resetAllMocks();
     
     const btnEdit = screen.getByText("Free Edit");
     expect(btnEdit).not.toBeDisabled();
