@@ -3,6 +3,7 @@ import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
+import UiState from "../../../types/UiState";
 import { MockActionUiStateController } from "../../__mocks__/MockActionUiStateController";
 
 import { PasswordResetErrorDialog } from "./PasswordResetErrorDialog";
@@ -14,7 +15,7 @@ export default {
       <UiStateContext.Provider value={{
         state: {
           loginState: "PASSWORD_RESET_ERROR",
-        },
+        } as UiState,
         controller: MockActionUiStateController,
       }}>
         {story()}

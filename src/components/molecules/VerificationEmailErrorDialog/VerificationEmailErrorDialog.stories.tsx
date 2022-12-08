@@ -7,6 +7,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
+import UiState from "../../../types/UiState";
 import { MockActionUiStateController } from "../../__mocks__/MockActionUiStateController";
 
 import VerificationEmailErrorDialog from "./VerificationEmailErrorDialog";
@@ -18,7 +19,7 @@ export default {
       <UiStateContext.Provider value={{
         state: {
           loginState: "VERIFICATION_ERROR",
-        },
+        } as UiState,
         controller: MockActionUiStateController,
       }}>
         {story()}

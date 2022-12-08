@@ -4,6 +4,7 @@ import { act } from "react-dom/test-utils";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { IUiStateController } from "../../controllers/UiStateController";
+import LoginState from "../../types/LoginState";
 
 import { useAuthProvider } from "./useAuthProvider";
 
@@ -30,7 +31,7 @@ const mockGetAuth = getAuth as jest.MockedFn<typeof getAuth>;
 
 const mockSetLoginState = jest.fn();
 const mockController = {
-  setLoginState: mockSetLoginState,
+  setLoginState: mockSetLoginState as (s:LoginState)=>void,
 } as IUiStateController;
 
 const mockOnAuthStateChanged = jest.fn();

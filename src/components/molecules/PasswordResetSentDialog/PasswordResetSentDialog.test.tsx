@@ -3,7 +3,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { LoginStates } from "../../../types/LoginState";
+import { UiStateController } from "../../../controllers/UiStateController";
+import LoginState, { LoginStates } from "../../../types/LoginState";
+import UiState from "../../../types/UiState";
 
 import { PasswordResetSentDialog } from "./PasswordResetSentDialog";
 
@@ -13,10 +15,10 @@ function renderIt() {
     <UiStateContext.Provider value={{
       state: {
         loginState: "PASSWORD_RESET_SENT",
-      },
+      } as UiState,
       controller: {
-        setLoginState: mockSetLoginState,
-      },
+        setLoginState: mockSetLoginState as (s:LoginState)=>void,
+      } as UiStateController,
     }}>
       <PasswordResetSentDialog />
     </UiStateContext.Provider>
@@ -31,10 +33,10 @@ describe('PasswordResetSentDialog', () => {
       <UiStateContext.Provider value={{
         state: {
           loginState: state,
-        },
+        } as UiState,
         controller: {
-          setLoginState: mockSetLoginState,
-        },
+          setLoginState: mockSetLoginState as (s:LoginState)=>void,
+        } as UiStateController,
       }}>
         <PasswordResetSentDialog />
       </UiStateContext.Provider>

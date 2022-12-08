@@ -4,8 +4,10 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
+import { LoginStateSetter } from "../../../controllers/UiStateController";
 import LoginState, { LoginStates } from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
+import UiState from "../../../types/UiState";
 
 import LogoutConfirmDialog from "./LogoutConfirmDialog";
 
@@ -22,9 +24,9 @@ function renderIt() {
       <UiStateContext.Provider value={{
         state: {
           loginState: "LOGGING_OUT",
-        },
+        } as UiState,
         controller: {
-          setLoginState: mockSetLoginState,
+          setLoginState: mockSetLoginState as LoginStateSetter,
         },
       } as UiStateContextType}>
         <LogoutConfirmDialog />

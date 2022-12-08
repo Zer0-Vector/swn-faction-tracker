@@ -7,6 +7,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
+import UiState from "../../../types/UiState";
 import { MockActionUiStateController } from "../../__mocks__/MockActionUiStateController";
 
 import NeedsVerificationDialog from "./NeedsVerificationDialog";
@@ -18,7 +19,7 @@ export default {
       <UiStateContext.Provider value={{
         state: {
           loginState: "NEEDS_VERIFICATION",
-        },
+        } as UiState,
         controller: MockActionUiStateController,
       }}>
         {story()}

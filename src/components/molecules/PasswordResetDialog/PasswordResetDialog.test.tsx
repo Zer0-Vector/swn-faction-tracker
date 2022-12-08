@@ -4,8 +4,10 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { LoginStates } from "../../../types/LoginState";
+import { LoginStateSetter, UiStateController } from "../../../controllers/UiStateController";
+import LoginState, { LoginStates } from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
+import UiState from "../../../types/UiState";
 
 import { PasswordResetDialog } from "./PasswordResetDialog";
 
@@ -20,10 +22,10 @@ function renderIt() {
       <UiStateContext.Provider value={{
         state: {
           loginState: "RESETTING_PASSWORD",
-        },
+        } as UiState,
         controller: {
-          setLoginState: mockSetLoginState,
-        },
+          setLoginState: mockSetLoginState as LoginStateSetter,
+        } as UiStateController,
       }}>
         <PasswordResetDialog />
       </UiStateContext.Provider>
@@ -39,10 +41,10 @@ describe('PasswordResetDialog', () => {
       <UiStateContext.Provider value={{
         state: {
           loginState: ls,
-        },
+        } as UiState,
         controller: {
-          setLoginState: mockSetLoginState,
-        },
+          setLoginState: mockSetLoginState as (s:LoginState)=>void,
+        } as UiStateController,
       }}>
         <PasswordResetDialog />
       </UiStateContext.Provider>
