@@ -3,8 +3,8 @@ import React, { useCallback, useContext } from "react";
 import { Theme } from "@mui/material";
 
 import { GameContext } from "../../../contexts/GameContext";
-import EditableStatText from "../../atoms/EditableStatText";
 import StatText from "../../atoms/StatText";
+import { ControlledStat } from "../ControlledStat";
 
 
 interface FactionStatSummaryProps {
@@ -26,29 +26,29 @@ export default function FactionStatSummary({ factionId, force, cunning, wealth }
    
   return (
     <>
-      <EditableStatText
+      <ControlledStat
         data-testid="faction-force"
         onUpdate={handleUpdateForce}
         inputSx={handleInputSx}
       >
         {force}
-      </EditableStatText>
+      </ControlledStat>
       <StatText variant="body2">/</StatText>
-      <EditableStatText
+      <ControlledStat
         data-testid="faction-cunning"
         onUpdate={handleUpdateCunning}
         inputSx={handleInputSx}
       >
         {cunning}
-      </EditableStatText>
+      </ControlledStat>
       <StatText variant="body2">/</StatText>
-      <EditableStatText
+      <ControlledStat
         data-testid="faction-wealth"
         onUpdate={handleUpdateWealth}
         inputSx={handleInputSx}
       >
         {wealth}
-      </EditableStatText>
+      </ControlledStat>
     </>
   );
 }
