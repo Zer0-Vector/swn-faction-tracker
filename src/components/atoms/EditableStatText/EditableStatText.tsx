@@ -1,20 +1,52 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { SxProps, Theme } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import { TypographyProps } from "@mui/material";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 
+import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
 import StatText from "../StatText";
 
-export interface EditableStatTextProps extends TestableProps {
+export interface EditableStatTextBaseProps extends TestableProps {
+  /**
+   * The default number to display
+   */
   children?: number;
+
+  /**
+   * Callback after value is edited.
+   * @param newValue The new value for the field
+   */
   onUpdate: (newValue: number) => void;
-  sx?: SxProps<Theme>;
-  inputSx?: SxProps<Theme>;
+
+  /**
+   * Text to display when {@link children} is `undefined`
+   * @default "??"
+   */
   placeholder?: string;
+
+  /**
+   * When `true`, the text is editable.
+   * @default true
+   */
+  editable?: boolean;
 }
 
-export default function EditableStatText({ children, onUpdate, sx, inputSx, placeholder, "data-testid": dtid }: EditableStatTextProps) {
+type EditableStatTextProps =
+  & EditableStatTextBaseProps
+  & Pick<TypographyProps, "sx">
+  & Prefixed<Pick<TextFieldProps, "sx">, "input">;
+  
+
+export default function EditableStatText({
+  children,
+  onUpdate,
+  sx,
+  inputSx,
+  placeholder = "??",
+  editable = true,
+  "data-testid": dtid,
+}: EditableStatTextProps) {
   const [editing, setEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(true);
@@ -26,7 +58,7 @@ export default function EditableStatText({ children, onUpdate, sx, inputSx, plac
     }
   }, [editing]);
   
-  const exitEditMode = (evt: React.SyntheticEvent<Element>) => {
+  const exitEditMode = useCallback((evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
     if (editing && valid) {
       if (hasChanged && textFieldRef.current) {
@@ -40,18 +72,20 @@ export default function EditableStatText({ children, onUpdate, sx, inputSx, plac
       setEditing(false);
       setHasChanged(false);
     }
-  };
+  }, [editing, hasChanged, onUpdate, valid]);
 
-  const enterEditMode = (evt: React.MouseEvent<HTMLElement>) => {
+  const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-    setEditing(true);
-  };
+    if (editable) {
+      setEditing(true);
+    }
+  }, [editable]);
 
-  const handleClick = (evt: React.MouseEvent<HTMLElement>) => {
+  const handleClick = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
-  };
+  }, []);
 
-  const handleKeyUp = (evt: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeyUp = useCallback((evt: React.KeyboardEvent<HTMLElement>) => {
     if (editing) {
       if (evt.key === 'Escape') {
         setEditing(false);
@@ -59,19 +93,9 @@ export default function EditableStatText({ children, onUpdate, sx, inputSx, plac
         exitEditMode(evt);
       }
     }
-  };
+  }, [editing, exitEditMode]);
 
-  const handleInputChange = (_evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (!textFieldRef.current) {
-      return;
-    }
-    setHasChanged(true);
-    const valid = validate(textFieldRef.current.value);
-    setValid(valid);
-    textFieldRef.current.focus();
-  };
-
-  const validate = (val: string): boolean => {
+  const validate = useCallback((val: string): boolean => {
     let result = true;
     try {
       const n = parseInt(val);
@@ -81,10 +105,21 @@ export default function EditableStatText({ children, onUpdate, sx, inputSx, plac
     }
     console.debug(`Validated text: '${val}', valid=${result}`);
     return result;
-  };
+  }, []);
 
-  const placeholderValue = placeholder === undefined ? "??" : placeholder;
-  const val = children === undefined ? placeholderValue : children;
+  const handleInputChange = useCallback((_evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (!textFieldRef.current) {
+      return;
+    }
+    setHasChanged(true);
+    const valid = validate(textFieldRef.current.value);
+    setValid(valid);
+    textFieldRef.current.focus();
+  }, [validate]);
+
+  const val = children === undefined ? placeholder : children;
+
+  const title = editable ? "Double-click to edit" : "Enable editing to change";
 
   if (editing) {
     return (
@@ -108,7 +143,7 @@ export default function EditableStatText({ children, onUpdate, sx, inputSx, plac
       <StatText
         onClick={handleClick}
         onDoubleClick={enterEditMode}
-        title="Double-click to edit"
+        title={title}
         sx={sx}
         data-testid={dtid}
       >

@@ -26,7 +26,6 @@ function App() {
       assets: [],
       locations: [],
       locationsOrder: [],
-      mode: "EDIT", // TODO default mode should be VIEW
     }
   );
 
@@ -38,6 +37,7 @@ function App() {
   const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", 
     {
       loginState: "LOGGED_OUT",
+      editMode: "VIEW",
     }
   );
 

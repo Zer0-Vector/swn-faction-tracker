@@ -16,8 +16,22 @@ import { ValidationFn } from "../../../types/ValidationFn";
 import { ValidatedTextField } from "../ValidatedTextField";
 
 export interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<string> {
+  /**
+   * Callback for editing the field.
+   * @param newValue The updated value for the field.
+   */
   onUpdate?: (newValue: string) => void;
+
+  /**
+   * Additional validation for updating text.
+   */
   validate?: ValidationFn;
+
+  /**
+   * Enables editing for this component.
+   * @default true
+   */
+  editable?: boolean;
 }
 
 type EditableTextProps = 
@@ -26,7 +40,18 @@ type EditableTextProps =
   & Required<Pick<TextFieldProps, "id">>
   & EditableTextBaseProps;
 
-export default function EditableText({ id, children, onUpdate, variant, sx, inputSx, inputVariant, validate, "data-testid": dtid }: EditableTextProps) {
+export default function EditableText({
+  id,
+  children,
+  onUpdate,
+  variant,
+  sx,
+  inputSx,
+  inputVariant,
+  validate,
+  editable = true,
+  "data-testid": dtid,
+}: EditableTextProps) {
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -165,7 +190,7 @@ export default function EditableText({ id, children, onUpdate, variant, sx, inpu
       data-testid={dtid}
     >
       {inner}
-      <IconButton size="small" onClick={enterEditMode} data-testid="editable-text-button">
+      <IconButton size="small" onClick={enterEditMode} disabled={!editable} data-testid="editable-text-button">
         <EditIcon fontSize="inherit" />
       </IconButton>
     </Box>

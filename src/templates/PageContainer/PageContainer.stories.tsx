@@ -25,6 +25,7 @@ export default {
       <UiStateContext.Provider value={{
         state: {
           loginState: "LOGGED_OUT",
+          editMode: "VIEW",
         },
         controller: MockActionUiStateController,
       }}>
@@ -40,9 +41,7 @@ export default {
     ),
     story => (
       <GameContext.Provider value={{
-        state: {
-          mode: "EDIT",
-        } as IGameState,
+        state: {} as IGameState,
         controller: MockActionController,
       }}>
         {story()}

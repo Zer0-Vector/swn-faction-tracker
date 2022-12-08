@@ -8,4 +8,10 @@ export interface UiStateContextType {
   controller: IUiStateController;
 }
 
-export const UiStateContext = createContext<UiStateContextType>({} as UiStateContextType);
+export const UiStateContext = createContext<UiStateContextType>({
+  state: {
+    loginState: "LOGGED_OUT",
+    editMode: "VIEW",
+  },
+  controller: {} as IUiStateController,
+} as UiStateContextType);

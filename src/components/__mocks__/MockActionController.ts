@@ -13,9 +13,6 @@ export const MockActionController: IGameController = {
   setGoal(faction: string, goal: GoalInfo): void {
     action(this.setGoal.name)(faction, goal);
   },
-  setMode(value: string): void {
-    action(this.setMode.name)(value);
-  },
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation | undefined): void {
     action(this.reorderLocations.name)(source, destination);
   },
@@ -57,7 +54,7 @@ export const MockActionController: IGameController = {
     action(this.updateForce.name)(name, force);
   },
   updateCunning(name: string, cunning: number): void {
-    action(this.setMode.name)(name, cunning);
+    action(this.updateCunning.name)(name, cunning);
   },
   updateWealth(name: string, wealth: number): void {
     action(this.updateWealth.name)(name, wealth);

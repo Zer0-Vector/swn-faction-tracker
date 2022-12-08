@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
+import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { UiStateController } from "../../../controllers/UiStateController";
 import GameMode, { GameModes } from "../../../types/GameMode";
-import { IGameState } from "../../../types/RuntimeGameState";
+import UiState from "../../../types/UiState";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
 
 import ModeToggleButtons from "./ModeToggleButtons";
@@ -32,18 +33,19 @@ export default {
 const Template: Story<StoryProps> = (args) => {
   const [mode, setMode] = useState<GameMode>(args.mode);
   return (
-    <GameContext.Provider value={{
+    <UiStateContext.Provider value={{
       state: {
-        mode: mode,
-      } as IGameState,
+        editMode: mode,
+      } as UiState,
       controller: {
-        setMode(val: string) {
+        setEditMode(val: string) {
+          action("setEditMode")(val);
           setMode(val as GameMode);
         },
-      } as IGameController,
+      } as UiStateController,
     }}>
       <ModeToggleButtons />
-    </GameContext.Provider>
+    </UiStateContext.Provider>
   );
 };
 

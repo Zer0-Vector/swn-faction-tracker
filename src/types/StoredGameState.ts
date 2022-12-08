@@ -1,5 +1,4 @@
 import FactionInfo from "./FactionInfo";
-import GameMode from "./GameMode";
 import LocationInfo from "./LocationInfo";
 import PurchasedAsset from "./PurchasedAsset";
 
@@ -9,5 +8,4 @@ export default interface StoredGameState {
   assets: [key: string, value: PurchasedAsset][];
   locations: [key: string, value: LocationInfo][];
   locationsOrder: string[];
-  mode: GameMode;
 }

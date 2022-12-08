@@ -7,7 +7,6 @@ import { generateId } from "../utils/IdGenerator";
 import AssetId from "./AssetId";
 import FactionInfo from "./FactionInfo";
 import { FactionStat } from "./FactionStatsInfo";
-import GameMode, { isGameMode } from "./GameMode";
 import GoalInfo from "./GoalInfo";
 import LocationInfo from "./LocationInfo";
 import { Maybe } from "./Maybe";
@@ -15,7 +14,6 @@ import PurchasedAsset from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
-  mode: GameMode;
   getFactions: () => FactionInfo[];
   getFaction: (factionId: string) => Maybe<FactionInfo>;
   getAssets: (factionId: Maybe<string>) => PurchasedAsset[];
@@ -31,7 +29,6 @@ export default class RuntimeGameState implements IGameController, IGameState {
   assets: Map<string, PurchasedAsset>;
   locations: Map<string, LocationInfo>;
   locationsOrder: string[];
-  mode: GameMode;
 
   constructor(storedState: StoredGameState) {
     console.debug(`Init RuntimeGameState: ${storedState.factions.length} factions, ${storedState.assets.length} assets`);
@@ -40,7 +37,6 @@ export default class RuntimeGameState implements IGameController, IGameState {
     this.assets = new Map(storedState.assets);
     this.locations = new Map(storedState.locations);
     this.locationsOrder = storedState.locationsOrder;
-    this.mode = storedState.mode;
     console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A, ${this.locations.size}L`);
   }
 
@@ -49,13 +45,6 @@ export default class RuntimeGameState implements IGameController, IGameState {
     if (faction) {
       faction.goal = goal;
     }
-  }
-
-  setMode(mode: string) {
-    if (!isGameMode(mode)) {
-      throw new Error(`Unknown GameMode: '${mode}'`);
-    }
-    this.mode = mode;
   }
 
   updateTag(factionId: string, tag: string): void {

@@ -11,7 +11,6 @@ import StoredGameState from "../types/StoredGameState";
 
 export interface IGameController {
   setGoal(faction: string, goal: GoalInfo): void;
-  setMode(value: string): void;
   reorderLocations(source: DraggableLocation, destination?: DraggableLocation): void;
   updateLocationName(currId: string, val: string): Maybe<LocationInfo>;
   removeLocation(selectedLocation: string): void;
@@ -54,18 +53,6 @@ export class GameController implements IGameController {
   setGoal(faction: string, goal: GoalInfo): void {
     this.runtimeState.setGoal(faction, goal);
     this.#writeFactions();
-  }
-
-  setMode(mode: string) {
-    this.runtimeState.setMode(mode);
-    this.#writeMode();
-  }
-  
-  #writeMode() {
-    this.setState(prev => ({
-      ...prev,
-      mode: this.runtimeState.mode,
-    }));
   }
 
   #writeFactions(setOrder = false) {
