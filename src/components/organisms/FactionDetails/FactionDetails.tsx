@@ -8,7 +8,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { GameContext } from "../../../contexts/GameContext";
 import { TAGS } from "../../../data/Tags";
 import FactionInfo from "../../../types/FactionInfo";
-import EditableDropDownText from "../../atoms/EditableDropDownText";
+import { ControlledDropDown } from "../../molecules/ControlledDropDown";
 import FactionHpSummary from "../../molecules/FactionHpSummary";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import GoalProgress from "../../molecules/GoalProgress";
@@ -59,9 +59,9 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
   return (
     <Container disableGutters={true} sx={containerSx} data-testid="faction-details">
       <ItemHeader data-testid="homeworld-label">Homeworld:</ItemHeader>
-      <Item data-testid="homeworld-item"><EditableDropDownText onUpdate={updateHomeworld} selectableOptions={homeworldOptions} data-testid="homeworld">{homeworldText}</EditableDropDownText></Item>
+      <Item data-testid="homeworld-item"><ControlledDropDown onUpdate={updateHomeworld} selectableOptions={homeworldOptions} data-testid="homeworld">{homeworldText}</ControlledDropDown></Item>
       <ItemHeader data-testid="tag-label">Tag:</ItemHeader>
-      <Item data-testid="tag-item"><EditableDropDownText onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</EditableDropDownText></Item>
+      <Item data-testid="tag-item"><ControlledDropDown onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</ControlledDropDown></Item>
 
       <ItemHeader data-testid="hp-label">HP:</ItemHeader>
       <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} {...faction.stats} data-testid="hp-summary" /></Item>

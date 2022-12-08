@@ -4,8 +4,8 @@ import { SxProps, Theme } from "@mui/material/styles";
 
 import { GameContext } from "../../../contexts/GameContext";
 import FactionInfo from "../../../types/FactionInfo";
-import EditableStatText from "../../atoms/EditableStatText";
 import StatText from "../../atoms/StatText";
+import { ControlledStat } from "../ControlledStat";
 
 interface GoalProgressProps {
   faction: FactionInfo;
@@ -46,9 +46,9 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   return (
     <span data-testid="goal-progress">
-      <EditableStatText data-testid="goal-tally" onUpdate={handleUpdateTally} inputSx={inputSx}>{tally}</EditableStatText>
+      <ControlledStat data-testid="goal-tally" onUpdate={handleUpdateTally} inputSx={inputSx}>{tally}</ControlledStat>
       <StatText>/</StatText>
-      <EditableStatText data-testid="goal-target" onUpdate={handleUpdateTarget} inputSx={inputSx}>{target}</EditableStatText>
+      <ControlledStat data-testid="goal-target" onUpdate={handleUpdateTarget} inputSx={inputSx}>{target}</ControlledStat>
     </span>
   );
 }

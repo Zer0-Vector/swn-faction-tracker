@@ -11,7 +11,7 @@ import { GameContext } from "../../../contexts/GameContext";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import FactionInfo from "../../../types/FactionInfo";
 import { ValidationFn } from "../../../types/ValidationFn";
-import EditableText from "../../atoms/EditableText";
+import { ControlledText } from "../../molecules/ControlledText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
 
@@ -98,9 +98,9 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         <DragHandleIcon />
       </ItemColumn>
       <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
-        <EditableText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" data-testid="faction-list-item-name">
+        <ControlledText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" data-testid="faction-list-item-name">
           {faction.name}
-        </EditableText>
+        </ControlledText>
       </ItemColumn>
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={statsBoxSx} data-testid="faction-list-item-stats">

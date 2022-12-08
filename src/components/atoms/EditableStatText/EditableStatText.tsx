@@ -7,7 +7,7 @@ import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
 import StatText from "../StatText";
 
-export interface EditableStatTextBaseProps extends TestableProps {
+interface EditableStatTextBaseProps extends TestableProps {
   /**
    * The default number to display
    */
@@ -32,7 +32,7 @@ export interface EditableStatTextBaseProps extends TestableProps {
   editable?: boolean;
 }
 
-type EditableStatTextProps =
+export type EditableStatTextProps =
   & EditableStatTextBaseProps
   & Pick<TypographyProps, "sx">
   & Prefixed<Pick<TextFieldProps, "sx">, "input">;

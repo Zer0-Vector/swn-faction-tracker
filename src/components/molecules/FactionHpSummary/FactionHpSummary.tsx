@@ -5,8 +5,8 @@ import Box from "@mui/material/Box";
 import { GameContext } from "../../../contexts/GameContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import TestableProps from "../../../types/TestableProps";
-import EditableStatText from "../../atoms/EditableStatText";
 import StatText from "../../atoms/StatText";
+import { ControlledStat } from "../ControlledStat";
 
 interface FactionHpSummaryProps {
   factionId: string;
@@ -32,13 +32,13 @@ export default function FactionHpSummary({ factionId, hp, maxHp }: FactionHpSumm
 
   return (
     <HpBox data-testid="faction-hp-box">
-      <EditableStatText
+      <ControlledStat
         onUpdate={handleUpdate}
         inputSx={{ maxWidth: "3rem"}}
         data-testid="hp"
       >
         {hp}
-      </EditableStatText>
+      </ControlledStat>
       <StatText>/</StatText>
       <StatText data-testid="maxhp">{maxHp}</StatText>
     </HpBox>

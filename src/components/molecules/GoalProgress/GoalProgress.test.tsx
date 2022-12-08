@@ -3,7 +3,9 @@ import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import { IGameController } from "../../../controllers/GameController";
+import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
@@ -28,9 +30,17 @@ const mockFaction = {
 
 function renderIt(faction = mockFaction) {
   render(
-    <GameContext.Provider value={mockContext}>
-      <GoalProgress faction={faction} />
-    </GameContext.Provider>
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
+      <GameContext.Provider value={mockContext}>
+        <GoalProgress faction={faction} />
+      </GameContext.Provider>
+    </UiStateContext.Provider>
   );
 }
 

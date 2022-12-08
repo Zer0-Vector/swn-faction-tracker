@@ -5,7 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import { IGameController } from "../../../controllers/GameController";
+import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
@@ -39,13 +41,21 @@ const mockFaction: FactionInfo = {
 
 function renderIt() {
   render(
-    <GameContext.Provider value={mockContext}>
-      <FactionListItem
-        dragHandleProps={{} as DraggableProvidedDragHandleProps}
-        faction={mockFaction}
-        isDragging={false}
-      />
-    </GameContext.Provider>,
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
+      <GameContext.Provider value={mockContext}>
+        <FactionListItem
+          dragHandleProps={{} as DraggableProvidedDragHandleProps}
+          faction={mockFaction}
+          isDragging={false}
+        />
+      </GameContext.Provider>
+    </UiStateContext.Provider>,
     { wrapper: BrowserRouter }
   );
 }
