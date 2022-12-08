@@ -64,6 +64,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     setCoords(newState);
   };
 
+  // TODO: this should check if new location will not produce existing ID
   const isNotDuplicateName = useCallback((val: string) => !locationsNames.includes(val.trim().toLowerCase()), [locationsNames]);
 
   const isInteger = (val: string) => {

@@ -18,12 +18,13 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
   const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const factions = state.getFactions().map(f => f.name);
+  // TODO: this should check if new faction will produce an existing ID
+  const factionNames = state.getFactions().map(f => f.name.toLowerCase());
 
   const handleInputChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.debug("input changed!", factions);
+    console.debug("input changed!", factionNames);
     const newText = evt.target.value;
-    const nameExists = factions.includes(newText);
+    const nameExists = factionNames.includes(newText.trim().toLowerCase());
     const isNotBlank = newText.trim().length > 0;
     const newState = {
       value: newText,
@@ -31,7 +32,7 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     };
     console.debug(isNotBlank, !nameExists);
     setFormState(newState);
-  }, [factions]);
+  }, [factionNames]);
   
   const handleClose = useCallback(() => {
     setFormState({ value: "", valid: false });
