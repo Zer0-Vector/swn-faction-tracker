@@ -14,12 +14,32 @@ import PurchasedAsset from "./PurchasedAsset";
 import StoredGameState from "./StoredGameState";
 
 export interface IGameState {
+  /**
+   * @returns The list of factions in order.
+   */
   getFactions: () => FactionInfo[];
+
+  /**
+   * @param factionId The faction id.
+   * @returns The requested `FactionInfo`, or `undefined` if no faction matches the given id.
+   */
   getFaction: (factionId: string) => Maybe<FactionInfo>;
   getAssets: (factionId: Maybe<string>) => PurchasedAsset[];
   getAsset: (factionId: string, assetId: string) => Maybe<PurchasedAsset>;
   getLocations: () => LocationInfo[];
   getLocation: (locationId: string) => Maybe<LocationInfo>;
+
+  /**
+   * @param factionName The potential faction name.
+   * @returns `true` if there are no conflicts, `false` if the name would produce a duplicate faction id.
+   */
+  checkFactionName: (factionName: string) => boolean;
+
+  /**
+   * @param locationName The potential location name.
+   * @returns `true` if there are no conflicts, `false` if the name would produce a duplicate location id.
+   */
+  checkLocationName: (locationName: string) => boolean;
 }
 
 export default class RuntimeGameState implements IGameController, IGameState {
@@ -322,6 +342,16 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
   getLocation(locationName: string): Maybe<LocationInfo> {
     return this.locations.get(locationName);
+  }
+
+  checkFactionName(factionName: string): boolean {
+    const id = generateId(factionName);
+    return !this.factions.has(id);
+  }
+
+  checkLocationName(locationName: string): boolean {
+    const id = generateId(locationName);
+    return !this.locations.has(id);
   }
 
 }
