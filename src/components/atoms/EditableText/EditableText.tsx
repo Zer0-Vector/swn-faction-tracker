@@ -15,7 +15,7 @@ import TestableProps from "../../../types/TestableProps";
 import { ValidationFn } from "../../../types/ValidationFn";
 import { ValidatedTextField } from "../ValidatedTextField";
 
-export interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<string> {
+interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<string> {
   /**
    * Callback for editing the field.
    * @param newValue The updated value for the field.
@@ -34,7 +34,7 @@ export interface EditableTextBaseProps extends TestableProps, RequiredChildrenPr
   editable?: boolean;
 }
 
-type EditableTextProps = 
+export type EditableTextProps = 
   & Prefixed<Pick<TextFieldProps, "variant" | "sx">, "input">
   & Pick<TypographyProps, "variant" | "sx">
   & Required<Pick<TextFieldProps, "id">>

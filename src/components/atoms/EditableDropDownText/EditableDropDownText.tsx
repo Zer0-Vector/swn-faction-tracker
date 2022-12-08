@@ -13,7 +13,7 @@ import Nullable from "../../../types/Nullable";
 import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
 
-export interface EditableDropDownTextBaseProps extends RequiredChildrenProps<string> {
+interface EditableDropDownTextBaseProps extends RequiredChildrenProps<string> {
   /**
    * When the text field is updated.
    * @param newValue The value from the text field
@@ -32,7 +32,7 @@ export interface EditableDropDownTextBaseProps extends RequiredChildrenProps<str
   editable?: boolean;
 }
 
-type EditableDropDownTextProps =
+export type EditableDropDownTextProps =
   & EditableDropDownTextBaseProps
   & Prefixed<Pick<TextFieldProps, "sx">, "input">
   & Pick<TypographyProps, "sx">
