@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-// import { useState } from "@storybook/addons";
+import { useState } from "@storybook/addons";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import EditableDropDownText from "./EditableDropDownText";
@@ -20,4 +20,11 @@ export const Default: ComponentStory<typeof EditableDropDownText> = args => {
 Default.args = {
   children: "one",
   selectableOptions: ["one", "two", "three", "four"],
+};
+
+export const NotEditable = Default.bind({});
+NotEditable.args = {
+  children: "one",
+  selectableOptions: ["one", "two", "three", "four"],
+  editable: false,
 };
