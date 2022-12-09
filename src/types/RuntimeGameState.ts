@@ -349,12 +349,12 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
   checkFactionName(factionName: string): boolean {
     const id = generateId(factionName);
-    return !this.factions.has(id);
+    return id.length > 0 && !this.factions.has(id);
   }
 
   checkLocationName(locationName: string): boolean {
     const id = generateId(locationName);
-    return !this.locations.has(id);
+    return id.length > 0 && !this.locations.has(id);
   }
 
 }
