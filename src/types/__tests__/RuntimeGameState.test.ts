@@ -8,7 +8,6 @@ let storedState: StoredGameState;
 let state: RuntimeGameState;
 beforeEach(() => {
   storedState = {
-    mode: "EDIT",
     factions: [],
     assets: [],
     factionOrder: [],
@@ -126,11 +125,11 @@ describe('updateLocationName', () => {
   });
 
   it('updates locationId in locationsOrder array', () => {
-    expect(storedState.locationsOrder.length).toBe(1);
-    expect(storedState.locationsOrder).toContain("location-one");
+    expect(state.locationsOrder.length).toBe(1);
+    expect(state.locationsOrder).toContain("location-one");
     state.updateLocationName("location-one", "Location Two");
-    expect(storedState.locationsOrder.length).toBe(1);
-    expect(storedState.locationsOrder).toContain("location-two");
+    expect(state.locationsOrder.length).toBe(1);
+    expect(state.locationsOrder).toContain("location-two");
   });
   
   it('updates any factions which reference updated location', () => {
@@ -161,6 +160,7 @@ describe('addLocation', () => {
 });
 
 // TODO removeAsset
+
 describe('addAssset', () => {
   it('addAsset adds asset', () => {
     const result = state.addAsset("test-faction", "Test Asset");
@@ -182,9 +182,99 @@ describe('addAssset', () => {
     expect(result3.id.index).toBe(3);
   });
 });
+
+describe('checkFactionName', () => {
+  beforeEach(() => {
+    state.addFaction("test 1");
+  });
+
+  it('returns true when name is unique', () => {
+    const result = state.checkFactionName("this dne");
+    expect(result).toBe(true);
+  });
+
+  it.each([
+    "",
+    " ",
+    "\t",
+    "\r\n",
+    "\t \f",
+  ])('returns false when name is empty or whitespace: %p', (name) => {
+    expect(state.checkFactionName(name)).toBe(false);
+  });
+
+  it.each([
+    "test 1",
+    "test-1",
+    "TEST 1",
+    "test\t1",
+    "test-----1",
+    "test!@#%$$^&&*(1",
+    "test\u00001",
+  ])('returns false when name is not unique: %p', (name) => {
+    const result = state.checkFactionName(name);
+    expect(result).toBe(false);
+  });
+});
+
+describe('checkLocationName', () => {
+  beforeEach(() => {
+    state.addLocation({ id: "test-1", name: "Test 1" } as LocationInfo);
+  });
+
+  it('returns true when name is unique', () => {
+    const result = state.checkLocationName("this dne");
+    expect(result).toBe(true);
+  });
+
+  it.each([
+    "",
+    " ",
+    "\t",
+    "\r\n",
+    "\t \f",
+  ])('returns false when name is empty or whitespace: %p', (name) => {
+    expect(state.checkLocationName(name)).toBe(false);
+  });
+
+  it.each([
+    "test 1",
+    "test-1",
+    "TEST 1",
+    "test\t1",
+    "test-----1",
+    "test!@#%$$^&&*(1",
+    "test\u00001",
+  ])('returns false when name is not unique: %p', (name) => {
+    const result = state.checkLocationName(name);
+    expect(result).toBe(false);
+  });
+});
+
 // TODO updateTag
 // TODO reorderFactions
-// TODO addFaction
+
+describe('addFaction', () => {
+  it('adds a faction when name is unique', () => {
+    const f = state.addFaction("Test Faction");
+    expect(f).not.toBeUndefined();
+    expect(f.id).toBe("test-faction");
+    expect(f.name).toBe("Test Faction");
+    expect(f.stats).not.toBeUndefined();
+  });
+
+  it.each([
+    "faction one",
+    "faction   one",
+    "faction-one",
+    "FACTION ONE",
+    "faction\tone",
+  ])('when "faction one" exists, adding it again throws: %p', () => {
+    state.addFaction("faction one");
+    expect(() => state.addFaction("faction one")).toThrowError();
+  });
+});
+
 // TODO removeFaction
 // TODO updateFactionName
 // TODO updateForce

@@ -31,8 +31,6 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
   const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const locationsNames = state.getLocations().map(loc => loc.name.toLowerCase());
-
   const handleChange = (setter: FormInfoSetter, valid?: StringValidator) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
     console.log("validating...");
@@ -64,7 +62,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     setCoords(newState);
   };
 
-  const isNotDuplicateName = useCallback((val: string) => !locationsNames.includes(val.trim().toLowerCase()), [locationsNames]);
+  const isNotDuplicateName = useCallback((val: string) => state.checkLocationName(val), [state]);
 
   const isInteger = (val: string) => {
     try {
