@@ -6,6 +6,7 @@ import { GameContext } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import { IGameState } from "../../../types/RuntimeGameState";
+import { generateId } from "../../../utils/IdGenerator";
 
 import AddFactionDialog from "./AddFactionDialog";
 
@@ -27,16 +28,7 @@ const MockProvider = ({ state, children }: MockProviderProps) => (
 );
 
 const MockState = {
-  getFactions: () => ([
-    {
-      id: "test-1",
-      name: "Test 1",
-    },
-    {
-      id: "test-2",
-      name: "Test 2",
-    },
-  ]),
+  checkFactionName: (s: string) => generateId(s) !== "test-1" && generateId(s) !== "test-2",
 } as IGameState;
 
 export const Default: ComponentStory<typeof AddFactionDialog> = args => <AddFactionDialog {...args} />;

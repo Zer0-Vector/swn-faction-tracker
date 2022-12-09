@@ -84,14 +84,14 @@ export default class RuntimeGameState implements IGameController, IGameState {
    * 
    * @param name the faction name
    * @returns `FactionInfo` for created faction
-   * @throws `Error`, if duplicate faction id/name
+   * @throws `Error`, if name produces duplicate faction id
    */
   addFaction(name: string): FactionInfo {
     const id = generateId(name);
 
     // indicates duplicate name
     if (this.factions.has(id)) {
-      throw new Error(`duplicate faction id/name: "${id}"`);
+      throw new Error(`Conflicing faction name: "${name}" (${id})`);
     }
 
     const result = new FactionInfo(id, name);

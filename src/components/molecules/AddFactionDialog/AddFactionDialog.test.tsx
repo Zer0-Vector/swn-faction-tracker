@@ -10,9 +10,7 @@ import { IGameState } from "../../../types/RuntimeGameState";
 import AddFactionDialog from "./AddFactionDialog";
 
 const EMPTY_CONTEXT: GameContextType = {
-  state: {
-    getFactions: () => [] as FactionInfo[],
-  } as IGameState,
+  state: {} as IGameState,
   controller: {} as IGameController,
 };
 
@@ -109,7 +107,12 @@ describe('default AddFactionDialog', () => {
   });
 
   it('enables Create button when field is non-empty', () => {
-    renderWithContext();
+    renderWithContext({
+      state: {
+        checkFactionName: (s: string) => true,
+      } as IGameState,
+      controller: {} as IGameController,
+    });
     const dialog = screen.getByTestId("add-faction-dialog");
     const inAsset = within(dialog).getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
@@ -132,7 +135,7 @@ describe('default AddFactionDialog', () => {
   it('marks the field with error class when duplicate name given', () => {
     const context: GameContextType = {
       state: {
-        getFactions: () => [{ name: "abc" }] as FactionInfo[],
+        checkFactionName: (s: string) => false,
       } as IGameState,
       controller: {} as IGameController,
     };
@@ -187,7 +190,13 @@ describe('default AddFactionDialog', () => {
   });
 
   it('calls onCreate when given a unique name', () => {
-    const { mockClose, mockCreate } = renderWithContext();
+    const { mockClose, mockCreate } = renderWithContext({
+      state: {
+        getFactions: () => ([] as FactionInfo[]),
+        checkFactionName: (s: string) => true,
+      } as IGameState,
+      controller: {} as IGameController,
+    });
     const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
     expect(inAsset).toBeInstanceOf(HTMLDivElement);
