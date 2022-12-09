@@ -285,6 +285,9 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addLocation(info: LocationInfo) {
+    if (this.locations.has(info.id)) {
+      throw new Error(`Conflicting location name: ${info.name} (${info.id})`);
+    }
     this.locations.set(info.id, info);
     this.locationsOrder.push(info.id);
   }

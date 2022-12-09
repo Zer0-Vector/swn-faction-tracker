@@ -15,6 +15,7 @@ function renderIt(locations: LocationInfo[] = []) {
     <GameContext.Provider value={{
       state: {
         getLocations: () => locations,
+        checkLocationName: (s: string) => true,
       } as IGameState,
       controller: {} as IGameController,
     }}>
