@@ -125,11 +125,11 @@ describe('updateLocationName', () => {
   });
 
   it('updates locationId in locationsOrder array', () => {
-    expect(storedState.locationsOrder.length).toBe(1);
-    expect(storedState.locationsOrder).toContain("location-one");
+    expect(state.locationsOrder.length).toBe(1);
+    expect(state.locationsOrder).toContain("location-one");
     state.updateLocationName("location-one", "Location Two");
-    expect(storedState.locationsOrder.length).toBe(1);
-    expect(storedState.locationsOrder).toContain("location-two");
+    expect(state.locationsOrder.length).toBe(1);
+    expect(state.locationsOrder).toContain("location-two");
   });
   
   it('updates any factions which reference updated location', () => {
@@ -253,7 +253,28 @@ describe('checkLocationName', () => {
 
 // TODO updateTag
 // TODO reorderFactions
-// TODO addFaction
+
+describe('addFaction', () => {
+  it('adds a faction when name is unique', () => {
+    const f = state.addFaction("Test Faction");
+    expect(f).not.toBeUndefined();
+    expect(f.id).toBe("test-faction");
+    expect(f.name).toBe("Test Faction");
+    expect(f.stats).not.toBeUndefined();
+  });
+
+  it.each([
+    "faction one",
+    "faction   one",
+    "faction-one",
+    "FACTION ONE",
+    "faction\tone",
+  ])('when "faction one" exists, adding it again throws: %p', () => {
+    state.addFaction("faction one");
+    expect(() => state.addFaction("faction one")).toThrowError();
+  });
+});
+
 // TODO removeFaction
 // TODO updateFactionName
 // TODO updateForce
