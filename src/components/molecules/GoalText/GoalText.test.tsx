@@ -3,7 +3,9 @@ import React from "react";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import { IGameController } from "../../../controllers/GameController";
+import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import GoalType from "../../../types/GoalType";
@@ -11,8 +13,6 @@ import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import GoalText from "./GoalText";
-import { UiStateContext } from "../../../contexts/UiStateContext";
-import { UiStateController } from "../../../controllers/UiStateController";
 
 const mockSetGoal = jest.fn();
 const mockContext = {
