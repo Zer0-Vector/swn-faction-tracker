@@ -53,10 +53,10 @@ export default class RuntimeGameState implements IGameController, IGameState {
   constructor(storedState: StoredGameState) {
     console.debug(`Init RuntimeGameState: ${storedState.factions.length} factions, ${storedState.assets.length} assets`);
     this.factions = new Map(storedState.factions);
-    this.factionOrder = storedState.factionOrder;
+    this.factionOrder = [...storedState.factionOrder];
     this.assets = new Map(storedState.assets);
     this.locations = new Map(storedState.locations);
-    this.locationsOrder = storedState.locationsOrder;
+    this.locationsOrder = [...storedState.locationsOrder];
     console.debug(`RtGS - ${this.factions.size}F, ${this.assets.size}A, ${this.locations.size}L`);
   }
 
