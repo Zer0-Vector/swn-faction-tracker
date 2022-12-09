@@ -4,17 +4,11 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
 import { IGameController } from "../../../controllers/GameController";
-import LocationInfo from "../../../types/LocationInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
 
 import AddLocationDialog from "./AddLocationDialog";
 
-const EMPTY_CONTEXT: GameContextType = {
-  state: {} as IGameState,
-  controller: {} as IGameController,
-};
-
-function renderWithContext(context?: GameContextType, open?: boolean) {
+function renderWithContext(context?: GameContextType) {
   const mockClose = jest.fn();
   const mockCreate = jest.fn();
   const mockCheckLocationName = jest.fn();
