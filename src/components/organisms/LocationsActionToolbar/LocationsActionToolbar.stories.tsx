@@ -5,6 +5,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
 import { IGameState } from "../../../types/RuntimeGameState";
+import { generateId } from "../../../utils/IdGenerator";
 import { MockActionController } from "../../__mocks__/MockActionController";
 
 import LocationsActionToolbar from "./LocationsActionToolbar";
@@ -28,6 +29,9 @@ export default {
           },
           getLocation(locationId) {
             return MockLocations.find(loc => loc.id === locationId);
+          },
+          checkLocationName(locationName) {
+            return !MockLocations.map(l => l.id).includes(generateId(locationName));
           },
         } as IGameState,
       }}>
