@@ -9,6 +9,9 @@ import { IGameState } from "../../../types/RuntimeGameState";
 import { MockActionController } from "../../__mocks__/MockActionController";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import UiState from "../../../types/UiState";
+import { UiStateController } from "../../../controllers/UiStateController";
 
 export default {
   component: AssetListActionsToolbar,
@@ -34,6 +37,14 @@ export default {
         {story()}
       </GameContext.Provider>
     ),
+    story => <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+      } as UiState,
+      controller: {} as UiStateController,
+    }}>
+      {story()}
+    </UiStateContext.Provider>,
   ],
 } as ComponentMeta<typeof AssetListActionsToolbar>;
 
