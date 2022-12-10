@@ -4,7 +4,9 @@ import { MemoryRouter, useLocation } from "react-router-dom";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { GameContext } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import { IGameController } from "../../../controllers/GameController";
+import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import { Maybe } from "../../../types/Maybe";
 import { IGameState } from "../../../types/RuntimeGameState";
@@ -14,10 +16,16 @@ import FactionListActionToolbar from "./FactionListActionToolbar";
 function TestComp() {
   const { pathname } = useLocation();
   return (
-    <>
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
       <FactionListActionToolbar />
       <div data-testid="test-path">{pathname}</div>
-    </>
+    </UiStateContext.Provider>
   );
 }
 

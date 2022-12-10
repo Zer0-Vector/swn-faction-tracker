@@ -4,7 +4,9 @@ import { MemoryRouter, useLocation } from "react-router-dom";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
 import { IGameController } from "../../../controllers/GameController";
+import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 import { IGameState } from "../../../types/RuntimeGameState";
@@ -35,12 +37,18 @@ const mockFaction = {
 const  TestComp = () => {
   const { pathname } = useLocation();
   return (
-    <>
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
       <div data-testid="test-location">{pathname}</div>
       <GameContext.Provider value={mockContext}>
         <AssetListActionsToolbar />
       </GameContext.Provider>
-    </>
+    </UiStateContext.Provider>
   );
 };
 

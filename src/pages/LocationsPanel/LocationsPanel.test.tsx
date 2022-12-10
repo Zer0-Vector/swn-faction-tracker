@@ -4,7 +4,9 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 
 import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
 import { IGameController } from "../../controllers/GameController";
+import { UiStateController } from "../../controllers/UiStateController";
 import LocationInfo from "../../types/LocationInfo";
 import { IGameState } from "../../types/RuntimeGameState";
 
@@ -19,9 +21,17 @@ function renderIt(locations: LocationInfo[] = []) {
       } as IGameState,
       controller: {} as IGameController,
     }}>
-      <MemoryRouter>
-        <LocationsPanel />
-      </MemoryRouter>
+      <UiStateContext.Provider value={{
+        state: {
+          editMode: "EDIT",
+          loginState: "LOGGED_IN",
+        },
+        controller: {} as UiStateController,
+      }}>
+        <MemoryRouter>
+          <LocationsPanel />
+        </MemoryRouter>
+      </UiStateContext.Provider>
     </GameContext.Provider>
   );
 }
