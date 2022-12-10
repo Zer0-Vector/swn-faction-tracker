@@ -4,8 +4,11 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../../contexts/GameContext";
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
+import UiState from "../../../types/UiState";
 import { MockActionController } from "../../__mocks__/MockActionController";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
@@ -34,6 +37,14 @@ export default {
         {story()}
       </GameContext.Provider>
     ),
+    story => <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+      } as UiState,
+      controller: {} as UiStateController,
+    }}>
+      {story()}
+    </UiStateContext.Provider>,
   ],
 } as ComponentMeta<typeof AssetListActionsToolbar>;
 

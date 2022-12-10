@@ -2,6 +2,10 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
+import { UiStateContext } from "../../../contexts/UiStateContext";
+import { UiStateController } from "../../../controllers/UiStateController";
+import GameMode from "../../../types/GameMode";
+
 import ListActionToolbar from "./ListActionToolbar";
 
 const mockOnAddClick = jest.fn();
@@ -9,18 +13,51 @@ const mockOnRemoveClick = jest.fn();
 
 function renderIt(removable = false) {
   render(
-    <ListActionToolbar
-      removable={removable}
-      onAddClick={mockOnAddClick}
-      onRemoveClick={mockOnRemoveClick}
-      data-testid="test-lat"
-    >
-      <p>test</p>
-    </ListActionToolbar>
+    <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      },
+      controller: {} as UiStateController,
+    }}>
+      <ListActionToolbar
+        removable={removable}
+        onAddClick={mockOnAddClick}
+        onRemoveClick={mockOnRemoveClick}
+        data-testid="test-lat"
+      >
+        <p>test</p>
+      </ListActionToolbar>
+    </UiStateContext.Provider>
   );
 }
 
 describe('ListActionToolbar', () => {
+  it.each<GameMode>(
+    ["VIEW", "TURN"]
+  )('does not render when editMode=%p', (mode) => {
+    render(
+      <UiStateContext.Provider value={{
+        state: {
+          editMode: mode,
+          loginState: "LOGGED_IN",
+        },
+        controller: {} as UiStateController,
+      }}>
+        <ListActionToolbar
+          removable={true}
+          onAddClick={mockOnAddClick}
+          onRemoveClick={mockOnRemoveClick}
+          data-testid="test-lat"
+        >
+          <p>test</p>
+        </ListActionToolbar>
+      </UiStateContext.Provider>
+    );
+    const lat = screen.queryByTestId("test-lat");
+    expect(lat).not.toBeInTheDocument();
+  });
+
   it('renders buttons and children', () => {
     renderIt();
     const lat = screen.getByTestId("test-lat");

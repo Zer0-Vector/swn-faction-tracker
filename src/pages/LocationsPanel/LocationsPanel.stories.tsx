@@ -5,10 +5,13 @@ import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
 import { IGameController } from "../../controllers/GameController";
+import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import LocationInfo from "../../types/LocationInfo";
 import { IGameState } from "../../types/RuntimeGameState";
+import UiState from "../../types/UiState";
 import { generateId } from "../../utils/IdGenerator";
 
 import LocationsPanel from "./LocationsPanel";
@@ -86,6 +89,14 @@ export default {
         {story()}
       </MemoryRouter>
     ),
+    story => <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+      } as UiState,
+      controller: {} as UiStateController,
+    }}>
+      {story()}
+    </UiStateContext.Provider>,
   ],
 } as ComponentMeta<typeof LocationsPanel>;
 

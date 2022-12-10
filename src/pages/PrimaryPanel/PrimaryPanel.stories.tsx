@@ -5,10 +5,13 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { MockActionController } from "../../components/__mocks__/MockActionController";
 import { GameContext } from "../../contexts/GameContext";
+import { UiStateContext } from "../../contexts/UiStateContext";
+import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import FactionInfo from "../../types/FactionInfo";
 import PurchasedAsset from "../../types/PurchasedAsset";
 import { IGameState } from "../../types/RuntimeGameState";
+import UiState from "../../types/UiState";
 
 import PrimaryPanel from "./PrimaryPanel";
 
@@ -20,6 +23,14 @@ export default {
         {story()}
       </MemoryRouter>
     ),
+    story => <UiStateContext.Provider value={{
+      state: {
+        editMode: "EDIT",
+      } as UiState,
+      controller: {} as UiStateController,
+    }}>
+      {story()}
+    </UiStateContext.Provider>,
   ],
 } as ComponentMeta<typeof PrimaryPanel>;
 

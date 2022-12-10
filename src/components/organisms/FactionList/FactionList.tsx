@@ -75,7 +75,7 @@ export default function FactionList(): JSX.Element {
                       >
                         <Box padding={1} bgcolor="background.paper">
                           <FactionDetails faction={faction} />
-                          <Box>
+                          <Box marginTop={3}>
                             <Typography variant="h3" textAlign="left">Assets</Typography>
                             <AssetListActionsToolbar />
                             <AssetList />
