@@ -25,7 +25,7 @@ export default function ModeToggleButtons() {
     >
       <ToggleButton value="VIEW" fullWidth={true}>View</ToggleButton>
       <ToggleButton value="EDIT" fullWidth={true}>Free Edit</ToggleButton>
-      <ToggleButton value="TURN" fullWidth={true} disabled>Take Turn</ToggleButton>
+      <ToggleButton value="TURN" fullWidth={true}>Take Turn</ToggleButton>
     </ToggleButtonGroup>
   );
 }
