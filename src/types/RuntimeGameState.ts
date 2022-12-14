@@ -208,7 +208,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
     }
 
     if (faction) {
-      faction.homeworldId = location.id;
+      faction.homeworldId = location.slug;
       this.factions.set(factionId, faction);
       console.info(`Homeworld set for ${faction?.name} (${factionId}):`, location);
     } else {
@@ -285,11 +285,11 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   addLocation(info: LocationInfo) {
-    if (this.locations.has(info.id)) {
-      throw new Error(`Conflicting location name: ${info.name} (${info.id})`);
+    if (this.locations.has(info.slug)) {
+      throw new Error(`Conflicting location name: ${info.name} (${info.slug})`);
     }
-    this.locations.set(info.id, info);
-    this.locationsOrder.push(info.id);
+    this.locations.set(info.slug, info);
+    this.locationsOrder.push(info.slug);
   }
 
   updateLocationName(currId: string, val: string) {
@@ -300,16 +300,16 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
     const info = new LocationInfo(val, oldInfo.tl, oldInfo.x, oldInfo.y);
     for (const loc of this.locations.values()) {
-      if (loc.id === oldInfo.id) {
-        this.locations.delete(oldInfo.id);
-        this.locations.set(info.id, info);
+      if (loc.slug === oldInfo.slug) {
+        this.locations.delete(oldInfo.slug);
+        this.locations.set(info.slug, info);
         break;
       }
     }
 
     this.locationsOrder.forEach((loc, index) => {
       if (loc === currId) {
-        this.locationsOrder[index] = info.id;
+        this.locationsOrder[index] = info.slug;
       }
     });
 
@@ -317,7 +317,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       if (faction.homeworldId === currId) {
         this.factions.set(faction.id, {
           ...faction,
-          homeworldId: info.id,
+          homeworldId: info.slug,
         });
       }
     }
@@ -326,7 +326,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       if (entry[1].locationId === currId) {
         this.assets.set(entry[0], {
           ...entry[1],
-          locationId: info.id,
+          locationId: info.slug,
         });
       }
     }

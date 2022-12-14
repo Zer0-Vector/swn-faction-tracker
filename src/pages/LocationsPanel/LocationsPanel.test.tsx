@@ -48,7 +48,7 @@ describe('default LocationsPanel', () => {
   it('nonempty LocationsPanel shows LocationActionsToolbar and LocationsList', () => {
     renderIt([
       {
-        id: "test",
+        slug: "test",
         name: "test",
         tl: 1,
         x: 2,

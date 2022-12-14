@@ -30,7 +30,7 @@ const getContextProvider = (numberOfLocations: number) => ({ children }: Require
       controller: MockActionController,
       state: {
         getLocations: () => locations,
-        getLocation: (locationId) => locations.find(loc => loc.id === locationId),
+        getLocation: (locationId) => locations.find(loc => loc.slug === locationId),
       } as IGameState,
     }}>
       {children}

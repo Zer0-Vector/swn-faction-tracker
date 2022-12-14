@@ -219,7 +219,7 @@ describe('checkFactionName', () => {
 
 describe('checkLocationName', () => {
   beforeEach(() => {
-    state.addLocation({ id: "test-1", name: "Test 1" } as LocationInfo);
+    state.addLocation({ slug: "test-1", name: "Test 1" } as LocationInfo);
   });
 
   it('returns true when name is unique', () => {

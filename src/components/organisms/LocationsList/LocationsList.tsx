@@ -49,9 +49,9 @@ export default function LocationsList() {
 
   const updateNameHandlers = useMemo(() => locations.map(loc => (
     (val: string) => {
-      const info = controller.updateLocationName(loc.id, val);
-      if (info !== undefined && selectedLocationId === loc.id) {
-        nav(`/locations/${info.id}`);
+      const info = controller.updateLocationName(loc.slug, val);
+      if (info !== undefined && selectedLocationId === loc.slug) {
+        nav(`/locations/${info.slug}`);
       }
     }
   )), [controller, locations, nav, selectedLocationId]);
@@ -64,10 +64,10 @@ export default function LocationsList() {
 
   const selectionHandlers = useMemo(() => (
     locations.map(val => () => {
-      if (val.id === selectedLocationId) {
+      if (val.slug === selectedLocationId) {
         nav("/locations");
       } else {
-        nav(`/locations/${val.id}`);
+        nav(`/locations/${val.slug}`);
       }
     })
   ), [locations, nav, selectedLocationId]);
@@ -95,7 +95,7 @@ export default function LocationsList() {
             bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
           >
             {locations.map((val, index) => {
-              const isSelected = selectedLocationId === val.id;
+              const isSelected = selectedLocationId === val.slug;
               const notDraggingColor = isSelected ? "action.selected" : "inherit";
               return (
                 <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>

@@ -28,7 +28,7 @@ const MockProvider = ({ locations, children }: MockProviderProps) => (
         return locations;
       },
       checkLocationName(locationName) {
-        return !locations.map(info => info.id).includes(generateSlug(locationName));
+        return !locations.map(info => info.slug).includes(generateSlug(locationName));
       },
     } as IGameState,
     controller: {} as IGameController,
@@ -40,7 +40,7 @@ const MockProvider = ({ locations, children }: MockProviderProps) => (
 export const Default: Story<PropsType> = args => (
   <MockProvider locations={[
     {
-      id: "existing-location",
+      slug: "existing-location",
       name: "Existing Location",
       tl: 0,
       x: 0,

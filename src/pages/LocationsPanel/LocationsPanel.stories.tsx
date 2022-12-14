@@ -30,23 +30,23 @@ const MockProvider = ({ children, state, controller }: MockProviderProps) => (
   </GameContext.Provider>
 );
 
-const locations = [
+const locations: LocationInfo[] = [
   {
-    id: "test-loc-1",
+    slug: "test-loc-1",
     name: "Test Loc 1",
     tl: 1,
     x: 0,
     y: 1,
   },
   {
-    id: "test-loc-2",
+    slug: "test-loc-2",
     name: "Test Loc 2 has a Medium Length Name",
     tl: 2,
     x: 2,
     y: 3,
   },
   {
-    id: "test-loc-3",
+    slug: "test-loc-3",
     name: "Test Loc 3 has a Really Long Name That Continues On and On For a Long Time",
     tl: 3,
     x: 4,
@@ -59,10 +59,10 @@ const getMockedState = (locations: LocationInfo[]) => ({
     return locations;
   },
   getLocation(locationId) {
-    return locations.find(v => v.id === locationId);
+    return locations.find(v => v.slug === locationId);
   },
   checkLocationName(locationName) {
-    return !locations.map(l => l.id).includes(generateSlug(locationName));
+    return !locations.map(l => l.slug).includes(generateSlug(locationName));
   },
 } as IGameState);
 
