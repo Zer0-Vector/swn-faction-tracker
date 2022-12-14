@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { useSelection } from "../../../hooks/useSelection";
+import { useSelectedLocation } from "../../../hooks/useSelectedLocation";
 import LocationInfo from "../../../types/LocationInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -13,7 +13,7 @@ export default function LocationsActionToolbar() {
   const { controller } = useContext(GameContext);
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   const [removeDialogOpen, setRemoveDialogOpen] = useState<boolean>(false);
-  const { location: selectedLocation } = useSelection();
+  const selectedLocation = useSelectedLocation();
   const nav = useNavigate();
 
   const handleOpenAddDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {

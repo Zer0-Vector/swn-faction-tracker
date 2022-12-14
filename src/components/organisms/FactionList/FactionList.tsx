@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { useSelection } from "../../../hooks/useSelection";
+import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import FactionInfo from "../../../types/FactionInfo";
 import AssetList from "../AssetList";
 import AssetListActionsToolbar from "../AssetListActionsToolbar";
@@ -18,7 +18,7 @@ import FactionListItem from "../FactionListItem";
 export default function FactionList(): JSX.Element {
   const { state, controller } = useContext(GameContext);
   const theme = useTheme();
-  const { faction: selectedFaction } = useSelection();
+  const selectedFaction = useSelectedFaction();
   
   const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) {
