@@ -31,6 +31,14 @@ const ItemHeader = React.memo(styled(Item)(() => ({
   textOverflow: "ellipsis",
 })));
 
+const Column = React.memo(styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1),
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+})));
+
+
 export default function LocationsList() {
   const { state, controller } = useContext(GameContext);
   const { locationId: selectedLocationId } = useSelectionId();
@@ -79,51 +87,73 @@ export default function LocationsList() {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable-location">
         {(provided, snapshot) => (
-          <Box {...provided.droppableProps} ref={provided.innerRef} data-testid="locations-list-container">
-            {locations.map((val, index) => (
-              <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
-                {(provided, snapshot) => (
-                  <Accordion 
-                    {...provided.draggableProps}
-                    ref={provided.innerRef}
-                    expanded={selectedLocationId === val.id}
-                    disableGutters={true}
-                  >
-                    <AccordionSummary
-                      onClick={selectionHandlers[index]}
-                      sx={{
-                        backgroundColor: snapshot.isDragging ? "action.dragging" : (selectedLocationId === val.id ? "action.selected" : "inherit"),
-                        justifyContent: "flex-start",
-                        gap: 2,
-                        "& .MuiAccordionSummary-content": {
-                          alignItems: "center",
-                          width: "100%",
-                        },
-                      }}
+          <Box 
+            {...provided.droppableProps}
+            ref={provided.innerRef} 
+            data-testid="locations-list-container"
+            padding={2}
+            bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
+          >
+            {locations.map((val, index) => {
+              const isSelected = selectedLocationId === val.id;
+              const notDraggingColor = isSelected ? "action.selected" : "inherit";
+              return (
+                <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>
+                  {(provided, snapshot) => (
+                    <Accordion
+                      {...provided.draggableProps}
+                      ref={provided.innerRef}
+                      expanded={isSelected}
+                      disableGutters={true}
                     >
-                      <Icon
-                        {...provided.dragHandleProps}
-                        component="div"
+                      <AccordionSummary
+                        onClick={selectionHandlers[index]}
                         sx={{
-                          display: "flex",
+                          backgroundColor: snapshot.isDragging ? "action.dragging" : notDraggingColor,
+                          justifyContent: "flex-start",
+                          gap: 1,
+                          display: "grid",
+                          gridTemplateColumns: "30px 1fr",
+                          "& .MuiAccordionSummary-content": {
+                            padding: 0,
+                            margin: 0,
+                            alignItems: "center",
+                            width: "100%",
+                          },
+                          "&:hover": {
+                            cursor: "pointer",
+                            backgroundColor: isSelected ? "action.selected-hover" : "action.hover",
+                          },
                         }}
                       >
-                        <DragHandleIcon />
-                      </Icon>
-                      <ControlledText id="location-name" onUpdate={updateNameHandlers[index]} variant="body2">{val.name}</ControlledText>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Grid container spacing={1}>
-                        <Grid item xs={cellWidth}><ItemHeader>Tech Level</ItemHeader></Grid>
-                        <Grid item xs={cellWidth}><Item>{val.tl}</Item></Grid>
-                        <Grid item xs={cellWidth}><ItemHeader>Coordinates</ItemHeader></Grid>
-                        <Grid item xs={cellWidth}><Item>{val.x}, {val.y}</Item></Grid>
-                      </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                )}
-              </Draggable>
-            ))}
+                        <Column>
+                          <Icon
+                            {...provided.dragHandleProps}
+                            component="div"
+                            sx={{
+                              display: "flex",
+                            }}
+                          >
+                            <DragHandleIcon />
+                          </Icon>
+                        </Column>
+                        <Column>
+                          <ControlledText id="location-name" onUpdate={updateNameHandlers[index]} variant="body2">{val.name}</ControlledText>
+                        </Column>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Grid container spacing={1}>
+                          <Grid item xs={cellWidth}><ItemHeader>Tech Level</ItemHeader></Grid>
+                          <Grid item xs={cellWidth}><Item>{val.tl}</Item></Grid>
+                          <Grid item xs={cellWidth}><ItemHeader>Coordinates</ItemHeader></Grid>
+                          <Grid item xs={cellWidth}><Item>{val.x}, {val.y}</Item></Grid>
+                        </Grid>
+                      </AccordionDetails>
+                    </Accordion>
+                  )}
+                </Draggable>
+              );
+            })}
             {provided.placeholder}
           </Box>
         )}

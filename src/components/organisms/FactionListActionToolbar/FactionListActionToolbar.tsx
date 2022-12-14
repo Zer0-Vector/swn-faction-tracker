@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { useSelection } from "../../../hooks/useSelection";
+import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 import AddFactionDialog from "../../molecules/AddFactionDialog";
@@ -14,7 +14,7 @@ export default function FactionListActionToolbar() {
   const [addOpen, setAddOpen] = useState<boolean>(false);
   const [removeOpen, setRemoveOpen] = useState<boolean>(false);
 
-  const { faction: selectedFaction } = useSelection();
+  const selectedFaction = useSelectedFaction();
   const nav = useNavigate();
 
   const handleAddClick = useCallback(() => setAddOpen(true), []);

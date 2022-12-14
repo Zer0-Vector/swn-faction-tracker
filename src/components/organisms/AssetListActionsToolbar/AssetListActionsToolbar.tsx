@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../../../contexts/GameContext";
-import { useSelection } from "../../../hooks/useSelection";
+import { useSelectedAsset } from "../../../hooks/useSelectedAsset";
 import { useSelectionId } from "../../../hooks/useSelectionId";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -15,7 +15,7 @@ export default function AssetListActionsToolbar() {
   const [addOpen, setAddOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
 
-  const { asset } = useSelection();
+  const asset = useSelectedAsset();
   const { assetId, factionId } = useSelectionId();
 
   const nav = useNavigate();
