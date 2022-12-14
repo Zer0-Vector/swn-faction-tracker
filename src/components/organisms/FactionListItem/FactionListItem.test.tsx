@@ -29,14 +29,12 @@ const mockContext: GameContextType = {
 const mockFaction: FactionInfo = {
   id: "test-faction",
   name: "Test Faction",
-  stats: {
-    cunning: 0,
-    force: 1,
-    hp: 2,
-    maxHp: 3,
-    wealth: 4,
-    xp: 5,
-  },
+  cunning: 0,
+  force: 1,
+  hp: 2,
+  maxHp: 3,
+  wealth: 4,
+  xp: 5,
 };
 
 function renderIt() {

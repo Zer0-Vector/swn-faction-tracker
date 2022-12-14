@@ -39,14 +39,12 @@ describe('default FactionDetails', () => {
     mockFaction = {
       id: "test-faction",
       name: "Test Faction",
-      stats: {
-        cunning: 11,
-        force: 22,
-        hp: 33,
-        maxHp: 44,
-        wealth: 55,
-        xp: 66,
-      },
+      cunning: 11,
+      force: 22,
+      hp: 33,
+      maxHp: 44,
+      wealth: 55,
+      xp: 66,
     };
     mockGetLocations.mockImplementation(() => [
       {

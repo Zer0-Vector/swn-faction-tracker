@@ -260,7 +260,7 @@ describe('addFaction', () => {
     expect(f).not.toBeUndefined();
     expect(f.id).toBe("test-faction");
     expect(f.name).toBe("Test Faction");
-    expect(f.stats).not.toBeUndefined();
+    expect(f.maxHp).toBe(4);
   });
 
   it.each([

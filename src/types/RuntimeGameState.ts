@@ -155,7 +155,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   #updateStat(factionId: string, statName: FactionStat, value: number) {
     const faction = this.factions.get(factionId);
     if (faction) {
-      faction.stats[statName] = value;
+      faction[statName] = value;
       FactionInfo.recomputeMaxHp(faction);
       this.factions.set(factionId, faction);
       console.info(`${statName} set for ${factionId}:`, value);
@@ -179,7 +179,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   updateHp(factionId: string, hp: number): void {
     const faction = this.factions.get(factionId);
     if (faction) {
-      faction.stats.hp = hp;
+      faction.hp = hp;
       this.factions.set(factionId, faction);
       console.info(`HP set for ${factionId}:`, hp);
     } else {
@@ -190,7 +190,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
   updateMaxHp(factionId: string, maxHp: number): void {
     const faction = this.factions.get(factionId);
     if (faction) {
-      faction.stats.maxHp = maxHp;
+      faction.maxHp = maxHp;
       this.factions.set(factionId, faction);
       console.info(`MaxHp set for ${factionId}:`, maxHp);
     } else {

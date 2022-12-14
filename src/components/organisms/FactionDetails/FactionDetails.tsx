@@ -64,11 +64,13 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
       <Item data-testid="tag-item"><ControlledDropDown onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</ControlledDropDown></Item>
 
       <ItemHeader data-testid="hp-label">HP:</ItemHeader>
-      <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} {...faction.stats} data-testid="hp-summary" /></Item>
+      <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} hp={faction.hp} maxHp={faction.maxHp} data-testid="hp-summary" /></Item>
       <ItemHeader data-testid="attr-label">F/C/W:</ItemHeader>
       <Item data-testid="attr-item">
         <FactionStatSummary
-          {...faction.stats}
+          cunning={faction.cunning}
+          wealth={faction.wealth}
+          force={faction.force}
           factionId={faction.id}
         />
       </Item>
