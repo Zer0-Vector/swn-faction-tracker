@@ -73,13 +73,6 @@ export default class FactionInfo {
     FactionInfo.recomputeMaxHp(this);
   }
 
-  static copy(currentFaction: FactionInfo) {
-    const result = new FactionInfo(currentFaction.id, currentFaction.name);
-    result.homeworldId = currentFaction.homeworldId;
-    result.stats = { ...currentFaction.stats };
-    return result;
-  }
-
   static recomputeMaxHp(info: FactionInfo) {
     const { force, cunning, wealth } = info.stats;
     info.stats.maxHp = 4 + STAT_INFO[force].hpValue + STAT_INFO[cunning].hpValue + STAT_INFO[wealth].hpValue;
