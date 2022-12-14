@@ -26,7 +26,7 @@ export default function ListActionToolbar({ removable, onAddClick, onRemoveClick
   return (
     <Slide in={state.editMode === "EDIT"} direction="right" appear={false} unmountOnExit>
       <Box>
-        <Box padding={1} display="flex" flexDirection="row" alignItems="center" gap={2} data-testid={dtid}>
+        <Box marginBottom={1} padding={1} display="flex" flexDirection="row" alignItems="center" gap={2} data-testid={dtid}>
           <Fab
             size="small"
             sx={fabSx}
