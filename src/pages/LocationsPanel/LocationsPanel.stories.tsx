@@ -12,7 +12,7 @@ import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import LocationInfo from "../../types/LocationInfo";
 import { IGameState } from "../../types/RuntimeGameState";
 import UiState from "../../types/UiState";
-import { generateId } from "../../utils/IdGenerator";
+import { generateSlug } from "../../utils/SlugGenerator";
 
 import LocationsPanel from "./LocationsPanel";
 
@@ -62,7 +62,7 @@ const getMockedState = (locations: LocationInfo[]) => ({
     return locations.find(v => v.id === locationId);
   },
   checkLocationName(locationName) {
-    return !locations.map(l => l.id).includes(generateId(locationName));
+    return !locations.map(l => l.id).includes(generateSlug(locationName));
   },
 } as IGameState);
 

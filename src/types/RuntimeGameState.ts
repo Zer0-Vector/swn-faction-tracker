@@ -2,7 +2,7 @@ import { DraggableLocation } from "react-beautiful-dnd";
 
 import { IGameController } from "../controllers/GameController";
 import ASSETS, { isAsset } from "../data/Assets";
-import { generateId } from "../utils/IdGenerator";
+import { generateSlug } from "../utils/SlugGenerator";
 
 import AssetId from "./AssetId";
 import FactionInfo from "./FactionInfo";
@@ -87,7 +87,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
    * @throws `Error`, if name produces duplicate faction id
    */
   addFaction(name: string): FactionInfo {
-    const id = generateId(name);
+    const id = generateSlug(name);
 
     // indicates duplicate name
     if (this.factions.has(id)) {
@@ -119,7 +119,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       return undefined;
     }
 
-    const newFactionId = generateId(newFactionName);
+    const newFactionId = generateSlug(newFactionName);
     if (newFactionId === currentFactionId) {
       return undefined;
     }
@@ -348,12 +348,12 @@ export default class RuntimeGameState implements IGameController, IGameState {
   }
 
   checkFactionName(factionName: string): boolean {
-    const id = generateId(factionName);
+    const id = generateSlug(factionName);
     return id.length > 0 && !this.factions.has(id);
   }
 
   checkLocationName(locationName: string): boolean {
-    const id = generateId(locationName);
+    const id = generateSlug(locationName);
     return id.length > 0 && !this.locations.has(id);
   }
 

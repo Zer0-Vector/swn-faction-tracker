@@ -1,7 +1,7 @@
-import { generateId } from "../utils/IdGenerator";
+import { randomUUID } from "crypto";
+import { generateSlug } from "../utils/SlugGenerator";
 
 export default class LocationInfo {
-  
   id: string;
   name: string;
   tl: number;
@@ -9,7 +9,7 @@ export default class LocationInfo {
   y: number;
 
   constructor(name: string, tl: number, x: number, y: number) {
-    this.id = generateId(name);
+    this.id = generateSlug(name);
     this.name = name;
     this.tl = tl;
     this.x = x;

@@ -7,7 +7,7 @@ import { IGameController } from "../../../controllers/GameController";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import LocationInfo from "../../../types/LocationInfo";
 import { IGameState } from "../../../types/RuntimeGameState";
-import { generateId } from "../../../utils/IdGenerator";
+import { generateSlug } from "../../../utils/SlugGenerator";
 
 import AddLocationDialog from "./AddLocationDialog";
 
@@ -28,7 +28,7 @@ const MockProvider = ({ locations, children }: MockProviderProps) => (
         return locations;
       },
       checkLocationName(locationName) {
-        return !locations.map(info => info.id).includes(generateId(locationName));
+        return !locations.map(info => info.id).includes(generateSlug(locationName));
       },
     } as IGameState,
     controller: {} as IGameController,

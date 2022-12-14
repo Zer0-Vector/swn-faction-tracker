@@ -8,7 +8,7 @@ import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import { IGameState } from "../../../types/RuntimeGameState";
 import UiState from "../../../types/UiState";
-import { generateId } from "../../../utils/IdGenerator";
+import { generateSlug } from "../../../utils/SlugGenerator";
 import { MockActionController } from "../../__mocks__/MockActionController";
 
 import LocationsActionToolbar from "./LocationsActionToolbar";
@@ -34,7 +34,7 @@ export default {
             return MockLocations.find(loc => loc.id === locationId);
           },
           checkLocationName(locationName) {
-            return !MockLocations.map(l => l.id).includes(generateId(locationName));
+            return !MockLocations.map(l => l.id).includes(generateSlug(locationName));
           },
         } as IGameState,
       }}>
