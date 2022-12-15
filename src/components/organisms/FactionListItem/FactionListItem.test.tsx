@@ -27,7 +27,7 @@ const mockContext: GameContextType = {
 };
 
 const mockFaction: FactionInfo = {
-  id: "test-faction",
+  slug: "test-faction",
   name: "Test Faction",
   cunning: 0,
   force: 1,

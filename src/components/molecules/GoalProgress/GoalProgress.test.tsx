@@ -21,7 +21,7 @@ const mockContext: GameContextType = {
 };
 
 const mockFaction = {
-  id: "test-faction",
+  slug: "test-faction",
   goal: {
     tally: 11,
     target: 22,

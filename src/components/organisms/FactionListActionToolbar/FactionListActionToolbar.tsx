@@ -26,7 +26,7 @@ export default function FactionListActionToolbar() {
     setRemoveOpen(false);
     console.debug("handleRemoveAction: ", selectedFaction, reason);
     if (selectedFaction && reason === "Remove") {
-      controller.removeFaction(selectedFaction.id);
+      controller.removeFaction(selectedFaction.slug);
       nav("/factions");
     }
   }, [controller, nav, selectedFaction]);

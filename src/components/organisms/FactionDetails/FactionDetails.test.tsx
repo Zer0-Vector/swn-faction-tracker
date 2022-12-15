@@ -37,7 +37,7 @@ function renderIt() {
 describe('default FactionDetails', () => {
   beforeEach(() => {
     mockFaction = {
-      id: "test-faction",
+      slug: "test-faction",
       name: "Test Faction",
       cunning: 11,
       force: 22,
@@ -61,7 +61,7 @@ describe('default FactionDetails', () => {
       },
     ]);
     mockGetFaction.mockImplementation((f: string) => {
-      if (f !== mockFaction.id) {
+      if (f !== mockFaction.slug) {
         throw new Error("Need more mocking");
       }
       return mockFaction;

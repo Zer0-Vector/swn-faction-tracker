@@ -38,12 +38,12 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
   const tagText = faction.tag ? faction.tag : "Unknown";
 
   const updateHomeworld = useCallback((val: string) => {
-    controller.updateHomeworld(faction.id, val);
-  }, [controller, faction.id]);
+    controller.updateHomeworld(faction.slug, val);
+  }, [controller, faction.slug]);
 
   const updateTag = useCallback((val: string) => {
-    controller.updateTag(faction.id, val);
-  }, [controller, faction.id]);
+    controller.updateTag(faction.slug, val);
+  }, [controller, faction.slug]);
 
   const homeworldOptions = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
 
@@ -64,14 +64,14 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
       <Item data-testid="tag-item"><ControlledDropDown onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tagText}</ControlledDropDown></Item>
 
       <ItemHeader data-testid="hp-label">HP:</ItemHeader>
-      <Item data-testid="hp-item"><FactionHpSummary factionId={faction.id} hp={faction.hp} maxHp={faction.maxHp} data-testid="hp-summary" /></Item>
+      <Item data-testid="hp-item"><FactionHpSummary factionId={faction.slug} hp={faction.hp} maxHp={faction.maxHp} data-testid="hp-summary" /></Item>
       <ItemHeader data-testid="attr-label">F/C/W:</ItemHeader>
       <Item data-testid="attr-item">
         <FactionStatSummary
           cunning={faction.cunning}
           wealth={faction.wealth}
           force={faction.force}
-          factionId={faction.id}
+          factionId={faction.slug}
         />
       </Item>
 

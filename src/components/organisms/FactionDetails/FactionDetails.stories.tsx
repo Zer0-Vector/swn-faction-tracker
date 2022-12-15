@@ -55,7 +55,7 @@ const Template: ComponentStory<typeof FactionDetails> = args => <FactionDetails 
 export const NoGoal = Template.bind({});
 NoGoal.args = {
   faction: {
-    id: "test-faction",
+    slug: "test-faction",
     name: "Test Faction",
     stats: {
       cunning: 1,
@@ -71,7 +71,7 @@ NoGoal.args = {
 export const WithGoal = Template.bind({});
 WithGoal.args = {
   faction: {
-    id: "test-faction",
+    slug: "test-faction",
     name: "Test Faction",
     stats: {
       cunning: 1,
@@ -90,7 +90,7 @@ WithGoal.args = {
 export const Full = Template.bind({});
 Full.args = {
   faction: {
-    id: "test-faction",
+    slug: "test-faction",
     name: "Test Faction",
     stats: {
       cunning: 1,

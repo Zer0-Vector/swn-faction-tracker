@@ -34,7 +34,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   const { factionId: navFactionId } = useSelectionId();
   const nav = useNavigate();
 
-  const isSelected = navFactionId === faction.id;
+  const isSelected = navFactionId === faction.slug;
   const getEditNameHandler = useCallback((factionId: string) => (
     (val: string) => {
       const newId = controller.updateFactionName(factionId, val);
@@ -58,8 +58,8 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   );
 
   const checkForDuplicates = useCallback<ValidationFn>(val => {
-    return !state.getFactions().filter(f => f.id !== faction.id).map(f => f.name.toLowerCase()).includes(val.toLowerCase());
-  }, [state, faction.id]);
+    return !state.getFactions().filter(f => f.slug !== faction.slug).map(f => f.name.toLowerCase()).includes(val.toLowerCase());
+  }, [state, faction.slug]);
 
 
   const notDraggingBgColor = isSelected ? "action.selected" : "inherit";
@@ -89,7 +89,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   
   return (
     <Box
-      onClick={getSelectFactionHandler(faction.id)}
+      onClick={getSelectFactionHandler(faction.slug)}
       sx={containerBoxSx}
       ref={boxRef}
       data-testid="faction-list-item"
@@ -98,17 +98,17 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         <DragHandleIcon />
       </ItemColumn>
       <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
-        <ControlledText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" data-testid="faction-list-item-name">
+        <ControlledText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.slug)} variant="body2" data-testid="faction-list-item-name">
           {faction.name}
         </ControlledText>
       </ItemColumn>
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={statsBoxSx} data-testid="faction-list-item-stats">
           <ItemColumn data-testid="faction-list-item-health-col">
-            <HealthDisplay factionId={faction.id} hp={faction.hp} maxHp={faction.maxHp} />
+            <HealthDisplay factionId={faction.slug} hp={faction.hp} maxHp={faction.maxHp} />
           </ItemColumn>
           <ItemColumn data-testid="faction-list-item-attributes-col">
-            <FactionStatSummary { ...faction } factionId={faction.id}  />
+            <FactionStatSummary { ...faction } factionId={faction.slug}  />
           </ItemColumn>
         </Box>
       </Slide>

@@ -30,7 +30,7 @@ const mockContext: GameContextType = {
 };
 
 const mockFaction = {
-  id: "test-faction",
+  slug: "test-faction",
   name: "Test Faction",
 } as FactionInfo;
 

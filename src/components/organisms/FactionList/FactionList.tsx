@@ -55,8 +55,8 @@ export default function FactionList(): JSX.Element {
             {factions.map((faction: FactionInfo, index: number) => {
               return (
                 <Draggable
-                  key={faction.id}
-                  draggableId={`draggable-faction-${faction.id}`}
+                  key={faction.slug}
+                  draggableId={`draggable-faction-${faction.slug}`}
                   index={index}
                 >
                   {(itemProvided, itemSnapshot) => (
@@ -70,7 +70,7 @@ export default function FactionList(): JSX.Element {
                         isDragging={itemSnapshot.isDragging}
                       />
                       <Collapse
-                        in={selectedFaction?.id === faction.id}
+                        in={selectedFaction?.slug === faction.slug}
                         unmountOnExit={true}
                       >
                         <Box padding={1} bgcolor="background.paper">

@@ -34,7 +34,7 @@ describe('GameController', () => {
     expect(result).not.toBeUndefined();
     expect(result.factions.length).toEqual(1);
     expect(result.factionOrder.length).toEqual(1);
-    expect(result.factionOrder[0]).toEqual(faction.id);
+    expect(result.factionOrder[0]).toEqual(faction.slug);
     expect(result.factions[0][1]).toEqual(faction);
   });
 
@@ -72,7 +72,7 @@ describe('GameController', () => {
         [
           "test-faction",
           {
-            id: "test-faction",
+            slug: "test-faction",
             goal: {
               type: "Destroy the Foe",
             },

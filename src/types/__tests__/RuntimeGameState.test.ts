@@ -71,19 +71,19 @@ describe('getAssets', () => {
 
   it('contains asset after adding one', () => {
     const faction = state.addFaction("Test Two");
-    const asset = state.addAsset(faction.id, "Test Asset");
-    const assets = state.getAssets(faction.id);
+    const asset = state.addAsset(faction.slug, "Test Asset");
+    const assets = state.getAssets(faction.slug);
     expect(assets.length).toEqual(1);
     expect(assets.at(0)?.id).toEqual(asset.id);
   });
 
   it('does not contain asset after removing it', () => {
     const faction = state.addFaction("Test Two");
-    const asset = state.addAsset(faction.id, "Test Asset");
-    state.addAsset(faction.id, "Asset 2");
-    expect(state.getAssets(faction.id).length).toEqual(2);
-    state.removeAsset(faction.id, AssetId.toRefFormat(asset.id));
-    const assets = state.getAssets(faction.id);
+    const asset = state.addAsset(faction.slug, "Test Asset");
+    state.addAsset(faction.slug, "Asset 2");
+    expect(state.getAssets(faction.slug).length).toEqual(2);
+    state.removeAsset(faction.slug, AssetId.toRefFormat(asset.id));
+    const assets = state.getAssets(faction.slug);
     expect(assets.length).toEqual(1);
     expect(assets.at(0)?.id).not.toEqual(asset.id);
   });
@@ -142,10 +142,10 @@ describe('updateLocationName', () => {
 
   it('updates any assets which reference updated location', () => {
     const faction = state.addFaction("Faction Two");
-    const asset = state.addAsset(faction.id, "Smugglers");
+    const asset = state.addAsset(faction.slug, "Smugglers");
     asset.locationId = "location-one";
     state.updateLocationName("location-one", "Location Three");
-    const updatedAsset = state.getAsset(faction.id, "smugglers-1");
+    const updatedAsset = state.getAsset(faction.slug, "smugglers-1");
     expect(updatedAsset?.locationId).toBe("location-three");
   });
 });
@@ -258,7 +258,7 @@ describe('addFaction', () => {
   it('adds a faction when name is unique', () => {
     const f = state.addFaction("Test Faction");
     expect(f).not.toBeUndefined();
-    expect(f.id).toBe("test-faction");
+    expect(f.slug).toBe("test-faction");
     expect(f.name).toBe("Test Faction");
     expect(f.maxHp).toBe(4);
   });

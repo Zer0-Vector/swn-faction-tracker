@@ -31,7 +31,7 @@ const Template: ComponentStory<typeof GoalText> = args => <GoalText {...args} />
 export const Default = Template.bind({});
 Default.args = {
   faction: {
-    id: "test-faction",
+    slug: "test-faction",
     goal: {
       type: "Invincible Valor",
     },
@@ -41,6 +41,6 @@ Default.args = {
 export const Empty = Template.bind({});
 Empty.args = {
   faction: {
-    id: "test-faction-2",
+    slug: "test-faction-2",
   } as FactionInfo,
 };

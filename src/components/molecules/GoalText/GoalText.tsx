@@ -14,9 +14,9 @@ export default function GoalText({faction}: GoalTextProps) {
   
   const handleUpdate = useCallback((val: string) => {
     if (isGoalType(val)) {
-      controller.setGoal(faction.id, { type: val });
+      controller.setGoal(faction.slug, { type: val });
     }
-  }, [controller, faction.id]);
+  }, [controller, faction.slug]);
 
   return (
     <ControlledDropDown

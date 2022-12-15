@@ -127,7 +127,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
       throw new Error(`Duplicate faction id detected: ${newFactionId}`);
     }
 
-    faction.id = newFactionId;
+    faction.slug = newFactionId;
     faction.name = newFactionName;
     this.factions.delete(currentFactionId);
     this.factions.set(newFactionId, faction);
@@ -315,7 +315,7 @@ export default class RuntimeGameState implements IGameController, IGameState {
 
     for (const faction of this.factions.values()) {
       if (faction.homeworldId === currId) {
-        this.factions.set(faction.id, {
+        this.factions.set(faction.slug, {
           ...faction,
           homeworldId: info.slug,
         });

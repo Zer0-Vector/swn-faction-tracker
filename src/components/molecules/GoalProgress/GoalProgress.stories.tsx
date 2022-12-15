@@ -33,7 +33,7 @@ const Template: ComponentStory<typeof GoalProgress> = args => <GoalProgress {...
 export const Default = Template.bind({});
 Default.args = {
   faction: {
-    id: "test-1",
+    slug: "test-1",
     goal: {
       type: "Blood the Enemy",
       tally: 1,
@@ -45,6 +45,6 @@ Default.args = {
 export const NoGoal = Template.bind({});
 NoGoal.args = {
   faction: {
-    id: "test-2",
+    slug: "test-2",
   } as FactionInfo,
 };

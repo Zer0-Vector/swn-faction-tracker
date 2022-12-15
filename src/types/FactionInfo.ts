@@ -1,3 +1,5 @@
+import { v4 as randomUuid } from "uuid";
+
 import FactionStatsInfo from "./FactionStatsInfo";
 import GoalInfo from "./GoalInfo";
 
@@ -53,6 +55,7 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
 export default class FactionInfo implements FactionStatsInfo {
   
   id: string;
+  slug: string;
   name: string;
   hp: number;
   maxHp: number;
@@ -64,8 +67,9 @@ export default class FactionInfo implements FactionStatsInfo {
   tag?: string;
   goal?: GoalInfo;
 
-  constructor(id: string, name: string) {
-    this.id = id;
+  constructor(slug: string, name: string) {
+    this.id = randomUuid();
+    this.slug = slug;
     this.name = name;
     this.force = 0;
     this.cunning = 0;

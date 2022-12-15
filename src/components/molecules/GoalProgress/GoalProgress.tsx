@@ -26,7 +26,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
   const handleUpdateTally = (val: number) => {
     if (faction.goal) {
       console.debug(`setting tally: '${val}'`);
-      controller.setGoal(faction.id, {
+      controller.setGoal(faction.slug, {
         ...faction.goal,
         tally: val,
       });
@@ -35,7 +35,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   const handleUpdateTarget = (val: number) => {
     if (faction.goal) {
-      controller.setGoal(faction.id, {
+      controller.setGoal(faction.slug, {
         ...faction.goal,
         target: val,
       });

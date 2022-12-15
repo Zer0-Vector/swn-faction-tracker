@@ -36,7 +36,7 @@ export default {
 
 const factions: FactionInfo[] = [
   {
-    id: "test-faction-1",
+    slug: "test-faction-1",
     name: "Test Faction 1",
     stats: {
       cunning: 1,
@@ -48,7 +48,7 @@ const factions: FactionInfo[] = [
     },
   },
   {
-    id: "test-faction-2",
+    slug: "test-faction-2",
     name: "Test Faction 2",
     stats: {
       cunning: 1,
@@ -60,7 +60,7 @@ const factions: FactionInfo[] = [
     },
   },
   {
-    id: "test-faction-3",
+    slug: "test-faction-3",
     name: "Test Faction 3",
     stats: {
       cunning: 1,
@@ -95,7 +95,7 @@ const getMockedState = (factions: FactionInfo[] = [], assetMap: { [id: string]: 
     return factions;
   },
   getFaction(factionId) {
-    return factions.find(f => f.id === factionId);
+    return factions.find(f => f.slug === factionId);
   },
   getLocations() {
     return locations;

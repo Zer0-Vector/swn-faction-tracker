@@ -77,7 +77,7 @@ describe('FactionListActionToolbar', () => {
   
   it("remove button shows RemoveFactionDialog and removes faction when confirmed", async () => {
     mockGetFaction.mockImplementation(() => ({
-      id: "test-faction",
+      slug: "test-faction",
     } as FactionInfo));
     renderIt("/factions/test-faction");
     const btnRemove = screen.getByTestId("lat-remove");

@@ -33,7 +33,7 @@ function renderIt(goalType: Maybe<GoalType> = undefined) {
     }}>
       <GameContext.Provider value={mockContext}>
         <GoalText faction={{
-            id: "test-faction",
+            slug: "test-faction",
             goal: {
               type: goalType,
             } as GoalInfo,

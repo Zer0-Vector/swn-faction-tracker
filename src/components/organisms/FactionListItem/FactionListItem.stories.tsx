@@ -28,7 +28,7 @@ const MockedState = {
   getFactions: () => {
     return [
       {
-        id: "test-faction-stored",
+        slug: "test-faction-stored",
         name: "Test Faction Stored",
       },
     ];
@@ -58,7 +58,7 @@ const Template: ComponentStory<typeof FactionListItem> = args => {
 export const Default = Template.bind({});
 Default.args = {
   faction: {
-    id: "test-faction",
+    slug: "test-faction",
     name: "Test Faction",
     stats: {
       force: 11,

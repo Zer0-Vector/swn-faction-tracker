@@ -22,14 +22,14 @@ export default {
           getFactions() {
             return [
               {
-                id: "existing-faction",
+                slug: "existing-faction",
                 name: "Existing Faction",
               },
             ];
           },
           getFaction(factionId) {
             return {
-              id: "test-faction",
+              slug: "test-faction",
               name: "Test Faction",
             };
           },

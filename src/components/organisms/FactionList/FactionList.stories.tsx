@@ -40,7 +40,7 @@ const MockProvider = ({ children, factions }: MockProviderProps) => (
         return factions;
       },
       getFaction(factionId) {
-        return factions.find(f => f.id === factionId);
+        return factions.find(f => f.slug === factionId);
       },
       getLocations() {
         return locations;
@@ -83,7 +83,7 @@ type AdditionalArgs = { numberOfFactions: number };
 const Template: Story<ComponentProps<typeof FactionList> & AdditionalArgs> = (args) => (
   <MockProvider factions={
     [...Array(args.numberOfFactions).keys()].map(n => ({
-      id: `faction-${n}`,
+      slug: `faction-${n}`,
       name: `Faction ${n}`,
       stats: {
         cunning: n % 3,
