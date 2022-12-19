@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
+import React, { PropsWithChildren, useContext, useEffect, useRef } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import FactionInfo from "../../types/FactionInfo";
