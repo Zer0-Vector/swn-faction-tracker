@@ -2,9 +2,7 @@ import React from "react";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
-import { IGameState } from "../../../types/RuntimeGameState";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { MockAction } from "../../__mocks__/MockAction";
 
 import HealthDisplay from "./HealthDisplay";
@@ -18,14 +16,13 @@ export default {
       </div>
     ),
     story => (
-      <GameContext.Provider value={{
-        state: {} as IGameState,
-        controller: {
-          ...MockAction("updateHp"),
-        } as unknown as IGameController,
+      <FactionContext.Provider value={{
+        factions: {
+          ...MockAction("update"),
+        } as unknown as FactionPoset,
       }}>
         {story()}
-      </GameContext.Provider>
+      </FactionContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof HealthDisplay>;

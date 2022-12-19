@@ -2,22 +2,19 @@ import React from "react";
 
 import { render } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
-import { IGameState } from "../../../types/RuntimeGameState";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 
 import HealthDisplay from "./HealthDisplay";
 
-const mockContext = {
-  state: {} as IGameState,
-  controller: {} as IGameController,
-} as GameContextType;
+const mockContext: FactionContextType = {
+  factions: {} as FactionPoset,
+};
 
 function renderIt() {
   render(
-    <GameContext.Provider value={mockContext}>
+    <FactionContext.Provider value={mockContext}>
       <HealthDisplay factionId="testFactionId" hp={11} maxHp={22} />
-    </GameContext.Provider>
+    </FactionContext.Provider>
   );
 }
 
