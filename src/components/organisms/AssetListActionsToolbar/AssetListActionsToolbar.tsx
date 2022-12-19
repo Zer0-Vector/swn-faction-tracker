@@ -1,32 +1,34 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { AssetContext } from "../../../contexts/AssetContext";
 import { useSelectedAsset } from "../../../hooks/useSelectedAsset";
-import { useSelectionId } from "../../../hooks/useSelectionId";
+import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
+import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 import AddAssetDialog from "../../molecules/AddAssetDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function AssetListActionsToolbar() {
-  const { controller } = useContext(GameContext);
+  const { assets } = useContext(AssetContext);
 
   const [addOpen, setAddOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
 
   const asset = useSelectedAsset();
-  const { assetId, factionId } = useSelectionId();
+  const { assetSlug, factionSlug } = useSelectionSlug();
 
   const nav = useNavigate();
+  const faction = useSelectedFaction();
 
   const handleAdd = useCallback((assetName: string) => {
-    if (factionId) {
-      controller.addAsset(factionId, assetName);
+    if (faction !== undefined) {
+      assets.add({ name: assetName, factionId: faction.id });
     } else {
-      console.warn("No faction selected.");
+      console.error("Could not add asset. No faction selected.");
     }
-  }, [controller, factionId]);
+  }, [assets, faction]);
 
   const handleAddClick = useCallback(() => setAddOpen(true), []);
   const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
@@ -35,19 +37,24 @@ export default function AssetListActionsToolbar() {
   const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
     setRemoveOpen(false);
     if (reason === "Remove") {
-      if (factionId && assetId) {
-        console.debug(`RemoveAsset: faction=${factionId}, asset=${assetId}`);
-        controller.removeAsset(factionId, assetId);
-        nav(`/factions/${factionId}`);
+      if (factionSlug && assetSlug) {
+        console.debug(`RemoveAsset: faction=${factionSlug}, asset=${assetSlug}`);
+        const assetId = assets.getId(assetSlug);
+        if (assetId !== undefined) {
+          assets.remove(assetId);
+          nav(`/factions/${factionSlug}`);
+        } else {
+          console.error("Could not remove asset. Unknown slug.", assetSlug);
+        }
       } else {
-        console.error(`Illegal selection state. factionId=${factionId}, assetId=${assetId}`);
+        console.error(`Illegal selection state. factionId=${factionSlug}, assetId=${assetSlug}`);
       }
     }
-  }, [assetId, controller, factionId, nav]);
+  }, [assetSlug, assets, factionSlug, nav]);
 
   return (
     <ListActionToolbar
-      removable={!!assetId}
+      removable={!!assetSlug}
       onAddClick={handleAddClick}
       onRemoveClick={handleRemoveClick}
       data-testid="asset-lat"
@@ -59,7 +66,7 @@ export default function AssetListActionsToolbar() {
       />
       <MessageDialog
         title="Confirm Remove Asset"
-        message={`Remove asset ${asset?.id.displayName}`}
+        message={`Remove asset ${asset?.name}`}
         buttons={["Cancel", "Remove"]}
         open={removeOpen}
         onAction={handleRemoveAction}
