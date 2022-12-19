@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import FactionInfo from "../../../types/FactionInfo";
 import AssetList from "../AssetList";
@@ -16,7 +16,7 @@ import FactionDetails from "../FactionDetails";
 import FactionListItem from "../FactionListItem";
 
 export default function FactionList(): JSX.Element {
-  const { state, controller } = useContext(GameContext);
+  const { factions: factionSet } = useContext(FactionContext);
   const theme = useTheme();
   const selectedFaction = useSelectedFaction();
   
@@ -24,10 +24,10 @@ export default function FactionList(): JSX.Element {
     if (!result.destination) {
       return;
     }
-    controller.reorderFactions(result.source.index, result.destination.index);
-  }, [controller]);
+    factionSet.reorder(result.source.index, result.destination.index);
+  }, [factionSet]);
 
-  const factions = state.getFactions();
+  const factions = factionSet.getAll();
 
   if (factions.length === 0) {
     return (
