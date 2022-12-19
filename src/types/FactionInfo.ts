@@ -1,7 +1,6 @@
-import { v4 as randomUuid } from "uuid";
-
 import FactionStatsInfo from "./FactionStatsInfo";
 import GoalInfo from "./GoalInfo";
+import { NamedEntity } from "./NamedElementPoset";
 
 interface StatInfo { xpCost: number, hpValue: number }
 
@@ -52,9 +51,9 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
   },
 };
 
-export default class FactionInfo implements FactionStatsInfo {
+export default class FactionInfo implements FactionStatsInfo, NamedEntity {
   
-  id: string;
+  readonly id: string;
   slug: string;
   name: string;
   hp: number;
@@ -67,8 +66,8 @@ export default class FactionInfo implements FactionStatsInfo {
   tag?: string;
   goal?: GoalInfo;
 
-  constructor(slug: string, name: string) {
-    this.id = randomUuid();
+  constructor(id: string, slug: string, name: string) {
+    this.id = id;
     this.slug = slug;
     this.name = name;
     this.force = 0;

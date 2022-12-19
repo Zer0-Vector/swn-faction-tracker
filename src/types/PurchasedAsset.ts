@@ -1,6 +1,7 @@
+import { NamedEntity } from "./NamedElementPoset";
 import Nullable from "./Nullable";
 
-export default class PurchasedAsset {
+export default class PurchasedAsset implements NamedEntity {
   
   constructor(
     public readonly id: string,

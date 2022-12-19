@@ -6,7 +6,7 @@ import { IObservable, Observable } from "../Observable";
 import { SluggedEntity } from "../SluggedEntity";
 import { SluggedOrderedSet } from "../SluggedOrderedSet";
 
-type NamedEntity = SluggedEntity & { name: string };
+export type NamedEntity = SluggedEntity & { name: string };
 
 export type ArgsWithName<Args = {}> = { name: string } & Args;
 
