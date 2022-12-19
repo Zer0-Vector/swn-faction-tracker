@@ -1,6 +1,7 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
@@ -13,7 +14,8 @@ import LocationsActionToolbar from "./LocationsActionToolbar";
 
 const MockLocations = [
   {
-    id: "test-location",
+    id: "123456",
+    slug: "test-location",
     name: "Test Location",
   },
 ];
@@ -27,11 +29,14 @@ export default {
           getAll() {
             return MockLocations;
           },
-          get(locationId) {
-            return MockLocations.find(loc => loc.id === locationId);
+          slugGet(locationSlug) {
+            return MockLocations.find(loc => loc.slug === locationSlug);
           },
           checkName(args) {
             return !MockLocations.map(l => l.id).includes(generateSlug(args.name));
+          },
+          remove(...args) {
+            action("remove")(args);
           },
         } as LocationsPoset,
       }}>
