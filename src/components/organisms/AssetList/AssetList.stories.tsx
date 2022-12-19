@@ -4,7 +4,9 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
+import FactionInfo from "../../../types/FactionInfo";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 
 import AssetList from "./AssetList";
@@ -14,22 +16,32 @@ interface MockProviderProps extends RequiredChildrenProps {
 }
 
 const MockProvider = ({ children, assetList }: MockProviderProps) => (
-  <AssetContext.Provider value={{
-    assets: {
-      getAll() {
-        return assetList;
-      },
-    } as AssetPoset,
+  <FactionContext.Provider value={{
+    factions: {
+      slugGet: (_) => ({
+        id: "test",
+        slug: "test",
+        name: "Test",
+      } as FactionInfo),
+    } as FactionPoset,
   }}>
-    {children}
-  </AssetContext.Provider>
+    <AssetContext.Provider value={{
+      assets: {
+        getAll() {
+          return assetList;
+        },
+      } as AssetPoset,
+    }}>
+      {children}
+    </AssetContext.Provider>
+  </FactionContext.Provider>
 );
 
 export default {
   component: AssetList,
   decorators: [
     story => (
-      <MemoryRouter>
+      <MemoryRouter initialEntries={["/factions/test"]}>
         {story()}
       </MemoryRouter>
     ),
@@ -79,14 +91,14 @@ ThreeAssets.decorators = [
         id: "2",
         name: "Informers",
         slug: "informers-1",
-        factionId: "test2",
+        factionId: "test",
         hp: 2,
       },
       {
         id: "3",
         name: "Blackmail",
         slug: "blackmail-1",
-        factionId: "test3",
+        factionId: "test",
         hp: 0,
       },
     ]}>
