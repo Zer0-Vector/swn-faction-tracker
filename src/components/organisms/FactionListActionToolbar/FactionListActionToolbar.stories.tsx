@@ -1,6 +1,7 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
@@ -26,12 +27,15 @@ export default {
               },
             ];
           },
-          get(factionId) {
+          slugGet(_) {
             return {
               id: "2",
               slug: "test-faction",
               name: "Test Faction",
             };
+          },
+          remove(...args) {
+            action("remove")(args);
           },
         } as FactionPoset,
       }}>
