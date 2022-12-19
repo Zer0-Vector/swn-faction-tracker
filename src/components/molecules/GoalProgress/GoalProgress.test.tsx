@@ -2,22 +2,21 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { IGameController } from "../../../controllers/GameController";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import GoalProgress from "./GoalProgress";
 
-const mockSetGoal = jest.fn();
-const mockContext: GameContextType = {
-  state: {} as IGameState,
-  controller: {
-    setGoal: mockSetGoal as (f: string, g: GoalInfo)=>void,
-  } as IGameController,
+const mockSlugGet = jest.fn() as jest.MockedFn<FactionPoset['slugGet']>;
+const mockUpdate = jest.fn() as jest.MockedFn<FactionPoset['update']>;
+const mockContext: FactionContextType = {
+  factions: {
+    slugGet: mockSlugGet as FactionPoset['slugGet'],
+    update: mockUpdate as FactionPoset['update'],
+  } as FactionPoset,
 };
 
 const mockFaction = {
@@ -37,14 +36,18 @@ function renderIt(faction = mockFaction) {
       },
       controller: {} as UiStateController,
     }}>
-      <GameContext.Provider value={mockContext}>
+      <FactionContext.Provider value={mockContext}>
         <GoalProgress faction={faction} />
-      </GameContext.Provider>
+      </FactionContext.Provider>
     </UiStateContext.Provider>
   );
 }
 
 describe('default GoalProgress', () => {
+  beforeEach(() => {
+    mockSlugGet.mockImplementationOnce(() => mockFaction);
+  });
+
   it('renders faction goal', () => {
     renderIt();
     const theSpan = screen.getByTestId("goal-progress");
@@ -71,8 +74,8 @@ describe('default GoalProgress', () => {
     
     fireEvent.input(progTfInput, { target: { value: "332211" } });
     fireEvent.keyUp(progTfInput, { key: "Enter" });
-    expect(mockSetGoal).toBeCalledTimes(1);
-    expect(mockSetGoal).toBeCalledWith("test-faction", {
+    expect(mockUpdate).toBeCalledTimes(1);
+    expect(mockUpdate).toBeCalledWith(undefined, "goal", {
       tally: 332211,
       target: expect.anything(),
     });
@@ -90,8 +93,8 @@ describe('default GoalProgress', () => {
     
     fireEvent.input(targTfInput, { target: { value: "332211" } });
     fireEvent.keyUp(targTfInput, { key: "Enter" });
-    expect(mockSetGoal).toBeCalledTimes(1);
-    expect(mockSetGoal).toBeCalledWith("test-faction", {
+    expect(mockUpdate).toBeCalledTimes(1);
+    expect(mockUpdate).toBeCalledWith(undefined, "goal", {
       tally: expect.anything(),
       target: 332211,
     });
