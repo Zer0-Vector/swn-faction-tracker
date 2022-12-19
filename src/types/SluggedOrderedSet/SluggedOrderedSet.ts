@@ -72,6 +72,12 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
    * @returns `true` if the element has a unique id among existing element ids and a unique slug among existing element slugs. `false` otherwise.
    */
   noConflicts(entity: SluggedEntity): boolean;
+
+  /**
+   * Converts a slug to its respective id.
+   * @param slug The slug to convert to an id.
+   */
+  getId(slug: string): Maybe<string>;
 }
 
 /**
@@ -93,7 +99,9 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     this.id2element = new Map<string, T>();
     this.slug2id = new Map<string, string>();
     this.order = [];
-    initialValues.forEach(value => this.add(value));
+    initialValues.forEach(value => {
+      this.add(value);
+    });
   }
 
   add(element: T): void {
@@ -189,6 +197,10 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
 
   noConflicts(entity: SluggedEntity) {
     return !this.hasId(entity.id) && !this.hasSlug(entity.slug);
+  }
+
+  getId(slug: string): Maybe<string> {
+    return this.slug2id.get(slug);
   }
 
 }
