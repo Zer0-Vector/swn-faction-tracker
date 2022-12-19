@@ -2,20 +2,17 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { IGameController } from "../../../controllers/GameController";
 import { UiStateController } from "../../../controllers/UiStateController";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionHpSummary from "./FactionHpSummary";
 
 const mockContext = {
-  state: {} as IGameState,
-  controller: {
-    updateHp: jest.fn() as (id: string, hp: number)=>void,
-  } as IGameController,
-} as GameContextType;
+  factions: {
+    update: jest.fn() as FactionPoset['update'],
+  } as FactionPoset,
+} as FactionContextType;
 
 function renderIt(factionId = "tf123") {
   render(
@@ -26,9 +23,9 @@ function renderIt(factionId = "tf123") {
       },
       controller: {} as UiStateController,
     }}>
-      <GameContext.Provider value={mockContext}>
+      <FactionContext.Provider value={mockContext}>
         <FactionHpSummary data-testid="test123" hp={123} maxHp={456} factionId={factionId} />
-      </GameContext.Provider>
+      </FactionContext.Provider>
     </UiStateContext.Provider>
   );
 }
@@ -76,7 +73,7 @@ describe('<FactionHpSummary />', () => {
     fireEvent.input(textfield, { target: { value: "321" } });
     fireEvent.keyUp(textfield, { key: "Enter" });
     expect(textfield).not.toBeInTheDocument();
-    expect(mockContext.controller.updateHp).toBeCalledTimes(1);
-    expect(mockContext.controller.updateHp).toBeCalledWith("tf123", 321);
+    expect(mockContext.factions.update).toBeCalledTimes(1);
+    expect(mockContext.factions.update).toBeCalledWith("tf123", "hp", 321);
   });
 });

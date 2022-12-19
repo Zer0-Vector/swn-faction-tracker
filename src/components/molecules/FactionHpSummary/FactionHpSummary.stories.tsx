@@ -2,9 +2,7 @@ import React, { useState } from "react";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
-import { IGameState } from "../../../types/RuntimeGameState";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 
 import FactionHpSummary from "./FactionHpSummary";
 
@@ -16,14 +14,13 @@ const Template: ComponentStory<typeof FactionHpSummary> = args => {
   const [hp, setHp] = useState<number>(args.hp);
   
   return (
-    <GameContext.Provider value={{
-      state: {} as IGameState,
-      controller: {
-        updateHp: (_, hp) => setHp(hp),
-      } as IGameController,
+    <FactionContext.Provider value={{
+      factions: {
+        update: jest.fn() as FactionPoset['update'],
+      } as FactionPoset,
     }}>
       <FactionHpSummary {...args} hp={hp} />
-    </GameContext.Provider>
+    </FactionContext.Provider>
   );
 };
 
