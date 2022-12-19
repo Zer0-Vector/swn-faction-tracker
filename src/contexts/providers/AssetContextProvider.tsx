@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext, useEffect, useRef } from "react";
+import React, { PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
 
 import ASSETS, { isAsset } from "../../data/Assets";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -53,8 +53,10 @@ export function AssetContextProvider({ children }: PropsWithChildren) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const context = useMemo(() => ({ assets: assets.current }), []);
+
   return (
-    <AssetContext.Provider value={{ assets: assets.current }}>
+    <AssetContext.Provider value={context}>
       {children}
     </AssetContext.Provider>
   );

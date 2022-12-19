@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import LocationInfo from "../../types/LocationInfo";
@@ -19,8 +19,10 @@ export function LocationContextProvider({ children }: React.PropsWithChildren<{}
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 
+  const context = useMemo(() => ({ locations: locations.current }), []);
+
   return (
-    <LocationContext.Provider value={{ locations: locations.current }}>
+    <LocationContext.Provider value={context}>
       {children}
     </LocationContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext, useEffect, useRef } from "react";
+import React, { PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import FactionInfo from "../../types/FactionInfo";
@@ -34,8 +34,10 @@ export function FactionContextProvider({ children }: PropsWithChildren) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const context = useMemo(() => ({ factions: factions.current }), []);
+
   return (
-    <FactionContext.Provider value={{ factions: factions.current }}>
+    <FactionContext.Provider value={context}>
       {children}
     </FactionContext.Provider>
   );
