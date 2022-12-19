@@ -19,14 +19,14 @@ export default {
     story => (
       <FactionContext.Provider value={{
         factions: {
-          get(factionId) {
+          slugGet(_) {
             return {} as FactionInfo;
           },
         } as FactionPoset,
       } as FactionContextType}>
         <AssetContext.Provider value={{
           assets: {
-            get(assetId) {
+            slugGet(_) {
               return {
                 hp: 1,
                 id: "1",
