@@ -3,13 +3,11 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import { IGameState } from "../../../types/RuntimeGameState";
 import UiState from "../../../types/UiState";
 import { generateSlug } from "../../../utils/SlugGenerator";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import LocationsActionToolbar from "./LocationsActionToolbar";
 
@@ -24,22 +22,21 @@ export default {
   component: LocationsActionToolbar,
   decorators: [
     story => (
-      <GameContext.Provider value={{
-        controller: MockActionController,
-        state: {
-          getLocations() {
+      <LocationContext.Provider value={{
+        locations: {
+          getAll() {
             return MockLocations;
           },
-          getLocation(locationId) {
+          get(locationId) {
             return MockLocations.find(loc => loc.id === locationId);
           },
-          checkLocationName(locationName) {
-            return !MockLocations.map(l => l.id).includes(generateSlug(locationName));
+          checkName(args) {
+            return !MockLocations.map(l => l.id).includes(generateSlug(args.name));
           },
-        } as IGameState,
+        } as LocationsPoset,
       }}>
         {story()}
-      </GameContext.Provider>
+      </LocationContext.Provider>
     ),
     story => <UiStateContext.Provider value={{
       state: {

@@ -1,16 +1,15 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { LocationContext } from "../../../contexts/LocationContext";
 import { useSelectedLocation } from "../../../hooks/useSelectedLocation";
-import LocationInfo from "../../../types/LocationInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 import AddLocationDialog from "../../molecules/AddLocationDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function LocationsActionToolbar() {
-  const { controller } = useContext(GameContext);
+  const { locations } = useContext(LocationContext);
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   const [removeDialogOpen, setRemoveDialogOpen] = useState<boolean>(false);
   const selectedLocation = useSelectedLocation();
@@ -23,10 +22,10 @@ export default function LocationsActionToolbar() {
 
   const handleCloseAdd = useCallback(() => setAddDialogOpen(false), []);
 
-  const handleCreate = useCallback((info: LocationInfo) => {
-    controller.addLocation(info);
+  const handleCreate = useCallback((info: {name: string, tl: number, x: number, y: number}) => {
+    locations.add(info);
     handleCloseAdd();
-  }, [controller, handleCloseAdd]);
+  }, [handleCloseAdd, locations]);
 
   const handleOpenRemoveDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {
     evt.stopPropagation();
@@ -36,10 +35,10 @@ export default function LocationsActionToolbar() {
   const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
     setRemoveDialogOpen(false);
     if (selectedLocation && reason === "Remove") {
-      controller.removeLocation(selectedLocation.slug);
+      locations.remove(selectedLocation.id);
       nav("/locations");
     }
-  }, [controller, nav, selectedLocation]);
+  }, [locations, nav, selectedLocation]);
 
   return (
     <ListActionToolbar
