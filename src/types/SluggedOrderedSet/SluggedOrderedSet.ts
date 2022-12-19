@@ -175,11 +175,11 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
   }
 
   reorder(source: number, target: number) {
-    if (source < 0 || source > this.order.length) {
+    if (source < 0 || source >= this.order.length) {
       throw new Error(`Source index out of bounds: ${source}`);
     }
     
-    if (target < 0 || target > this.order.length) {
+    if (target < 0 || target >= this.order.length) {
       throw new Error(`Target index out of bounds: ${target}`);
     }
 
