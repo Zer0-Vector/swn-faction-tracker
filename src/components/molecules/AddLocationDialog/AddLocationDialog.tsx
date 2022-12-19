@@ -4,16 +4,15 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { LocationContext } from "../../../contexts/LocationContext";
 import FormInfo from "../../../types/FormInfo";
-import LocationInfo from "../../../types/LocationInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddLocationDialogProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (loc: LocationInfo) => void;
+  onCreate: (loc: { name: string, tl: number, x: number, y: number }) => void;
 }
 
 type Coordinate<T> = [x: T, y: T];
@@ -25,7 +24,7 @@ type FormInfoSetter = (val: FormInfo) => void;
 type StringValidator = (val: string) => boolean;
 
 export default function AddLocationDialog({ open, onClose, onCreate }: AddLocationDialogProps) {
-  const { state } = useContext(GameContext);
+  const { locations } = useContext(LocationContext);
   const [nameText, setNameText] = useState<FormInfo>(BLANK_FORM_INFO);
   const [tlText, setTlText] = useState<FormInfo>(BLANK_FORM_INFO);
   const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
@@ -62,7 +61,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     setCoords(newState);
   };
 
-  const isNotDuplicateName = useCallback((val: string) => state.checkLocationName(val), [state]);
+  const isNotDuplicateName = useCallback((val: string) => locations.checkName({ name: val }), [locations]);
 
   const isInteger = (val: string) => {
     try {
@@ -92,12 +91,12 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
 
   const handleCreate = useCallback(() => {
     if (allValid()) {
-      onCreate(new LocationInfo(
-        nameText.value,
-        parseInt(tlText.value),
-        parseInt(coords.value[0]),
-        parseInt(coords.value[1])
-      ));
+      onCreate({
+        name: nameText.value,
+        tl: parseInt(tlText.value),
+        x: parseInt(coords.value[0]),
+        y: parseInt(coords.value[1]),
+      });
     }
   }, [allValid, coords.value, nameText.value, onCreate, tlText.value]);
 

@@ -2,11 +2,9 @@ import React, { ComponentProps } from "react";
 
 import { Meta, Story } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
+import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import LocationInfo from "../../../types/LocationInfo";
-import { IGameState } from "../../../types/RuntimeGameState";
 import { generateSlug } from "../../../utils/SlugGenerator";
 
 import AddLocationDialog from "./AddLocationDialog";
@@ -22,24 +20,24 @@ interface MockProviderProps extends RequiredChildrenProps {
 }
 
 const MockProvider = ({ locations, children }: MockProviderProps) => (
-  <GameContext.Provider value={{
-    state: {
-      getLocations() {
+  <LocationContext.Provider value={{
+    locations: {
+      getAll() {
         return locations;
       },
-      checkLocationName(locationName) {
-        return !locations.map(info => info.slug).includes(generateSlug(locationName));
+      checkName(args) {
+        return !locations.map(info => info.slug).includes(generateSlug(args.name));
       },
-    } as IGameState,
-    controller: {} as IGameController,
+    } as LocationsPoset,
   }}>
     {children}
-  </GameContext.Provider>
+  </LocationContext.Provider>
 );
 
 export const Default: Story<PropsType> = args => (
   <MockProvider locations={[
     {
+      id: "123",
       slug: "existing-location",
       name: "Existing Location",
       tl: 0,
