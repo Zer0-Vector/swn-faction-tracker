@@ -2,25 +2,23 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import FactionInfo from "../../../types/FactionInfo";
-import { IGameState } from "../../../types/RuntimeGameState";
+import { ArgsWithName } from "../../../types/NamedElementPoset";
 
 import AddFactionDialog from "./AddFactionDialog";
 
-const EMPTY_CONTEXT: GameContextType = {
-  state: {} as IGameState,
-  controller: {} as IGameController,
+const EMPTY_CONTEXT: FactionContextType = {
+  factions: {} as FactionPoset,
 };
 
-function renderWithContext(context?: GameContextType) {
+function renderWithContext(context?: FactionContextType) {
   const mockClose = jest.fn();
   const mockCreate = jest.fn();
   render(
-    <GameContext.Provider value={context || EMPTY_CONTEXT}>
+    <FactionContext.Provider value={context || EMPTY_CONTEXT}>
       <AddFactionDialog open={true} onClose={mockClose} onCreate={mockCreate} />
-    </GameContext.Provider>
+    </FactionContext.Provider>
   );
   return { mockClose, mockCreate };
 }
@@ -28,10 +26,10 @@ function renderWithContext(context?: GameContextType) {
 describe('default AddFactionDialog', () => {
   it('does not render when open=false', () => {
     render(
-      <GameContext.Provider value={EMPTY_CONTEXT}>
+      <FactionContext.Provider value={EMPTY_CONTEXT}>
         {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
         <AddFactionDialog open={false} onClose={()=>{}} onCreate={()=>{}} />
-      </GameContext.Provider>
+      </FactionContext.Provider>
     );
     expect(screen.queryByTestId("add-faction-dialog")).not.toBeInTheDocument();
   });
@@ -108,10 +106,9 @@ describe('default AddFactionDialog', () => {
 
   it('enables Create button when field is non-empty', () => {
     renderWithContext({
-      state: {
-        checkFactionName: (s: string) => true,
-      } as IGameState,
-      controller: {} as IGameController,
+      factions: {
+        checkName: (s: ArgsWithName) => true,
+      } as FactionPoset,
     });
     const dialog = screen.getByTestId("add-faction-dialog");
     const inAsset = within(dialog).getByTestId("faction-name-field");
@@ -133,11 +130,10 @@ describe('default AddFactionDialog', () => {
   });
 
   it('marks the field with error class when duplicate name given', () => {
-    const context: GameContextType = {
-      state: {
-        checkFactionName: (s: string) => false,
-      } as IGameState,
-      controller: {} as IGameController,
+    const context: FactionContextType = {
+      factions: {
+        checkName: (s: ArgsWithName) => false,
+      } as FactionPoset,
     };
     renderWithContext(context);
     const inAsset = screen.getByTestId("faction-name-field");
@@ -191,11 +187,10 @@ describe('default AddFactionDialog', () => {
 
   it('calls onCreate when given a unique name', () => {
     const { mockClose, mockCreate } = renderWithContext({
-      state: {
-        getFactions: () => ([] as FactionInfo[]),
-        checkFactionName: (s: string) => true,
-      } as IGameState,
-      controller: {} as IGameController,
+      factions: {
+        getAll: () => ([] as FactionInfo[]),
+        checkName: (s: ArgsWithName) => true,
+      } as FactionPoset,
     });
     const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
