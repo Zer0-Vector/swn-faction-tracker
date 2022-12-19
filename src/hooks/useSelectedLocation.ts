@@ -1,12 +1,12 @@
 import { useContext } from "react";
 
-import { GameContext } from "../contexts/GameContext";
+import { LocationContext } from "../contexts/LocationContext";
 
-import { useSelectionId } from "./useSelectionId";
+import { useSelectionSlug } from "./useSelectionSlug";
 
 export function useSelectedLocation() {
-  const { locationId } = useSelectionId();
-  const { state } = useContext(GameContext);
+  const { locationSlug } = useSelectionSlug();
+  const { locations } = useContext(LocationContext);
   
-  return locationId ? state.getLocation(locationId) : undefined;
+  return locationSlug ? locations.slugGet(locationSlug) : undefined;
 }

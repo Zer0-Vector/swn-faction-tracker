@@ -1,12 +1,12 @@
 import { useContext } from "react";
 
-import { GameContext } from "../contexts/GameContext";
+import { AssetContext } from "../contexts/AssetContext";
 
-import { useSelectionId } from "./useSelectionId";
+import { useSelectionSlug } from "./useSelectionSlug";
 
 export function useSelectedAsset() {
-  const { factionId, assetId } = useSelectionId();
-  const { state } = useContext(GameContext);
+  const { assetSlug } = useSelectionSlug();
+  const { assets } = useContext(AssetContext);
   
-  return factionId && assetId ? state.getAsset(factionId, assetId) : undefined;
+  return assetSlug ? assets.slugGet(assetSlug) : undefined;
 }
