@@ -61,7 +61,7 @@ describe('generateId(*, [*, ...])', () => {
     ["h-=*=-w-1", ["h-w-1", "h-w-3"], "h-w-4"],
     ["1.4.3", ["1-4-3"], "1-4-4"], // this is a strange case, but the results just need to be unique; sometimes they won't make sense
     ["hw-7", ["hw-1", "hw-2"], "hw-7"],
-    ["abc", ["hw", "hw-1", "hw-54"], "abc"],
+    ["abc", ["hw", "hw-1", "hw-54"], "abc-1"],
   ])('given %p with existing %p, expect %p', (input: string, currentValues: string[], expected: string) => {
     expect(generateSlug(input, currentValues)).toEqual(expected);
   });
