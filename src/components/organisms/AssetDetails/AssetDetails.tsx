@@ -84,11 +84,11 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
   
 
   
-  if (!isAsset(asset.id.displayName)) {
-    console.error(`Could not find asset named '${asset.id.displayName}'`);
+  if (!isAsset(asset.name)) {
+    console.error(`Could not find asset named '${asset.name}'`);
     return (<Typography color="error" fontWeight="bold" fontStyle="italic">Could not load asset info</Typography>);
   }
-  const assetInfo = ASSETS[asset.id.displayName];
+  const assetInfo = ASSETS[asset.name];
 
   const { hp } = asset;
   const { description, attack, counter, attribute, level, maxHp, type, upkeep /*note*/ } = assetInfo;
