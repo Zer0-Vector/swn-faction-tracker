@@ -3,11 +3,9 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
+import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import PurchasedAsset from "../../../types/PurchasedAsset";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import AssetList from "./AssetList";
 
@@ -16,16 +14,15 @@ interface MockProviderProps extends RequiredChildrenProps {
 }
 
 const MockProvider = ({ children, assetList }: MockProviderProps) => (
-  <GameContext.Provider value={{
-    controller: {} as IGameController,
-    state: {
-      getAssets(factionId) {
+  <AssetContext.Provider value={{
+    assets: {
+      getAll() {
         return assetList;
       },
-    } as IGameState,
+    } as AssetPoset,
   }}>
     {children}
-  </GameContext.Provider>
+  </AssetContext.Provider>
 );
 
 export default {
@@ -55,10 +52,10 @@ OneAsset.decorators = [
   story => (
     <MockProvider assetList={[
       {
-        id: {
-          displayName: "Smugglers",
-          index: 1,
-        },
+        id: "1",
+        name: "Smugglers",
+        factionId: "test",
+        slug: "smugglers-1",
         hp: 1,
       },
     ]}>
@@ -72,24 +69,24 @@ ThreeAssets.decorators = [
   story => (
     <MockProvider assetList={[
       {
-        id: {
-          displayName: "Smugglers",
-          index: 1,
-        },
+        id: "1",
+        name: "Smugglers",
+        slug: "smugglers-1",
+        factionId: "test",
         hp: 1,
       },
       {
-        id: {
-          displayName: "Informers",
-          index: 1,
-        },
+        id: "2",
+        name: "Informers",
+        slug: "informers-1",
+        factionId: "test2",
         hp: 2,
       },
       {
-        id: {
-          displayName: "Blackmail",
-          index: 1,
-        },
+        id: "3",
+        name: "Blackmail",
+        slug: "blackmail-1",
+        factionId: "test3",
         hp: 0,
       },
     ]}>
