@@ -3,19 +3,18 @@ import { MemoryRouter } from "react-router-dom";
 
 import { Meta, Story } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import LocationInfo from "../../../types/LocationInfo";
-import { IGameState } from "../../../types/RuntimeGameState";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import LocationsList from "./LocationsList";
 
 const MockLocations: (n: number)=>LocationInfo[] = numLocations => 
   [...Array(numLocations).keys()]
   .map(n => ({
-    id: `test-location-${n}`,
+    id: "test",
+    slug: `test-location-${n}`,
     name: `Test Location ${n}`,
     tl: n % 6,
     x: n % 10,
@@ -26,15 +25,14 @@ const MockLocations: (n: number)=>LocationInfo[] = numLocations =>
 const getContextProvider = (numberOfLocations: number) => ({ children }: RequiredChildrenProps) => {
   const locations = MockLocations(numberOfLocations);
   return (
-    <GameContext.Provider value={{
-      controller: MockActionController,
-      state: {
-        getLocations: () => locations,
-        getLocation: (locationId) => locations.find(loc => loc.slug === locationId),
-      } as IGameState,
+    <LocationContext.Provider value={{
+      locations: {
+        getAll: () => locations,
+        get: (locationId) => locations.find(loc => loc.slug === locationId),
+      } as LocationsPoset,
     }}>
       {children}
-    </GameContext.Provider>
+    </LocationContext.Provider>
   );
 };
 
