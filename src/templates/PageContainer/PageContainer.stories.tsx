@@ -3,13 +3,10 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { MockActionController } from "../../components/__mocks__/MockActionController";
 import { MockActionUiStateController } from "../../components/__mocks__/MockActionUiStateController";
 import { AuthContext } from "../../contexts/AuthContext";
-import { GameContext } from "../../contexts/GameContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { ProvidedAuth } from "../../types/ProvidedAuth";
-import { IGameState } from "../../types/RuntimeGameState";
 
 import PageContainer from "./PageContainer";
 
@@ -38,14 +35,6 @@ export default {
       } as ProvidedAuth}>
         {story()}
       </AuthContext.Provider>
-    ),
-    story => (
-      <GameContext.Provider value={{
-        state: {} as IGameState,
-        controller: MockActionController,
-      }}>
-        {story()}
-      </GameContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof PageContainer>;
