@@ -3,29 +3,26 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import { IGameState } from "../../../types/RuntimeGameState";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionListItem from "./FactionListItem";
 
 
 interface MockProviderProps extends RequiredChildrenProps {
-  state: IGameState;
+  factions: FactionPoset;
 }
 
-const MockProvider = ({ state, children }: MockProviderProps) => (
-  <GameContext.Provider value={{
-    state,
-    controller: MockActionController,
+const MockProvider = ({ factions, children }: MockProviderProps) => (
+  <FactionContext.Provider value={{
+    factions,
   }}>
     {children}
-  </GameContext.Provider>
+  </FactionContext.Provider>
 );
 
-const MockedState = {
-  getFactions: () => {
+const mockedFactions: FactionPoset = {
+  getAll: () => {
     return [
       {
         slug: "test-faction-stored",
@@ -33,7 +30,7 @@ const MockedState = {
       },
     ];
   },
-} as IGameState;
+} as FactionPoset;
 
 export default {
   component: FactionListItem,
@@ -44,7 +41,7 @@ export default {
       </MemoryRouter>
     ),
     story => (
-      <MockProvider state={MockedState}>
+      <MockProvider factions={mockedFactions}>
         {story()}
       </MockProvider>
     ),
@@ -58,15 +55,14 @@ const Template: ComponentStory<typeof FactionListItem> = args => {
 export const Default = Template.bind({});
 Default.args = {
   faction: {
+    id: "test",
     slug: "test-faction",
     name: "Test Faction",
-    stats: {
-      force: 11,
-      cunning: 22,
-      wealth: 33,
-      hp: 8,
-      maxHp: 16,
-      xp: 999,
-    },
+    force: 11,
+    cunning: 22,
+    wealth: 33,
+    hp: 8,
+    maxHp: 16,
+    xp: 999,
   },
 };
