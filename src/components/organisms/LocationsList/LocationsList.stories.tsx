@@ -9,6 +9,7 @@ import LocationInfo from "../../../types/LocationInfo";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
 
 import LocationsList from "./LocationsList";
+import { action } from "@storybook/addon-actions";
 
 const MockLocations: (n: number)=>LocationInfo[] = numLocations => 
   [...Array(numLocations).keys()]
@@ -29,6 +30,7 @@ const getContextProvider = (numberOfLocations: number) => ({ children }: Require
       locations: {
         getAll: () => locations,
         get: (locationId) => locations.find(loc => loc.slug === locationId),
+        reorder: (...args) => action("reorder")(args),
       } as LocationsPoset,
     }}>
       {children}
