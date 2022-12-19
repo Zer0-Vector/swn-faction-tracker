@@ -2,11 +2,9 @@ import React from "react";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { TagsList } from "../../../data/Tags";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import { IGameState } from "../../../types/RuntimeGameState";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionDetails from "./FactionDetails";
 
@@ -24,19 +22,18 @@ const locations = [
 ];
 
 const MockProvider = ({ children }: RequiredChildrenProps) => (
-  <GameContext.Provider value={{
-    controller: MockActionController,
-    state: {
-      getLocations() {
+  <LocationContext.Provider value={{
+    locations: {
+      getAll() {
         return locations;
       },
-      getLocation(locationId: string) {
+      get(locationId: string) {
         return locations.find(loc => loc.id === locationId);
       },
-    } as IGameState,
+    } as LocationsPoset,
   }}>
     {children}
-  </GameContext.Provider>
+  </LocationContext.Provider>
 );
 
 export default {
@@ -55,32 +52,30 @@ const Template: ComponentStory<typeof FactionDetails> = args => <FactionDetails 
 export const NoGoal = Template.bind({});
 NoGoal.args = {
   faction: {
+    id: "1",
     slug: "test-faction",
     name: "Test Faction",
-    stats: {
-      cunning: 1,
-      force: 2,
-      hp: 3,
-      maxHp: 4,
-      wealth: 5,
-      xp: 6,
-    },
+    cunning: 1,
+    force: 2,
+    hp: 3,
+    maxHp: 4,
+    wealth: 5,
+    xp: 6,
   },
 };
 
 export const WithGoal = Template.bind({});
 WithGoal.args = {
   faction: {
+    id: "test",
     slug: "test-faction",
     name: "Test Faction",
-    stats: {
-      cunning: 1,
-      force: 2,
-      hp: 3,
-      maxHp: 4,
-      wealth: 5,
-      xp: 6,
-    },
+    cunning: 1,
+    force: 2,
+    hp: 3,
+    maxHp: 4,
+    wealth: 5,
+    xp: 6,
     goal: {
       type: "Wealth of Worlds",
     },
@@ -90,16 +85,15 @@ WithGoal.args = {
 export const Full = Template.bind({});
 Full.args = {
   faction: {
+    id: "test",
     slug: "test-faction",
     name: "Test Faction",
-    stats: {
-      cunning: 1,
-      force: 2,
-      hp: 3,
-      maxHp: 4,
-      wealth: 5,
-      xp: 6,
-    },
+    cunning: 1,
+    force: 2,
+    hp: 3,
+    maxHp: 4,
+    wealth: 5,
+    xp: 6,
     goal: {
       type: "Wealth of Worlds",
       tally: 2,

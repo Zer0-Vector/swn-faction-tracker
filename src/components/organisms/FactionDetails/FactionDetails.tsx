@@ -5,7 +5,8 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
+import { LocationContext } from "../../../contexts/LocationContext";
 import { TAGS } from "../../../data/Tags";
 import FactionInfo from "../../../types/FactionInfo";
 import { ControlledDropDown } from "../../molecules/ControlledDropDown";
@@ -30,22 +31,23 @@ const ItemHeader = React.memo(styled(Item)(() => ({
 })));
 
 export default function FactionDetails({ faction }: FactionDetailsProps) {
-  const { state, controller } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
+  const { locations } = useContext(LocationContext);
+
   const isSmallViewport = useMediaQuery("(max-width:600px)");
 
-  
-  const homeworldText = state.getLocation(faction.homeworldId || "")?.name || "Unknown";
+  const homeworldText = locations.get(faction.homeworldId || "")?.name || "Unknown";
   const tagText = faction.tag ? faction.tag : "Unknown";
 
   const updateHomeworld = useCallback((val: string) => {
-    controller.updateHomeworld(faction.slug, val);
-  }, [controller, faction.slug]);
+    factions.update(faction.id, "homeworldId", locations.slugGet(val)?.id);
+  }, [faction.id, factions, locations]);
 
   const updateTag = useCallback((val: string) => {
-    controller.updateTag(faction.slug, val);
-  }, [controller, faction.slug]);
+    factions.update(faction.id, "tag", val);
+  }, [faction.id, factions]);
 
-  const homeworldOptions = useMemo(() => state.getLocations().map(loc => loc.name), [state]);
+  const homeworldOptions = locations.getAll().map(loc => loc.name);
 
   const containerSx = useMemo(() => ({
     backgroundColor: "background.paper2",
