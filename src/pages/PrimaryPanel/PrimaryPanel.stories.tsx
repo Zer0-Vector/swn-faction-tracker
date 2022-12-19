@@ -3,6 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
+import { AssetContext, AssetPoset } from "../../contexts/AssetContext";
 import { FactionContext, FactionPoset } from "../../contexts/FactionContext";
 import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
@@ -10,6 +11,7 @@ import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import FactionInfo from "../../types/FactionInfo";
 import LocationInfo from "../../types/LocationInfo";
+import PurchasedAsset from "../../types/PurchasedAsset";
 import UiState from "../../types/UiState";
 
 import PrimaryPanel from "./PrimaryPanel";
@@ -88,6 +90,16 @@ const locations = [
   },
 ];
 
+const assets: PurchasedAsset[] = [
+  {
+    id: "123",
+    slug: "smugglers-1",
+    name: "Smugglers",
+    factionId: "234",
+    hp: 1,
+  },
+];
+
 const getLocationPoset = (locations: LocationInfo[] = []) => ({
   getAll() {
     return locations;
@@ -101,20 +113,32 @@ const getFactionPoset = (factions: FactionInfo[] = []) => ({
   getAll() {
     return factions;
   },
-  get(factionId) {
-    return factions.find(f => f.slug === factionId);
+  slugGet(factionSlug) {
+    return factions.find(f => f.slug === factionSlug);
   },
 } as FactionPoset);
+
+const getAssetPoset = (assets: PurchasedAsset[] = []) => ({
+  getAll() {
+    return assets;
+  },
+  slugGet(assetSlug) {
+    return assets.find(a => a.slug === assetSlug);
+  },
+} as AssetPoset);
 
 interface MockProviderProps extends RequiredChildrenProps {
   factions: FactionPoset;
   locations: LocationsPoset;
+  assets: AssetPoset;
 }
 
-const MockProvider = ({ children, factions, locations }: MockProviderProps) => (
+const MockProvider = ({ children, factions, locations, assets }: MockProviderProps) => (
   <LocationContext.Provider value={{ locations }}>
     <FactionContext.Provider value={{ factions }}>
+      <AssetContext.Provider value={{ assets }}>
         {children}
+      </AssetContext.Provider>
     </FactionContext.Provider>
   </LocationContext.Provider>
 );
@@ -124,7 +148,7 @@ const Template: ComponentStory<typeof PrimaryPanel> = () => <PrimaryPanel />;
 export const Default = Template.bind({});
 Default.decorators = [
   story => (
-    <MockProvider factions={getFactionPoset(factions)} locations={getLocationPoset(locations)}>
+    <MockProvider factions={getFactionPoset(factions)} locations={getLocationPoset(locations)} assets={getAssetPoset(assets)}>
       {story()}
     </MockProvider>
   ),
@@ -133,7 +157,7 @@ Default.decorators = [
 export const Empty = Template.bind({});
 Empty.decorators = [
   story => (
-    <MockProvider factions={getFactionPoset()} locations={getLocationPoset()}>
+    <MockProvider factions={getFactionPoset()} locations={getLocationPoset()} assets={getAssetPoset()}>
       {story()}
     </MockProvider>
   ),
