@@ -55,23 +55,23 @@ const getLocationsPoset = (locations: LocationInfo[]) => ({
   getAll() {
     return locations;
   },
-  get(locationId) {
-    return locations.find(v => v.slug === locationId);
+  slugGet(locationSlug) {
+    return locations.find(v => v.slug === locationSlug);
   },
   checkName(args) {
     return !locations.map(l => l.slug).includes(generateSlug(args.name));
   },
   add(info) {
-    action("addLocation")(info);
+    action("add")(info);
   },
   reorder(source, destination?) {
-    action("reorderLocations")(source, destination);
+    action("reorder")(source, destination);
   },
   remove(selectedLocation) {
-    action("removeLocation")(selectedLocation);
+    action("remove")(selectedLocation);
   },
   update(id, key, value) {
-    action("updateLocationName")(id, key, value);
+    action("update")(id, key, value);
   },
 } as LocationsPoset);
 
