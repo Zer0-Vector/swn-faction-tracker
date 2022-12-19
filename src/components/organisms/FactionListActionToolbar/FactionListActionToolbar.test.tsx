@@ -3,13 +3,10 @@ import { MemoryRouter, useLocation } from "react-router-dom";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { IGameController } from "../../../controllers/GameController";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
-import { Maybe } from "../../../types/Maybe";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionListActionToolbar from "./FactionListActionToolbar";
 
@@ -29,24 +26,21 @@ function TestComp() {
   );
 }
 
-type GetFactionFunc = (id: string) => Maybe<FactionInfo>;
-const mockGetFaction = jest.fn() as jest.MockedFn<GetFactionFunc>;
-const mockRemoveFaction = jest.fn() as jest.MockedFn<(id: string)=>void>;
+const mockGetFaction = jest.fn() as jest.MockedFn<FactionPoset['get']>;
+const mockRemoveFaction = jest.fn() as jest.MockedFn<FactionPoset['remove']>;
 function renderIt(route = "/") {
   render(
-    <GameContext.Provider value={{
-      state: {
-        getFactions: () => [] as FactionInfo[],
-        getFaction: mockGetFaction as GetFactionFunc,
-      } as IGameState,
-      controller: {
-        removeFaction: mockRemoveFaction as (id:string)=>void,
-      } as IGameController,
+    <FactionContext.Provider value={{
+      factions: {
+        getAll: () => [] as FactionInfo[],
+        slugGet: mockGetFaction as FactionPoset['slugGet'],
+        remove: mockRemoveFaction as FactionPoset['remove'],
+      } as FactionPoset,
     }}>
       <MemoryRouter initialEntries={[route]}>
         <TestComp />
       </MemoryRouter>
-    </GameContext.Provider>
+    </FactionContext.Provider>
   );
 }
 
@@ -77,6 +71,7 @@ describe('FactionListActionToolbar', () => {
   
   it("remove button shows RemoveFactionDialog and removes faction when confirmed", async () => {
     mockGetFaction.mockImplementation(() => ({
+      id: "test-1234",
       slug: "test-faction",
     } as FactionInfo));
     renderIt("/factions/test-faction");
@@ -93,7 +88,7 @@ describe('FactionListActionToolbar', () => {
     fireEvent.click(btnConfirm);
 
     await waitFor(() => expect(mockRemoveFaction).toBeCalledTimes(1));
-    expect(mockRemoveFaction).toBeCalledWith("test-faction");
+    expect(mockRemoveFaction).toBeCalledWith("test-1234");
     const loc = screen.getByTestId("test-path");
     expect(loc.textContent).toBe("/factions");
   });
