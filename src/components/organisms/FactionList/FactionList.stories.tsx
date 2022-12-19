@@ -50,8 +50,8 @@ const MockProvider = ({ children, factions }: MockProviderProps) => (
         getAll() {
           return factions;
         },
-        get(factionId) {
-          return factions.find(f => f.slug === factionId);
+        slugGet(factionSlug) {
+          return factions.find(f => f.slug === factionSlug);
         },
       } as FactionPoset,
     }}>
