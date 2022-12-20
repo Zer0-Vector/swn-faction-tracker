@@ -14,9 +14,9 @@ export const SmugglersDetails = Template.bind({});
 SmugglersDetails.args = {
   asset: {
     hp: 2,
-    id: {
-      displayName: "Smugglers",
-      index: 1,
-    },
+    id: "test",
+    name: "Smugglers",
+    slug: "smugglers-1",
+    factionId: "test",
   },
 };

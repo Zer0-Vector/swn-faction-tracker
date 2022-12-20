@@ -1,5 +1,6 @@
 import FactionStatsInfo from "./FactionStatsInfo";
 import GoalInfo from "./GoalInfo";
+import { NamedEntity } from "./NamedElementPoset";
 
 interface StatInfo { xpCost: number, hpValue: number }
 
@@ -50,40 +51,38 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
   },
 };
 
-export default class FactionInfo {
+export default class FactionInfo implements FactionStatsInfo, NamedEntity {
   
-  id: string;
+  readonly id: string;
+  slug: string;
   name: string;
+  hp: number;
+  maxHp: number;
+  force: number;
+  cunning: number;
+  wealth: number;
+  xp: number;
   homeworldId?: string;
   tag?: string;
-  stats: FactionStatsInfo;
   goal?: GoalInfo;
 
-  constructor(id: string, name: string) {
+  constructor(id: string, slug: string, name: string) {
     this.id = id;
+    this.slug = slug;
     this.name = name;
-    this.stats = {
-      force: 0,
-      cunning: 0,
-      wealth: 0,
-      hp: 4,
-      maxHp: 4,
-      xp: 0,
-    };
+    this.force = 0;
+    this.cunning = 0;
+    this.wealth = 0;
+    this.hp = 4;
+    this.maxHp = 4;
+    this.xp = 0;
     FactionInfo.recomputeMaxHp(this);
   }
 
-  static copy(currentFaction: FactionInfo) {
-    const result = new FactionInfo(currentFaction.id, currentFaction.name);
-    result.homeworldId = currentFaction.homeworldId;
-    result.stats = { ...currentFaction.stats };
-    return result;
-  }
-
   static recomputeMaxHp(info: FactionInfo) {
-    const { force, cunning, wealth } = info.stats;
-    info.stats.maxHp = 4 + STAT_INFO[force].hpValue + STAT_INFO[cunning].hpValue + STAT_INFO[wealth].hpValue;
-    console.log(`Recomputed MaxHp for ${info.name}: ${info.stats.maxHp}`);
+    const { force, cunning, wealth } = info;
+    info.maxHp = 4 + STAT_INFO[force].hpValue + STAT_INFO[cunning].hpValue + STAT_INFO[wealth].hpValue;
+    console.log(`Recomputed MaxHp for ${info.name}: ${info.maxHp}`);
   }
 
 }

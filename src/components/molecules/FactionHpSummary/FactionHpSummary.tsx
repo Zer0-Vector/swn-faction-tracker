@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 
 import Box from "@mui/material/Box";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import TestableProps from "../../../types/TestableProps";
 import StatText from "../../atoms/StatText";
@@ -25,10 +25,10 @@ const HpBoxComponent = ({ children, "data-testid": dtid }: HpBoxProps) => (
 const HpBox = React.memo(HpBoxComponent);
 
 export default function FactionHpSummary({ factionId, hp, maxHp }: FactionHpSummaryProps) {
-  const { controller } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
   const handleUpdate = useCallback((val: number) => {
-      controller.updateHp(factionId, val);
-  }, [controller, factionId]);  
+      factions.update(factionId, "hp", val);
+  }, [factionId, factions]);  
 
   return (
     <HpBox data-testid="faction-hp-box">

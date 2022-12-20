@@ -2,25 +2,22 @@ import React from "react";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { IGameController } from "../../../controllers/GameController";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import GoalType from "../../../types/GoalType";
 import { Maybe } from "../../../types/Maybe";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import GoalText from "./GoalText";
 
 const mockSetGoal = jest.fn();
 const mockContext = {
-  state: {} as IGameState,
-  controller: {
-    setGoal: mockSetGoal as (f: string, g: GoalInfo)=>void,
-  } as IGameController,
-} as GameContextType;
+  factions: {
+    update: mockSetGoal as FactionPoset['update'],
+  } as FactionPoset,
+} as FactionContextType;
 
 function renderIt(goalType: Maybe<GoalType> = undefined) {
   render(
@@ -31,15 +28,15 @@ function renderIt(goalType: Maybe<GoalType> = undefined) {
       },
       controller: {} as UiStateController,
     }}>
-      <GameContext.Provider value={mockContext}>
+      <FactionContext.Provider value={mockContext}>
         <GoalText faction={{
-            id: "test-faction",
+            slug: "test-faction",
             goal: {
               type: goalType,
             } as GoalInfo,
           } as FactionInfo}
         />
-      </GameContext.Provider>
+      </FactionContext.Provider>
     </UiStateContext.Provider>
   );
 }
@@ -78,6 +75,6 @@ describe('GoalText', () => {
     fireEvent.click(selection);
 
     await waitFor(() => expect(mockSetGoal).toBeCalledTimes(1), { timeout: 2000 });
-    expect(mockSetGoal).toBeCalledWith("test-faction", { type: selection.textContent });
+    expect(mockSetGoal).toBeCalledWith(undefined, "goal", { type: selection.textContent });
   });
 });

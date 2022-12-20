@@ -1,19 +1,14 @@
-import { generateId } from "../utils/IdGenerator";
+import { NamedEntity } from "./NamedElementPoset";
 
-export default class LocationInfo {
-  
-  id: string;
-  name: string;
-  tl: number;
-  x: number;
-  y: number;
+export default class LocationInfo implements NamedEntity {
 
-  constructor(name: string, tl: number, x: number, y: number) {
-    this.id = generateId(name);
-    this.name = name;
-    this.tl = tl;
-    this.x = x;
-    this.y = y;
-  }
+  constructor(
+    public readonly id: string,
+    public slug: string,
+    public name: string,
+    public tl: number,
+    public x: number,
+    public y: number
+  ) {}
 
 }

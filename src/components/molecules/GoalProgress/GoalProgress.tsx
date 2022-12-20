@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from "react";
 
 import { SxProps, Theme } from "@mui/material/styles";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import FactionInfo from "../../../types/FactionInfo";
 import StatText from "../../atoms/StatText";
 import { ControlledStat } from "../ControlledStat";
@@ -12,7 +12,7 @@ interface GoalProgressProps {
 }
 
 export default function GoalProgress({ faction }: GoalProgressProps) {
-  const { controller } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
   const inputSx = useMemo<SxProps<Theme>>(() => ({
     width: "5ch",
   }), []);
@@ -26,7 +26,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
   const handleUpdateTally = (val: number) => {
     if (faction.goal) {
       console.debug(`setting tally: '${val}'`);
-      controller.setGoal(faction.id, {
+      factions.update(faction.id, "goal", {
         ...faction.goal,
         tally: val,
       });
@@ -35,7 +35,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   const handleUpdateTarget = (val: number) => {
     if (faction.goal) {
-      controller.setGoal(faction.id, {
+      factions.update(faction.id, "goal", {
         ...faction.goal,
         target: val,
       });

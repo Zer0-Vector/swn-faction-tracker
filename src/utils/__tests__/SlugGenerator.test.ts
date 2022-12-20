@@ -1,4 +1,4 @@
-import { generateId } from "../IdGenerator";
+import { generateSlug } from "../SlugGenerator";
 
 describe('generateId(*)', () => {
   describe('returns input when only aphanumeric', () => {
@@ -10,7 +10,7 @@ describe('generateId(*)', () => {
         "123test123",
       ]
     )('%p remains unchanged', (input: string) => {
-      expect(generateId(input)).toEqual(input);
+      expect(generateSlug(input)).toEqual(input);
     });
   });
 
@@ -20,7 +20,7 @@ describe('generateId(*)', () => {
       ["\ttest", "test"],
       ["\n\rtest543\t", "test543"],
     ])('%p returns %p', (input: string, expected: string) => {
-      expect(generateId(input)).toEqual(expected);
+      expect(generateSlug(input)).toEqual(expected);
     });
   });
 
@@ -34,7 +34,7 @@ describe('generateId(*)', () => {
         ["123-3.2", "123-3-2"],
       ]
     )('converts %p into %p', (input: string, expected: string) => {
-      expect(generateId(input)).toEqual(expected);
+      expect(generateSlug(input)).toEqual(expected);
     });
   });
 });
@@ -50,7 +50,7 @@ describe('generateId("hw", [x, ...])', () => {
     [["hw-1", "hw-2","hw-3"], 4],
     [["hw-1","hw-3"], 4],
   ])('given "hw" with exising %p, expect "hw-%p"', (currentValues: string[], expectedSuffix: number) => {
-    expect(generateId("hw", currentValues)).toEqual(`hw-${expectedSuffix}`);
+    expect(generateSlug("hw", currentValues)).toEqual(`hw-${expectedSuffix}`);
   });
 });
 
@@ -61,8 +61,8 @@ describe('generateId(*, [*, ...])', () => {
     ["h-=*=-w-1", ["h-w-1", "h-w-3"], "h-w-4"],
     ["1.4.3", ["1-4-3"], "1-4-4"], // this is a strange case, but the results just need to be unique; sometimes they won't make sense
     ["hw-7", ["hw-1", "hw-2"], "hw-7"],
-    ["abc", ["hw", "hw-1", "hw-54"], "abc"],
+    ["abc", ["hw", "hw-1", "hw-54"], "abc-1"],
   ])('given %p with existing %p, expect %p', (input: string, currentValues: string[], expected: string) => {
-    expect(generateId(input, currentValues)).toEqual(expected);
+    expect(generateSlug(input, currentValues)).toEqual(expected);
   });
 });

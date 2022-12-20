@@ -2,11 +2,10 @@ import React from "react";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import { IGameState } from "../../../types/RuntimeGameState";
-import { generateId } from "../../../utils/IdGenerator";
+import { ArgsWithName } from "../../../types/NamedElementPoset";
+import { generateSlug } from "../../../utils/SlugGenerator";
 
 import AddFactionDialog from "./AddFactionDialog";
 
@@ -15,21 +14,20 @@ export default {
 } as ComponentMeta<typeof AddFactionDialog>;
 
 interface MockProviderProps extends RequiredChildrenProps {
-  state: IGameState;
+  factions: FactionPoset;
 }
 
-const MockProvider = ({ state, children }: MockProviderProps) => (
-  <GameContext.Provider value={{
-    state: state,
-    controller: {} as IGameController,
+const MockProvider = ({ factions, children }: MockProviderProps) => (
+  <FactionContext.Provider value={{
+    factions,
   }}>
     {children}
-  </GameContext.Provider>
+  </FactionContext.Provider>
 );
 
-const MockState = {
-  checkFactionName: (s: string) => generateId(s) !== "test-1" && generateId(s) !== "test-2",
-} as IGameState;
+const MockFactions = {
+  checkName: (s: ArgsWithName<{}>) => generateSlug(s.name) !== "test-1" && generateSlug(s.name) !== "test-2",
+} as FactionPoset;
 
 export const Default: ComponentStory<typeof AddFactionDialog> = args => <AddFactionDialog {...args} />;
 Default.args = {
@@ -37,7 +35,7 @@ Default.args = {
 };
 Default.decorators = [
   story => (
-    <MockProvider state={MockState}>
+    <MockProvider factions={MockFactions}>
       {story()}
     </MockProvider>
   ),

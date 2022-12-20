@@ -3,23 +3,20 @@ import { MemoryRouter } from "react-router-dom";
 
 import { render, screen } from "@testing-library/react";
 
-import { GameContext } from "../../contexts/GameContext";
+import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
-import { IGameController } from "../../controllers/GameController";
 import { UiStateController } from "../../controllers/UiStateController";
 import LocationInfo from "../../types/LocationInfo";
-import { IGameState } from "../../types/RuntimeGameState";
 
 import LocationsPanel from "./LocationsPanel";
 
 function renderIt(locations: LocationInfo[] = []) {
   render(
-    <GameContext.Provider value={{
-      state: {
-        getLocations: () => locations,
-        checkLocationName: (s: string) => true,
-      } as IGameState,
-      controller: {} as IGameController,
+    <LocationContext.Provider value={{
+      locations: {
+        getAll: () => locations,
+        checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
+      } as LocationsPoset,
     }}>
       <UiStateContext.Provider value={{
         state: {
@@ -32,7 +29,7 @@ function renderIt(locations: LocationInfo[] = []) {
           <LocationsPanel />
         </MemoryRouter>
       </UiStateContext.Provider>
-    </GameContext.Provider>
+    </LocationContext.Provider>
   );
 }
 
@@ -49,6 +46,7 @@ describe('default LocationsPanel', () => {
     renderIt([
       {
         id: "test",
+        slug: "test",
         name: "test",
         tl: 1,
         x: 2,

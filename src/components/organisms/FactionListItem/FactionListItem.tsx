@@ -7,8 +7,8 @@ import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
 import { styled, SxProps } from "@mui/material/styles";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { useSelectionId } from "../../../hooks/useSelectionId";
+import { FactionContext } from "../../../contexts/FactionContext";
+import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
 import FactionInfo from "../../../types/FactionInfo";
 import { ValidationFn } from "../../../types/ValidationFn";
 import { ControlledText } from "../../molecules/ControlledText";
@@ -29,37 +29,40 @@ const ItemColumn = React.memo(styled(Box)(({ theme }) => ({
 })));
 
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
-  const { state, controller } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
   const boxRef = useRef<HTMLElement>(null);
-  const { factionId: navFactionId } = useSelectionId();
+  const { factionSlug: navFactionSlug } = useSelectionSlug();
   const nav = useNavigate();
 
-  const isSelected = navFactionId === faction.id;
-  const getEditNameHandler = useCallback((factionId: string) => (
+  const isSelected = navFactionSlug === faction.slug;
+  const getEditNameHandler = (factionSlug: string) => (
     (val: string) => {
-      const newId = controller.updateFactionName(factionId, val);
-      if (isSelected && newId) {
-        console.debug(`Updated faction name for '${factionId}' to '${val}'`);
-        nav(`/factions/${newId}`);
+      const faction = factions.slugGet(factionSlug);
+      if (faction !== undefined) {
+        const result = factions.update(faction.id, "name", val);
+        if (navFactionSlug === factionSlug) {
+          nav(`/factions/${result.slug}`);
+        }
       }
+      console.debug(`Updated faction name for '${factionSlug}' to '${val}'`);
     }
-  ), [controller, isSelected, nav]);
+  );
 
-  const getSelectFactionHandler = (factionId: string) => (
+  const getSelectFactionHandler = (factionSlug: string) => (
     () => {
-      if (navFactionId === factionId) {
-        console.debug("Deselecting faction: ", navFactionId);
+      if (navFactionSlug === factionSlug) {
+        console.debug("Deselecting faction: ", navFactionSlug);
         nav("/factions");
       } else {
-        console.log("Selecting faction: ", factionId);
-        nav(`/factions/${factionId}`);
+        console.log("Selecting faction: ", factionSlug);
+        nav(`/factions/${factionSlug}`);
       }
     }
   );
 
-  const checkForDuplicates = useCallback<ValidationFn>(val => {
-    return !state.getFactions().filter(f => f.id !== faction.id).map(f => f.name.toLowerCase()).includes(val.toLowerCase());
-  }, [state, faction.id]);
+  const checkForDuplicates = useCallback<ValidationFn>((val: string) => {
+    return factions.checkName({ name: val });
+  }, [factions]);
 
 
   const notDraggingBgColor = isSelected ? "action.selected" : "inherit";
@@ -89,7 +92,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
   
   return (
     <Box
-      onClick={getSelectFactionHandler(faction.id)}
+      onClick={getSelectFactionHandler(faction.slug)}
       sx={containerBoxSx}
       ref={boxRef}
       data-testid="faction-list-item"
@@ -98,17 +101,17 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
         <DragHandleIcon />
       </ItemColumn>
       <ItemColumn sx={factionNameColSx} data-testid="faction-list-item-name-col">
-        <ControlledText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.id)} variant="body2" data-testid="faction-list-item-name">
+        <ControlledText validate={checkForDuplicates} id="faction-name" onUpdate={getEditNameHandler(faction.slug)} variant="body2" data-testid="faction-list-item-name">
           {faction.name}
         </ControlledText>
       </ItemColumn>
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={statsBoxSx} data-testid="faction-list-item-stats">
           <ItemColumn data-testid="faction-list-item-health-col">
-            <HealthDisplay factionId={faction.id} hp={faction.stats.hp} maxHp={faction.stats.maxHp} />
+            <HealthDisplay factionId={faction.slug} hp={faction.hp} maxHp={faction.maxHp} />
           </ItemColumn>
           <ItemColumn data-testid="faction-list-item-attributes-col">
-            <FactionStatSummary {...faction.stats} factionId={faction.id}  />
+            <FactionStatSummary { ...faction } factionId={faction.slug}  />
           </ItemColumn>
         </Box>
       </Slide>

@@ -4,49 +4,46 @@ import { MemoryRouter } from "react-router-dom";
 import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../contexts/GameContext";
+import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
-import { IGameController } from "../../controllers/GameController";
 import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
 import LocationInfo from "../../types/LocationInfo";
-import { IGameState } from "../../types/RuntimeGameState";
 import UiState from "../../types/UiState";
-import { generateId } from "../../utils/IdGenerator";
+import { generateSlug } from "../../utils/SlugGenerator";
 
 import LocationsPanel from "./LocationsPanel";
 
 interface MockProviderProps extends RequiredChildrenProps {
-  state: IGameState;
-  controller: IGameController;
+  locations: LocationsPoset;
 }
 
-const MockProvider = ({ children, state, controller }: MockProviderProps) => (
-  <GameContext.Provider value={{
-    state,
-    controller,
-  }}>
+const MockProvider = ({ children, locations }: MockProviderProps) => (
+  <LocationContext.Provider value={{ locations }}>
     {children}
-  </GameContext.Provider>
+  </LocationContext.Provider>
 );
 
-const locations = [
+const locations: LocationInfo[] = [
   {
-    id: "test-loc-1",
+    id: "test-1",
+    slug: "test-loc-1",
     name: "Test Loc 1",
     tl: 1,
     x: 0,
     y: 1,
   },
   {
-    id: "test-loc-2",
+    id: "test-2",
+    slug: "test-loc-2",
     name: "Test Loc 2 has a Medium Length Name",
     tl: 2,
     x: 2,
     y: 3,
   },
   {
-    id: "test-loc-3",
+    id: "test-3",
+    slug: "test-loc-3",
     name: "Test Loc 3 has a Really Long Name That Continues On and On For a Long Time",
     tl: 3,
     x: 4,
@@ -54,32 +51,29 @@ const locations = [
   },
 ];
 
-const getMockedState = (locations: LocationInfo[]) => ({
-  getLocations() {
+const getLocationsPoset = (locations: LocationInfo[]) => ({
+  getAll() {
     return locations;
   },
-  getLocation(locationId) {
-    return locations.find(v => v.id === locationId);
+  slugGet(locationSlug) {
+    return locations.find(v => v.slug === locationSlug);
   },
-  checkLocationName(locationName) {
-    return !locations.map(l => l.id).includes(generateId(locationName));
+  checkName(args) {
+    return !locations.map(l => l.slug).includes(generateSlug(args.name));
   },
-} as IGameState);
-
-const MockedController = {
-  addLocation(info) {
-    action("addLocation")(info);
+  add(info) {
+    action("add")(info);
   },
-  reorderLocations(source, destination?) {
-    action("reorderLocations")(source, destination);
+  reorder(source, destination?) {
+    action("reorder")(source, destination);
   },
-  removeLocation(selectedLocation) {
-    action("removeLocation")(selectedLocation);
+  remove(selectedLocation) {
+    action("remove")(selectedLocation);
   },
-  updateLocationName(curr, val) {
-    action("updateLocationName")(curr, val);
+  update(id, key, value) {
+    action("update")(id, key, value);
   },
-} as IGameController;
+} as LocationsPoset);
 
 export default {
   component: LocationsPanel,
@@ -105,7 +99,7 @@ const Template: ComponentStory<typeof LocationsPanel> = () => <LocationsPanel />
 export const Default = Template.bind({});
 Default.decorators = [
   story => (
-    <MockProvider state={getMockedState(locations)} controller={MockedController}>
+    <MockProvider locations={getLocationsPoset(locations)}>
       {story()}
     </MockProvider>
   ),
@@ -114,7 +108,7 @@ Default.decorators = [
 export const Empty = Template.bind({});
 Empty.decorators = [
   story => (
-    <MockProvider state={getMockedState([])} controller={MockedController}>
+    <MockProvider locations={getLocationsPoset([])}>
       {story()}
     </MockProvider>
   ),

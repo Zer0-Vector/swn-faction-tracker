@@ -14,8 +14,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { GameContext } from "../../../contexts/GameContext";
-import { useSelectionId } from "../../../hooks/useSelectionId";
+import { LocationContext } from "../../../contexts/LocationContext";
+import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
 import { ControlledText } from "../../molecules/ControlledText";
 
 const Item = React.memo(styled(Paper)(({ theme }) => ({
@@ -40,34 +40,34 @@ const Column = React.memo(styled(Box)(({ theme }) => ({
 
 
 export default function LocationsList() {
-  const { state, controller } = useContext(GameContext);
-  const { locationId: selectedLocationId } = useSelectionId();
+  const { locations: locationSet } = useContext(LocationContext);
+  const { locationSlug: selectedLocationId } = useSelectionSlug();
   const nav = useNavigate();
   const hasSmallWidth = useMediaQuery("(max-width:600px)");
 
-  const locations = state.getLocations();
+  const locations = locationSet.getAll();
 
-  const updateNameHandlers = useMemo(() => locations.map(loc => (
+  const updateNameHandlers = locations.map(loc => (
     (val: string) => {
-      const info = controller.updateLocationName(loc.id, val);
-      if (info !== undefined && selectedLocationId === loc.id) {
-        nav(`/locations/${info.id}`);
-      }
+      const result = locationSet.update(loc.id, "name", val);
+      nav(`/locations/${result.slug}`);
     }
-  )), [controller, locations, nav, selectedLocationId]);
+  ));
 
   const handleDragEnd = useCallback((result: DropResult) => {
     if (result.reason === 'DROP') {
-      controller.reorderLocations(result.source, result.destination);
+      if (result.destination) {
+        locationSet.reorder(result.source.index, result.destination?.index);
+      }
     }
-  }, [controller]);
+  }, [locationSet]);
 
   const selectionHandlers = useMemo(() => (
     locations.map(val => () => {
-      if (val.id === selectedLocationId) {
+      if (val.slug === selectedLocationId) {
         nav("/locations");
       } else {
-        nav(`/locations/${val.id}`);
+        nav(`/locations/${val.slug}`);
       }
     })
   ), [locations, nav, selectedLocationId]);
@@ -95,7 +95,7 @@ export default function LocationsList() {
             bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
           >
             {locations.map((val, index) => {
-              const isSelected = selectedLocationId === val.id;
+              const isSelected = selectedLocationId === val.slug;
               const notDraggingColor = isSelected ? "action.selected" : "inherit";
               return (
                 <Draggable key={val.name} index={index} draggableId={`draggable-location-${val.name.replaceAll(/\W/g, "-")}`}>

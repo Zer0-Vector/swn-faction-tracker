@@ -1,21 +1,21 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import { IGameState } from "../../../types/RuntimeGameState";
 import UiState from "../../../types/UiState";
-import { generateId } from "../../../utils/IdGenerator";
-import { MockActionController } from "../../__mocks__/MockActionController";
+import { generateSlug } from "../../../utils/SlugGenerator";
 
 import LocationsActionToolbar from "./LocationsActionToolbar";
 
 const MockLocations = [
   {
-    id: "test-location",
+    id: "123456",
+    slug: "test-location",
     name: "Test Location",
   },
 ];
@@ -24,22 +24,24 @@ export default {
   component: LocationsActionToolbar,
   decorators: [
     story => (
-      <GameContext.Provider value={{
-        controller: MockActionController,
-        state: {
-          getLocations() {
+      <LocationContext.Provider value={{
+        locations: {
+          getAll() {
             return MockLocations;
           },
-          getLocation(locationId) {
-            return MockLocations.find(loc => loc.id === locationId);
+          slugGet(locationSlug) {
+            return MockLocations.find(loc => loc.slug === locationSlug);
           },
-          checkLocationName(locationName) {
-            return !MockLocations.map(l => l.id).includes(generateId(locationName));
+          checkName(args) {
+            return !MockLocations.map(l => l.id).includes(generateSlug(args.name));
           },
-        } as IGameState,
+          remove(...args) {
+            action("remove")(args);
+          },
+        } as LocationsPoset,
       }}>
         {story()}
-      </GameContext.Provider>
+      </LocationContext.Provider>
     ),
     story => <UiStateContext.Provider value={{
       state: {

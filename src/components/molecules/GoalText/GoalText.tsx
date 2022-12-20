@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from "react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes, isGoalType } from "../../../types/GoalType";
 import { ControlledDropDown } from "../ControlledDropDown";
@@ -10,13 +10,13 @@ interface GoalTextProps {
 }
 
 export default function GoalText({faction}: GoalTextProps) {
-  const { controller } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
   
   const handleUpdate = useCallback((val: string) => {
     if (isGoalType(val)) {
-      controller.setGoal(faction.id, { type: val });
+      factions.update(faction.id, "goal", { type: val });
     }
-  }, [controller, faction.id]);
+  }, [faction.id, factions]);
 
   return (
     <ControlledDropDown

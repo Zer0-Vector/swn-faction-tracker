@@ -3,13 +3,13 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
-import { IGameState } from "../../../types/RuntimeGameState";
+import PurchasedAsset from "../../../types/PurchasedAsset";
 import UiState from "../../../types/UiState";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
 
@@ -17,25 +17,29 @@ export default {
   component: AssetListActionsToolbar,
   decorators: [
     story => (
-      <GameContext.Provider value={{
-        state: {
-          getFaction(factionId) {
+      <FactionContext.Provider value={{
+        factions: {
+          slugGet(_) {
             return {} as FactionInfo;
           },
-          getAsset(factionId, assetId) {
-            return {
-              hp: 1,
-              id: {
-                displayName: "Smugglers",
-                index: 1,
-              },
-            };
-          },
-        } as IGameState,
-        controller: MockActionController,
-      }}>
-        {story()}
-      </GameContext.Provider>
+        } as FactionPoset,
+      } as FactionContextType}>
+        <AssetContext.Provider value={{
+          assets: {
+            slugGet(_) {
+              return {
+                hp: 1,
+                id: "1",
+                name: "Smugglers",
+                slug: "smugglers-1",
+                factionId: "test",
+              } as PurchasedAsset;
+            },
+          } as AssetPoset,
+        }}>
+          {story()}
+        </AssetContext.Provider>
+      </FactionContext.Provider>
     ),
     story => <UiStateContext.Provider value={{
       state: {

@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -9,7 +9,7 @@ import AddFactionDialog from "../../molecules/AddFactionDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function FactionListActionToolbar() {
-  const { controller } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
 
   const [addOpen, setAddOpen] = useState<boolean>(false);
   const [removeOpen, setRemoveOpen] = useState<boolean>(false);
@@ -20,16 +20,16 @@ export default function FactionListActionToolbar() {
   const handleAddClick = useCallback(() => setAddOpen(true), []);
   const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
   const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
-  const handleAddDialogCreate = useCallback((v: string): void => {controller.addFaction(v);}, [controller]);
+  const handleAddDialogCreate = useCallback((v: string): void => { factions.add({ name: v }); }, [factions]);
 
   const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
     setRemoveOpen(false);
     console.debug("handleRemoveAction: ", selectedFaction, reason);
     if (selectedFaction && reason === "Remove") {
-      controller.removeFaction(selectedFaction.id);
+      factions.remove(selectedFaction.id);
       nav("/factions");
     }
-  }, [controller, nav, selectedFaction]);
+  }, [factions, nav, selectedFaction]);
 
   console.debug("Rendering FactionListActionToolbar...");
 

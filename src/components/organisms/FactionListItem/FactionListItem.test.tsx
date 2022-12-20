@@ -4,39 +4,35 @@ import { BrowserRouter } from "react-router-dom";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { IGameController } from "../../../controllers/GameController";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
-import { Maybe } from "../../../types/Maybe";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionListItem from "./FactionListItem";
 
-const mockGetFaction = jest.fn();
-const mockUpdateFactionName = jest.fn();
-const mockContext: GameContextType = {
-  state: {
-    getFaction: mockGetFaction as (f:string)=>FactionInfo,
-    getFactions: () => [] as FactionInfo[],
-  } as IGameState,
-  controller: {
-    updateFactionName: mockUpdateFactionName as (c:string, v:string)=>Maybe<string>,
-  } as IGameController,
+const mockGetFaction = jest.fn() as jest.MockedFn<FactionPoset['get']>;
+const mockUpdateFaction = jest.fn() as jest.MockedFn<FactionPoset['update']>;
+const mockCheckName = jest.fn() as jest.MockedFn<FactionPoset['checkName']>;
+const mockContext: FactionContextType = {
+  factions: {
+    slugGet: mockGetFaction as FactionPoset['get'],
+    getAll: jest.fn() as FactionPoset['getAll'],
+    update: mockUpdateFaction as FactionPoset['update'],
+    checkName: mockCheckName as FactionPoset['checkName'],
+  } as FactionPoset,
 };
 
 const mockFaction: FactionInfo = {
-  id: "test-faction",
+  id: "test",
+  slug: "test-faction",
   name: "Test Faction",
-  stats: {
-    cunning: 0,
-    force: 1,
-    hp: 2,
-    maxHp: 3,
-    wealth: 4,
-    xp: 5,
-  },
+  cunning: 0,
+  force: 1,
+  hp: 2,
+  maxHp: 3,
+  wealth: 4,
+  xp: 5,
 };
 
 function renderIt() {
@@ -48,13 +44,13 @@ function renderIt() {
       },
       controller: {} as UiStateController,
     }}>
-      <GameContext.Provider value={mockContext}>
+      <FactionContext.Provider value={mockContext}>
         <FactionListItem
           dragHandleProps={{} as DraggableProvidedDragHandleProps}
           faction={mockFaction}
           isDragging={false}
         />
-      </GameContext.Provider>
+      </FactionContext.Provider>
     </UiStateContext.Provider>,
     { wrapper: BrowserRouter }
   );
@@ -117,9 +113,11 @@ describe('FactionListItem', () => {
 describe('FactionListItem behaviors', () => {
   beforeEach(() => {
     window.history.pushState({}, "", "/");
+    mockCheckName.mockImplementation(() => true);
   });
 
   it('editing the faction name calls controller', async () => {
+    mockGetFaction.mockImplementation((id: string) => mockFaction);
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
     const name = within(col).getByTestId("faction-list-item-name");
@@ -133,12 +131,13 @@ describe('FactionListItem behaviors', () => {
     expect(textinput).toHaveValue("Test Faction");
     fireEvent.change(textinput, { target: { value: "blah" } });
     fireEvent.keyUp(textinput, { key: 'Enter' });
-    await waitFor(() => expect(mockUpdateFactionName).toBeCalledTimes(1));
-    expect(mockUpdateFactionName).toBeCalledWith("test-faction", "blah");
+    await waitFor(() => expect(mockUpdateFaction).toBeCalledTimes(1));
+    expect(mockUpdateFaction).toBeCalledWith("test", "name", "blah");
   });
 
   it('editing a selected name redirect to new name', async () => {
-    mockUpdateFactionName.mockImplementationOnce(() => "blah");
+    mockGetFaction.mockImplementation((id: string) => mockFaction);
+    mockUpdateFaction.mockImplementationOnce(() => ({ id: "123", name: "blah", slug: "blah" }));
     renderIt();
     expect(window.location.pathname).toBe("/");
     const col = screen.getByTestId("faction-list-item-name-col");
@@ -154,8 +153,8 @@ describe('FactionListItem behaviors', () => {
     const textinput = textfield.querySelector("input") as HTMLInputElement;
     fireEvent.change(textinput, { target: { value: "blah" } });
     fireEvent.keyUp(textinput, { key: 'Enter' });
-    await waitFor(() => expect(mockUpdateFactionName).toBeCalledTimes(1));
-    expect(mockUpdateFactionName).toBeCalledWith("test-faction", "blah");
+    await waitFor(() => expect(mockUpdateFaction).toBeCalledTimes(1));
+    expect(mockUpdateFaction).toBeCalledWith("test", "name", "blah");
     expect(window.location.pathname).toBe("/factions/blah");
   });
 

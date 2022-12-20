@@ -11,14 +11,14 @@ import ModeToggleButtons from "../ModeToggleButtons";
 // enable tests when UI uses mode
 describe('default ModeToggleButtons', () => {
   it('value is from context', () => {
-    const mockGameContext = {
+    const mockContext = {
       state: { editMode: "TURN" },
       controller: { setEditMode: jest.fn() as LoginStateSetter },
     } as UiStateContextType;
 
     render(
       <ThemeProvider theme={THEME}> {/* needed since it's using custom colors */}
-        <UiStateContext.Provider value={mockGameContext}>
+        <UiStateContext.Provider value={mockContext}>
           <ModeToggleButtons />
         </UiStateContext.Provider>
       </ThemeProvider>
@@ -39,14 +39,14 @@ describe('default ModeToggleButtons', () => {
 
   // remove this when the above are implemented
   it('calls setEditMode when clicked', () => {
-    const mockGameContext = {
+    const mockFactionContext = {
       state: { editMode: "EDIT" },
       controller: { setEditMode: jest.fn() as LoginStateSetter },
     } as UiStateContextType;
 
     render(
       <ThemeProvider theme={THEME}> {/* needed since it's using custom colors */}
-        <UiStateContext.Provider value={mockGameContext}>
+        <UiStateContext.Provider value={mockFactionContext}>
           <ModeToggleButtons />
         </UiStateContext.Provider>
       </ThemeProvider>
@@ -55,21 +55,21 @@ describe('default ModeToggleButtons', () => {
     const btnView = screen.getByText("View");
     expect(btnView).not.toBeDisabled();
     fireEvent.click(btnView);
-    expect(mockGameContext.controller.setEditMode).toBeCalledTimes(1);
-    expect(mockGameContext.controller.setEditMode).toBeCalledWith("VIEW");
+    expect(mockFactionContext.controller.setEditMode).toBeCalledTimes(1);
+    expect(mockFactionContext.controller.setEditMode).toBeCalledWith("VIEW");
     jest.resetAllMocks();
     
     // const btnTurn = screen.getByText("Take Turn");
     // expect(btnTurn).not.toBeDisabled();
     // fireEvent.click(btnTurn);
-    // expect(mockGameContext.controller.setEditMode).toBeCalledTimes(1);
-    // expect(mockGameContext.controller.setEditMode).toBeCalledWith("TURN");
+    // expect(mockFactionContext.controller.setEditMode).toBeCalledTimes(1);
+    // expect(mockFactionContext.controller.setEditMode).toBeCalledWith("TURN");
     // jest.resetAllMocks();
     
     const btnEdit = screen.getByText("Free Edit");
     expect(btnEdit).not.toBeDisabled();
     fireEvent.click(btnEdit);
     // clicking currently selected sends null to handler; controller is not called.
-    expect(mockGameContext.controller.setEditMode).not.toBeCalledWith("EDIT");
+    expect(mockFactionContext.controller.setEditMode).not.toBeCalledWith("EDIT");
   });
 }); 

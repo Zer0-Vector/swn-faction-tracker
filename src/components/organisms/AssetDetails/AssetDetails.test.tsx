@@ -7,10 +7,10 @@ import PurchasedAsset from "../../../types/PurchasedAsset";
 import AssetDetails from "./AssetDetails";
 
 const mockAsset: PurchasedAsset = {
-  id: {
-    displayName: "Covert Shipping",
-    index: 77,
-  },
+  id: "test",
+  name: "Covert Shipping",
+  slug: "covert-shipping-77",
+  factionId: "test",
   hp: 11,
 };
 

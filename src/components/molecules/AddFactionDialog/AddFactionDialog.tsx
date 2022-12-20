@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo, useRef, useState } from "react
 
 import TextField from "@mui/material/TextField";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import FormInfo from "../../../types/FormInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -14,13 +14,13 @@ interface AddFactionDialogProps {
 }
 
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
-  const { state } = useContext(GameContext);
+  const { factions } = useContext(FactionContext);
   const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
-    const uniqueName = state.checkFactionName(newText);
+    const uniqueName = factions.checkName({ name: newText });
     const isNotBlank = newText.trim().length > 0;
     const newState = {
       value: newText,
@@ -28,7 +28,7 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     };
     console.debug(isNotBlank, uniqueName);
     setFormState(newState);
-  }, [state]);
+  }, [factions]);
   
   const handleClose = useCallback(() => {
     setFormState({ value: "", valid: false });

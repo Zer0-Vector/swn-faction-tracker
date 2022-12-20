@@ -3,14 +3,14 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, Story } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
+import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { TagsList } from "../../../data/Tags";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes } from "../../../types/GoalType";
 import PurchasedAsset from "../../../types/PurchasedAsset";
-import { IGameState } from "../../../types/RuntimeGameState";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionList from "./FactionList";
 
@@ -34,28 +34,38 @@ const locations = [
 ];
 
 const MockProvider = ({ children, factions }: MockProviderProps) => (
-  <GameContext.Provider value={{
-    state: {
-      getFactions() {
-        return factions;
-      },
-      getFaction(factionId) {
-        return factions.find(f => f.id === factionId);
-      },
-      getLocations() {
+  // TODO wrap with LocationContext and insert AssetContext
+  <LocationContext.Provider value={{
+    locations: {
+      getAll() {
         return locations;
       },
-      getLocation(locationId) {
+      get(locationId) {
         return locations.find(loc => loc.id === locationId);
       },
-      getAssets(factionId) {
-        return [] as PurchasedAsset[];
-      },
-    } as IGameState,
-    controller: MockActionController,
+    } as LocationsPoset,
   }}>
-    {children}
-  </GameContext.Provider>
+    <FactionContext.Provider value={{
+      factions: {
+        getAll() {
+          return factions;
+        },
+        slugGet(factionSlug) {
+          return factions.find(f => f.slug === factionSlug);
+        },
+      } as FactionPoset,
+    }}>
+      <AssetContext.Provider value={{
+        assets: {
+          getAll() {
+            return [] as PurchasedAsset[];
+          },
+        } as AssetPoset,
+      }}>
+        {children}
+      </AssetContext.Provider>
+    </FactionContext.Provider>
+  </LocationContext.Provider>
 );
 
 export default {
@@ -83,16 +93,15 @@ type AdditionalArgs = { numberOfFactions: number };
 const Template: Story<ComponentProps<typeof FactionList> & AdditionalArgs> = (args) => (
   <MockProvider factions={
     [...Array(args.numberOfFactions).keys()].map(n => ({
-      id: `faction-${n}`,
+      id: `${n}`,
+      slug: `faction-${n}`,
       name: `Faction ${n}`,
-      stats: {
-        cunning: n % 3,
-        force: n % 4,
-        hp: n % 10,
-        maxHp: n % 5 + 1,
-        wealth: n % 5,
-        xp: 0,
-      },
+      cunning: n % 3,
+      force: n % 4,
+      hp: n % 10,
+      maxHp: n % 5 + 1,
+      wealth: n % 5,
+      xp: 0,
       goal: {
         type: GoalTypes[n % GoalTypes.length],
         tally: n % 6,

@@ -2,12 +2,9 @@ import React from "react";
 
 import { render, screen, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import { LocationContext, LocationContextType, LocationsPoset } from "../../../contexts/LocationContext";
 import FactionInfo from "../../../types/FactionInfo";
-import LocationInfo from "../../../types/LocationInfo";
-import { Maybe } from "../../../types/Maybe";
-import { IGameState } from "../../../types/RuntimeGameState";
 
 import FactionDetails from "./FactionDetails";
 
@@ -17,36 +14,41 @@ const mockGetLocations = jest.fn();
 const mockGetFaction = jest.fn();
 const mockGetLocation = jest.fn();
 
-const mockContext: GameContextType = {
-  state: {
-    getLocation: mockGetLocation as (lid: string)=>Maybe<LocationInfo>,
-    getLocations: mockGetLocations as ()=>LocationInfo[],
-    getFaction: mockGetFaction as (fid: string)=>Maybe<FactionInfo>,
-  } as IGameState,
-  controller: {} as IGameController,
+const mockLocationContext: LocationContextType = {
+  locations: {
+    get: mockGetLocation as LocationsPoset['get'],
+    getAll: mockGetLocations as LocationsPoset['getAll'],
+  } as LocationsPoset,
+};
+
+const mockContext: FactionContextType = {
+  factions: {
+    get: mockGetFaction as FactionPoset['get'],
+  } as FactionPoset,
 };
 
 function renderIt() {
   render(
-    <GameContext.Provider value={mockContext}>
-      <FactionDetails faction={mockFaction} />
-    </GameContext.Provider>
+    <LocationContext.Provider value={mockLocationContext}>
+      <FactionContext.Provider value={mockContext}>
+        <FactionDetails faction={mockFaction} />
+      </FactionContext.Provider>
+    </LocationContext.Provider>
   );
 }
 
 describe('default FactionDetails', () => {
   beforeEach(() => {
     mockFaction = {
-      id: "test-faction",
+      id: "test",
+      slug: "test-faction",
       name: "Test Faction",
-      stats: {
-        cunning: 11,
-        force: 22,
-        hp: 33,
-        maxHp: 44,
-        wealth: 55,
-        xp: 66,
-      },
+      cunning: 11,
+      force: 22,
+      hp: 33,
+      maxHp: 44,
+      wealth: 55,
+      xp: 66,
     };
     mockGetLocations.mockImplementation(() => [
       {
@@ -63,7 +65,7 @@ describe('default FactionDetails', () => {
       },
     ]);
     mockGetFaction.mockImplementation((f: string) => {
-      if (f !== mockFaction.id) {
+      if (f !== mockFaction.slug) {
         throw new Error("Need more mocking");
       }
       return mockFaction;

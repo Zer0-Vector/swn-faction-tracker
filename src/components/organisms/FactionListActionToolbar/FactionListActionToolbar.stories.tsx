@@ -1,14 +1,14 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import { IGameState } from "../../../types/RuntimeGameState";
 import UiState from "../../../types/UiState";
-import { MockActionController } from "../../__mocks__/MockActionController";
 
 import FactionListActionToolbar from "./FactionListActionToolbar";
 
@@ -16,30 +16,39 @@ export default {
   component: FactionListActionToolbar,
   decorators: [
     story => (
-      <GameContext.Provider value={{
-        controller: MockActionController,
-        state: {
-          getFactions() {
+      <FactionContext.Provider value={{
+        factions: {
+          getAll() {
             return [
               {
-                id: "existing-faction",
+                id: "1",
+                slug: "existing-faction",
                 name: "Existing Faction",
               },
             ];
           },
-          getFaction(factionId) {
+          slugGet(_) {
             return {
-              id: "test-faction",
+              id: "2",
+              slug: "test-faction",
               name: "Test Faction",
             };
           },
-          getAsset(factionId, assetId) {
-            return {};
+          remove(...args) {
+            action("remove")(args);
           },
-        } as IGameState,
+        } as FactionPoset,
       }}>
-        {story()}
-      </GameContext.Provider>
+        <AssetContext.Provider value={{
+          assets: {
+            get(_) {
+              return {};
+            },
+          } as AssetPoset,
+        }}>
+          {story()}
+        </AssetContext.Provider>
+      </FactionContext.Provider>
     ),
     story => <UiStateContext.Provider value={{
       state: {

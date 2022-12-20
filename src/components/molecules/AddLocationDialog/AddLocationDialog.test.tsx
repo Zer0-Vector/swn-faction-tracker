@@ -2,25 +2,22 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { GameContext, GameContextType } from "../../../contexts/GameContext";
-import { IGameController } from "../../../controllers/GameController";
-import { IGameState } from "../../../types/RuntimeGameState";
+import { LocationContext, LocationContextType, LocationsPoset } from "../../../contexts/LocationContext";
 
 import AddLocationDialog from "./AddLocationDialog";
 
-function renderWithContext(context?: GameContextType) {
+function renderWithContext(context?: LocationContextType) {
   const mockClose = jest.fn();
   const mockCreate = jest.fn();
   const mockCheckLocationName = jest.fn();
   render(
-    <GameContext.Provider value={context || {
-      state: {
-        checkLocationName: mockCheckLocationName as (s:string)=>boolean,
-      } as IGameState,
-      controller: {} as IGameController,
+    <LocationContext.Provider value={context || {
+      locations: {
+        checkName: mockCheckLocationName as LocationsPoset['checkName'],
+      } as LocationsPoset,
     }}>
       <AddLocationDialog open={true} onClose={mockClose} onCreate={mockCreate} />
-    </GameContext.Provider>
+    </LocationContext.Provider>
   );
   return { mockClose, mockCreate, mockCheckLocationName };
 }
@@ -28,14 +25,13 @@ function renderWithContext(context?: GameContextType) {
 describe('default AddLocationDialog', () => {
   it('does not render when open=false', () => {
     render(
-      <GameContext.Provider value={{
-        state: {
-          checkLocationName: jest.fn() as (s:string)=>boolean,
-        } as IGameState,
-        controller: {} as IGameController,
+      <LocationContext.Provider value={{
+        locations: {
+          checkName: jest.fn() as LocationsPoset['checkName'],
+        } as LocationsPoset,
       }}>
         <AddLocationDialog open={false} onClose={jest.fn()} onCreate={jest.fn()} />
-      </GameContext.Provider>
+      </LocationContext.Provider>
     );
     expect(screen.queryByTestId("add-location-dialog")).not.toBeInTheDocument();
   });
@@ -206,10 +202,9 @@ describe('default AddLocationDialog', () => {
 
   it('calls onCreate when given a unique name and other non-empty details', () => {
     const { mockClose, mockCreate } = renderWithContext({
-      state: {
-        checkLocationName: (s: string) => true,
-      } as IGameState,
-      controller: {} as IGameController,
+      locations: {
+        checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
+      } as LocationsPoset,
     });
     const { input: nameField } = assertEmptyField("location-name-field", "Location Name");
     fireEvent.input(nameField, { target: { value: "abc" } });

@@ -1,12 +1,12 @@
 import { useContext } from "react";
 
-import { GameContext } from "../contexts/GameContext";
+import { FactionContext } from "../contexts/FactionContext";
 
-import { useSelectionId } from "./useSelectionId";
+import { useSelectionSlug } from "./useSelectionSlug";
 
 export function useSelectedFaction() {
-  const { factionId } = useSelectionId();
-  const { state } = useContext(GameContext);
+  const { factionSlug } = useSelectionSlug();
+  const { factions } = useContext(FactionContext);
   
-  return factionId ? state.getFaction(factionId) : undefined;
+  return factionSlug ? factions.slugGet(factionSlug) : undefined;
 }

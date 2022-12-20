@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 
 import { Theme } from "@mui/material";
 
-import { GameContext } from "../../../contexts/GameContext";
+import { FactionContext } from "../../../contexts/FactionContext";
 import StatText from "../../atoms/StatText";
 import { ControlledStat } from "../ControlledStat";
 
@@ -15,10 +15,10 @@ interface FactionStatSummaryProps {
 }
 
 export default function FactionStatSummary({ factionId, force, cunning, wealth }: FactionStatSummaryProps) {
-  const { controller } = useContext(GameContext);
-  const handleUpdateForce = useCallback((val: number) => controller.updateForce(factionId, val), [controller, factionId]);
-  const handleUpdateCunning = useCallback((val: number) => controller.updateCunning(factionId, val), [controller, factionId]);
-  const handleUpdateWealth = useCallback((val: number) => controller.updateWealth(factionId, val), [controller, factionId]);
+  const { factions } = useContext(FactionContext);
+  const handleUpdateForce = useCallback((val: number) => factions.update(factionId, "force", val), [factionId, factions]);
+  const handleUpdateCunning = useCallback((val: number) => factions.update(factionId, "cunning", val), [factionId, factions]);
+  const handleUpdateWealth = useCallback((val: number) => factions.update(factionId, "wealth", val), [factionId, factions]);
   const handleInputSx = useCallback((theme: Theme) => ({ 
     ...theme.typography.body2,
     width: "3em",
