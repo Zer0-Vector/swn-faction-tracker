@@ -73,6 +73,11 @@ const getLocationsPoset = (locations: LocationInfo[]) => ({
   update(id, key, value) {
     action("update")(id, key, value);
   },
+  subscribe(...args) {
+    action("subscribe")(args);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
+  },
 } as LocationsPoset);
 
 export default {

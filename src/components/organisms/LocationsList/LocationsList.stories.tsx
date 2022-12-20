@@ -31,6 +31,11 @@ const getContextProvider = (numberOfLocations: number) => ({ children }: Require
         getAll: () => locations,
         get: (locationId) => locations.find(loc => loc.slug === locationId),
         reorder: (...args) => action("reorder")(args),
+        subscribe: (...args) => {
+          action("subscribe")(args);
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          return () => {};
+        },
       } as LocationsPoset,
     }}>
       {children}
