@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
@@ -15,8 +15,18 @@ import AssetListActionsToolbar from "../AssetListActionsToolbar";
 import FactionDetails from "../FactionDetails";
 import FactionListItem from "../FactionListItem";
 
+function useFactionsList() {
+  const { factions } = useContext(FactionContext);
+  const [list, setList] = useState(factions.getAll());
+  useEffect(() => factions.subscribe(() => setList(factions.getAll())), [factions]);
+  return {
+    factions: list,
+    reorder: factions.reorder,
+  };
+}
+
 export default function FactionList(): JSX.Element {
-  const { factions: factionSet } = useContext(FactionContext);
+  const { factions, reorder } = useFactionsList();
   const theme = useTheme();
   const selectedFaction = useSelectedFaction();
   
@@ -24,10 +34,8 @@ export default function FactionList(): JSX.Element {
     if (!result.destination) {
       return;
     }
-    factionSet.reorder(result.source.index, result.destination.index);
-  }, [factionSet]);
-
-  const factions = factionSet.getAll();
+    reorder(result.source.index, result.destination.index);
+  }, [reorder]);
 
   if (factions.length === 0) {
     return (

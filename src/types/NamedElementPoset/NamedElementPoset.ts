@@ -10,7 +10,18 @@ export type NamedEntity = SluggedEntity & { name: string };
 
 export type ArgsWithName<Args = {}> = { name: string } & Args;
 
-export interface INamedElementPoset<T extends NamedEntity & A, A = {}, N extends keyof ArgsWithName<A> = never, M extends keyof A = never>
+/**
+ * @template T The type of elements in the poset.
+ * @template A Additional arguments needed to create a type `T`.
+ * @template N Additional keys that should not be allowed to be updated.
+ * @template M Additional args needed to check name.
+ */
+export interface INamedElementPoset<
+  T extends NamedEntity & A,
+  A = {},
+  N extends keyof ArgsWithName<A> = never,
+  M extends keyof A = never
+>
     extends IObservable<NamedElementPosetAction<T>> {
   add(args: ArgsWithName<A>): T;
   remove(id: string): boolean;
@@ -40,12 +51,6 @@ type NamedElementPosetAction<T> = {
 
 type FilterFuncGenerator<X, Y> = (args: X) => (arg: Y) => boolean;
 
-/**
- * @template T The type of elements in the poset.
- * @template A Additional arguments needed to create a type `T`.
- * @template N Additional keys that should not be allowed to be updated.
- * @template M Additional args needed to check name.
- */
 export class NamedElementPoset<T extends NamedEntity & A, A = {}, N extends keyof ArgsWithName<A>  = never, M extends keyof A = never>
   extends Observable<NamedElementPosetAction<T>>
   implements INamedElementPoset<T, A, N> {
