@@ -24,6 +24,10 @@ function renderIt(assets: PurchasedAsset[], route = "/factions/test-faction") {
         <AssetContext.Provider value={{
           assets: {
             getAll: () => assets,
+            subscribe(callback) {
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              return () => {};
+            },
           } as AssetPoset,
         }}>
           <AssetList />

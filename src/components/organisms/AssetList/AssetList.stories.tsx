@@ -30,6 +30,10 @@ const MockProvider = ({ children, assetList }: MockProviderProps) => (
         getAll() {
           return assetList;
         },
+        subscribe(_) {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          return () => {};
+        },
       } as AssetPoset,
     }}>
       {children}
