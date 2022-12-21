@@ -107,6 +107,10 @@ const getLocationPoset = (locations: LocationInfo[] = []) => ({
   get(locationId) {
     return locations.find(loc => loc.id === locationId);
   },
+  subscribe(_) {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
+  },
 } as LocationsPoset);
 
 const getFactionPoset = (factions: FactionInfo[] = []) => ({
@@ -116,6 +120,10 @@ const getFactionPoset = (factions: FactionInfo[] = []) => ({
   slugGet(factionSlug) {
     return factions.find(f => f.slug === factionSlug);
   },
+  subscribe(_) {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
+  },
 } as FactionPoset);
 
 const getAssetPoset = (assets: PurchasedAsset[] = []) => ({
@@ -124,6 +132,10 @@ const getAssetPoset = (assets: PurchasedAsset[] = []) => ({
   },
   slugGet(assetSlug) {
     return assets.find(a => a.slug === assetSlug);
+  },
+  subscribe(_) {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
   },
 } as AssetPoset);
 

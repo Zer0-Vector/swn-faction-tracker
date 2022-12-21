@@ -53,12 +53,20 @@ const MockProvider = ({ children, factions }: MockProviderProps) => (
         slugGet(factionSlug) {
           return factions.find(f => f.slug === factionSlug);
         },
+        subscribe(_) {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          return () => {};
+        },
       } as FactionPoset,
     }}>
       <AssetContext.Provider value={{
         assets: {
           getAll() {
             return [] as PurchasedAsset[];
+          },
+          subscribe(_) {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            return () => {};
           },
         } as AssetPoset,
       }}>
