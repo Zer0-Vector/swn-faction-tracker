@@ -1,4 +1,4 @@
-export const TurnActionList = [
+export const FactionActionList = [
   "Attack",
   "Buy Asset",
   "Change Homeworld",
@@ -11,8 +11,8 @@ export const TurnActionList = [
   "Use Asset Ability",
 ] as const;
 
-export type TurnAction = typeof TurnActionList[number];
+export type FactionAction = typeof FactionActionList[number];
 
-export function isTurnAction(s: string): s is TurnAction {
-  return TurnActionList.includes(s as TurnAction);
+export function isFactionAction(s: string): s is FactionAction {
+  return FactionActionList.includes(s as FactionAction);
 }
