@@ -4,8 +4,9 @@ import { ThemeProvider } from "@mui/material/styles";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
-import { LoginStateSetter } from "../../../controllers/UiStateController";
+import { EditModeSetter, UiStateController } from "../../../controllers/UiStateController";
 import { THEME } from "../../../style/Theme";
+import UiState from "../../../types/UiState";
 import ModeToggleButtons from "../ModeToggleButtons";
 
 // enable tests when UI uses mode
@@ -13,7 +14,7 @@ describe('default ModeToggleButtons', () => {
   it('value is from context', () => {
     const mockContext = {
       state: { editMode: "TURN" },
-      controller: { setEditMode: jest.fn() as LoginStateSetter },
+      controller: { setEditMode: jest.fn() as EditModeSetter },
     } as UiStateContextType;
 
     render(
@@ -40,8 +41,8 @@ describe('default ModeToggleButtons', () => {
   // remove this when the above are implemented
   it('calls setEditMode when clicked', () => {
     const mockFactionContext = {
-      state: { editMode: "EDIT" },
-      controller: { setEditMode: jest.fn() as LoginStateSetter },
+      state: { editMode: "EDIT" } as UiState,
+      controller: { setEditMode: jest.fn() as EditModeSetter } as UiStateController,
     } as UiStateContextType;
 
     render(

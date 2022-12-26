@@ -9,4 +9,7 @@ export const MockActionUiStateController: IUiStateController = {
   setEditMode(...args) {
     action(this.setEditMode.name)(...args);
   },
+  setTurnState(...args) {
+    action(this.setTurnState.name)(...args);
+  },
 };

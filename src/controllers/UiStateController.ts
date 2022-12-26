@@ -1,12 +1,16 @@
-import { isGameMode } from "../types/GameMode";
+import GameMode, { isGameMode } from "../types/GameMode";
 import LoginState from "../types/LoginState";
+import { TurnState } from "../types/TurnState";
 import UiState from "../types/UiState";
 
 export type LoginStateSetter = (state: LoginState) => void;
+export type EditModeSetter = (mode: GameMode, forceEndTurn?: true) => void;
+export type TurnStateSetter = (state: Exclude<TurnState, "OFF">) => void;
 
 export interface IUiStateController {
   setLoginState: LoginStateSetter;
-  setEditMode: (value: string) => void;
+  setEditMode: EditModeSetter;
+  setTurnState: TurnStateSetter;
 }
 
 export type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>;
@@ -26,14 +30,49 @@ export class UiStateController implements IUiStateController {
     }));
   }
 
-  setEditMode(mode: string) {
-    if (!isGameMode(mode)) {
-      throw new Error(`Unknown GameMode: ${mode}`);
+  setEditMode(mode: GameMode, forceEndTurn?: true) {
+    let needsForce = false;
+    new Promise<void>((resolve, reject) => {
+      this.setState(prev => {
+        if (prev.editMode === mode) {
+          try {
+            return prev;
+          } finally {
+            resolve();
+          }
+        }
+  
+        if (prev.editMode === "TURN" && prev.turnState !== "COMPLETE" && !forceEndTurn) {
+          try {
+            return prev;
+          } finally {
+            reject();
+          }
+        }
+  
+        try {
+          return {
+            ...prev,
+            editMode: mode,
+            turnState: mode === "TURN" ? "IDLE" : "OFF",
+          };
+        } finally {
+          resolve();
+        }
+      });
+    }).catch(() => needsForce = true);
+    if (needsForce) {
+      throw new Error("Cannot end incomplete turn without forceEndTurn=true");
     }
+  }
+
+  setTurnState: TurnStateSetter = (state) => {
     this.setState(prev => ({
       ...prev,
-      editMode: mode,
+      turnState: state,
     }));
-  }
+  };
+
+
 
 }
