@@ -6,6 +6,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
+import UiState from "../../../types/UiState";
 
 import FactionHpSummary from "./FactionHpSummary";
 
@@ -21,7 +22,7 @@ const Template: ComponentStory<typeof FactionHpSummary> = args => {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      }, 
+      } as UiState, 
       controller: {} as UiStateController,
     }}>
       <FactionContext.Provider value={{

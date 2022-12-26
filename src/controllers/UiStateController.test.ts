@@ -26,8 +26,4 @@ describe("UiStateController", () => {
     const result = setter({} as UiState);
     expect(result.editMode).toEqual("EDIT");
   });
-
-  it('throws if invalid edit mode', () => {
-    expect(() => controller.setEditMode("THIS-FAILS")).toThrowError();
-  });
 });

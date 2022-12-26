@@ -7,6 +7,7 @@ import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
+import UiState from "../../../types/UiState";
 
 import GoalProgress from "./GoalProgress";
 
@@ -33,7 +34,7 @@ function renderIt(faction = mockFaction) {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
     }}>
       <FactionContext.Provider value={mockContext}>

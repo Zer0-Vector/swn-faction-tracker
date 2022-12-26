@@ -1,6 +1,7 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/react";
 
 import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
@@ -9,7 +10,6 @@ import LocationInfo from "../../../types/LocationInfo";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
 
 import LocationsList from "./LocationsList";
-import { action } from "@storybook/addon-actions";
 
 const MockLocations: (n: number)=>LocationInfo[] = numLocations => 
   [...Array(numLocations).keys()]

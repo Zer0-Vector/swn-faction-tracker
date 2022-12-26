@@ -5,6 +5,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import GameMode from "../../../types/GameMode";
+import UiState from "../../../types/UiState";
 
 import ListActionToolbar from "./ListActionToolbar";
 
@@ -17,7 +18,7 @@ function renderIt(removable = false) {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
     }}>
       <ListActionToolbar
@@ -41,7 +42,7 @@ describe('ListActionToolbar', () => {
         state: {
           editMode: mode,
           loginState: "LOGGED_IN",
-        },
+        } as UiState,
         controller: {} as UiStateController,
       }}>
         <ListActionToolbar

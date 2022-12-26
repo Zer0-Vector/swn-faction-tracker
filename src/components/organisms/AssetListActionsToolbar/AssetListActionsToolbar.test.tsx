@@ -8,6 +8,7 @@ import { FactionContext, FactionContextType, FactionPoset } from "../../../conte
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
+import UiState from "../../../types/UiState";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
 
@@ -45,7 +46,7 @@ const  TestComp = () => {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
     }}>
       <div data-testid="test-location">{pathname}</div>

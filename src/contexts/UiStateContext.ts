@@ -12,6 +12,7 @@ export const UiStateContext = createContext<UiStateContextType>({
   state: {
     loginState: "LOGGED_OUT",
     editMode: "VIEW",
+    turnState: "IDLE",
   },
   controller: {} as IUiStateController,
 } as UiStateContextType);

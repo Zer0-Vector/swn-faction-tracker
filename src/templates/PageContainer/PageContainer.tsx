@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -6,14 +6,17 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid, { GridSize } from "@mui/material/Grid";
+import Slide from "@mui/material/Slide";
 import { SxProps, Theme } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+import { TurnPhaseStepper } from "../../components/atoms/TurnPhaseStepper";
 import ModeToggleButtons from "../../components/molecules/ModeToggleButtons";
 import UserMenu from "../../components/molecules/UserMenu";
+import { UiStateContext } from "../../contexts/UiStateContext";
 import { useAuth } from "../../hooks/useAuth";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
 
@@ -37,6 +40,7 @@ const GridItemComp = ({ xs, children }: GridItemProps) => (
 const GridItem = React.memo(GridItemComp);
 
 export default function PageContainer({ children }: PageContainerProps) {
+  const { state } = useContext(UiStateContext);
   const location = useLocation();
   const { currentUser } = useAuth();
 
@@ -74,7 +78,6 @@ export default function PageContainer({ children }: PageContainerProps) {
   }), []);
 
   const containerSx = useMemo<SxProps<Theme>>(() => ({
-    py: 2,
     width: "100vw",
     display: "grid",
     gridTemplateColumns: "40% 60%",
@@ -118,6 +121,11 @@ export default function PageContainer({ children }: PageContainerProps) {
           </Toolbar>
         </AppBar>
         <Toolbar id="appbar-shim" />
+        <Slide in={state.editMode === "TURN"} direction="down" appear={false} unmountOnExit={true}>
+          <Box paddingX={4} paddingY={2}>
+            <TurnPhaseStepper /> 
+          </Box>
+        </Slide>
         <Container sx={containerSx}>
           {children}
         </Container>
