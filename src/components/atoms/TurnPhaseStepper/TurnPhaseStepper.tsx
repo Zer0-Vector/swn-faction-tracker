@@ -1,53 +1,41 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import StarsIcon from "@mui/icons-material/AutoAwesome";
 import EllipsisIcon from "@mui/icons-material/MoreHoriz";
-import Icon from "@mui/material/Icon";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 
-interface GamePhase {
+import { UiStateContext } from "../../../contexts/UiStateContext";
+
+interface TurnPhase {
   name: string;
   icon?: JSX.Element;
+  // showUi: () => void;
+  // completed: boolean;
 }
 
-interface HoverIconProps {
-  normal: JSX.Element;
-  hover: JSX.Element;
-}
-
-const HoverIcon = ({ normal, hover }: HoverIconProps) => {
-  const [shownIcon, setShownIcon] = useState(normal);
-  return (
-    <Icon
-      onMouseEnter={() => setShownIcon(hover)}
-      onMouseLeave={() => setShownIcon(normal)}
-    >
-      {shownIcon}
-    </Icon>
-  );
-};
-
-const ActionIcon = () => (
-  <HoverIcon normal={<StarsIcon />} hover={<EllipsisIcon />} />
-);
-
-const phases: GamePhase[] = [
+const phases: TurnPhase[] = [
+  {
+    name: "Select Faction",
+  },
   {
     name: "Set Goal",
   },
   {
     name: "Select Action",
+    icon: React.createElement(StarsIcon),
   },
   {
-    name: "Resolve Action",
+    name: "",
+    icon: React.createElement(EllipsisIcon),
   },
 ];
 
 export function TurnPhaseStepper() {
+  const { state, controller } = useContext(UiStateContext);
   return (
-    <Stepper nonLinear={true} activeStep={2}>
+    <Stepper activeStep={0}>
       {phases.map(n => (
         <Step key={n.name}>
           <StepButton icon={n.icon}>
