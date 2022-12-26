@@ -7,6 +7,7 @@ import { LocationContext, LocationsPoset } from "../../contexts/LocationContext"
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import LocationInfo from "../../types/LocationInfo";
+import UiState from "../../types/UiState";
 
 import LocationsPanel from "./LocationsPanel";
 
@@ -24,7 +25,7 @@ function renderIt(locations: LocationInfo[] = []) {
         state: {
           editMode: "EDIT",
           loginState: "LOGGED_IN",
-        },
+        } as UiState,
         controller: {} as UiStateController,
       }}>
         <MemoryRouter>

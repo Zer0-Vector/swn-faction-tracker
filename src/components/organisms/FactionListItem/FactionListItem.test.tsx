@@ -8,6 +8,7 @@ import { FactionContext, FactionContextType, FactionPoset } from "../../../conte
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
+import UiState from "../../../types/UiState";
 
 import FactionListItem from "./FactionListItem";
 
@@ -41,7 +42,7 @@ function renderIt() {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
     }}>
       <FactionContext.Provider value={mockContext}>

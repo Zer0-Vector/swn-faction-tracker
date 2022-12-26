@@ -21,6 +21,7 @@ function App() {
     {
       loginState: "LOGGED_OUT",
       editMode: "VIEW",
+      turnState: "IDLE",
     }
   );
 
