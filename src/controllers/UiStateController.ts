@@ -1,4 +1,4 @@
-import GameMode, { isGameMode } from "../types/GameMode";
+import GameMode from "../types/GameMode";
 import LoginState from "../types/LoginState";
 import { TurnState } from "../types/TurnState";
 import UiState from "../types/UiState";
