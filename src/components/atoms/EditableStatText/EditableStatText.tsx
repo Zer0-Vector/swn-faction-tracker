@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TypographyProps } from "@mui/material";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
+import { Maybe } from "../../../types/Maybe";
 import { Prefixed } from "../../../types/Prefixed";
 import TestableProps from "../../../types/TestableProps";
 import StatText from "../StatText";
@@ -36,7 +37,7 @@ export type EditableStatTextProps =
   & EditableStatTextBaseProps
   & Pick<TypographyProps, "sx">
   & Prefixed<Pick<TextFieldProps, "sx">, "input">;
-  
+
 
 export default function EditableStatText({
   children,
@@ -45,7 +46,7 @@ export default function EditableStatText({
   inputSx,
   placeholder = "??",
   editable = true,
-  "data-testid": dtid,
+  "data-testid": dataTestId,
 }: EditableStatTextProps) {
   const [editing, setEditing] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
@@ -57,16 +58,27 @@ export default function EditableStatText({
       textFieldRef.current?.select();
     }
   }, [editing]);
-  
+
+  function maybeParseInt(val: string): Maybe<number> {
+    try {
+      return parseInt(val);
+    } catch (e) {
+      console.error("Invalid stat value:", val, e);
+      return undefined;
+    }
+  }
+
   const exitEditMode = useCallback((evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
     if (editing && valid) {
       if (hasChanged && textFieldRef.current) {
+        const val = maybeParseInt(textFieldRef.current.value);
         try {
-          const val = parseInt(textFieldRef.current.value);
-          onUpdate(val);
+          if (val !== undefined) {
+            onUpdate(val);
+          }
         } catch (e) {
-          console.error("Invalid stat value:", textFieldRef.current.value);
+          console.error("Could not update:", textFieldRef.current.value, e);
         }
       }
       setEditing(false);
@@ -117,7 +129,7 @@ export default function EditableStatText({
     textFieldRef.current.focus();
   }, [validate]);
 
-  const val = children === undefined ? placeholder : children;
+  const val = children ?? placeholder;
 
   const title = editable ? "Double-click to edit" : "Enable editing to change";
 
@@ -135,7 +147,7 @@ export default function EditableStatText({
         error={hasChanged && !valid}
         sx={inputSx}
         size="small"
-        data-testid={`${dtid}-textfield`}
+        data-testid={`${dataTestId}-textfield`}
       />
     );
   } else {
@@ -145,7 +157,7 @@ export default function EditableStatText({
         onDoubleClick={enterEditMode}
         title={title}
         sx={sx}
-        data-testid={dtid}
+        data-testid={dataTestId}
       >
         {val}
       </StatText>
