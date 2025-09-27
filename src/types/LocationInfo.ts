@@ -11,4 +11,9 @@ export default class LocationInfo implements NamedEntity {
     public y: number
   ) {}
 
+  static from(info: LocationInfo): LocationInfo {
+    return new LocationInfo(info.id, info.slug, info.name,
+      info.tl, info.x, info.y);
+  }
+
 }
