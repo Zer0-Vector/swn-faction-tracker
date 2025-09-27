@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
 
-import MessageDialog, { DialogActionHandler } from "../components/atoms/MessageDialog";
+import MessageDialog, { DialogActionHandler, DialogActionResult } from "../components/atoms/MessageDialog";
 
 export interface ConfirmationOptions {
   title: string;
@@ -27,9 +27,9 @@ export function ConfirmationContextProvider({ children }: PropsWithChildren<{}>)
       });
   }, []);
 
-  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
+  const handleAction = useCallback<DialogActionHandler>((result: DialogActionResult) => {
     setOpen(false);
-    promiseRef.current?.resolve(reason === "Confirm");
+    promiseRef.current?.resolve(result.reason === "Confirm");
   }, []);
 
   return (
