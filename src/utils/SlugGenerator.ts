@@ -12,7 +12,7 @@ export function generateSlug(name: string, currentValues?: string[]): string {
   }
 
   // extract baseName and index, i.e. "prefix-123" => "prefix", "123"
-  const inputMatches = simple.match(/^(.+)-(\d+)?$/);
+  const inputMatches = /^(.+)-(\d+)?$/.exec(simple);
   const baseName = inputMatches?.at(1) || simple;
   const strIndex = inputMatches?.at(2);
   let index = strIndex !== undefined ? parseInt(strIndex) : 1;
