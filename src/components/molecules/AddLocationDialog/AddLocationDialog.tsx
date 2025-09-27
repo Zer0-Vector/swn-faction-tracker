@@ -100,8 +100,8 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     }
   }, [allValid, coords.value, nameText.value, onCreate, tlText.value]);
 
-  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
-    if (reason === "Create") {
+  const handleAction = useCallback<DialogActionHandler>((result) => {
+    if (result.reason === "Create") {
       handleCreate();
     }
     handleClose();

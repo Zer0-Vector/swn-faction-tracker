@@ -36,8 +36,8 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     onClose();
   }, [onClose]);
 
-  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
-    if (reason === "Create" && formState.valid) {
+  const handleAction = useCallback<DialogActionHandler>((result) => {
+    if (result.reason === "Create" && formState.valid) {
       onCreate(formState.value);
     }
     handleClose();

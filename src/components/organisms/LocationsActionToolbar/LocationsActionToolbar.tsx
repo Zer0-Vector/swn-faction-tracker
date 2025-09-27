@@ -32,9 +32,9 @@ export default function LocationsActionToolbar() {
     setRemoveDialogOpen(true);
   }, []);
 
-  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+  const handleRemoveAction = useCallback<DialogActionHandler>((result) => {
     setRemoveDialogOpen(false);
-    if (selectedLocation && reason === "Remove") {
+    if (selectedLocation && result.reason === "Remove") {
       locations.remove(selectedLocation.id);
       nav("/locations");
     }

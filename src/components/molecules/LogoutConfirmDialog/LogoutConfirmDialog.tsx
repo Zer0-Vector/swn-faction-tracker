@@ -9,8 +9,8 @@ const LogoutConfirmDialog = () => {
   const { state: uiState, controller: uiController } = useContext(UiStateContext);
   const { logout } = useAuth();
 
-  const handleAction = useCallback<DialogActionHandler>(async (action, reason) => {
-    if (reason !== "Logout") {
+  const handleAction = useCallback<DialogActionHandler>(async (result) => {
+    if (result.reason !== "Logout") {
       uiController.setLoginState("LOGGED_IN");
     } else {
       try {

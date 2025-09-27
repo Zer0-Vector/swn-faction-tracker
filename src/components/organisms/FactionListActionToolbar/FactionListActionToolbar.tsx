@@ -22,10 +22,10 @@ export default function FactionListActionToolbar() {
   const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
   const handleAddDialogCreate = useCallback((v: string): void => { factions.add({ name: v }); }, [factions]);
 
-  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+  const handleRemoveAction = useCallback<DialogActionHandler>((result) => {
     setRemoveOpen(false);
-    console.debug("handleRemoveAction: ", selectedFaction, reason);
-    if (selectedFaction && reason === "Remove") {
+    console.debug("handleRemoveAction: ", selectedFaction, result.reason);
+    if (selectedFaction && result.reason === "Remove") {
       factions.remove(selectedFaction.id);
       nav("/factions");
     }

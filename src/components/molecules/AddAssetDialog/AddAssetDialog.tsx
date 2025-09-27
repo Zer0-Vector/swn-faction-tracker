@@ -12,9 +12,9 @@ import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddAssetDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onAdd: (key: string) => void;
+  readonly open: boolean;
+  readonly onClose: () => void;
+  readonly onAdd: (key: string) => void;
 }
 
 interface AssetOption {
@@ -25,7 +25,7 @@ interface AssetOption {
 
 export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogProps) {
   const [selection, setSelection] = useState<string>("");
-  
+
   const options = useMemo(() => (
     Object.entries(ASSETS)
       .filter(([name, _]) => name !== "Base of Influence")
@@ -57,10 +57,10 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
   const optionsAreEqual = useCallback((o: AssetOption, v: AssetOption): boolean => o.group === v.group && o.name === v.name, []);
   // ? extract TextField to custom component with React.memo?
   const autoRenderInput = useCallback((params: AutocompleteRenderInputParams) => <TextField {...params} label="Select Asset" data-testid="selection-field" />, []);
-  
-  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
+
+  const handleAction = useCallback<DialogActionHandler>((result) => {
     handleClose();
-    if (reason === "Add" && selection !== "") {
+    if (result.reason === "Add" && selection !== "") {
       onAdd(selection);
     }
   }, [handleClose, onAdd, selection]);
