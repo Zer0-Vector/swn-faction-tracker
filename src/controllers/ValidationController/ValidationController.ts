@@ -2,13 +2,13 @@ import { IValidationController } from "../../types/IValidationController";
 import { ValidationFn } from "../../types/ValidationFn";
 
 export class ValidationController implements IValidationController {
-  
+
   private valid;
 
   constructor(
     private readonly validators: { readonly [id: string]: ValidationFn }
   ) {
-    this.valid = {} as { [P in keyof typeof validators]: boolean };
+    this.valid = {} as { -readonly [P in keyof typeof validators]: boolean };
     Object.keys(validators).forEach(k => {
       this.valid[k] = false;
     });
@@ -16,7 +16,7 @@ export class ValidationController implements IValidationController {
 
   isAllValid(): boolean {
     const vals: boolean[] = Object.values(this.valid);
-    return vals.reduce((prev, curr) => curr && prev);
+    return vals.reduce((prev, curr) => curr && prev, true);
   }
 
   isValid(id: string): boolean {
@@ -26,7 +26,7 @@ export class ValidationController implements IValidationController {
     }
     return result;
   }
-  
+
   validate(id: string, value: string): boolean {
     const validator = this.validators[id];
     if (validator === undefined) {
