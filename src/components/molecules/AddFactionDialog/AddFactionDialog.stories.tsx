@@ -4,7 +4,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import { ArgsWithName } from "../../../types/NamedElementPoset";
+import { Named } from "../../../types/NamedElementPoset";
 import { generateSlug } from "../../../utils/SlugGenerator";
 
 import AddFactionDialog from "./AddFactionDialog";
@@ -27,7 +27,7 @@ const MockProvider = ({ factions, children }: MockProviderProps) => {
 };
 
 const MockFactions = {
-  checkName: (s: ArgsWithName<{}>) => generateSlug(s.name) !== "test-1" && generateSlug(s.name) !== "test-2",
+  checkName: (s: Named<{}>) => generateSlug(s.name) !== "test-1" && generateSlug(s.name) !== "test-2",
 } as FactionPoset;
 
 export const Default: ComponentStory<typeof AddFactionDialog> = args => <AddFactionDialog {...args} />;
