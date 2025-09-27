@@ -1,46 +1,26 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import StarsIcon from "@mui/icons-material/AutoAwesome";
-import EllipsisIcon from "@mui/icons-material/MoreHoriz";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
+import Tooltip from "@mui/material/Tooltip";
 
-import { UiStateContext } from "../../../contexts/UiStateContext";
-
-interface TurnPhase {
-  name: string;
-  icon?: JSX.Element;
-  // showUi: () => void;
-  // completed: boolean;
-}
-
-const phases: TurnPhase[] = [
-  {
-    name: "Select Faction",
-  },
-  {
-    name: "Set Goal",
-  },
-  {
-    name: "Select Action",
-    icon: React.createElement(StarsIcon),
-  },
-  {
-    name: "",
-    icon: React.createElement(EllipsisIcon),
-  },
-];
+import { useTurnPhases } from "./useTurnPhases";
 
 export function TurnPhaseStepper() {
-  const { state, controller } = useContext(UiStateContext);
+  const { index, phases } = useTurnPhases();
+
   return (
-    <Stepper activeStep={0}>
-      {phases.map(n => (
-        <Step key={n.name}>
-          <StepButton icon={n.icon}>
-            {n.name}
-          </StepButton>
+    <Stepper activeStep={index}>
+      {phases.map((phase, i) => (
+        <Step key={phase.name}>
+          <Tooltip title={phase.title} enterDelay={300}>
+            <div>{/* needed for tooltip display over disabled button */}
+              <StepButton icon={phase.icon} onClick={phase.onClick} disabled={i < index ? true : undefined}>
+                {phase.name}
+              </StepButton>
+            </div>
+          </Tooltip>
         </Step>
       ))}
     </Stepper>
