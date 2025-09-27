@@ -10,3 +10,9 @@ export interface LocationContextType {
 }
 
 export const LocationContext = React.createContext({} as LocationContextType);
+
+export const useLocations = () => {
+  const ctx = React.useContext(LocationContext);
+  if (!ctx) throw new Error("useLocations must be used within a LocationContextProvider");
+  return ctx.locations;
+};
