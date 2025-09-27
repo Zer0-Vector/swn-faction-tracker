@@ -35,7 +35,7 @@ const mockController = {
 } as IUiStateController;
 
 const mockOnAuthStateChanged = jest.fn();
-const mockUnSub = jest.fn();
+const mockUnsubscribe = jest.fn();
 const mockAuth = {
   onAuthStateChanged: mockOnAuthStateChanged as (nextOrObserver: NextOrObserver<User | null>)=>Unsubscribe,
 } as Auth;
@@ -88,7 +88,7 @@ function TestComp({ name }: { name: string }) {
 describe('useAuthProvider', () => {
   beforeEach(() => {
     mockGetAuth.mockImplementation(() => mockAuth);
-    mockOnAuthStateChanged.mockReturnValue(mockUnSub);
+    mockOnAuthStateChanged.mockReturnValue(mockUnsubscribe);
     mockSetPersistence.mockResolvedValue();
   });
 
@@ -99,15 +99,15 @@ describe('useAuthProvider', () => {
     // expect(mockSetPersistence).toBeCalledWith(expect.anything(), expect.objectContaining({ type: "LOCAL" }));
   });
 
-  it('calls unsub on unmount', async () => {
-    const { unmount } = render(<TestComp name="unsub on unmount" />);
-    expect(mockUnSub).not.toBeCalled();
+  it('calls unsubscribe on unmount', async () => {
+    const { unmount } = render(<TestComp name="unsubscribe on unmount" />);
+    expect(mockUnsubscribe).not.toBeCalled();
     unmount();
-    await waitFor(() => expect(mockUnSub).toBeCalled());
+    await waitFor(() => expect(mockUnsubscribe).toBeCalled());
   });
 
   it('login called signInWithEmailAndPassword', async () => {
-    mockSignIn.mockResolvedValueOnce({ 
+    mockSignIn.mockResolvedValueOnce({
       user: {
         email: "fake-email",
         uid: "fake-uid",
@@ -141,7 +141,7 @@ describe('useAuthProvider', () => {
   });
 
   it('clears user on logout', async () => {
-    mockSignIn.mockResolvedValueOnce({ 
+    mockSignIn.mockResolvedValueOnce({
       user: {
         email: "fake-email",
         uid: "fake-uid",
@@ -154,7 +154,7 @@ describe('useAuthProvider', () => {
     expect(loginButton).toBeInstanceOf(HTMLButtonElement);
     const logoutButton = screen.getByText("logout");
     expect(logoutButton).toBeInstanceOf(HTMLButtonElement);
-    
+
     const email = screen.getByTestId("user-email");
     const uid = screen.getByTestId("user-uid");
     expect(email).not.toHaveTextContent("fake-email");
@@ -163,7 +163,7 @@ describe('useAuthProvider', () => {
     fireEvent.click(loginButton);
     await waitFor(() => expect(email).toHaveTextContent("fake-email"));
     expect(uid).toHaveTextContent("fake-uid");
-    
+
     fireEvent.click(logoutButton);
     await waitFor(() => expect(email).not.toHaveTextContent("fake-email"));
     expect(uid).not.toHaveTextContent("fake-uid");
@@ -174,7 +174,7 @@ describe('useAuthProvider', () => {
       email: "fake-email",
       uid: "fake-uid",
     } as User;
-    mockSignIn.mockResolvedValueOnce({ 
+    mockSignIn.mockResolvedValueOnce({
       user: theUser,
       providerId: "789",
       operationType: "signIn",
@@ -188,7 +188,7 @@ describe('useAuthProvider', () => {
     const uid = screen.getByTestId("user-uid");
     await waitFor(() => expect(email).toHaveTextContent("fake-email"));
     expect(uid).toHaveTextContent("fake-uid");
-    
+
     const button = screen.getByText("verify email");
     expect(button).toBeInstanceOf(HTMLButtonElement);
     await act(() => button.click());
@@ -201,10 +201,10 @@ describe('useAuthProvider', () => {
     render(<TestComp name="logged out sendEmailVerification" />);
     const button = screen.getByText("verify email");
     expect(button).toBeInstanceOf(HTMLButtonElement);
-    const etext = screen.getByTestId("error-message");
-    expect(etext).toHaveTextContent("");
+    const errorText = screen.getByTestId("error-message");
+    expect(errorText).toHaveTextContent("");
     fireEvent.click(button);
-    await waitFor(() => expect(etext).not.toHaveTextContent(""));
+    await waitFor(() => expect(errorText).not.toHaveTextContent(""));
     expect(mockSendEmailVerification).not.toBeCalled();
   });
 
