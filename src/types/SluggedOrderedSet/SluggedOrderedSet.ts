@@ -1,6 +1,7 @@
 import { Maybe } from "../Maybe";
 import { SluggedEntity } from "../SluggedEntity";
 
+
 export interface ISluggedOrderedSet<T extends SluggedEntity> {
 
   size: number;

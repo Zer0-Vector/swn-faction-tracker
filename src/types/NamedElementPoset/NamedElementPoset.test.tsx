@@ -1,8 +1,8 @@
-import { NamedElementPoset, NamedEntity } from "./NamedElementPoset";
+import { NamedElementPoset, NamedSluggedEntity } from "./NamedElementPoset";
 
 describe('NamedElementPoset(x => x, [], undefined)', () => {
-  let poset: NamedElementPoset<NamedEntity>;
-  
+  let poset: NamedElementPoset<NamedSluggedEntity>;
+
   beforeEach(() => {
     poset = new NamedElementPoset(x => x);
   });
@@ -61,41 +61,53 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
 
   it('subscribers notified when element added', () => {
     const fn = jest.fn();
-    const unsub = poset.subscribe(fn);
+    const unsubscribe = poset.subscribe(fn);
     const element = poset.add({ name: "cb" });
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith({ type: "ADD", id: element.id });
-    unsub();
+    unsubscribe();
   });
 
   it('subscribers notified when element removed', () => {
     const fn = jest.fn();
     const element = poset.add({ name: "cb" });
-    const unsub = poset.subscribe(fn);
+    const unsubscribe = poset.subscribe(fn);
     expect(poset.remove(element.id)).toBe(true);
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith({ type: "REMOVE", id: element.id });
-    unsub();
+    unsubscribe();
   });
 
   it('subscribers notified when element reordered', () => {
     const fn = jest.fn();
     poset.add({ name: "cb" });
     poset.add({ name: "az" });
-    const unsub = poset.subscribe(fn);
+    const unsubscribe = poset.subscribe(fn);
     expect(() => poset.reorder(1, 0)).not.toThrow();
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith({ type: "REORDER" });
-    unsub();
+    unsubscribe();
   });
 
   it('subscribers notified when element updated', () => {
     const fn = jest.fn();
     const element = poset.add({ name: "cb" });
-    const unsub = poset.subscribe(fn);
+    const unsubscribe = poset.subscribe(fn);
     expect(poset.update(element.id, "name", "de")).toBe(element);
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith({ type: "UPDATE", id: element.id, key: "name" });
-    unsub();
+    unsubscribe();
+  });
+
+  it('subscribers not notified when unsubscribed', () => {
+    const fn = jest.fn();
+    const element = poset.add({ name: "cb" });
+    const unsubscribe = poset.subscribe(fn);
+    expect(poset.update(element.id, "name", "de")).toBe(element);
+    expect(fn).toBeCalledTimes(1);
+    expect(fn).toBeCalledWith({ type: "UPDATE", id: element.id, key: "name" });
+    unsubscribe();
+    poset.update(element.id, "name", "ef");
+    expect(fn).not.toBeCalledTimes(2);
   });
 });

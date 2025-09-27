@@ -1,6 +1,6 @@
-import { NamedEntity } from "./NamedElementPoset";
+import { NamedSluggedEntity } from "./NamedElementPoset";
 
-export default class LocationInfo implements NamedEntity {
+export default class LocationInfo implements NamedSluggedEntity {
 
   constructor(
     public readonly id: string,

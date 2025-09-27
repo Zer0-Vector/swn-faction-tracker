@@ -3,12 +3,16 @@ import { v4 as randomUuid } from "uuid";
 import { generateSlug } from "../../utils/SlugGenerator";
 import { Maybe } from "../Maybe";
 import { IObservable, Observable } from "../Observable";
+import type { Prettify } from "../Prettify";
 import { SluggedEntity } from "../SluggedEntity";
-import { SluggedOrderedSet } from "../SluggedOrderedSet";
+import { ISluggedOrderedSet, SluggedOrderedSet } from "../SluggedOrderedSet";
 
-export type NamedEntity = SluggedEntity & { name: string };
+export type NamedSluggedEntity = Prettify<Named<SluggedEntity>>;
 
-export type ArgsWithName<Args = {}> = { name: string } & Args;
+export type Named<T = {}> = T & { name: string };
+
+export type NamedEntityWithReadonlyProps<TProps, ReadonlyKeys extends keyof Named<TProps>> =
+    NamedSluggedEntity & TProps & Readonly<Pick<Named<TProps>, ReadonlyKeys>>;
 
 /**
  * @template T The type of elements in the poset.
@@ -17,24 +21,25 @@ export type ArgsWithName<Args = {}> = { name: string } & Args;
  * @template M Additional args needed to check name.
  */
 export interface INamedElementPoset<
-  T extends NamedEntity & A,
+  T extends NamedSluggedEntity & A,
   A = {},
-  N extends keyof ArgsWithName<A> = never,
+  N extends keyof Named<A> = never,
   M extends keyof A = never
 >
     extends IObservable<NamedElementPosetAction<T>> {
-  add(args: ArgsWithName<A>): T;
+  size: number;
+  add(args: Named<A>): T;
   remove(id: string): boolean;
   get(id: string): Maybe<T>;
   slugGet(slug: string): Maybe<T>;
   getId(slug: string): Maybe<string>;
   getAll(): T[];
   reorder(source: number, target: number): void;
-  update<K extends keyof Omit<T, N | keyof SluggedEntity>>(id: string, key: K, value: T[K]): NamedEntity;
-  checkName(args: ArgsWithName<Pick<A, M>>): boolean;
+  update<K extends keyof Omit<T, N | keyof SluggedEntity>>(id: string, key: K, value: T[K]): NamedSluggedEntity;
+  checkName(args: Named<Pick<A, M>>): boolean;
 }
 
-type NamedElementFactoryFn<T extends NamedEntity, A> = (input: NamedEntity & A) => T;
+type NamedElementFactoryFn<T extends NamedSluggedEntity, A> = (input: NamedSluggedEntity & A) => T;
 
 type NamedElementPosetActionType = "ADD" | "REMOVE" | "REORDER" | "UPDATE";
 
@@ -51,22 +56,29 @@ type NamedElementPosetAction<T> = {
 
 type FilterFuncGenerator<X, Y> = (args: X) => (arg: Y) => boolean;
 
-export class NamedElementPoset<T extends NamedEntity & A, A = {}, N extends keyof ArgsWithName<A>  = never, M extends keyof A = never>
+export class NamedElementPoset<T extends NamedSluggedEntity & A, A = {}, N extends keyof Named<A>  = never, M extends keyof A = never>
   extends Observable<NamedElementPosetAction<T>>
   implements INamedElementPoset<T, A, N> {
 
   private readonly factory: NamedElementFactoryFn<T, A>;
-  private readonly set: SluggedOrderedSet<T>;
-  private readonly filterFunc?: FilterFuncGenerator<Omit<ArgsWithName<Pick<A, M>>, "name">, T>;
+  private readonly set: ISluggedOrderedSet<T>;
+  private readonly filterFunc?: FilterFuncGenerator<Omit<Named<Pick<A, M>>, "name">, T>;
 
-  constructor(factory: NamedElementFactoryFn<T, A>, elements: T[] = [], filterFunc?: FilterFuncGenerator<Omit<ArgsWithName<Pick<A, M>>, "name">, T>) {
+  constructor(factory: NamedElementFactoryFn<T, A>, elements: T[] = [], filterFunc?: FilterFuncGenerator<Omit<Named<Pick<A, M>>, "name">, T>) {
     super();
     this.factory = factory;
-    this.set = new SluggedOrderedSet(elements);
+    this.set = new SluggedOrderedSet();
+    elements.forEach(e => {
+      this.set.add(factory(e));
+    });
     this.filterFunc = filterFunc;
   }
 
-  add(args: ArgsWithName<A>): T {
+  get size() {
+    return this.set.size;
+  }
+
+  add(args: Named<A>): T {
     const id = randomUuid();
     const element = this.factory({
       id,
@@ -103,10 +115,10 @@ export class NamedElementPoset<T extends NamedEntity & A, A = {}, N extends keyo
     this.notifyObservers({ type: "REORDER" });
   }
 
-  update<K extends keyof Omit<T, N | keyof SluggedEntity>>(id: string, key: K, value: T[K]): NamedEntity {
+  update<K extends keyof Omit<T, N | keyof SluggedEntity>>(id: string, key: K, value: T[K]): NamedSluggedEntity {
     const element = this.set.get(id);
     if (element === undefined) {
-      throw new Error(`Cannot update ${String(key)}, unknown id=${id}`);
+      throw new Error(`Cannot update ${String(key)}, unknown id=${id} keys: ${this.set.getAll().map(e => e.slug)}`);
     }
     if (key === "name") {
       if (!this.checkName({ ...element, name: value })) {
@@ -120,7 +132,7 @@ export class NamedElementPoset<T extends NamedEntity & A, A = {}, N extends keyo
     return element;
   }
 
-  checkName(args: ArgsWithName<Pick<A, M>>): boolean {
+  checkName(args: Named<Pick<A, M>>): boolean {
     const slug = this.getNextSlug(args);
     return !this.set.hasSlug(slug);
   }
@@ -129,12 +141,12 @@ export class NamedElementPoset<T extends NamedEntity & A, A = {}, N extends keyo
     return this.set.getId(slug);
   }
 
-  private getNextSlug(args: ArgsWithName<Pick<A, M>>) {
-    return this.filterFunc !== undefined 
-        ? generateSlug(args.name, 
+  private getNextSlug(args: Named<Pick<A, M>>) {
+    return this.filterFunc !== undefined
+        ? generateSlug(args.name,
             this.getAll()
                 .filter(this.filterFunc(args))
-                .map(e => e.slug)) 
+                .map(e => e.slug))
         : generateSlug(args.name);
   }
 

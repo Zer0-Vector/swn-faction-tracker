@@ -1,6 +1,6 @@
 import FactionStatsInfo from "./FactionStatsInfo";
 import GoalInfo from "./GoalInfo";
-import { NamedEntity } from "./NamedElementPoset";
+import { NamedSluggedEntity } from "./NamedElementPoset";
 import { Prettify } from "./Prettify";
 
 interface StatInfo { xpCost: number, hpValue: number }
@@ -52,7 +52,7 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
   },
 };
 
-export default class FactionInfo implements FactionStatsInfo, NamedEntity {
+export default class FactionInfo implements FactionStatsInfo, NamedSluggedEntity {
 
   readonly id: string;
   slug: string;
@@ -82,7 +82,7 @@ export default class FactionInfo implements FactionStatsInfo, NamedEntity {
     return maxHp;
   }
 
-  static from(info: Prettify<Partial<FactionInfo> & NamedEntity>) {
+  static from(info: Prettify<Partial<FactionInfo> & NamedSluggedEntity>) {
     const newInfo = new FactionInfo(info.id, info.slug, info.name);
     Object.assign(newInfo, info);
     return newInfo;
