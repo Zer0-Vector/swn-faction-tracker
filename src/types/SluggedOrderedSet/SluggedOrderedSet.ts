@@ -2,6 +2,9 @@ import { Maybe } from "../Maybe";
 import { SluggedEntity } from "../SluggedEntity";
 
 export interface ISluggedOrderedSet<T extends SluggedEntity> {
+
+  size: number;
+
   /**
    * Adds an element to the tail of the set.
    * @param element The element to add having properties "id" and "slug".
@@ -16,7 +19,7 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
    * @returns `true` if the element exists and was removed. `false`, otherwise.
    */
   remove(id: string): boolean;
-  
+
   /**
    * Renames a slug for a specific element. The new slug is trimmed before adding.
    * @param updateInfo An object with the id of the target element and the new slug for said element.
@@ -24,7 +27,7 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
    * @throws If new slug is blank or conflicts with an existing element.
    */
   renameSlug(info: SluggedEntity): void;
-  
+
   /**
    * Retrieves an element from the set by its `id`.
    * @param id The id of the element to retrieve.
@@ -85,10 +88,10 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
  * The ordering is based on the order elements are added, however, elements can be reordered.
  */
 export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrderedSet<T> {
-  
-  private id2element: Map<string, T>;
-  private slug2id: Map<string, string>;
-  private order: string[];
+
+  private readonly id2element: Map<string, T>;
+  private readonly slug2id: Map<string, string>;
+  private readonly order: string[];
 
   /**
    * Constructs a set with the given contents.
@@ -102,6 +105,10 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     initialValues.forEach(value => {
       this.add(value);
     });
+  }
+
+  get size() {
+    return this.id2element.size;
   }
 
   add(element: T): void {
@@ -142,7 +149,7 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     if (storedElement === undefined) {
       throw new Error(`Unknown element with id=${updateInfo.id}`);
     }
-    
+
     if (updateInfo.slug.trim().length === 0) {
       throw Error("Cannot rename slug to blank");
     }
@@ -178,7 +185,7 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     if (source < 0 || source >= this.order.length) {
       throw new Error(`Source index out of bounds: ${source}`);
     }
-    
+
     if (target < 0 || target >= this.order.length) {
       throw new Error(`Target index out of bounds: ${target}`);
     }
