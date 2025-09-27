@@ -15,6 +15,27 @@
         "<node_internals>/**"
       ],
       "type": "node"
+    },
+    {
+      "name": "Firefox",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/build",
+      "preLaunchTask": "npm: start",
+      "clearConsoleOnReload": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "pathMappings": [
+        {
+          "url": "webpack:///./src/",
+          "path": "${workspaceFolder}/src"
+        }
+      ],
+      "reloadOnChange": {
+        "watch": "${workspaceFolder}/src/**/*.js",
+        "ignore": "**/node_modules/**"
+      },
     }
   ]
 }

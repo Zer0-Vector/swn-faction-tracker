@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"group": {
+        "kind": "build",
+        "isDefault": true
+      },
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "react-scripts build --verbose"
+		},
+    {
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "problemMatcher": ["$eslint-compact", "$tsc-watch"],
+      "label": "npm: start",
+      "detail": "react-scripts start",
+      "group": "none",
+      "runOptions": {
+        "instanceLimit": 1,
+
+      }
+    }
+	]
+}
