@@ -19,6 +19,7 @@ function renderIt(locations: LocationInfo[] = []) {
         checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         subscribe: (_) => () => {},
+        reorder: jest.fn() as LocationsPoset['reorder'],
       } as LocationsPoset,
     }}>
       <UiStateContext.Provider value={{
