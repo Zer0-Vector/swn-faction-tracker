@@ -1,0 +1,12 @@
+{
+  "cSpell.words": [
+    "Appender",
+    "homeworld",
+    "maxhp",
+    "NOSONAR"
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "zer0-vector",
+    "projectKey": "Zer0-Vector_swn-faction-tracker"
+  }
+}
