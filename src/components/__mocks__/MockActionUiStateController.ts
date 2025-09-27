@@ -12,4 +12,10 @@ export const MockActionUiStateController: IUiStateController = {
   setTurnState(...args) {
     action(this.setTurnState.name)(...args);
   },
+  setTurnInfo(...args) {
+    action(this.setTurnInfo.name)(...args);
+  },
+  setTurnIndex(...args) {
+    action(this.setTurnIndex.name)(...args);
+  },
 };
