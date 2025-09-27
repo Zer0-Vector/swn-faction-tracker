@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 
 import FactionListItem from "./FactionListItem";
@@ -13,13 +13,14 @@ interface MockProviderProps extends RequiredChildrenProps {
   factions: FactionPoset;
 }
 
-const MockProvider = ({ factions, children }: MockProviderProps) => (
-  <FactionContext.Provider value={{
-    factions,
-  }}>
-    {children}
-  </FactionContext.Provider>
-);
+const MockProvider = ({ factions, children }: MockProviderProps) => {
+  const context = useMemo(() => ({ factions }), [factions]);
+  return (
+    <FactionContext.Provider value={context}>
+      {children}
+    </FactionContext.Provider>
+  );
+};
 
 const mockedFactions: FactionPoset = {
   getAll: () => {

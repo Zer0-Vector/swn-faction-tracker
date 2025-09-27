@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, useMemo } from "react";
 
 import { Meta, Story } from "@storybook/react";
 
@@ -19,8 +19,8 @@ interface MockProviderProps extends RequiredChildrenProps {
   locations: LocationInfo[];
 }
 
-const MockProvider = ({ locations, children }: MockProviderProps) => (
-  <LocationContext.Provider value={{
+const MockProvider = ({ locations, children }: MockProviderProps) => {
+  const locationContext = useMemo(() => ({
     locations: {
       getAll() {
         return locations;
@@ -29,10 +29,14 @@ const MockProvider = ({ locations, children }: MockProviderProps) => (
         return !locations.map(info => info.slug).includes(generateSlug(args.name));
       },
     } as LocationsPoset,
-  }}>
-    {children}
-  </LocationContext.Provider>
-);
+  }), [locations]);
+
+  return (
+    <LocationContext.Provider value={locationContext}>
+      {children}
+    </LocationContext.Provider>
+  );
+};
 
 export const Default: Story<PropsType> = args => (
   <MockProvider locations={[
