@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 
 import { Theme } from "@mui/material";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import StatText from "../../atoms/StatText";
 import { ControlledStat } from "../ControlledStat";
 
@@ -15,15 +15,15 @@ interface FactionStatSummaryProps {
 }
 
 export default function FactionStatSummary({ factionId, force, cunning, wealth }: FactionStatSummaryProps) {
-  const { factions } = useContext(FactionContext);
+  const factions = useFactions();
   const handleUpdateForce = useCallback((val: number) => factions.update(factionId, "force", val), [factionId, factions]);
   const handleUpdateCunning = useCallback((val: number) => factions.update(factionId, "cunning", val), [factionId, factions]);
   const handleUpdateWealth = useCallback((val: number) => factions.update(factionId, "wealth", val), [factionId, factions]);
-  const handleInputSx = useCallback((theme: Theme) => ({ 
+  const handleInputSx = useCallback((theme: Theme) => ({
     ...theme.typography.body2,
     width: "3em",
    }), []);
-   
+
   return (
     <>
       <ControlledStat

@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
 import TextField from "@mui/material/TextField";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import FormInfo from "../../../types/FormInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -14,7 +14,7 @@ interface AddFactionDialogProps {
 }
 
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
-  const { factions } = useContext(FactionContext);
+  const factions = useFactions();
   const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -29,7 +29,7 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     console.debug(isNotBlank, uniqueName);
     setFormState(newState);
   }, [factions]);
-  
+
   const handleClose = useCallback(() => {
     setFormState({ value: "", valid: false });
     inputRef.current?.focus();

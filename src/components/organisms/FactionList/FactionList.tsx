@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import FactionInfo from "../../../types/FactionInfo";
 import AssetList from "../AssetList";
@@ -15,8 +15,9 @@ import AssetListActionsToolbar from "../AssetListActionsToolbar";
 import FactionDetails from "../FactionDetails";
 import FactionListItem from "../FactionListItem";
 
+
 function useFactionsList() {
-  const { factions } = useContext(FactionContext);
+  const factions = useFactions();
   const [list, setList] = useState(factions.getAll());
   useEffect(() => factions.subscribe(() => setList(factions.getAll())), [factions]);
   return {
@@ -29,7 +30,7 @@ export default function FactionList(): JSX.Element {
   const { factions, reorder } = useFactionsList();
   const theme = useTheme();
   const selectedFaction = useSelectedFaction();
-  
+
   const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) {
       return;

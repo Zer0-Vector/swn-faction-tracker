@@ -1,12 +1,12 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { FactionContext } from "../../../contexts/FactionContext";
-import { LocationContext } from "../../../contexts/LocationContext";
+import { useFactions } from "../../../contexts/FactionContext";
+import { useLocations } from "../../../contexts/LocationContext";
 import { TAGS } from "../../../data/Tags";
 import FactionInfo from "../../../types/FactionInfo";
 import { ControlledDropDown } from "../../molecules/ControlledDropDown";
@@ -31,8 +31,8 @@ const ItemHeader = React.memo(styled(Item)(() => ({
 })));
 
 export default function FactionDetails({ faction }: FactionDetailsProps) {
-  const { factions } = useContext(FactionContext);
-  const { locations } = useContext(LocationContext);
+  const factions = useFactions();
+  const locations = useLocations();
 
   const isSmallViewport = useMediaQuery("(max-width:600px)");
 

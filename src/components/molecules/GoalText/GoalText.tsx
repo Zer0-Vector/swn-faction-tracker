@@ -1,18 +1,18 @@
-import React, { useCallback, useContext } from "react";
+import React from "react";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import FactionInfo from "../../../types/FactionInfo";
 import { GoalTypes, isGoalType } from "../../../types/GoalType";
 import { ControlledDropDown } from "../ControlledDropDown";
 
 interface GoalTextProps {
-  faction: FactionInfo;
+  readonly faction: FactionInfo;
 }
 
 export default function GoalText({faction}: GoalTextProps) {
-  const { factions } = useContext(FactionContext);
-  
-  const handleUpdate = useCallback((val: string) => {
+  const factions = useFactions();
+
+  const handleUpdate = React.useCallback((val: string) => {
     if (isGoalType(val)) {
       factions.update(faction.id, "goal", { type: val });
     }

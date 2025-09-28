@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -9,7 +9,7 @@ import AddFactionDialog from "../../molecules/AddFactionDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function FactionListActionToolbar() {
-  const { factions } = useContext(FactionContext);
+  const factions = useFactions();
 
   const [addOpen, setAddOpen] = useState<boolean>(false);
   const [removeOpen, setRemoveOpen] = useState<boolean>(false);
@@ -40,7 +40,7 @@ export default function FactionListActionToolbar() {
       onRemoveClick={handleRemoveClick}
       data-testid="faction-list-action-toolbar"
     >
-      <AddFactionDialog 
+      <AddFactionDialog
         open={addOpen}
         onClose={handleAddDialogClose}
         onCreate={handleAddDialogCreate}
