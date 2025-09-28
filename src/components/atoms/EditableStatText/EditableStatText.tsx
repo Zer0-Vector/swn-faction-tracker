@@ -39,6 +39,15 @@ export type EditableStatTextProps =
   & Prefixed<Pick<TextFieldProps, "sx">, "input">;
 
 
+function maybeParseIntStat(val: string): Maybe<number> {
+  try {
+    return parseInt(val);
+  } catch (e) {
+    console.error("Invalid stat value:", val, e);
+    return undefined;
+  }
+}
+
 export default function EditableStatText({
   children,
   onUpdate,
@@ -59,20 +68,11 @@ export default function EditableStatText({
     }
   }, [editing]);
 
-  function maybeParseInt(val: string): Maybe<number> {
-    try {
-      return parseInt(val);
-    } catch (e) {
-      console.error("Invalid stat value:", val, e);
-      return undefined;
-    }
-  }
-
   const exitEditMode = useCallback((evt: React.SyntheticEvent<Element>) => {
     evt.preventDefault();
     if (editing && valid) {
       if (hasChanged && textFieldRef.current) {
-        const val = maybeParseInt(textFieldRef.current.value);
+        const val = maybeParseIntStat(textFieldRef.current.value);
         try {
           if (val !== undefined) {
             onUpdate(val);
