@@ -35,6 +35,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   const handleUpdateTarget = (val: number) => {
     if (faction.goal) {
+      console.debug(`setting target: '${val}'`);
       factions.update(faction.id, "goal", {
         ...faction.goal,
         target: val,

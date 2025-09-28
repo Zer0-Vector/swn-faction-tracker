@@ -58,6 +58,8 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
   
   const tagOptions = useMemo(() => Object.keys(TAGS), []);
 
+  console.log("Rendering FactionDetails...");
+
   return (
     <Container disableGutters={true} sx={containerSx} data-testid="faction-details">
       <ItemHeader data-testid="homeworld-label">Homeworld:</ItemHeader>

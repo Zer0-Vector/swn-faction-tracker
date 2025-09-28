@@ -32,10 +32,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
 
   const handleChange = (setter: FormInfoSetter, valid?: StringValidator) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
-    console.log("validating...");
     const isValid = valid === undefined || valid(newText);
-    console.log(isValid ? "valid" : "invalid");
-    console.log(`text='${newText}'`);
     const isNotBlank = newText !== undefined && newText.trim().length > 0;
     const newState = {
       value: newText,
