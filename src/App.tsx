@@ -5,7 +5,9 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
 import { AuthContext } from './contexts/AuthContext';
 import { ConfirmationContextProvider } from './contexts/ConfirmationContext';
+import { DialogContextProvider } from './contexts/DialogContext';
 import { DataProvider } from './contexts/providers/DataProvider';
+import { TurnPhaseContextProvider } from './contexts/TurnPhaseContext';
 import { UiStateContext } from './contexts/UiStateContext';
 import { IUiStateController, UiStateController } from './controllers/UiStateController';
 import { useAuthProvider } from './hooks/useAuthProvider';
@@ -17,11 +19,13 @@ import PageContainer from './templates/PageContainer';
 import UiState from './types/UiState';
 
 function App() {
-  const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", 
+  const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState",
     {
       loginState: "LOGGED_OUT",
       editMode: "VIEW",
       turnState: "IDLE",
+      turnInfo: undefined,
+      turnIndex: 0,
     }
   );
 
@@ -43,6 +47,9 @@ function App() {
       <UiStateContext.Provider value={uiStateContext}>
         <DataProvider>
           <AuthContext.Provider value={auth}>
+            <DialogContextProvider>
+              <TurnPhaseContextProvider>
+                <ConfirmationContextProvider>
                   <Router>
                     <PageContainer>
                       <Routes>
@@ -68,6 +75,8 @@ function App() {
                     </PageContainer>
                   </Router>
                 </ConfirmationContextProvider>
+              </TurnPhaseContextProvider>
+            </DialogContextProvider>
           </AuthContext.Provider>
         </DataProvider>
       </UiStateContext.Provider>
