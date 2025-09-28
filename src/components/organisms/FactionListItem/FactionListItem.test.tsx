@@ -96,15 +96,15 @@ describe('FactionListItem', () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-attributes-col");
     expect(col).toBeInTheDocument();
-    
+
     const force = within(col).getByTestId("faction-force");
     expect(force).toBeInTheDocument();
     expect(force).toHaveTextContent("1");
-    
+
     const cunning = within(col).getByTestId("faction-cunning");
     expect(cunning).toBeInTheDocument();
     expect(cunning).toHaveTextContent("0");
-    
+
     const wealth = within(col).getByTestId("faction-wealth");
     expect(wealth).toBeInTheDocument();
     expect(wealth).toHaveTextContent("4");
@@ -127,11 +127,11 @@ describe('FactionListItem behaviors', () => {
 
     const textfield = within(name).getByTestId("editable-text-textfield");
     // eslint-disable-next-line testing-library/no-node-access
-    const textinput = textfield.querySelector("input") as HTMLInputElement;
-    expect(textinput).toBeInTheDocument();
-    expect(textinput).toHaveValue("Test Faction");
-    fireEvent.change(textinput, { target: { value: "blah" } });
-    fireEvent.keyUp(textinput, { key: 'Enter' });
+    const textInput = textfield.querySelector("input") as HTMLInputElement;
+    expect(textInput).toBeInTheDocument();
+    expect(textInput).toHaveValue("Test Faction");
+    fireEvent.change(textInput, { target: { value: "blah" } });
+    fireEvent.keyUp(textInput, { key: 'Enter' });
     await waitFor(() => expect(mockUpdateFaction).toBeCalledTimes(1));
     expect(mockUpdateFaction).toBeCalledWith("test", "name", "blah");
   });
@@ -151,9 +151,9 @@ describe('FactionListItem behaviors', () => {
 
     const textfield = within(name).getByTestId("editable-text-textfield");
     // eslint-disable-next-line testing-library/no-node-access
-    const textinput = textfield.querySelector("input") as HTMLInputElement;
-    fireEvent.change(textinput, { target: { value: "blah" } });
-    fireEvent.keyUp(textinput, { key: 'Enter' });
+    const textInput = textfield.querySelector("input") as HTMLInputElement;
+    fireEvent.change(textInput, { target: { value: "blah" } });
+    fireEvent.keyUp(textInput, { key: 'Enter' });
     await waitFor(() => expect(mockUpdateFaction).toBeCalledTimes(1));
     expect(mockUpdateFaction).toBeCalledWith("test", "name", "blah");
     expect(window.location.pathname).toBe("/factions/blah");

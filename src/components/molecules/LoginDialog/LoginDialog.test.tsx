@@ -40,7 +40,7 @@ describe('default LoginDialog', () => {
   it('displays nothing when not open', () => {
     render(
       <UiStateContext.Provider value={
-        { 
+        {
           state: {},
           controller: {},
         } as UiStateContextType
@@ -55,14 +55,14 @@ describe('default LoginDialog', () => {
     renderOpened();
     const loginDialog = screen.getByTestId("login-dialog");
     expect(loginDialog).toBeInTheDocument();
-    
+
     const loginButton = screen.getByTestId("login-dialog-login-button");
     expect(loginButton).toBeInTheDocument();
     expect(loginButton).toBeInstanceOf(HTMLButtonElement);
     expect(loginButton).toHaveTextContent("Login");
     expect(loginButton.getAttribute("type")).toBe("submit");
     expect(loginButton).toBeDisabled();
-    
+
     const cancelButton = screen.getByTestId("login-dialog-cancel-button");
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton).toBeInstanceOf(HTMLButtonElement);
@@ -77,7 +77,7 @@ describe('default LoginDialog', () => {
     expect(emailField).toBeInTheDocument();
     expect(emailField).toBeInstanceOf(HTMLInputElement);
     expect(emailField).toHaveValue("");
-    
+
     const passwordDiv = screen.getByTestId("login-dialog-password-field");
     expect(passwordDiv).toBeInTheDocument();
     expect(passwordDiv).toBeInstanceOf(HTMLDivElement);
@@ -98,8 +98,8 @@ describe('default LoginDialog', () => {
 
   it('login button enabled after entering credentials', () => {
     renderOpened();
-    const emailField = screen.getByLabelText("Email") as HTMLInputElement;
-    const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
+    const emailField = screen.getByLabelText("Email");
+    const passwordField = screen.getByLabelText("Password");
     const loginButton = screen.getByTestId("login-dialog-login-button");
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
@@ -108,11 +108,11 @@ describe('default LoginDialog', () => {
     expect(loginButton).not.toBeDisabled();
   });
 
-  it('after login click with verified credentails, LoginState=LOGGED_IN', async () => {
+  it('after login click with verified credentials, LoginState=LOGGED_IN', async () => {
     mockLogin.mockImplementationOnce(() => Promise.resolve({ emailVerified: true } as User));
     renderOpened();
-    const emailField = screen.getByLabelText("Email") as HTMLInputElement;
-    const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
+    const emailField = screen.getByLabelText("Email");
+    const passwordField = screen.getByLabelText("Password");
     const loginButton = screen.getByTestId("login-dialog-login-button");
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
@@ -127,8 +127,8 @@ describe('default LoginDialog', () => {
   it('after login with unverified credentials, LoginState=NEEDS_VERIFICATION', async () => {
     mockLogin.mockImplementationOnce(() => Promise.resolve({ emailVerified: false } as User));
     renderOpened();
-    const emailField = screen.getByLabelText("Email") as HTMLInputElement;
-    const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
+    const emailField = screen.getByLabelText("Email");
+    const passwordField = screen.getByLabelText("Password");
     const loginButton = screen.getByTestId("login-dialog-login-button");
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
@@ -143,8 +143,8 @@ describe('default LoginDialog', () => {
   it('after failed login, LoginState=LOGGING_IN with error message', async () => {
     mockLogin.mockImplementationOnce(() => Promise.reject({ code: "testing" }));
     renderOpened();
-    const emailField = screen.getByLabelText("Email") as HTMLInputElement;
-    const passwordField = screen.getByLabelText("Password") as HTMLInputElement;
+    const emailField = screen.getByLabelText("Email");
+    const passwordField = screen.getByLabelText("Password");
     const loginButton = screen.getByTestId("login-dialog-login-button");
     expect(screen.queryByTestId("login-dialog-error-message")).not.toBeInTheDocument();
 

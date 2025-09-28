@@ -58,7 +58,7 @@ describe('<FactionHpSummary />', () => {
     expect(textfield).toBeInstanceOf(HTMLDivElement);
     expect(textfield).toHaveClass("MuiTextField-root");
   });
-  
+
   it('updates hp on Enter and valid value', () => {
     renderIt();
     const box = screen.getByTestId("faction-hp-box");

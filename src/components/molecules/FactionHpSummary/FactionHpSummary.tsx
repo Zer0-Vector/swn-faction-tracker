@@ -16,8 +16,8 @@ interface FactionHpSummaryProps {
 
 type HpBoxProps = RequiredChildrenProps & TestableProps;
 
-const HpBoxComponent = ({ children, "data-testid": dtid }: HpBoxProps) => (
-  <Box display="flex" alignItems="center" data-testid={dtid}>
+const HpBoxComponent = ({ children, "data-testid": dataTestId }: HpBoxProps) => (
+  <Box display="flex" alignItems="center" data-testid={dataTestId}>
     {children}
   </Box>
 );

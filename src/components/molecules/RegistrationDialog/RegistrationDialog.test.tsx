@@ -49,12 +49,12 @@ describe('default RegistrationDialog', () => {
     );
     expect(screen.queryByTestId("registration-dialog")).not.toBeInTheDocument();
   });
-  
+
   it('is shown when in valid registration state', () => {
     renderOpened();
     expect(screen.getByTestId("registration-dialog")).toBeInTheDocument();
   });
-  
+
   it('renders register and cancel buttons', () => {
     renderOpened();
     const registerButton = screen.getByTestId("registration-dialog-register-button");

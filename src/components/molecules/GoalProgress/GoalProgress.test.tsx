@@ -58,9 +58,9 @@ describe('default GoalProgress', () => {
     expect(prog).toBeInTheDocument();
     expect(prog.textContent).toEqual("11");
 
-    const targ = within(theSpan).getByTestId("goal-target");
-    expect(targ).toBeInTheDocument();
-    expect(targ.textContent).toEqual("22");
+    const testArg = within(theSpan).getByTestId("goal-target");
+    expect(testArg).toBeInTheDocument();
+    expect(testArg.textContent).toEqual("22");
   });
 
   it('calls controller when tally is updated', () => {
@@ -72,7 +72,7 @@ describe('default GoalProgress', () => {
     const progTfInput = within(progTf).getByDisplayValue("11");
     expect(progTfInput).toBeInTheDocument();
     expect(progTfInput).toBeInstanceOf(HTMLInputElement);
-    
+
     fireEvent.input(progTfInput, { target: { value: "332211" } });
     fireEvent.keyUp(progTfInput, { key: "Enter" });
     expect(mockUpdate).toBeCalledTimes(1);
@@ -84,16 +84,16 @@ describe('default GoalProgress', () => {
 
   it('calls controller when target is updated', () => {
     renderIt();
-    const targ = screen.getByTestId("goal-target");
-    fireEvent.doubleClick(targ);
-    const targTf = screen.getByTestId("goal-target-textfield");
-    expect(targTf).toBeInTheDocument();
-    const targTfInput = within(targTf).getByDisplayValue("22");
-    expect(targTfInput).toBeInTheDocument();
-    expect(targTfInput).toBeInstanceOf(HTMLInputElement);
-    
-    fireEvent.input(targTfInput, { target: { value: "332211" } });
-    fireEvent.keyUp(targTfInput, { key: "Enter" });
+    const testArg = screen.getByTestId("goal-target");
+    fireEvent.doubleClick(testArg);
+    const testArgTextField = screen.getByTestId("goal-target-textfield");
+    expect(testArgTextField).toBeInTheDocument();
+    const testArgTextFieldInput = within(testArgTextField).getByDisplayValue("22");
+    expect(testArgTextFieldInput).toBeInTheDocument();
+    expect(testArgTextFieldInput).toBeInstanceOf(HTMLInputElement);
+
+    fireEvent.input(testArgTextFieldInput, { target: { value: "332211" } });
+    fireEvent.keyUp(testArgTextFieldInput, { key: "Enter" });
     expect(mockUpdate).toBeCalledTimes(1);
     expect(mockUpdate).toBeCalledWith(undefined, "goal", {
       tally: expect.anything(),

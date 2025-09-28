@@ -67,7 +67,7 @@ describe('GoalText', () => {
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
-    
+
     const listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
     const options = within(listbox).getAllByRole("option");

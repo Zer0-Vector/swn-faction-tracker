@@ -12,7 +12,7 @@ interface HealthDisplayProps {
   readonly maxHp: number;
 }
 
-export default function HealthDisplay({ factionId, hp, maxHp}: HealthDisplayProps) {
+export default function HealthDisplay({ factionId, hp, maxHp }: HealthDisplayProps) {
   const sx = useMemo(() => ({
     minWidth: "50px",
     width: "100%",
@@ -26,18 +26,16 @@ export default function HealthDisplay({ factionId, hp, maxHp}: HealthDisplayProp
   ), [factionId, hp, maxHp]);
 
   return (
-    <>
-      <Tooltip
-        title={tooltip}
-        arrow={true}
-      >
-        <LinearProgress
-          color="error"
-          value={100 * hp / maxHp}
-          variant="determinate"
-          sx={sx}
-        />
-      </Tooltip>
-    </>
+    <Tooltip
+      title={tooltip}
+      arrow={true}
+    >
+      <LinearProgress
+        color="error"
+        value={100 * hp / maxHp}
+        variant="determinate"
+        sx={sx}
+      />
+    </Tooltip>
   );
 }

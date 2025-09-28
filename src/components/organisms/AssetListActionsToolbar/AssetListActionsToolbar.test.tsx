@@ -75,30 +75,30 @@ beforeEach(() => {
 describe('default AssetListActionsToolbar', () => {
   it('renders', () => {
     renderIt();
-    const alat = screen.getByTestId("asset-lat");
-    expect(alat).toBeInTheDocument();
+    const assetLat = screen.getByTestId("asset-lat");
+    expect(assetLat).toBeInTheDocument();
   });
 
   it('when location does not have assetId, remove button is disabled', () => {
     renderIt();
-    const alat = screen.getByTestId("asset-lat");
-    const add = within(alat).getByTestId("lat-add");
+    const assetLat = screen.getByTestId("asset-lat");
+    const add = within(assetLat).getByTestId("lat-add");
     expect(add).toBeInTheDocument();
     expect(add).not.toBeDisabled();
 
-    const remove = within(alat).getByTestId("lat-remove");
+    const remove = within(assetLat).getByTestId("lat-remove");
     expect(remove).toBeInTheDocument();
     expect(remove).toBeDisabled();
   });
 
   it('add button opens AddAssetDialog', () => {
     renderIt();
-    const alat = screen.getByTestId("asset-lat");
-    const add = within(alat).getByTestId("lat-add");
+    const assetLat = screen.getByTestId("asset-lat");
+    const add = within(assetLat).getByTestId("lat-add");
     let dialog = screen.queryByTestId("add-asset-dialog");
     expect(dialog).not.toBeInTheDocument();
     fireEvent.click(add);
-    
+
     dialog = screen.getByTestId("add-asset-dialog");
     expect(dialog).toBeInTheDocument();
   });
@@ -106,15 +106,15 @@ describe('default AssetListActionsToolbar', () => {
   it('adding asset calls controller', () => {
     mockGetFaction.mockImplementationOnce(() => mockFaction);
     renderIt(["/factions/test-faction"]);
-    const alat = screen.getByTestId("asset-lat");
-    const add = within(alat).getByTestId("lat-add");
+    const assetLat = screen.getByTestId("asset-lat");
+    const add = within(assetLat).getByTestId("lat-add");
     fireEvent.click(add);
     const dialog = screen.getByTestId("add-asset-dialog");
-    
+
     // open drop down
     const openAutocomplete = within(dialog).getByTitle("Open");
     fireEvent.click(openAutocomplete);
-    
+
     // select option
     const list = screen.getByRole("listbox");
     const allOptions = within(list).getAllByRole("option");
@@ -135,20 +135,20 @@ describe('asset selected AssetListActionsToolbar', () => {
   });
   it('when asset selected, remove button is enabled', () => {
     renderIt(["/factions/test-faction/assets/test-asset-1"]);
-    const alat = screen.getByTestId("asset-lat");
-    const add = within(alat).getByTestId("lat-add");
+    const assetLat = screen.getByTestId("asset-lat");
+    const add = within(assetLat).getByTestId("lat-add");
     expect(add).toBeInTheDocument();
     expect(add).not.toBeDisabled();
 
-    const remove = within(alat).getByTestId("lat-remove");
+    const remove = within(assetLat).getByTestId("lat-remove");
     expect(remove).toBeInTheDocument();
     expect(remove).not.toBeDisabled();
   });
 
   it('when remove button enabled, click shows confirm dialog', () => {
     renderIt(["/factions/test-faction/assets/test-asset-1"]);
-    const alat = screen.getByTestId("asset-lat");
-    const fabRemove = within(alat).getByTestId("lat-remove");
+    const assetLat = screen.getByTestId("asset-lat");
+    const fabRemove = within(assetLat).getByTestId("lat-remove");
     let dlgRemove = screen.queryByTestId("remove-asset-dialog");
     expect(dlgRemove).not.toBeInTheDocument();
     fireEvent.click(fabRemove);
@@ -157,10 +157,10 @@ describe('asset selected AssetListActionsToolbar', () => {
     expect(dlgRemove).toBeInTheDocument();
   });
 
-  it('confirm remove asset calls controller and navs to faction', () => {
+  it('confirm remove asset calls controller and navigates to faction', () => {
     renderIt(["/factions/test-faction/assets/test-asset-1"]);
-    const alat = screen.getByTestId("asset-lat");
-    const fabRemove = within(alat).getByTestId("lat-remove");
+    const assetLat = screen.getByTestId("asset-lat");
+    const fabRemove = within(assetLat).getByTestId("lat-remove");
     expect(fabRemove).not.toBeDisabled();
     fireEvent.click(fabRemove);
     const dlgRemove = screen.getByTestId("remove-asset-dialog");

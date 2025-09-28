@@ -55,7 +55,7 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
     gridTemplateColumns: isSmallViewport ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
     gap: 0.25,
   }), [isSmallViewport]);
-  
+
   const tagOptions = useMemo(() => Object.keys(TAGS), []);
 
   console.log("Rendering FactionDetails...");
