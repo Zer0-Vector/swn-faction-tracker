@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
@@ -15,8 +15,8 @@ interface MockProviderProps extends RequiredChildrenProps {
   assetList: PurchasedAsset[];
 }
 
-const MockProvider = ({ children, assetList }: MockProviderProps) => (
-  <FactionContext.Provider value={{
+const MockProvider = ({ children, assetList }: MockProviderProps) => {
+  const factionContext = useMemo(() => ({
     factions: {
       slugGet: (_) => ({
         id: "test",
@@ -24,22 +24,28 @@ const MockProvider = ({ children, assetList }: MockProviderProps) => (
         name: "Test",
       } as FactionInfo),
     } as FactionPoset,
-  }}>
-    <AssetContext.Provider value={{
-      assets: {
-        getAll() {
-          return assetList;
-        },
-        subscribe(_) {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          return () => {};
-        },
-      } as AssetPoset,
-    }}>
-      {children}
-    </AssetContext.Provider>
-  </FactionContext.Provider>
-);
+  }), []);
+
+  const assetContext = useMemo(() => ({
+    assets: {
+      getAll() {
+        return assetList;
+      },
+      subscribe(_) {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        return () => { };
+      },
+    } as AssetPoset,
+  }), [assetList]);
+
+  return (
+    <FactionContext.Provider value={factionContext}>
+      <AssetContext.Provider value={assetContext}>
+        {children}
+      </AssetContext.Provider>
+    </FactionContext.Provider>
+  );
+};
 
 export default {
   component: AssetList,

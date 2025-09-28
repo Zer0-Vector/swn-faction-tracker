@@ -1,20 +1,20 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
 import TextField from "@mui/material/TextField";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import FormInfo from "../../../types/FormInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddFactionDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onCreate: (val: string) => void;
+  readonly open: boolean;
+  readonly onClose: () => void;
+  readonly onCreate: (val: string) => void;
 }
 
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
-  const { factions } = useContext(FactionContext);
+  const factions = useFactions();
   const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -29,15 +29,15 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     console.debug(isNotBlank, uniqueName);
     setFormState(newState);
   }, [factions]);
-  
+
   const handleClose = useCallback(() => {
     setFormState({ value: "", valid: false });
     inputRef.current?.focus();
     onClose();
   }, [onClose]);
 
-  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
-    if (reason === "Create" && formState.valid) {
+  const handleAction = useCallback<DialogActionHandler>((result) => {
+    if (result.reason === "Create" && formState.valid) {
       onCreate(formState.value);
     }
     handleClose();

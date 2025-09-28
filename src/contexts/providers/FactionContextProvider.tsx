@@ -1,24 +1,25 @@
-import React, { PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import FactionInfo from "../../types/FactionInfo";
 import { NamedElementPoset } from "../../types/NamedElementPoset";
+import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
 import { FactionContext } from "../FactionContext";
-import { LocationContext } from "../LocationContext";
+import { useLocations } from "../LocationContext";
 
-export function FactionContextProvider({ children }: PropsWithChildren) {
+export function FactionContextProvider({ children }: ReadonlyPropsWithChildren) {
   const [storedFactions, setStoredFactions] = useLocalStorage<FactionInfo[]>("swn-faction-tracker.factions", []);
   const factions = useRef(new NamedElementPoset(
-    info => new FactionInfo(info.id, info.slug, info.name),
+    FactionInfo.from,
     storedFactions
   ));
-  const { locations } = useContext(LocationContext);
+  const locations = useLocations();
 
   useEffect(() => {
-    const factionsUnsub = factions.current.subscribe(() => {
+    const factionsUnsubscribe = factions.current.subscribe(() => {
       setStoredFactions(factions.current.getAll());
     });
-    const locationsUnsub = locations.subscribe(action => {
+    const locationsUnsubscribe = locations.subscribe(action => {
       if (action.type === "REMOVE") {
         factions.current.getAll().forEach(f => {
           if (f.homeworldId === action.id) {
@@ -28,13 +29,13 @@ export function FactionContextProvider({ children }: PropsWithChildren) {
       }
     });
     return () => {
-      factionsUnsub();
-      locationsUnsub();
+      factionsUnsubscribe();
+      locationsUnsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const context = useMemo(() => ({ factions: factions.current }), []);
+  const context = useMemo(() => ({ factions: factions.current }), [factions]);
 
   return (
     <FactionContext.Provider value={context}>

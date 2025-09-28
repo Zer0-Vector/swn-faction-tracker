@@ -14,9 +14,13 @@ import { SystemStyleObject } from "@mui/system/styleFunctionSx";
 
 import TestableProps from "../../../types/TestableProps";
 
-export type DialogActionHandler = (action: "CLOSE" | "BUTTON", reason: string) => void;
+export interface DialogActionResult {
+  action: "CLOSE" | "BUTTON";
+  reason: string;
+}
+export type DialogActionHandler = (result: DialogActionResult) => void;
 
-interface MessageDialogProps extends TestableProps {
+export interface MessageDialogProps extends TestableProps {
   open: boolean;
   title: string;
   message: string;
@@ -29,7 +33,7 @@ interface MessageDialogProps extends TestableProps {
   disabledButtons?: string[];
 }
 
-const MessageDialog = ({ 
+const MessageDialog = ({
   open,
   title,
   message,
@@ -40,22 +44,22 @@ const MessageDialog = ({
   modal = true,
   fullWidth = true,
   children,
-  "data-testid": dtid,
+  "data-testid": dataTestId,
 }: MessageDialogProps) => {
   const handleButtonClick = useCallback((button: string, event: React.SyntheticEvent) => {
     event.stopPropagation();
-    onAction("BUTTON", button);
+    onAction({ action: "BUTTON", reason: button });
   }, [onAction]);
 
   const handleCloseClick = useCallback((event: React.SyntheticEvent) => {
     event.stopPropagation();
-    onAction("CLOSE", "closeButton");
+    onAction({ action: "CLOSE", reason: "closeButton" });
   }, [onAction]);
 
   type JustHandleClose = Exclude<ModalProps['onClose'], undefined>;
   const handleClose = useCallback<JustHandleClose>((_, reason) => {
     if (!modal) {
-      onAction("CLOSE", reason);
+      onAction({ action: "CLOSE", reason });
     }
   }, [modal, onAction]);
 
@@ -89,7 +93,7 @@ const MessageDialog = ({
   ), [closeButtonSx, closeable, handleCloseClick]);
 
   return (
-    <Dialog open={open} fullWidth={fullWidth} maxWidth="xs" onClose={handleClose} data-testid={dtid}>
+    <Dialog open={open} fullWidth={fullWidth} maxWidth="xs" onClose={handleClose} data-testid={dataTestId}>
       <DialogTitle data-testid="message-dialog-title">
         {title}
         {closeButton}

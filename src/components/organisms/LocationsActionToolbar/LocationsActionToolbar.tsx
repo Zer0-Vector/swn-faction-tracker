@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { LocationContext } from "../../../contexts/LocationContext";
+import { useLocations } from "../../../contexts/LocationContext";
 import { useSelectedLocation } from "../../../hooks/useSelectedLocation";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
@@ -9,7 +9,7 @@ import AddLocationDialog from "../../molecules/AddLocationDialog";
 import ListActionToolbar from "../../molecules/ListActionToolbar";
 
 export default function LocationsActionToolbar() {
-  const { locations } = useContext(LocationContext);
+  const locations = useLocations();
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   const [removeDialogOpen, setRemoveDialogOpen] = useState<boolean>(false);
   const selectedLocation = useSelectedLocation();
@@ -32,9 +32,9 @@ export default function LocationsActionToolbar() {
     setRemoveDialogOpen(true);
   }, []);
 
-  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+  const handleRemoveAction = useCallback<DialogActionHandler>((result) => {
     setRemoveDialogOpen(false);
-    if (selectedLocation && reason === "Remove") {
+    if (selectedLocation && result.reason === "Remove") {
       locations.remove(selectedLocation.id);
       nav("/locations");
     }

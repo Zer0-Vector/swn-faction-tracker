@@ -32,9 +32,9 @@ interface LabeledItemProps extends RequiredChildrenProps, TestableProps{
   xsContent?: GridSize;
 }
 
-const LabeledItemComponent = ({ label, children, sx, xsLabel, xsContent, "data-testid": dtid }: LabeledItemProps) => {
+const LabeledItemComponent = ({ label, children, sx, xsLabel, xsContent, "data-testid": dataTestId }: LabeledItemProps) => {
   return (
-    <Item sx={sx} data-testid={dtid}>
+    <Item sx={sx} data-testid={dataTestId}>
       <Grid container columnSpacing={2}>
         <Grid item
           xs={xsLabel || "auto"}
@@ -64,7 +64,7 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
     gap: 1.5,
     padding: 2,
   }), []);
-  
+
   const descriptionSx = useMemo(() => ({
     textAlign: "justify",
     gridRow: "1 / 5",
@@ -75,15 +75,15 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
     textTransform: "uppercase",
     fontStyle: "italic",
   }), []);
-  
+
   const dmgText = useCallback((result: AssetAttackResult) => (
-    result.type === "DAMAGE" 
-    ? result.damage 
+    result.type === "DAMAGE"
+    ? result.damage
     : "Special"
   ), []);
-  
 
-  
+
+
   if (!isAsset(asset.name)) {
     console.error(`Could not find asset named '${asset.name}'`);
     return (<Typography color="error" fontWeight="bold" fontStyle="italic">Could not load asset info</Typography>);
@@ -94,7 +94,7 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
   const { description, attack, counter, attribute, level, maxHp, type, upkeep /*note*/ } = assetInfo;
   const attributeText = `${attribute} ${level}`;
   const attackText = attack ? `${TextUtils.titleCase(attack.offense)} vs. ${TextUtils.titleCase(attack.defense)}, ${dmgText(attack.result)}` : "None";
-  const counterText = counter ? counter : "None";
+  const counterText = counter || "None";
   const typeText = TextUtils.titleCase(type.replaceAll(/_/g, " "));
   const upkeepText = upkeep === 0 ? "None" : `${upkeep} FacCred`;
 

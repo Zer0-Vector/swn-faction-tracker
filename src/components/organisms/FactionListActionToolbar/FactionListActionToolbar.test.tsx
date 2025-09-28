@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MemoryRouter, useLocation } from "react-router-dom";
 
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
@@ -7,19 +7,21 @@ import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../types/FactionInfo";
+import UiState from "../../../types/UiState";
 
 import FactionListActionToolbar from "./FactionListActionToolbar";
 
 function TestComp() {
   const { pathname } = useLocation();
-  return (
-    <UiStateContext.Provider value={{
+  const mc = useMemo(() => ({
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
-    }}>
+    }), []);
+  return (
+    <UiStateContext.Provider value={mc}>
       <FactionListActionToolbar />
       <div data-testid="test-path">{pathname}</div>
     </UiStateContext.Provider>
@@ -68,7 +70,7 @@ describe('FactionListActionToolbar', () => {
 
   it.todo("add button shows AddFactionDialog");
   it.todo("AddFactionDialog calls controller after faction added");
-  
+
   it("remove button shows RemoveFactionDialog and removes faction when confirmed", async () => {
     mockGetFaction.mockImplementation(() => ({
       id: "test-1234",
@@ -80,7 +82,7 @@ describe('FactionListActionToolbar', () => {
     let dialog = screen.queryByTestId("delete-faction-confirmation");
     expect(dialog).not.toBeInTheDocument();
     fireEvent.click(btnRemove);
-    
+
     dialog = screen.getByTestId("delete-faction-confirmation");
     expect(dialog).toBeInTheDocument();
     const btnConfirm = within(dialog).getByText("Remove");

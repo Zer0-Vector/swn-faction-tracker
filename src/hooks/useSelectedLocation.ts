@@ -1,12 +1,11 @@
-import { useContext } from "react";
 
-import { LocationContext } from "../contexts/LocationContext";
+import { useLocations } from "../contexts/LocationContext";
 
 import { useSelectionSlug } from "./useSelectionSlug";
 
 export function useSelectedLocation() {
   const { locationSlug } = useSelectionSlug();
-  const { locations } = useContext(LocationContext);
-  
+  const locations = useLocations();
+
   return locationSlug ? locations.slugGet(locationSlug) : undefined;
 }

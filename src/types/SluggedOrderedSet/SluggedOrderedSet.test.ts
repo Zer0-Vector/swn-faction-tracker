@@ -25,7 +25,7 @@ describe('SluggedOrderedSet', () => {
         expect(set.getAll()).toEqual(elements);
       });
     });
-    
+
     it('empty set is empty', () => {
       expect(set.getAll().length).toBe(0);
     });
@@ -66,7 +66,7 @@ describe('SluggedOrderedSet', () => {
       set.add(e1);
       expect(() => set.add(e2)).toThrowError("id");
     });
-    
+
     it('adding element with conflicting slug throws', () => {
       const e1 = { id: "8", slug: "hhh" };
       const e2 = { id: "9", slug: "hhh" };
@@ -130,7 +130,7 @@ describe('SluggedOrderedSet', () => {
       expect(() => set.reorder(0, 5)).toThrowError("index");
     });
   });
-  
+
   describe('renameSlug', () => {
     it('changes slug', () => {
       const e = { id: "123", slug: "before" };
@@ -140,11 +140,11 @@ describe('SluggedOrderedSet', () => {
       expect(set.slugGet("before")).toBeUndefined();
       expect(set.slugGet("after")).toBe(e);
     });
-  
+
     it('throws if element DNE', () => {
       expect(() => set.renameSlug({ id: "10", slug: "dne" })).toThrowError("id");
     });
-  
+
     it('throws if slug already exists', () => {
       set.add({ id: "1", slug: "one" });
       set.add({ id: "2", slug: "two" });

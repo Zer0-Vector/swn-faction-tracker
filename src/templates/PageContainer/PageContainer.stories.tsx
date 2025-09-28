@@ -7,6 +7,7 @@ import { MockActionUiStateController } from "../../components/__mocks__/MockActi
 import { AuthContext } from "../../contexts/AuthContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { ProvidedAuth } from "../../types/ProvidedAuth";
+import UiState from "../../types/UiState";
 
 import PageContainer from "./PageContainer";
 
@@ -23,7 +24,7 @@ export default {
         state: {
           loginState: "LOGGED_OUT",
           editMode: "VIEW",
-        },
+        } as UiState,
         controller: MockActionUiStateController,
       }}>
         {story()}

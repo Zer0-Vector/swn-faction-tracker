@@ -19,7 +19,7 @@ import RegistrationDialog from "../RegistrationDialog";
 import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
 
 interface UserMenuProps {
-  user: User | null;
+  readonly user: User | null;
 }
 
 export default function UserMenu({ user }: UserMenuProps) {

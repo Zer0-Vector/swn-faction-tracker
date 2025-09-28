@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MemoryRouter } from "react-router-dom";
 
 import { action } from "@storybook/addon-actions";
@@ -18,11 +18,14 @@ interface MockProviderProps extends RequiredChildrenProps {
   locations: LocationsPoset;
 }
 
-const MockProvider = ({ children, locations }: MockProviderProps) => (
-  <LocationContext.Provider value={{ locations }}>
-    {children}
-  </LocationContext.Provider>
-);
+const MockProvider = ({ children, locations }: MockProviderProps) => {
+  const context = useMemo(() => ({ locations }), [locations]);
+  return (
+    <LocationContext.Provider value={context}>
+      {children}
+    </LocationContext.Provider>
+  );
+};
 
 const locations: LocationInfo[] = [
   {
@@ -76,7 +79,7 @@ const getLocationsPoset = (locations: LocationInfo[]) => ({
   subscribe(...args) {
     action("subscribe")(args);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
+    return () => { };
   },
 } as LocationsPoset);
 

@@ -1,18 +1,18 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-import { LocationContext } from "../../../contexts/LocationContext";
+import { useLocations } from "../../../contexts/LocationContext";
 import FormInfo from "../../../types/FormInfo";
 import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddLocationDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onCreate: (loc: { name: string, tl: number, x: number, y: number }) => void;
+  readonly open: boolean;
+  readonly onClose: () => void;
+  readonly onCreate: (loc: { name: string, tl: number, x: number, y: number }) => void;
 }
 
 type Coordinate<T> = [x: T, y: T];
@@ -24,7 +24,7 @@ type FormInfoSetter = (val: FormInfo) => void;
 type StringValidator = (val: string) => boolean;
 
 export default function AddLocationDialog({ open, onClose, onCreate }: AddLocationDialogProps) {
-  const { locations } = useContext(LocationContext);
+  const locations = useLocations();
   const [nameText, setNameText] = useState<FormInfo>(BLANK_FORM_INFO);
   const [tlText, setTlText] = useState<FormInfo>(BLANK_FORM_INFO);
   const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
@@ -32,10 +32,7 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
 
   const handleChange = (setter: FormInfoSetter, valid?: StringValidator) => (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newText = evt.target.value;
-    console.log("validating...");
     const isValid = valid === undefined || valid(newText);
-    console.log(isValid ? "valid" : "invalid");
-    console.log(`text='${newText}'`);
     const isNotBlank = newText !== undefined && newText.trim().length > 0;
     const newState = {
       value: newText,
@@ -100,8 +97,8 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     }
   }, [allValid, coords.value, nameText.value, onCreate, tlText.value]);
 
-  const handleAction = useCallback<DialogActionHandler>((_, reason) => {
-    if (reason === "Create") {
+  const handleAction = useCallback<DialogActionHandler>((result) => {
+    if (result.reason === "Create") {
       handleCreate();
     }
     handleClose();

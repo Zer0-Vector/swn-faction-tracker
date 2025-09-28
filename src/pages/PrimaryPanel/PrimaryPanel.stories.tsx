@@ -4,8 +4,8 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { AssetContext, AssetPoset } from "../../contexts/AssetContext";
-import { FactionContext, FactionPoset } from "../../contexts/FactionContext";
-import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
+import { FactionContext, FactionContextType, FactionPoset } from "../../contexts/FactionContext";
+import { LocationContext, LocationContextType, LocationsPoset } from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
@@ -140,27 +140,30 @@ const getAssetPoset = (assets: PurchasedAsset[] = []) => ({
 } as AssetPoset);
 
 interface MockProviderProps extends RequiredChildrenProps {
-  factions: FactionPoset;
-  locations: LocationsPoset;
+  factions: FactionContextType;
+  locations: LocationContextType;
   assets: AssetPoset;
 }
 
-const MockProvider = ({ children, factions, locations, assets }: MockProviderProps) => (
-  <LocationContext.Provider value={{ locations }}>
-    <FactionContext.Provider value={{ factions }}>
-      <AssetContext.Provider value={{ assets }}>
+const MockProvider = ({ children, factions, locations, assets }: MockProviderProps) => {
+  const mockAssetContext = React.useMemo(() => ({ assets }), [assets]);
+  return (
+  <LocationContext.Provider value={locations}>
+    <FactionContext.Provider value={factions}>
+      <AssetContext.Provider value={mockAssetContext}>
         {children}
       </AssetContext.Provider>
     </FactionContext.Provider>
   </LocationContext.Provider>
 );
+};
 
 const Template: ComponentStory<typeof PrimaryPanel> = () => <PrimaryPanel />;
 
 export const Default = Template.bind({});
 Default.decorators = [
   story => (
-    <MockProvider factions={getFactionPoset(factions)} locations={getLocationPoset(locations)} assets={getAssetPoset(assets)}>
+    <MockProvider factions={{ factions: getFactionPoset(factions)}} locations={{ locations: getLocationPoset(locations)}} assets={getAssetPoset(assets)}>
       {story()}
     </MockProvider>
   ),
@@ -169,7 +172,7 @@ Default.decorators = [
 export const Empty = Template.bind({});
 Empty.decorators = [
   story => (
-    <MockProvider factions={getFactionPoset()} locations={getLocationPoset()} assets={getAssetPoset()}>
+    <MockProvider factions={{ factions: getFactionPoset() }} locations={{ locations: getLocationPoset() }} assets={getAssetPoset()}>
       {story()}
     </MockProvider>
   ),

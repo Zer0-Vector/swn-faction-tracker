@@ -1,14 +1,15 @@
-import React, { PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 import ASSETS, { isAsset } from "../../data/Assets";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { NamedElementPoset } from "../../types/NamedElementPoset";
 import PurchasedAsset from "../../types/PurchasedAsset";
-import { AssetContext } from "../AssetContext";
-import { FactionContext } from "../FactionContext";
-import { LocationContext } from "../LocationContext";
+import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
+import { AssetContext, AssetContextType } from "../AssetContext";
+import { useFactions } from "../FactionContext";
+import { useLocations } from "../LocationContext";
 
-export function AssetContextProvider({ children }: PropsWithChildren) {
+export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
   const [storedAssets, setStoredAssets] = useLocalStorage<PurchasedAsset[]>("swn-faction-tracker.assets", []);
   const assets = useRef(new NamedElementPoset<PurchasedAsset, { factionId: string }, "name", "factionId">(
     info => {
@@ -22,12 +23,12 @@ export function AssetContextProvider({ children }: PropsWithChildren) {
       return e.factionId === args.factionId;
     }
   ));
-  const { locations } = useContext(LocationContext);
-  const { factions } = useContext(FactionContext);
+  const locations = useLocations();
+  const factions = useFactions();
 
   useEffect(() => {
-    const assetsUnsub = assets.current.subscribe(() => setStoredAssets(assets.current.getAll()));
-    const locationsUnsub = locations.subscribe(action => {
+    const assetsUnsubscribe = assets.current.subscribe(() => setStoredAssets(assets.current.getAll()));
+    const locationsUnsubscribe = locations.subscribe(action => {
       if (action.type === "REMOVE") {
         assets.current.getAll().forEach(a => {
           if (a.locationId === action.id) {
@@ -36,7 +37,7 @@ export function AssetContextProvider({ children }: PropsWithChildren) {
         });
       }
     });
-    const factionsUnsub = factions.subscribe(action => {
+    const factionsUnsubscribe = factions.subscribe(action => {
       if (action.type === "REMOVE") {
         assets.current.getAll().forEach(a => {
           if (a.factionId === action.id) {
@@ -46,14 +47,14 @@ export function AssetContextProvider({ children }: PropsWithChildren) {
       }
     });
     return () => {
-      assetsUnsub();
-      locationsUnsub();
-      factionsUnsub();
+      assetsUnsubscribe();
+      locationsUnsubscribe();
+      factionsUnsubscribe();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const context = useMemo(() => ({ assets: assets.current }), []);
+  const context = useMemo<AssetContextType>(() => ({ assets: assets.current }), []);
 
   return (
     <AssetContext.Provider value={context}>

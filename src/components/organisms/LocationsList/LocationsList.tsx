@@ -1,28 +1,28 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { LocationContext } from "../../../contexts/LocationContext";
+import { useLocations } from "../../../contexts/LocationContext";
 import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
 import { LocationsListItem } from "../LocationsListItem";
 
 function useLocationsList() {
-  const { locations } = useContext(LocationContext);
+  const locations = useLocations();
   const [list, setList] = useState(locations.getAll());
   useEffect(() => locations.subscribe(() => setList(locations.getAll())), [locations]);
 
   return {
     locations: list,
-    reorder: locations.reorder,
+    reorder: locations.reorder.bind(locations),
   };
 }
 
 export default function LocationsList() {
   const { locations, reorder } = useLocationsList();
   const { locationSlug: selectedLocationId } = useSelectionSlug();
-  
+
   const handleDragEnd = useCallback((result: DropResult) => {
     if (result.reason === 'DROP') {
       if (result.destination) {
@@ -44,9 +44,9 @@ export default function LocationsList() {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable-location">
         {(provided, snapshot) => (
-          <Box 
+          <Box
             {...provided.droppableProps}
-            ref={provided.innerRef} 
+            ref={provided.innerRef}
             data-testid="locations-list-container"
             padding={2}
             bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}

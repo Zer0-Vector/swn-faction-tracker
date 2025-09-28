@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/react";
 
 import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
@@ -9,35 +10,35 @@ import LocationInfo from "../../../types/LocationInfo";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
 
 import LocationsList from "./LocationsList";
-import { action } from "@storybook/addon-actions";
 
-const MockLocations: (n: number)=>LocationInfo[] = numLocations => 
+const MockLocations: (n: number) => LocationInfo[] = numLocations =>
   [...Array(numLocations).keys()]
-  .map(n => ({
-    id: "test",
-    slug: `test-location-${n}`,
-    name: `Test Location ${n}`,
-    tl: n % 6,
-    x: n % 10,
-    y: n % 8,
-  }));
+    .map(n => ({
+      id: "test",
+      slug: `test-location-${n}`,
+      name: `Test Location ${n}`,
+      tl: n % 6,
+      x: n % 10,
+      y: n % 8,
+    }));
 
 // eslint-disable-next-line react/display-name
 const getContextProvider = (numberOfLocations: number) => ({ children }: RequiredChildrenProps) => {
   const locations = MockLocations(numberOfLocations);
+  const lc = useMemo(() => ({
+    locations: {
+      getAll: () => locations,
+      get: (locationId) => locations.find(loc => loc.slug === locationId),
+      reorder: (...args) => action("reorder")(args),
+      subscribe: (...args) => {
+        action("subscribe")(args);
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        return () => { };
+      },
+    } as LocationsPoset,
+  }), [locations]);
   return (
-    <LocationContext.Provider value={{
-      locations: {
-        getAll: () => locations,
-        get: (locationId) => locations.find(loc => loc.slug === locationId),
-        reorder: (...args) => action("reorder")(args),
-        subscribe: (...args) => {
-          action("subscribe")(args);
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          return () => {};
-        },
-      } as LocationsPoset,
-    }}>
+    <LocationContext.Provider value={lc}>
       {children}
     </LocationContext.Provider>
   );

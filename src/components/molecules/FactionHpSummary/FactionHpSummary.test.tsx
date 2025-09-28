@@ -5,6 +5,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
+import UiState from "../../../types/UiState";
 
 import FactionHpSummary from "./FactionHpSummary";
 
@@ -20,7 +21,7 @@ function renderIt(factionId = "tf123") {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
     }}>
       <FactionContext.Provider value={mockContext}>
@@ -57,7 +58,7 @@ describe('<FactionHpSummary />', () => {
     expect(textfield).toBeInstanceOf(HTMLDivElement);
     expect(textfield).toHaveClass("MuiTextField-root");
   });
-  
+
   it('updates hp on Enter and valid value', () => {
     renderIt();
     const box = screen.getByTestId("faction-hp-box");

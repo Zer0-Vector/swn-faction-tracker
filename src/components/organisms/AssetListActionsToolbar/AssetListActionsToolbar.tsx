@@ -34,9 +34,9 @@ export default function AssetListActionsToolbar() {
   const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
   const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
   
-  const handleRemoveAction = useCallback<DialogActionHandler>((_, reason) => {
+  const handleRemoveAction = useCallback<DialogActionHandler>((result) => {
     setRemoveOpen(false);
-    if (reason === "Remove") {
+    if (result.reason === "Remove") {
       if (factionSlug && assetSlug) {
         console.debug(`RemoveAsset: faction=${factionSlug}, asset=${assetSlug}`);
         const assetId = assets.getId(assetSlug);

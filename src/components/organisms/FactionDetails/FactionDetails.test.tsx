@@ -60,7 +60,7 @@ describe('default FactionDetails', () => {
       {
         id: "test-location-2",
         name: "Test Location 2",
-        tl: 1, 
+        tl: 1,
         x: 1, y: 1,
       },
     ]);
@@ -121,7 +121,7 @@ describe('default FactionDetails', () => {
     const hp = within(item).getByTestId("hp");
     expect(hp).toBeInTheDocument();
     expect(hp).toHaveTextContent("33");
-    
+
     const maxhp = within(item).getByTestId("maxhp");
     expect(maxhp).toBeInTheDocument();
     expect(maxhp).toHaveTextContent("44");
@@ -139,11 +139,11 @@ describe('default FactionDetails', () => {
     const force = within(item).getByTestId("faction-force");
     expect(force).toBeInTheDocument();
     expect(force).toHaveTextContent("22");
-    
+
     const cunning = within(item).getByTestId("faction-cunning");
     expect(cunning).toBeInTheDocument();
     expect(cunning).toHaveTextContent("11");
-    
+
     const wealth = within(item).getByTestId("faction-wealth");
     expect(wealth).toBeInTheDocument();
     expect(wealth).toHaveTextContent("55");
@@ -155,10 +155,10 @@ describe('default FactionDetails', () => {
     const header = within(container).getByTestId("goal-label");
     expect(header).toBeInTheDocument();
     expect(header.textContent).toEqual("Goal:");
-    
+
     const item = within(container).getByTestId("goal-item");
     expect(item).toBeInTheDocument();
-    
+
     const hp = within(item).getByTestId("goal-text");
     expect(hp).toBeInTheDocument();
     expect(hp).toHaveTextContent("None");
@@ -170,10 +170,10 @@ describe('default FactionDetails', () => {
     const header = within(container).getByTestId("goal-progress-label");
     expect(header).toBeInTheDocument();
     expect(header.textContent).toEqual("Progress:");
-    
+
     const item = within(container).getByTestId("goal-progress-item");
     expect(item).toBeInTheDocument();
-    
+
     const tally = within(item).getByTestId("goal-progress-empty");
     expect(tally).toBeInTheDocument();
     expect(tally).toHaveTextContent("Select Goal");

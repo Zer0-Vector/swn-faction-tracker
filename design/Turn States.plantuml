@@ -1,0 +1,29 @@
+@startuml "Turn States"
+
+state Idle
+state SelectingFaction
+state FactionSelected
+state SelectingGoal
+state CheckGoal <<choice>>
+state GoalSelected
+state SelectingAction
+state ActionSelected
+state CheckActionsRemaining <<choice>>
+
+[*] -> Idle : Enter Turn Mode\nFaction=null
+[*] --> FactionSelected : Enter Turn Mode\nfrom Faction Selection
+Idle --> SelectingFaction : Click active step
+SelectingFaction --> CheckGoal : Select faction
+CheckGoal -left-> FactionSelected : GOAL=null
+CheckGoal --> GoalSelected : GOAL!=null
+FactionSelected --> SelectingGoal : Click active step
+FactionSelected --> GoalSelected : Set goal
+SelectingGoal -> GoalSelected : Select goal
+GoalSelected -> SelectingAction : Click active step
+SelectingAction --> ActionSelected : Select action
+ActionSelected -> CheckActionsRemaining : Do action
+CheckActionsRemaining --> ActionSelected : More assets to act
+CheckActionsRemaining -> Completed : All assets acted
+Completed -> [*] : Exit turn mode
+
+@enduml

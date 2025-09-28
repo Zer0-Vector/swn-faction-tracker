@@ -9,6 +9,7 @@ import FactionInfo from "../../../types/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import GoalType from "../../../types/GoalType";
 import { Maybe } from "../../../types/Maybe";
+import UiState from "../../../types/UiState";
 
 import GoalText from "./GoalText";
 
@@ -25,7 +26,7 @@ function renderIt(goalType: Maybe<GoalType> = undefined) {
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
-      },
+      } as UiState,
       controller: {} as UiStateController,
     }}>
       <FactionContext.Provider value={mockContext}>
@@ -66,7 +67,7 @@ describe('GoalText', () => {
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
-    
+
     const listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
     const options = within(listbox).getAllByRole("option");

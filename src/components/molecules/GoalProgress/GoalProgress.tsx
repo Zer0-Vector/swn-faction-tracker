@@ -1,19 +1,19 @@
-import React, { useContext, useMemo } from "react";
+import React from "react";
 
 import { SxProps, Theme } from "@mui/material/styles";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import FactionInfo from "../../../types/FactionInfo";
 import StatText from "../../atoms/StatText";
 import { ControlledStat } from "../ControlledStat";
 
 interface GoalProgressProps {
-  faction: FactionInfo;
+  readonly faction: FactionInfo;
 }
 
 export default function GoalProgress({ faction }: GoalProgressProps) {
-  const { factions } = useContext(FactionContext);
-  const inputSx = useMemo<SxProps<Theme>>(() => ({
+  const factions  = useFactions();
+  const inputSx = React.useMemo<SxProps<Theme>>(() => ({
     width: "5ch",
   }), []);
 
@@ -35,6 +35,7 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   const handleUpdateTarget = (val: number) => {
     if (faction.goal) {
+      console.debug(`setting target: '${val}'`);
       factions.update(faction.id, "goal", {
         ...faction.goal,
         target: val,

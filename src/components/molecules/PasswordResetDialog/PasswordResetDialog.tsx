@@ -30,8 +30,8 @@ export function PasswordResetDialog() {
   const buttons = useMemo(() => ["Cancel", "OK"], []);
   const disabledButtons = useMemo(() => ready ? [] : ["OK"], [ready]);
 
-  const handleAction = useCallback<DialogActionHandler>(async (_, reason) => {
-    if (reason === "OK") {
+  const handleAction = useCallback<DialogActionHandler>(async (result) => {
+    if (result.reason === "OK") {
       if (validator.isAllValid() && emailRef.current) {
         try {
           const email = emailRef.current.value;

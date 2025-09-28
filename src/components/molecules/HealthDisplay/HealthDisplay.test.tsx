@@ -2,13 +2,11 @@ import React from "react";
 
 import { render } from "@testing-library/react";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import { FactionContext, FactionContextType } from "../../../contexts/FactionContext";
 
 import HealthDisplay from "./HealthDisplay";
 
-const mockContext: FactionContextType = {
-  factions: {} as FactionPoset,
-};
+const mockContext = {} as FactionContextType;
 
 function renderIt() {
   render(

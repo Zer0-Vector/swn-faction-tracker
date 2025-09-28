@@ -1,6 +1,7 @@
 import FactionStatsInfo from "./FactionStatsInfo";
 import GoalInfo from "./GoalInfo";
-import { NamedEntity } from "./NamedElementPoset";
+import { NamedSluggedEntity } from "./NamedElementPoset";
+import { Prettify } from "./Prettify";
 
 interface StatInfo { xpCost: number, hpValue: number }
 
@@ -51,13 +52,12 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
   },
 };
 
-export default class FactionInfo implements FactionStatsInfo, NamedEntity {
-  
+export default class FactionInfo implements FactionStatsInfo, NamedSluggedEntity {
+
   readonly id: string;
   slug: string;
   name: string;
   hp: number;
-  maxHp: number;
   force: number;
   cunning: number;
   wealth: number;
@@ -74,15 +74,18 @@ export default class FactionInfo implements FactionStatsInfo, NamedEntity {
     this.cunning = 0;
     this.wealth = 0;
     this.hp = 4;
-    this.maxHp = 4;
     this.xp = 0;
-    FactionInfo.recomputeMaxHp(this);
   }
 
-  static recomputeMaxHp(info: FactionInfo) {
-    const { force, cunning, wealth } = info;
-    info.maxHp = 4 + STAT_INFO[force].hpValue + STAT_INFO[cunning].hpValue + STAT_INFO[wealth].hpValue;
-    console.log(`Recomputed MaxHp for ${info.name}: ${info.maxHp}`);
+  get maxHp(): number {
+    const maxHp = 4 + STAT_INFO[this.force].hpValue + STAT_INFO[this.cunning].hpValue + STAT_INFO[this.wealth].hpValue;
+    return maxHp;
+  }
+
+  static from(info: Prettify<Partial<FactionInfo> & NamedSluggedEntity>) {
+    const newInfo = new FactionInfo(info.id, info.slug, info.name);
+    Object.assign(newInfo, info);
+    return newInfo;
   }
 
 }

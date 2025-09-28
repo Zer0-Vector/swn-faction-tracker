@@ -11,14 +11,14 @@ import { UiStateContext } from "../../../contexts/UiStateContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import TestableProps from "../../../types/TestableProps";
 
-interface ListActionToolbarProps 
+interface ListActionToolbarProps
   extends RequiredChildrenProps<React.ReactElement | React.ReactElement[]>, TestableProps {
-  removable: boolean;
-  onAddClick: React.MouseEventHandler<HTMLButtonElement>;
-  onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
+  readonly removable: boolean;
+  readonly onAddClick: React.MouseEventHandler<HTMLButtonElement>;
+  readonly onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children, "data-testid": dtid }: ListActionToolbarProps) {
+export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children, "data-testid": dataTestId }: ListActionToolbarProps) {
   const { state } = useContext(UiStateContext);
   const fabSx = useMemo<SxProps>(() => ({
     backgroundColor: "secondary.main",
@@ -26,7 +26,7 @@ export default function ListActionToolbar({ removable, onAddClick, onRemoveClick
   return (
     <Slide in={state.editMode === "EDIT"} direction="right" appear={false} unmountOnExit>
       <Box>
-        <Box marginBottom={1} padding={1} display="flex" flexDirection="row" alignItems="center" gap={2} data-testid={dtid}>
+        <Box marginBottom={1} padding={1} display="flex" flexDirection="row" alignItems="center" gap={2} data-testid={dataTestId}>
           <Fab
             size="small"
             sx={fabSx}

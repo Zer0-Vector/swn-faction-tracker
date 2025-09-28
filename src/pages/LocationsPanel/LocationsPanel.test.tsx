@@ -7,6 +7,7 @@ import { LocationContext, LocationsPoset } from "../../contexts/LocationContext"
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import LocationInfo from "../../types/LocationInfo";
+import UiState from "../../types/UiState";
 
 import LocationsPanel from "./LocationsPanel";
 
@@ -18,13 +19,14 @@ function renderIt(locations: LocationInfo[] = []) {
         checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         subscribe: (_) => () => {},
+        reorder: jest.fn() as LocationsPoset['reorder'],
       } as LocationsPoset,
     }}>
       <UiStateContext.Provider value={{
         state: {
           editMode: "EDIT",
           loginState: "LOGGED_IN",
-        },
+        } as UiState,
         controller: {} as UiStateController,
       }}>
         <MemoryRouter>

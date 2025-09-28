@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/react";
@@ -32,8 +32,7 @@ export default {
 
 const Template: Story<StoryProps> = (args) => {
   const [mode, setMode] = useState<GameMode>(args.mode);
-  return (
-    <UiStateContext.Provider value={{
+  const uiStateContext = useMemo(() => ({
       state: {
         editMode: mode,
       } as UiState,
@@ -43,7 +42,9 @@ const Template: Story<StoryProps> = (args) => {
           setMode(val as GameMode);
         },
       } as UiStateController,
-    }}>
+    }), [mode]);
+  return (
+    <UiStateContext.Provider value={uiStateContext}>
       <ModeToggleButtons />
     </UiStateContext.Provider>
   );

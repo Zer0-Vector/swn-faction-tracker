@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
 import { styled, SxProps } from "@mui/material/styles";
 
-import { FactionContext } from "../../../contexts/FactionContext";
+import { useFactions } from "../../../contexts/FactionContext";
 import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
 import FactionInfo from "../../../types/FactionInfo";
 import { ValidationFn } from "../../../types/ValidationFn";
@@ -16,9 +16,9 @@ import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
 
 interface FactionListRowProps {
-  dragHandleProps: DraggableProvidedDragHandleProps | undefined;
-  isDragging: boolean;
-  faction: FactionInfo;
+  readonly dragHandleProps: DraggableProvidedDragHandleProps | undefined;
+  readonly isDragging: boolean;
+  readonly faction: FactionInfo;
 }
 
 const ItemColumn = React.memo(styled(Box)(({ theme }) => ({
@@ -29,7 +29,7 @@ const ItemColumn = React.memo(styled(Box)(({ theme }) => ({
 })));
 
 export default function FactionListItem({ dragHandleProps, isDragging, faction }: FactionListRowProps) {
-  const { factions } = useContext(FactionContext);
+  const factions = useFactions();
   const boxRef = useRef<HTMLElement>(null);
   const { factionSlug: navFactionSlug } = useSelectionSlug();
   const nav = useNavigate();
@@ -89,7 +89,7 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
     display: "grid",
     gridTemplateColumns: "1fr 75px",
   }), []);
-  
+
   return (
     <Box
       onClick={getSelectFactionHandler(faction.slug)}
@@ -108,10 +108,10 @@ export default function FactionListItem({ dragHandleProps, isDragging, faction }
       <Slide in={!isSelected} container={boxRef.current} direction="up" appear={false}>
         <Box sx={statsBoxSx} data-testid="faction-list-item-stats">
           <ItemColumn data-testid="faction-list-item-health-col">
-            <HealthDisplay factionId={faction.slug} hp={faction.hp} maxHp={faction.maxHp} />
+            <HealthDisplay factionId={faction.id} hp={faction.hp} maxHp={faction.maxHp} />
           </ItemColumn>
           <ItemColumn data-testid="faction-list-item-attributes-col">
-            <FactionStatSummary { ...faction } factionId={faction.slug}  />
+            <FactionStatSummary { ...faction } factionId={faction.id}  />
           </ItemColumn>
         </Box>
       </Slide>

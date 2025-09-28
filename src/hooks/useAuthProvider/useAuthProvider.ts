@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { browserLocalPersistence, getAuth, User } from "firebase/auth";
-import * as fauth from "firebase/auth";
+import * as firebaseAuth from "firebase/auth";
 
 import { IUiStateController } from "../../controllers/UiStateController";
 import { FirebaseApp } from "../../firebase-init";
@@ -13,48 +13,47 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   const AUTH = getAuth(FirebaseApp);
 
   useEffect(() => {
-    fauth.setPersistence(AUTH, browserLocalPersistence)
+    firebaseAuth.setPersistence(AUTH, browserLocalPersistence)
       .catch(reason => {
         console.error("Error setting auth persistence: ", reason);
       });
   }, [AUTH]);
 
   useEffect(() => {
-    const unsub = AUTH.onAuthStateChanged((user) => {
+    return AUTH.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
         controller.setLoginState("LOGGED_IN");
       }
     });
-    return () => unsub();
   }, [AUTH, controller]);
 
   return {
     currentUser: user,
-    
+
     login: async (email: string, password: string) => {
-      const { user } = await fauth.signInWithEmailAndPassword(AUTH, email, password);
+      const { user } = await firebaseAuth.signInWithEmailAndPassword(AUTH, email, password);
       setUser(user);
       return user;
     },
-    
+
     logout: async () => {
-      await fauth.signOut(AUTH);
+      await firebaseAuth.signOut(AUTH);
       setUser(null);
     },
 
     signup: async (email: string, password: string) => {
-      const { user } = await fauth.createUserWithEmailAndPassword(AUTH, email, password);
+      const { user } = await firebaseAuth.createUserWithEmailAndPassword(AUTH, email, password);
       setUser(user);
       return user;
     },
 
     sendEmailVerification: (user: User) => {
-      return fauth.sendEmailVerification(user);
+      return firebaseAuth.sendEmailVerification(user);
     },
 
     sendPasswordResetEmail: async (email: string) => {
-      await fauth.sendPasswordResetEmail(AUTH, email);
+      await firebaseAuth.sendPasswordResetEmail(AUTH, email);
     },
   };
 }

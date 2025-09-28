@@ -1,8 +1,8 @@
-import { NamedEntity } from "./NamedElementPoset";
+import { NamedSluggedEntity } from "./NamedElementPoset";
 import Nullable from "./Nullable";
 
-export default class PurchasedAsset implements NamedEntity {
-  
+export default class PurchasedAsset implements NamedSluggedEntity {
+
   constructor(
     public readonly id: string,
     public slug: string,

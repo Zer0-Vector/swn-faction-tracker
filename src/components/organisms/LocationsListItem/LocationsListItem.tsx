@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useContext, useMemo } from "react";
+import React, { PropsWithChildren, useCallback, useMemo } from "react";
 import { Draggable, DraggableProps } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 
@@ -13,12 +13,12 @@ import Paper from "@mui/material/Paper";
 import { styled, SxProps, Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { LocationContext } from "../../../contexts/LocationContext";
+import { useLocations } from "../../../contexts/LocationContext";
 import LocationInfo from "../../../types/LocationInfo";
 import { ControlledText } from "../../molecules/ControlledText";
 
 
-type LocationsListItemProps = 
+type LocationsListItemProps =
   & Pick<DraggableProps, "index" | "draggableId">
   & {
     isSelected: boolean,
@@ -86,7 +86,7 @@ export function LocationsListItem({ index, draggableId, isSelected, locationInfo
   const hasSmallWidth = useMediaQuery("(max-width:600px)");
   const iconSx = useMemo<SxProps<Theme>>(() => ({ display: "flex" }), []);
   const nav = useNavigate();
-  const { locations } = useContext(LocationContext);
+  const locations = useLocations();
 
   const updateNameHandler = useCallback((val: string) => {
     const result = locations.update(locationInfo.id, "name", val);
