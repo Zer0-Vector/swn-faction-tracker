@@ -41,14 +41,15 @@ const mockFaction = {
 
 const  TestComp = () => {
   const { pathname } = useLocation();
-  return (
-    <UiStateContext.Provider value={{
+  const uiStateContext = React.useMemo(() => ({
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
       } as UiState,
       controller: {} as UiStateController,
-    }}>
+    }), []);
+  return (
+    <UiStateContext.Provider value={uiStateContext}>
       <div data-testid="test-location">{pathname}</div>
       <FactionContext.Provider value={mockFactionContext}>
         <AssetContext.Provider value={mockContext}>
