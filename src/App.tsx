@@ -34,42 +34,43 @@ function App() {
 
   const auth = useAuthProvider(uiController);
 
+  const uiStateContext = useMemo(() => ({ state: uiState, controller: uiController }), [uiState, uiController]);
+
   console.debug("Rendering App...");
 
   return (
     <ThemeProvider theme={THEME}>
-      <DataProvider>
-        <UiStateContext.Provider value={{ state: uiState, controller: uiController }}>
+      <UiStateContext.Provider value={uiStateContext}>
+        <DataProvider>
           <AuthContext.Provider value={auth}>
-            <ConfirmationContextProvider>
-              <Router>
-                <PageContainer>
-                  <Routes>
-                    {/* UGLY is there another way???? */}
-                    <Route path="/">
-                      <Route index element={<PrimaryPanel />} />
-                      <Route path="factions">
-                        <Route index element={<PrimaryPanel />} />
-                        <Route path=":factionId">
+                  <Router>
+                    <PageContainer>
+                      <Routes>
+                        {/* UGLY is there another way???? */}
+                        <Route path="/">
                           <Route index element={<PrimaryPanel />} />
-                          <Route path="assets">
+                          <Route path="factions">
                             <Route index element={<PrimaryPanel />} />
-                            <Route path=":assetId" element={<PrimaryPanel />} />
+                            <Route path=":factionId">
+                              <Route index element={<PrimaryPanel />} />
+                              <Route path="assets">
+                                <Route index element={<PrimaryPanel />} />
+                                <Route path=":assetId" element={<PrimaryPanel />} />
+                              </Route>
+                            </Route>
+                          </Route>
+                          <Route path="locations">
+                            <Route index element={<LocationsPanel />} />
+                            <Route path=":locationId" element={<LocationsPanel />} />
                           </Route>
                         </Route>
-                      </Route>
-                      <Route path="locations">
-                        <Route index element={<LocationsPanel />} />
-                        <Route path=":locationId" element={<LocationsPanel />} />
-                      </Route>
-                    </Route>
-                  </Routes>
-                </PageContainer>
-              </Router>
-            </ConfirmationContextProvider>
+                      </Routes>
+                    </PageContainer>
+                  </Router>
+                </ConfirmationContextProvider>
           </AuthContext.Provider>
-        </UiStateContext.Provider>
-      </DataProvider>
+        </DataProvider>
+      </UiStateContext.Provider>
     </ThemeProvider>
   );
 }
