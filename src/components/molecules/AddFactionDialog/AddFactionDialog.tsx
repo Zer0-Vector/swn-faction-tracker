@@ -8,9 +8,9 @@ import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddFactionDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onCreate: (val: string) => void;
+  readonly open: boolean;
+  readonly onClose: () => void;
+  readonly onCreate: (val: string) => void;
 }
 
 export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {

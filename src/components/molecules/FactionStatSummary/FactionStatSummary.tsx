@@ -8,10 +8,10 @@ import { ControlledStat } from "../ControlledStat";
 
 
 interface FactionStatSummaryProps {
-  factionId: string;
-  force: number;
-  cunning: number;
-  wealth: number;
+  readonly factionId: string;
+  readonly force: number;
+  readonly cunning: number;
+  readonly wealth: number;
 }
 
 export default function FactionStatSummary({ factionId, force, cunning, wealth }: FactionStatSummaryProps) {

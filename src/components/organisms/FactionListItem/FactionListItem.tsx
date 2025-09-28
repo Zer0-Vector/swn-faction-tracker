@@ -16,9 +16,9 @@ import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
 
 interface FactionListRowProps {
-  dragHandleProps: DraggableProvidedDragHandleProps | undefined;
-  isDragging: boolean;
-  faction: FactionInfo;
+  readonly dragHandleProps: DraggableProvidedDragHandleProps | undefined;
+  readonly isDragging: boolean;
+  readonly faction: FactionInfo;
 }
 
 const ItemColumn = React.memo(styled(Box)(({ theme }) => ({

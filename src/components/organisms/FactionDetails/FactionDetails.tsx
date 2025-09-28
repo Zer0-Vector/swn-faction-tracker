@@ -16,7 +16,7 @@ import GoalProgress from "../../molecules/GoalProgress";
 import GoalText from "../../molecules/GoalText";
 
 interface FactionDetailsProps {
-  faction: FactionInfo;
+  readonly faction: FactionInfo;
 }
 
 const Item = React.memo(styled(Paper)(({ theme }) => ({

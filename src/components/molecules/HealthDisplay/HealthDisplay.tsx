@@ -7,9 +7,9 @@ import Tooltip from "@mui/material/Tooltip";
 import FactionHpSummary from "../FactionHpSummary";
 
 interface HealthDisplayProps {
-  factionId: string;
-  hp: number;
-  maxHp: number;
+  readonly factionId: string;
+  readonly hp: number;
+  readonly maxHp: number;
 }
 
 export default function HealthDisplay({ factionId, hp, maxHp}: HealthDisplayProps) {

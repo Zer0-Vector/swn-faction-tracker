@@ -10,9 +10,9 @@ import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddLocationDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onCreate: (loc: { name: string, tl: number, x: number, y: number }) => void;
+  readonly open: boolean;
+  readonly onClose: () => void;
+  readonly onCreate: (loc: { name: string, tl: number, x: number, y: number }) => void;
 }
 
 type Coordinate<T> = [x: T, y: T];

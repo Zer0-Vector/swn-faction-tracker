@@ -11,11 +11,11 @@ import { UiStateContext } from "../../../contexts/UiStateContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import TestableProps from "../../../types/TestableProps";
 
-interface ListActionToolbarProps 
+interface ListActionToolbarProps
   extends RequiredChildrenProps<React.ReactElement | React.ReactElement[]>, TestableProps {
-  removable: boolean;
-  onAddClick: React.MouseEventHandler<HTMLButtonElement>;
-  onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
+  readonly removable: boolean;
+  readonly onAddClick: React.MouseEventHandler<HTMLButtonElement>;
+  readonly onRemoveClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function ListActionToolbar({ removable, onAddClick, onRemoveClick, children, "data-testid": dtid }: ListActionToolbarProps) {
