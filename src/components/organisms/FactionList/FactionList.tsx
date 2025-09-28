@@ -22,7 +22,7 @@ function useFactionsList() {
   useEffect(() => factions.subscribe(() => setList(factions.getAll())), [factions]);
   return {
     factions: list,
-    reorder: factions.reorder,
+    reorder: factions.reorder.bind(factions),
   };
 }
 

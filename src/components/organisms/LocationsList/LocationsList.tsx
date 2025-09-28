@@ -15,7 +15,7 @@ function useLocationsList() {
 
   return {
     locations: list,
-    reorder: locations.reorder,
+    reorder: locations.reorder.bind(locations),
   };
 }
 
