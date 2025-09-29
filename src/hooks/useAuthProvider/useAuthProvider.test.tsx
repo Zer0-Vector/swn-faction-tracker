@@ -7,15 +7,14 @@ import { IUiStateController } from "../../controllers/UiStateController";
 import LoginState from "../../types/LoginState";
 
 import { useAuthProvider } from "./useAuthProvider";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-jest.mock("firebase/app");
-jest.mock("firebase/auth");
-// eslint-disable-next-line import/first
 import {
   Auth,
   createUserWithEmailAndPassword,
   getAuth,
   NextOrObserver,
+  onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
   setPersistence,
@@ -26,32 +25,42 @@ import {
   UserCredential,
 } from "firebase/auth";
 
-const mockSetPersistence = setPersistence as jest.MockedFn<typeof setPersistence>;
-const mockGetAuth = getAuth as jest.MockedFn<typeof getAuth>;
+vi.mock("firebase/app");
+// vi.mock("firebase/auth");
 
-const mockSetLoginState = jest.fn();
+const mocks = vi.hoisted(() => ({
+  onAuthStateChanged: vi.fn(),
+  signInWithEmailAndPassword: vi.fn(),
+  signOut: vi.fn(),
+  sendEmailVerification: vi.fn(),
+  sendPasswordResetEmail: vi.fn(),
+  createUserWithEmailAndPassword: vi.fn(),
+  getAuth: vi.fn(),
+  setPersistence: vi.fn(),
+}));
+
+vi.mock("firebase/auth", async () => {
+  const originalModule = await vi.importActual("firebase/auth");
+  return {
+    ...originalModule,
+    ...mocks,
+  }
+})
+
+
+const mockSetLoginState = vi.fn();
 const mockController = {
-  setLoginState: mockSetLoginState as (s:LoginState)=>void,
+  setLoginState: mockSetLoginState as (s: LoginState) => void,
 } as IUiStateController;
 
-const mockOnAuthStateChanged = jest.fn();
-const mockUnsubscribe = jest.fn();
-const mockAuth = {
-  onAuthStateChanged: mockOnAuthStateChanged as (nextOrObserver: NextOrObserver<User | null>)=>Unsubscribe,
-} as Auth;
-const mockSignIn = signInWithEmailAndPassword as jest.MockedFn<typeof signInWithEmailAndPassword>;
-const mockSignOut = signOut as jest.MockedFn<typeof signOut>;
-const mockSendEmailVerification = sendEmailVerification as jest.MockedFn<typeof sendEmailVerification>;
-const mockSendPasswordResetEmail = sendPasswordResetEmail as jest.MockedFn<typeof sendPasswordResetEmail>;
-const mockCreateUser = createUserWithEmailAndPassword as jest.MockedFn<typeof createUserWithEmailAndPassword>;
+const mockUnsubscribe = vi.fn();
 
-
-function TestComp({ name }: { name: string }) {
+function TestComp({ name }: { readonly name: string }) {
   const auth = useAuthProvider(mockController);
   const [error, setError] = useState<string>("");
   const [done, setDone] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-  const couldThrow = <T extends unknown>(f: ()=>Promise<T>) => async () => {
+  const couldThrow = <T extends unknown>(f: () => Promise<T>) => async () => {
     try {
       await f();
     } catch (e) {
@@ -79,7 +88,7 @@ function TestComp({ name }: { name: string }) {
       <button onClick={couldThrow(() => auth.login("email@test.com", "123456"))}>login</button>
       <button onClick={couldThrow(() => auth.logout())}>logout</button>
       <button onClick={couldThrow(() => auth.signup("email@signup.com", "789789"))}>signup</button>
-      <button onClick={couldThrow(() => { if (!auth.currentUser) throw new Error("NULL USER!"); return auth.sendEmailVerification(auth.currentUser); })}>verify email</button>
+      <button onClick={couldThrow(() => { if (!auth.currentUser) { throw new Error("NULL USER!"); } return auth.sendEmailVerification(auth.currentUser); })}>verify email</button>
       <button onClick={couldThrow(() => auth.sendPasswordResetEmail("pw@reset.com"))}>pw reset</button>
     </div>
   );
@@ -87,19 +96,27 @@ function TestComp({ name }: { name: string }) {
 
 describe('useAuthProvider', () => {
   beforeEach(() => {
-    mockGetAuth.mockImplementation(() => mockAuth);
-    mockOnAuthStateChanged.mockReturnValue(mockUnsubscribe);
-    mockSetPersistence.mockResolvedValue();
+    vi.mocked(getAuth).mockImplementation(() => ({
+      onAuthStateChanged: mocks.onAuthStateChanged
+    } as unknown as Auth));
+    vi.mocked(onAuthStateChanged).mockImplementation(() => mockUnsubscribe);
+    vi.mocked(setPersistence).mockResolvedValue();
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+    vi.resetModules();
   });
 
   it('calls setPersistence on mount', () => {
     render(<TestComp name="setPersistence on mount" />);
-    expect(mockSetPersistence).toBeCalledTimes(1);
+    expect(setPersistence).toBeCalledTimes(1);
     // FIXME not sure why this fails
     // expect(mockSetPersistence).toBeCalledWith(expect.anything(), expect.objectContaining({ type: "LOCAL" }));
   });
 
   it('calls unsubscribe on unmount', async () => {
+    mockUnsubscribe.mockClear(); // XXX: not sure why this is needed...
     const { unmount } = render(<TestComp name="unsubscribe on unmount" />);
     expect(mockUnsubscribe).not.toBeCalled();
     unmount();
@@ -107,7 +124,7 @@ describe('useAuthProvider', () => {
   });
 
   it('login called signInWithEmailAndPassword', async () => {
-    mockSignIn.mockResolvedValueOnce({
+    vi.mocked(signInWithEmailAndPassword).mockResolvedValueOnce({
       user: {
         email: "fake-email",
         uid: "fake-uid",
@@ -123,8 +140,8 @@ describe('useAuthProvider', () => {
     const isDone = screen.getByTestId("is-done");
     await waitFor(() => expect(isDone).toHaveTextContent("yes"));
 
-    expect(mockSignIn).toBeCalledTimes(1);
-    expect(mockSignIn).toBeCalledWith(expect.anything(), "email@test.com", "123456");
+    expect(signInWithEmailAndPassword).toBeCalledTimes(1);
+    expect(signInWithEmailAndPassword).toBeCalledWith(expect.anything(), "email@test.com", "123456");
     const email = screen.getByTestId("user-email");
     expect(email).toHaveTextContent("fake-email");
     const uid = screen.getByTestId("user-uid");
@@ -132,16 +149,16 @@ describe('useAuthProvider', () => {
   });
 
   it('signOut called on logout', async () => {
-    mockSignOut.mockResolvedValueOnce();
+    vi.mocked(signOut).mockResolvedValueOnce();
     render(<TestComp name="signOut/logout" />);
     const button = screen.getByText("logout");
     expect(button).toBeInstanceOf(HTMLButtonElement);
     await act(() => button.click());
-    await waitFor(() => expect(mockSignOut).toBeCalledTimes(1));
+    await waitFor(() => expect(signOut).toBeCalledTimes(1));
   });
 
   it('clears user on logout', async () => {
-    mockSignIn.mockResolvedValueOnce({
+    vi.mocked(signInWithEmailAndPassword).mockResolvedValueOnce({
       user: {
         email: "fake-email",
         uid: "fake-uid",
@@ -174,12 +191,12 @@ describe('useAuthProvider', () => {
       email: "fake-email",
       uid: "fake-uid",
     } as User;
-    mockSignIn.mockResolvedValueOnce({
+    vi.mocked(signInWithEmailAndPassword).mockResolvedValueOnce({
       user: theUser,
       providerId: "789",
       operationType: "signIn",
     });
-    mockSendEmailVerification.mockResolvedValueOnce();
+    vi.mocked(sendEmailVerification).mockResolvedValueOnce();
     render(<TestComp name="sendEmailVerification" />);
     const loginButton = screen.getByText("login");
     expect(loginButton).toBeInstanceOf(HTMLButtonElement);
@@ -192,12 +209,12 @@ describe('useAuthProvider', () => {
     const button = screen.getByText("verify email");
     expect(button).toBeInstanceOf(HTMLButtonElement);
     await act(() => button.click());
-    await waitFor(() => expect(mockSendEmailVerification).toBeCalledTimes(1));
-    expect(mockSendEmailVerification).toBeCalledWith(theUser);
+    await waitFor(() => expect(sendEmailVerification).toBeCalledTimes(1));
+    expect(sendEmailVerification).toBeCalledWith(theUser);
   });
 
   it('does not send verification email on sendEmailVerification when logged out', async () => {
-    mockSendEmailVerification.mockResolvedValueOnce();
+    vi.mocked(sendEmailVerification).mockResolvedValueOnce();
     render(<TestComp name="logged out sendEmailVerification" />);
     const button = screen.getByText("verify email");
     expect(button).toBeInstanceOf(HTMLButtonElement);
@@ -205,28 +222,28 @@ describe('useAuthProvider', () => {
     expect(errorText).toHaveTextContent("");
     fireEvent.click(button);
     await waitFor(() => expect(errorText).not.toHaveTextContent(""));
-    expect(mockSendEmailVerification).not.toBeCalled();
+    expect(sendEmailVerification).not.toBeCalled();
   });
 
   it('sends password reset email', async () => {
-    mockSendPasswordResetEmail.mockResolvedValueOnce();
+    vi.mocked(sendPasswordResetEmail).mockResolvedValueOnce();
     render(<TestComp name="sendPasswordResetEmail" />);
     const button = screen.getByText("pw reset");
     const isDone = screen.getByTestId("is-done");
     fireEvent.click(button);
     await waitFor(() => expect(isDone).toHaveTextContent("yes"));
-    expect(mockSendPasswordResetEmail).toBeCalledTimes(1);
-    expect(mockSendPasswordResetEmail).toBeCalledWith(expect.anything(), "pw@reset.com");
+    expect(sendPasswordResetEmail).toBeCalledTimes(1);
+    expect(sendPasswordResetEmail).toBeCalledWith(expect.anything(), "pw@reset.com");
   });
 
   it('creates user', async () => {
-    mockCreateUser.mockResolvedValueOnce({ user: { email: "test@test.test" } } as UserCredential);
+    vi.mocked(createUserWithEmailAndPassword).mockResolvedValueOnce({ user: { email: "test@test.test" } } as UserCredential);
     render(<TestComp name="signup" />);
     const button = screen.getByText("signup");
     const isDone = screen.getByTestId("is-done");
     fireEvent.click(button);
     await waitFor(() => expect(isDone).toHaveTextContent("yes"));
-    expect(mockCreateUser).toBeCalledTimes(1);
-    expect(mockCreateUser).toBeCalledWith(expect.anything(), "email@signup.com", "789789");
+    expect(createUserWithEmailAndPassword).toBeCalledTimes(1);
+    expect(createUserWithEmailAndPassword).toBeCalledWith(expect.anything(), "email@signup.com", "789789");
   });
 });

@@ -8,13 +8,14 @@ import { EditModeSetter, UiStateController } from "../../../controllers/UiStateC
 import { THEME } from "../../../style/Theme";
 import UiState from "../../../types/UiState";
 import ModeToggleButtons from "../ModeToggleButtons";
+import { describe, expect, it, vi } from "vitest";
 
 // enable tests when UI uses mode
 describe('default ModeToggleButtons', () => {
   it('value is from context', () => {
     const mockContext = {
       state: { editMode: "TURN" },
-      controller: { setEditMode: jest.fn() as EditModeSetter },
+      controller: { setEditMode: vi.fn() as EditModeSetter },
     } as UiStateContextType;
 
     render(
@@ -42,7 +43,7 @@ describe('default ModeToggleButtons', () => {
   it('calls setEditMode when clicked', () => {
     const mockFactionContext = {
       state: { editMode: "EDIT" } as UiState,
-      controller: { setEditMode: jest.fn() as EditModeSetter } as UiStateController,
+      controller: { setEditMode: vi.fn() as EditModeSetter } as UiStateController,
     } as UiStateContextType;
 
     render(
@@ -58,19 +59,19 @@ describe('default ModeToggleButtons', () => {
     fireEvent.click(btnView);
     expect(mockFactionContext.controller.setEditMode).toBeCalledTimes(1);
     expect(mockFactionContext.controller.setEditMode).toBeCalledWith("VIEW");
-    jest.resetAllMocks();
-    
+    vi.resetAllMocks();
+
     // const btnTurn = screen.getByText("Take Turn");
     // expect(btnTurn).not.toBeDisabled();
     // fireEvent.click(btnTurn);
     // expect(mockFactionContext.controller.setEditMode).toBeCalledTimes(1);
     // expect(mockFactionContext.controller.setEditMode).toBeCalledWith("TURN");
-    // jest.resetAllMocks();
-    
+    // vi.resetAllMocks();
+
     const btnEdit = screen.getByText("Free Edit");
     expect(btnEdit).not.toBeDisabled();
     fireEvent.click(btnEdit);
     // clicking currently selected sends null to handler; controller is not called.
     expect(mockFactionContext.controller.setEditMode).not.toBeCalledWith("EDIT");
   });
-}); 
+});

@@ -8,10 +8,11 @@ import LoginState from "../../../types/LoginState";
 import UiState from "../../../types/UiState";
 
 import { PasswordResetErrorDialog } from "./PasswordResetErrorDialog";
+import { describe, expect, it, vi } from "vitest";
 
 describe('PasswordResetErrorDialog', () => {
   it('returns to LoginState=LOGGING_IN after close', () => {
-    const mockSetLoginState = jest.fn();
+    const mockSetLoginState = vi.fn();
     render(
       <UiStateContext.Provider value={{
         state: {

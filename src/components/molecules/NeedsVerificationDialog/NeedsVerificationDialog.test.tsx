@@ -10,20 +10,21 @@ import LoginState, { LoginStates } from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 import NeedsVerificationDialog from "../NeedsVerificationDialog";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockContext = {
   state: {
     loginState: "NEEDS_VERIFICATION",
   } as UiState,
   controller: {
-    setLoginState: jest.fn((state: LoginState) => {
+    setLoginState: vi.fn((state: LoginState) => {
       console.debug("mockContext.controller.setLoginState: ", state);
     }) as (state: LoginState)=>void,
   },
 } as UiStateContextType;
 
-const mockSendEmailVerification = jest.fn();
-const mockLogout = jest.fn();
+const mockSendEmailVerification = vi.fn();
+const mockLogout = vi.fn();
 const mockAuth = {
   logout: mockLogout as ()=>Promise<void>,
   sendEmailVerification: mockSendEmailVerification as (u:User)=>Promise<void>,
@@ -41,6 +42,7 @@ function renderOpened() {
 
 describe('<NeedsVerificationDialog />', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     mockAuth.currentUser = null;
   });
 
@@ -85,17 +87,17 @@ describe('<NeedsVerificationDialog />', () => {
     mockAuth.currentUser = {} as User;
     renderOpened();
     mockSendEmailVerification.mockImplementationOnce(() => Promise.resolve());
-    
+
     const link = screen.getByTestId("verification-dialog-resend-link");
     fireEvent.click(link);
     expect(mockSendEmailVerification).toBeCalledTimes(1);
   });
-  
+
   it('LoginState=VERIFICATION_ERROR when sendEmailVerification fails', async () => {
     mockAuth.currentUser = {} as User;
     renderOpened();
     mockSendEmailVerification.mockImplementationOnce(() => Promise.reject());
-    
+
     const link = screen.getByTestId("verification-dialog-resend-link");
     fireEvent.click(link);
     expect(mockSendEmailVerification).toBeCalledTimes(1);
@@ -113,7 +115,7 @@ describe('<NeedsVerificationDialog />', () => {
     await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(1));
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_OUT");
   });
-  
+
   it('stays logged in if signout fails', async () => {
     renderOpened();
     mockLogout.mockImplementationOnce(() => Promise.reject());

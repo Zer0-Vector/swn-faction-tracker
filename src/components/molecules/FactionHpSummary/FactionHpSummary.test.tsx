@@ -8,10 +8,11 @@ import { UiStateController } from "../../../controllers/UiStateController";
 import UiState from "../../../types/UiState";
 
 import FactionHpSummary from "./FactionHpSummary";
+import { describe, expect, it, vi } from "vitest";
 
 const mockContext = {
   factions: {
-    update: jest.fn() as FactionPoset['update'],
+    update: vi.fn() as FactionPoset['update'],
   } as FactionPoset,
 } as FactionContextType;
 

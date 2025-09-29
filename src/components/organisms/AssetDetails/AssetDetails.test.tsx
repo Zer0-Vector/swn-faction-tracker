@@ -5,6 +5,7 @@ import { render, screen, within } from "@testing-library/react";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 
 import AssetDetails from "./AssetDetails";
+import { describe, expect, it } from "vitest";
 
 const mockAsset: PurchasedAsset = {
   id: "test",

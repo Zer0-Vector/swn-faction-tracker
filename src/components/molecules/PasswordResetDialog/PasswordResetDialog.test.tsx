@@ -10,10 +10,11 @@ import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 
 import { PasswordResetDialog } from "./PasswordResetDialog";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockSend = jest.fn();
+const mockSend = vi.fn();
 
-const mockSetLoginState = jest.fn();
+const mockSetLoginState = vi.fn();
 function renderIt() {
   render(
     <AuthContext.Provider value={{
@@ -34,6 +35,11 @@ function renderIt() {
 }
 
 describe('PasswordResetDialog', () => {
+
+  beforeEach(() => {
+
+  })
+
   it.each(
     [...LoginStates.filter(s => s !== "RESETTING_PASSWORD")]
   )('does not show when LoginState=%p', (ls) => {
@@ -58,7 +64,7 @@ describe('PasswordResetDialog', () => {
     const dialog = screen.getByTestId("password-reset-dialog");
     expect(dialog).toBeInTheDocument();
   });
-  
+
   it('asks for email', () => {
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
@@ -94,7 +100,8 @@ describe('PasswordResetDialog', () => {
   });
 
   it('if send password reset email fails, set state', async () => {
-    mockSend.mockReturnValue(Promise.reject());
+    mockSend.mockClear(); // XXX: why is this needed?
+    mockSend.mockReturnValue(Promise.reject(new Error()));
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
     const ok = within(dialog).getByText("OK");

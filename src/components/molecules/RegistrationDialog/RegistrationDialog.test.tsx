@@ -10,18 +10,19 @@ import LoginState from "../../../types/LoginState";
 import Nullable from "../../../types/Nullable";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import RegistrationDialog from "../RegistrationDialog";
+import { describe, expect, it, vi } from "vitest";
 
 const mockContext = {
   state: {
     loginState: "REGISTERING",
   },
   controller: {
-    setLoginState: jest.fn() as (state: LoginState) => void,
+    setLoginState: vi.fn() as (state: LoginState) => void,
   },
 } as UiStateContextType;
 
-const mockSignUp = jest.fn();
-const mockSendEmailVerification = jest.fn();
+const mockSignUp = vi.fn();
+const mockSendEmailVerification = vi.fn();
 const mockAuth = {
   signup: mockSignUp as (e: string, p: string)=>Promise<User>,
   sendEmailVerification: mockSendEmailVerification as (u:Nullable<User>)=>Promise<void>,

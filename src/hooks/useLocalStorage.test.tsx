@@ -4,6 +4,7 @@ import { act } from "react-dom/test-utils";
 import { render, screen } from "@testing-library/react";
 
 import { useLocalStorage } from "./useLocalStorage";
+import { beforeEach, expect, test } from "vitest";
 
 function TestComponent(): JSX.Element {
   const [value, setValue] = useLocalStorage<string>("TestKey", "default test value 123");

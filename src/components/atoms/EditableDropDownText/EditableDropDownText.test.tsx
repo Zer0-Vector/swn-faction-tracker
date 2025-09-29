@@ -3,6 +3,7 @@ import React from "react";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import EditableDropDownText from "./EditableDropDownText";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const options = [
   "test-one",
@@ -12,13 +13,17 @@ const options = [
   "test-five",
 ];
 
-const mockOnUpdate = jest.fn();
+const mockOnUpdate = vi.fn();
 
 function renderIt() {
   render(<EditableDropDownText onUpdate={mockOnUpdate} selectableOptions={options} data-testid="test-eddt">test-one</EditableDropDownText>);
 }
 
 describe('default EditableDropDownText', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders text on init', () => {
     renderIt();
     const outer = screen.getByTestId("test-eddt");
@@ -58,12 +63,12 @@ describe('default EditableDropDownText', () => {
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
-    
+
     const listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
     const options = within(listbox).getAllByRole("option");
     expect(options.length).toBe(5);
-    const selection = options[Math.floor(Math.random() * 4) + 1];
+    const selection = options[Math.floor(Math.random() * 4) + 1];// NOSONAR
     fireEvent.click(selection);
 
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
@@ -83,7 +88,7 @@ describe('default EditableDropDownText', () => {
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
-    
+
     const listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
     const textfield = within(outer).getByTestId("editable-dropdown-textfield");

@@ -8,9 +8,10 @@ import GameMode from "../../../types/GameMode";
 import UiState from "../../../types/UiState";
 
 import ListActionToolbar from "./ListActionToolbar";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockOnAddClick = jest.fn();
-const mockOnRemoveClick = jest.fn();
+const mockOnAddClick = vi.fn();
+const mockOnRemoveClick = vi.fn();
 
 function renderIt(removable = false) {
   render(
@@ -34,6 +35,10 @@ function renderIt(removable = false) {
 }
 
 describe('ListActionToolbar', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it.each<GameMode>(
     ["VIEW", "TURN"]
   )('does not render when editMode=%p', (mode) => {
@@ -63,7 +68,7 @@ describe('ListActionToolbar', () => {
     renderIt();
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
-    
+
     const btnAdd = within(lat).getByTestId("lat-add");
     expect(btnAdd).toBeInTheDocument();
     expect(btnAdd).toBeInstanceOf(HTMLButtonElement);
@@ -85,7 +90,7 @@ describe('ListActionToolbar', () => {
     renderIt(true);
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
-    
+
     const btnRemove = within(lat).getByTestId("lat-remove");
     expect(btnRemove).toBeInTheDocument();
     expect(btnRemove).toBeInstanceOf(HTMLButtonElement);
@@ -96,12 +101,12 @@ describe('ListActionToolbar', () => {
     renderIt();
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
-    
+
     const btnAdd = within(lat).getByTestId("lat-add");
     expect(btnAdd).toBeInTheDocument();
     expect(btnAdd).toBeInstanceOf(HTMLButtonElement);
     expect(btnAdd).toBeEnabled();
-    
+
     fireEvent.click(btnAdd);
     expect(mockOnAddClick).toBeCalledTimes(1);
     expect(mockOnRemoveClick).not.toBeCalled();
@@ -111,7 +116,7 @@ describe('ListActionToolbar', () => {
     renderIt(true);
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
-    
+
     const btnRemove = within(lat).getByTestId("lat-remove");
     expect(btnRemove).toBeInTheDocument();
     expect(btnRemove).toBeInstanceOf(HTMLButtonElement);

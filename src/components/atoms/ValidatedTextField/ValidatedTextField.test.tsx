@@ -6,6 +6,7 @@ import { ValidationContext } from "../../../contexts/ValidationContext";
 import { ValidationController } from "../../../controllers/ValidationController";
 
 import { ValidatedTextField } from "./ValidatedTextField";
+import { describe, expect, it } from "vitest";
 
 describe('one ValidatedTextField', () => {
   const validator = new ValidationController({
@@ -32,7 +33,7 @@ describe('one ValidatedTextField', () => {
 
     expect(validator.isAllValid()).toBe(false);
     expect(validator.isValid("test1")).toBe(false);
-    
+
     fireEvent.change(field, { target: { value: "1234" } });
     expect(label).toHaveClass("Mui-error");
     expect(validator.isAllValid()).toBe(false);
@@ -74,7 +75,7 @@ describe('two ValidatedTextField', () => {
     expect(label1).toBeInTheDocument();
     expect(label1).toBeInstanceOf(HTMLLabelElement);
     expect(label1).not.toHaveClass("Mui-error");
-    
+
     // inspect the second field
     const theDiv2 = screen.getByTestId("test-two");
     expect(theDiv2).toBeInTheDocument();
@@ -88,12 +89,12 @@ describe('two ValidatedTextField', () => {
     expect(label2).toBeInstanceOf(HTMLLabelElement);
     expect(label2).not.toHaveClass("Mui-error");
 
-    // inpect the validator
+    // inspect the validator
     expect(validator.isAllValid()).toBe(false);
     expect(validator.isValid("test1")).toBe(false);
     expect(validator.isValid("test2")).toBe(false);
     expect(() => validator.isValid("test3")).toThrowError();
-    
+
     // update field1 to invalid value
     fireEvent.change(field1, { target: { value: "1234" } });
     expect(label1).toHaveClass("Mui-error");
