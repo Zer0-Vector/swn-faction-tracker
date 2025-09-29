@@ -9,5 +9,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfigString = import.meta.env.VITE_FIREBASE_CONFIG;
 const firebaseConfig = JSON.parse(firebaseConfigString);
 
+console.log("Configured Firebase: ", firebaseConfig.projectId)
+
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
