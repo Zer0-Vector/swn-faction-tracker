@@ -20,7 +20,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "ci-test": "vitest",
+    "ci-test": "vitest run",
     "lint": "npx eslint --ext .tsx,.ts .",
     "lint-fix": "npx eslint --ext .tsx,.ts --fix .",
     "storybook": "start-storybook -p 6006 -s public",
