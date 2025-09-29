@@ -8,5 +8,20 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "zer0-vector",
     "projectKey": "Zer0-Vector_swn-faction-tracker"
-  }
+  },
+  "files.associations": {
+    "firestore.indexes.json": "jsonc",
+  },
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/{info,lfs,logs,refs,objects}/**",
+    ".git/{index,*refs,*HEAD}",
+    ".vscode",
+    ".vscode-insiders",
+    ".gitignore",
+    "firestore.*",
+    "firebase.json"
+  ]
 }

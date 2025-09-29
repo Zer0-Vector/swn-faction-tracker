@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { browserLocalPersistence, getAuth, User } from "firebase/auth";
+import type { User } from "firebase/auth";
 import * as firebaseAuth from "firebase/auth";
 
 import { IUiStateController } from "../../controllers/UiStateController";
@@ -10,10 +10,10 @@ import { ProvidedAuth } from "../../types/ProvidedAuth";
 export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   const [user, setUser] = useState<Nullable<User>>(null);
 
-  const AUTH = getAuth(FirebaseApp);
+  const AUTH = firebaseAuth.getAuth(FirebaseApp);
 
   useEffect(() => {
-    firebaseAuth.setPersistence(AUTH, browserLocalPersistence)
+    firebaseAuth.setPersistence(AUTH, firebaseAuth.browserLocalPersistence)
       .catch(reason => {
         console.error("Error setting auth persistence: ", reason);
       });
