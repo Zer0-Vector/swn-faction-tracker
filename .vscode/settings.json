@@ -23,10 +23,13 @@
     ".gitignore",
     "firestore.*",
     "firebase.json",
-    ".env*"
+    ".env*",
   ],
   "cSpell.ignoreWords": [
     "webfonts",
-    "ärthur"
+    "ärthur",
+    "infiles",
+    "chromaui",
+    "sonarqube"
   ]
 }
