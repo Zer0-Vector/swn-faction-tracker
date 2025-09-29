@@ -7,12 +7,13 @@ import { LocationContext, LocationContextType, LocationsPoset } from "../../../c
 import FactionInfo from "../../../types/FactionInfo";
 
 import FactionDetails from "./FactionDetails";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 let mockFaction: FactionInfo;
 
-const mockGetLocations = jest.fn();
-const mockGetFaction = jest.fn();
-const mockGetLocation = jest.fn();
+const mockGetLocations = vi.fn();
+const mockGetFaction = vi.fn();
+const mockGetLocation = vi.fn();
 
 const mockLocationContext: LocationContextType = {
   locations: {

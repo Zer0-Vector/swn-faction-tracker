@@ -1,9 +1,10 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ValidationController } from "./ValidationController";
 
 describe("ValidationController", () => {
   const mockValidators = {
-    one: jest.fn(),
-    two: jest.fn(),
+    one: vi.fn(),
+    two: vi.fn(),
   };
   let controller = new ValidationController(mockValidators);
 
@@ -38,7 +39,7 @@ describe("ValidationController", () => {
     expect(controller.isValid("one")).toBe(true);
     expect(controller.isAllValid()).toBe(false);
   });
-  
+
   it('when all are validated, isAllValid returns true', () => {
     mockValidators.one.mockImplementationOnce(() => true);
     mockValidators.two.mockImplementationOnce(() => true);

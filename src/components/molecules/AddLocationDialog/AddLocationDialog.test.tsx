@@ -5,11 +5,12 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { LocationContext, LocationContextType, LocationsPoset } from "../../../contexts/LocationContext";
 
 import AddLocationDialog from "./AddLocationDialog";
+import { describe, expect, it, vi } from "vitest";
 
 function renderWithContext(context?: LocationContextType) {
-  const mockClose = jest.fn();
-  const mockCreate = jest.fn();
-  const mockCheckLocationName = jest.fn();
+  const mockClose = vi.fn();
+  const mockCreate = vi.fn();
+  const mockCheckLocationName = vi.fn();
 
   const locationContext = context || {
     locations: {
@@ -30,10 +31,10 @@ describe('default AddLocationDialog', () => {
     render(
       <LocationContext.Provider value={{
         locations: {
-          checkName: jest.fn() as LocationsPoset['checkName'],
+          checkName: vi.fn() as LocationsPoset['checkName'],
         } as LocationsPoset,
       }}>
-        <AddLocationDialog open={false} onClose={jest.fn()} onCreate={jest.fn()} />
+        <AddLocationDialog open={false} onClose={vi.fn()} onCreate={vi.fn()} />
       </LocationContext.Provider>
     );
     expect(screen.queryByTestId("add-location-dialog")).not.toBeInTheDocument();

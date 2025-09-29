@@ -10,6 +10,7 @@ import FactionInfo from "../../../types/FactionInfo";
 import UiState from "../../../types/UiState";
 
 import FactionListActionToolbar from "./FactionListActionToolbar";
+import { describe, expect, it, vi } from "vitest";
 
 function TestComp() {
   const { pathname } = useLocation();
@@ -28,8 +29,8 @@ function TestComp() {
   );
 }
 
-const mockGetFaction = jest.fn() as jest.MockedFn<FactionPoset['get']>;
-const mockRemoveFaction = jest.fn() as jest.MockedFn<FactionPoset['remove']>;
+const mockGetFaction = vi.fn();
+const mockRemoveFaction = vi.fn();
 function renderIt(route = "/") {
   render(
     <FactionContext.Provider value={{

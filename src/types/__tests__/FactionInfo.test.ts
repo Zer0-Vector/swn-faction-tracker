@@ -1,3 +1,4 @@
+import { expect, it } from "vitest";
 import FactionInfo from "../FactionInfo";
 
 it('Recompute HP method sets maxhp', () => {

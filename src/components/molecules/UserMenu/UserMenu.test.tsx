@@ -1,4 +1,5 @@
 import React from "react";
+import { describe, it } from "vitest";
 
 describe('UserMenu, logged out', () => {
   it.todo('renders closed on init');

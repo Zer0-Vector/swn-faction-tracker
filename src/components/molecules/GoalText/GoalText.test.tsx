@@ -12,8 +12,9 @@ import { Maybe } from "../../../types/Maybe";
 import UiState from "../../../types/UiState";
 
 import GoalText from "./GoalText";
+import { describe, expect, it, vi } from "vitest";
 
-const mockSetGoal = jest.fn();
+const mockSetGoal = vi.fn();
 const mockContext = {
   factions: {
     update: mockSetGoal as FactionPoset['update'],

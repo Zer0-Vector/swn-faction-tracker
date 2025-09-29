@@ -1,7 +1,8 @@
+import { describe, expect, it } from "vitest";
 import { generateSlug } from "../SlugGenerator";
 
 describe('generateId(*)', () => {
-  describe('returns input when only aphanumeric', () => {
+  describe('returns input when only alphanumeric', () => {
     it.each(
       [
         "test123",
@@ -49,7 +50,7 @@ describe('generateId("hw", [x, ...])', () => {
     [["hw", "hw-2", "hw-1"], 3],
     [["hw-1", "hw-2","hw-3"], 4],
     [["hw-1","hw-3"], 4],
-  ])('given "hw" with exising %p, expect "hw-%p"', (currentValues: string[], expectedSuffix: number) => {
+  ])('given "hw" with existing %p, expect "hw-%p"', (currentValues: string[], expectedSuffix: number) => {
     expect(generateSlug("hw", currentValues)).toEqual(`hw-${expectedSuffix}`);
   });
 });

@@ -8,8 +8,9 @@ import LoginState, { LoginStates } from "../../../types/LoginState";
 import UiState from "../../../types/UiState";
 
 import { PasswordResetSentDialog } from "./PasswordResetSentDialog";
+import { describe, expect, it, vi } from "vitest";
 
-const mockSetLoginState = jest.fn();
+const mockSetLoginState = vi.fn();
 function renderIt() {
   render(
     <UiStateContext.Provider value={{
@@ -44,7 +45,7 @@ describe('PasswordResetSentDialog', () => {
     const dialog = screen.queryByTestId("reset-sent-dialog");
     expect(dialog).not.toBeInTheDocument();
   });
-  
+
   it('is shown when LoginState="PASSWORD_RESET_SENT"', () => {
     renderIt();
     const dialog = screen.getByTestId("reset-sent-dialog");

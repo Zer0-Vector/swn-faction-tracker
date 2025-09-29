@@ -11,14 +11,15 @@ import FactionInfo from "../../../types/FactionInfo";
 import UiState from "../../../types/UiState";
 
 import FactionListItem from "./FactionListItem";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockGetFaction = jest.fn() as jest.MockedFn<FactionPoset['get']>;
-const mockUpdateFaction = jest.fn() as jest.MockedFn<FactionPoset['update']>;
-const mockCheckName = jest.fn() as jest.MockedFn<FactionPoset['checkName']>;
+const mockGetFaction = vi.fn();
+const mockUpdateFaction = vi.fn();
+const mockCheckName = vi.fn();
 const mockContext: FactionContextType = {
   factions: {
     slugGet: mockGetFaction as FactionPoset['get'],
-    getAll: jest.fn() as FactionPoset['getAll'],
+    getAll: vi.fn() as FactionPoset['getAll'],
     update: mockUpdateFaction as FactionPoset['update'],
     checkName: mockCheckName as FactionPoset['checkName'],
   } as FactionPoset,
@@ -113,6 +114,7 @@ describe('FactionListItem', () => {
 
 describe('FactionListItem behaviors', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     window.history.pushState({}, "", "/");
     mockCheckName.mockImplementation(() => true);
   });

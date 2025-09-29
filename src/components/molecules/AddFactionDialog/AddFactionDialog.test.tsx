@@ -7,12 +7,13 @@ import FactionInfo from "../../../types/FactionInfo";
 import { Named } from "../../../types/NamedElementPoset";
 
 import AddFactionDialog from "./AddFactionDialog";
+import { describe, expect, it, vi } from "vitest";
 
 const EMPTY_CONTEXT = {} as FactionContextType;
 
 function renderWithContext(context?: FactionContextType) {
-  const mockClose = jest.fn();
-  const mockCreate = jest.fn();
+  const mockClose = vi.fn();
+  const mockCreate = vi.fn();
   render(
     <FactionContext.Provider value={context || EMPTY_CONTEXT}>
       <AddFactionDialog open={true} onClose={mockClose} onCreate={mockCreate} />

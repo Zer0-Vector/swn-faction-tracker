@@ -7,6 +7,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+env:
+  NODE_VERSION: 22.11.0
 jobs:
   build:
     name: Build
@@ -18,7 +20,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.5.1
         with:
-          node-version: 16.15.1
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       - run: npm install
       - run: npm run build
@@ -37,7 +39,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.5.1
         with:
-          node-version: 16.15.1
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       - run: npm install
       - run: npm run ci-test -- --coverage
@@ -47,6 +49,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   chromatic:
+    # XXX: disabled for now
+    if: false
     name: Chromatic Deployment
     runs-on: ubuntu-latest
     steps:
@@ -56,7 +60,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.5.1
         with:
-          node-version: 16.15.1
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       - run: npm install
       - name: Publish to Chromatic

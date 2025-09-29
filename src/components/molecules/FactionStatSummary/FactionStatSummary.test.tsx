@@ -5,10 +5,11 @@ import { render } from "@testing-library/react";
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 
 import FactionStatSummary from "./FactionStatSummary";
+import { describe, it, vi } from "vitest";
 
 const mockContext: FactionContextType = {
   factions: {
-    update: jest.fn() as FactionPoset['update'],
+    update: vi.fn() as FactionPoset['update'],
   } as FactionPoset,
 };
 

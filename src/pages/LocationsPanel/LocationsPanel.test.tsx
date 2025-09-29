@@ -10,6 +10,7 @@ import LocationInfo from "../../types/LocationInfo";
 import UiState from "../../types/UiState";
 
 import LocationsPanel from "./LocationsPanel";
+import { describe, expect, it, vi } from "vitest";
 
 function renderIt(locations: LocationInfo[] = []) {
   render(
@@ -19,7 +20,7 @@ function renderIt(locations: LocationInfo[] = []) {
         checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         subscribe: (_) => () => {},
-        reorder: jest.fn() as LocationsPoset['reorder'],
+        reorder: vi.fn() as LocationsPoset['reorder'],
       } as LocationsPoset,
     }}>
       <UiStateContext.Provider value={{

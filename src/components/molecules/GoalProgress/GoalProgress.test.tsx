@@ -10,9 +10,10 @@ import GoalInfo from "../../../types/GoalInfo";
 import UiState from "../../../types/UiState";
 
 import GoalProgress from "./GoalProgress";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockSlugGet = jest.fn() as jest.MockedFn<FactionPoset['slugGet']>;
-const mockUpdate = jest.fn() as jest.MockedFn<FactionPoset['update']>;
+const mockSlugGet = vi.fn();
+const mockUpdate = vi.fn();
 const mockContext: FactionContextType = {
   factions: {
     slugGet: mockSlugGet as FactionPoset['slugGet'],
@@ -46,6 +47,7 @@ function renderIt(faction = mockFaction) {
 
 describe('default GoalProgress', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     mockSlugGet.mockImplementationOnce(() => mockFaction);
   });
 

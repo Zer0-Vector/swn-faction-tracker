@@ -1,13 +1,15 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import UiState from "../types/UiState";
 
 import { UiStateController } from "./UiStateController";
 
 let controller: UiStateController;
 
-const mockSetter = jest.fn();
+const mockSetter = vi.fn();
 
 describe("UiStateController", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     controller = new UiStateController(mockSetter);
   });
 

@@ -8,6 +8,7 @@ import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import PurchasedAsset from "../../../types/PurchasedAsset";
 
 import AssetList from "./AssetList";
+import { describe, expect, it } from "vitest";
 
 function renderIt(assets: PurchasedAsset[], route = "/factions/test-faction") {
   render(

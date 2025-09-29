@@ -9,19 +9,20 @@ import LoginState from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 import LoginDialog from "../LoginDialog";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockContext = {
   state: {
     loginState: "LOGGING_IN",
   } as UiState,
   controller: {
-    setLoginState: jest.fn(state => {
+    setLoginState: vi.fn(state => {
       console.log("TEST SET_LOGIN_STATE: ", state);
     }) as (state:LoginState) => void,
   },
 } as UiStateContextType;
 
-const mockLogin = jest.fn();
+const mockLogin = vi.fn();
 const mockAuth = {
   login: mockLogin as (e: string, p: string)=>Promise<User>,
 } as ProvidedAuth;
@@ -37,6 +38,9 @@ function renderOpened() {
 }
 
 describe('default LoginDialog', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  })
   it('displays nothing when not open', () => {
     render(
       <UiStateContext.Provider value={

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NamedElementPoset, NamedSluggedEntity } from "./NamedElementPoset";
 
 describe('NamedElementPoset(x => x, [], undefined)', () => {
@@ -60,7 +61,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
   });
 
   it('subscribers notified when element added', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const unsubscribe = poset.subscribe(fn);
     const element = poset.add({ name: "cb" });
     expect(fn).toBeCalledTimes(1);
@@ -69,7 +70,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
   });
 
   it('subscribers notified when element removed', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const element = poset.add({ name: "cb" });
     const unsubscribe = poset.subscribe(fn);
     expect(poset.remove(element.id)).toBe(true);
@@ -79,7 +80,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
   });
 
   it('subscribers notified when element reordered', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     poset.add({ name: "cb" });
     poset.add({ name: "az" });
     const unsubscribe = poset.subscribe(fn);
@@ -90,7 +91,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
   });
 
   it('subscribers notified when element updated', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const element = poset.add({ name: "cb" });
     const unsubscribe = poset.subscribe(fn);
     expect(poset.update(element.id, "name", "de")).toBe(element);
@@ -100,7 +101,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
   });
 
   it('subscribers not notified when unsubscribed', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const element = poset.add({ name: "cb" });
     const unsubscribe = poset.subscribe(fn);
     expect(poset.update(element.id, "name", "de")).toBe(element);

@@ -10,6 +10,7 @@ import LoginState, { LoginStates } from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
 import VerificationEmailErrorDialog from "../VerificationEmailErrorDialog";
+import { describe, expect, it, vi } from "vitest";
 
 describe('VerificationEmailErrorDialog', () => {
   it.each(
@@ -41,22 +42,22 @@ describe('VerificationEmailErrorDialog', () => {
     );
     expect(screen.getByTestId("verification-error-dialog")).toBeInTheDocument();
   });
-  
+
   it('sets LoginState to LOGGED_OUT after close (w/ user={})', async () => {
     const mockContext = {
       state: {
         loginState: "VERIFICATION_ERROR",
       } as UiState,
       controller: {
-        setLoginState: jest.fn() as (state: LoginState)=>void,
+        setLoginState: vi.fn() as (state: LoginState)=>void,
       } as UiStateController,
     };
-    const mockLogout = jest.fn() as jest.MockedFn<()=>Promise<void>>;
+    const mockLogout = vi.fn()
     const mockAuth = {
       currentUser: {} as User,
       logout: mockLogout as ()=>Promise<void>,
     } as ProvidedAuth;
-    mockLogout.mockResolvedValueOnce();
+    mockLogout.mockResolvedValueOnce(null); // void function
 
     render(
       <AuthContext.Provider value={mockAuth}>

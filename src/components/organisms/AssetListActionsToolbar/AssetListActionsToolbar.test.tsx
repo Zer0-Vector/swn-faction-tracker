@@ -11,12 +11,13 @@ import FactionInfo from "../../../types/FactionInfo";
 import UiState from "../../../types/UiState";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockAddAsset = jest.fn();
-const mockRemoveAsset = jest.fn();
-const mockGetFaction = jest.fn();
-const mockGetAsset = jest.fn();
-const mockGetId = jest.fn();
+const mockAddAsset = vi.fn();
+const mockRemoveAsset = vi.fn();
+const mockGetFaction = vi.fn();
+const mockGetAsset = vi.fn();
+const mockGetId = vi.fn();
 
 const mockFactionContext: FactionContextType = {
   factions: {
