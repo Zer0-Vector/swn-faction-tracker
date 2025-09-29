@@ -196,6 +196,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.11.4",
     "eslint-plugin-simple-import-sort": "^8.0.0",
+    "jsdom": "^27.0.0",
     "prop-types": "^15.8.1",
     "react-test-renderer": "^18.2.0",
     "typescript": "^4.9.3",
