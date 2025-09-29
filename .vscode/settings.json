@@ -22,6 +22,11 @@
     ".vscode-insiders",
     ".gitignore",
     "firestore.*",
-    "firebase.json"
+    "firebase.json",
+    ".env*"
+  ],
+  "cSpell.ignoreWords": [
+    "webfonts",
+    "ärthur"
   ]
 }
