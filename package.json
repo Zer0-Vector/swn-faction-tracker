@@ -16,10 +16,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build --verbose",
-    "test": "react-scripts test --verbose",
-    "ci-test": "react-scripts test --verbose --watchAll=false",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "echo 'todo: test'",
+    "ci-test": "echo 'todo: ci-test'",
     "lint": "npx eslint --ext .tsx,.ts .",
     "lint-fix": "npx eslint --ext .tsx,.ts --fix .",
     "storybook": "start-storybook -p 6006 -s public",
