@@ -70,8 +70,8 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.development
-.env.production
+.env.*
+!.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -106,3 +106,12 @@ dist
 
 build/
 storybook-static/
+
+# Firebase
+.firebase/
+firebase-debug.log
+.serviceAccount*.json
+.runtimeconfig.json
+
+# production config is generated
+.firebaserc
