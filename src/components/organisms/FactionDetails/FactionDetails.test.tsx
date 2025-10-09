@@ -1,81 +1,103 @@
 import React from "react";
 
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
+
+import { userEvent } from "@testing-library/user-event";
 
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { LocationContext, LocationContextType, LocationsPoset } from "../../../contexts/LocationContext";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 
 import FactionDetails from "./FactionDetails";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import LocationInfo from "../../../utils/LocationInfo";
+import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
+import { UiStateController } from "../../../controllers/UiStateController";
+import UiState from "../../../types/UiState";
+
+const DEBUG_MODE = true;
 
 let mockFaction: FactionInfo;
 
-const mockGetLocations = vi.fn();
-const mockGetFaction = vi.fn();
-const mockGetLocation = vi.fn();
-
 const mockLocationContext: LocationContextType = {
-  locations: {
-    get: mockGetLocation as LocationsPoset['get'],
-    getAll: mockGetLocations as LocationsPoset['getAll'],
-  } as LocationsPoset,
+  locations: new LocationsPoset(),
 };
 
 const mockContext: FactionContextType = {
-  factions: {
-    get: mockGetFaction as FactionPoset['get'],
-  } as FactionPoset,
+  factions: new FactionPoset(),
 };
 
+const mockSetUiState = vi.fn();
+const mockUiStateContext: UiStateContextType = (() => {
+  const state: UiState = {
+    editMode: "EDIT",
+    loginState: "LOGGED_OUT",
+    turnIndex: 0,
+    turnState: "OFF",
+    turnInfo: undefined
+  };
+  const ctx = {
+    state,
+    controller: new UiStateController(mockSetUiState),
+  };
+
+  mockSetUiState.mockImplementation((uiState) => {
+    ctx.state = uiState;
+  });
+
+  return ctx;
+})();
+
+let mockFactionId;
+
 function renderIt() {
-  render(
-    <LocationContext.Provider value={mockLocationContext}>
-      <FactionContext.Provider value={mockContext}>
-        <FactionDetails faction={mockFaction} />
-      </FactionContext.Provider>
-    </LocationContext.Provider>
-  );
+  return {
+    user: userEvent.setup({ delay: 500, }),
+    ...render(
+      <UiStateContext.Provider value={mockUiStateContext}>
+        <LocationContext.Provider value={mockLocationContext}>
+          <FactionContext.Provider value={mockContext}>
+            <FactionDetails faction={mockFaction} />
+          </FactionContext.Provider>
+        </LocationContext.Provider>
+      </UiStateContext.Provider>
+    )
+  }
 }
 
+let mockLocation1: LocationInfo
+let mockLocation2: LocationInfo;
+
 describe('default FactionDetails', () => {
-  beforeEach(() => {
-    mockFaction = {
-      id: "test",
-      slug: "test-faction",
-      name: "Test Faction",
-      cunning: 11,
-      force: 22,
-      hp: 33,
-      maxHp: 44,
-      wealth: 55,
-      xp: 66,
-    };
-    mockGetLocations.mockImplementation(() => [
-      {
-        id: "test-location-1",
-        name: "Test Location 1",
-        tl: 0,
-        x: 0, y: 0,
-      },
-      {
-        id: "test-location-2",
-        name: "Test Location 2",
-        tl: 1,
-        x: 1, y: 1,
-      },
-    ]);
-    mockGetFaction.mockImplementation((f: string) => {
-      if (f !== mockFaction.slug) {
-        throw new Error("Need more mocking");
-      }
-      return mockFaction;
+  beforeAll(() => {
+    mockLocation1 = mockLocationContext.locations.add({
+      name: "Test Location 1",
+      tl: 0, x: 0, y: 0
     });
+    mockLocation2 = mockLocationContext.locations.add({
+      name: "Test Location 2",
+      tl: 1, x: 1, y: 1
+    });
+    const faction = mockContext.factions.add({
+      name: "Test Faction",
+    });
+    const fid = faction.id;
+    mockContext.factions.update(fid, "cunning", 1);
+    mockContext.factions.update(fid, "force", 2);
+    mockContext.factions.update(fid, "hp", 33);
+    mockContext.factions.update(fid, "wealth", 5);
+    mockContext.factions.update(fid, "xp", 66);
+    mockFaction = mockContext.factions.get(fid)!;
+
+  });
+
+  beforeEach(() => {
+    console.log("mocked FactionInfo: ", mockContext.factions.get(mockFaction.id));
+    console.log("mockContext.factions.size: ", mockContext.factions.size);
   });
 
   afterEach(() => {
-    mockGetFaction.mockClear();
-    mockGetLocations.mockClear();
+    vi.resetAllMocks();
   });
 
   it('renders container', () => {
@@ -125,7 +147,7 @@ describe('default FactionDetails', () => {
 
     const maxhp = within(item).getByTestId("maxhp");
     expect(maxhp).toBeInTheDocument();
-    expect(maxhp).toHaveTextContent("44");
+    expect(maxhp).toHaveTextContent("16");
   });
 
   it('renders attributes', () => {
@@ -139,15 +161,15 @@ describe('default FactionDetails', () => {
 
     const force = within(item).getByTestId("faction-force");
     expect(force).toBeInTheDocument();
-    expect(force).toHaveTextContent("22");
+    expect(force).toHaveTextContent("2");
 
     const cunning = within(item).getByTestId("faction-cunning");
     expect(cunning).toBeInTheDocument();
-    expect(cunning).toHaveTextContent("11");
+    expect(cunning).toHaveTextContent("1");
 
     const wealth = within(item).getByTestId("faction-wealth");
     expect(wealth).toBeInTheDocument();
-    expect(wealth).toHaveTextContent("55");
+    expect(wealth).toHaveTextContent("5");
   });
 
   it('renders goal', () => {
@@ -179,16 +201,77 @@ describe('default FactionDetails', () => {
     expect(tally).toBeInTheDocument();
     expect(tally).toHaveTextContent("Select Goal");
   });
-});
 
-describe('FactionDetails with homeworld set', () => {
-  it.todo('check stuff');
-});
+  describe('FactionDetails with homeworld set', { timeout: 10000 },  () => {
+    beforeAll(() => {
+      mockContext.factions.update(mockFaction.id, "homeworldId", mockLocation1.id);
+    });
 
-describe('FactionDetails with goal set', () => {
-  it.todo('check stuff');
-});
+    afterAll(() => {
+      mockContext.factions.update(mockFaction.id, "homeworldId", undefined);
+    })
 
-describe('FactionDetails behavior', () => {
-  it.todo('do stuff and check results');
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
+    function setupHomeworldComponent() {
+      const result = renderIt();
+      const container = screen.getByTestId("faction-details");
+      const header = within(container).getByTestId("homeworld-label");
+      expect(header).toBeInTheDocument();
+      expect(header.textContent).toEqual("Homeworld:");
+      const item = within(container).getByTestId("homeworld-item");
+      expect(item).toBeInTheDocument();
+      const child = within(item).getByTestId("homeworld");
+      expect(child).toBeInTheDocument();
+      return { homeworldComponent: child, ...result };
+    }
+
+    it("renders homeworld name", () => {
+      const { homeworldComponent } = setupHomeworldComponent();
+      expect(homeworldComponent).toHaveTextContent(mockLocation1.name);
+    });
+
+    it("edits homeworld name", async () => {
+      const { homeworldComponent: hc, user } = setupHomeworldComponent();
+      expect(hc).toHaveTextContent(mockLocation1.name);
+
+      const getTextElement = () => within(hc).queryByTestId("editable-dropdown-text");
+      const getFieldElement = () => within(hc).queryByTestId("editable-dropdown-textfield");
+
+      expect(getTextElement()).toBeInTheDocument();
+      expect(getFieldElement()).not.toBeInTheDocument();
+
+      const button = within(hc).getByTestId("editable-dropdown-button");
+      await user.click(button);
+
+      expect(getTextElement()).not.toBeInTheDocument();
+      const field = getFieldElement();
+      expect(field).toBeInTheDocument();
+
+      const listbox = within(hc).getByRole("listbox");
+      expect(listbox).toBeInTheDocument();
+      const options = within(listbox).getAllByRole("option");
+      expect(options.length).toBe(2);
+
+      const selection = options.find(opt => opt.textContent === mockLocation2.name);
+      expect(selection).not.toBeUndefined();
+      expect(selection).toHaveTextContent(mockLocation2.name);
+      await user.click(selection!);
+
+      await waitFor(() => expect(listbox).not.toBeInTheDocument());
+
+      expect(getTextElement()).toBeInTheDocument();
+      expect(getTextElement()).toHaveTextContent(mockLocation2.name);
+
+    });
+
+  });
+
+  describe('FactionDetails with goal set', () => {
+    it.todo("renders goal");
+    it.todo("updates goal on edit");
+  });
+
 });
