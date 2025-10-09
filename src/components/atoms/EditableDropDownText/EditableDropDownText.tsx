@@ -19,12 +19,12 @@ interface EditableDropDownTextBaseProps extends RequiredChildrenProps<string> {
    * @param newValue The value from the text field
    */
   onUpdate: (newValue: string) => void;
-  
+
   /**
    * Options for drop down
    */
   selectableOptions: readonly string[];
-  
+
   /**
    * Flag to enable/disable editing
    * @default true
@@ -39,7 +39,7 @@ export type EditableDropDownTextProps =
   & Prefixed<Pick<TypographyProps, "variant">, "text">
   & TestableProps;
 
-export default function EditableDropDownText({ 
+export default function EditableDropDownText({
   children,
   onUpdate,
   textVariant,
@@ -58,7 +58,7 @@ export default function EditableDropDownText({
       textFieldRef.current.focus();
       textFieldRef.current.select();
     }
-  }, [editing]);
+  }, [editing, textFieldRef.current]);
 
   const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
@@ -98,7 +98,7 @@ export default function EditableDropDownText({
     }
   }, [clicked]);
 
-  const inputClickHander = useCallback<React.MouseEventHandler>((evt) => {
+  const inputClickHandler = useCallback<React.MouseEventHandler>((evt) => {
     evt.stopPropagation();
   }, []);
 
@@ -108,13 +108,13 @@ export default function EditableDropDownText({
         {...params}
         inputRef={textFieldRef}
         onKeyUp={handleKeyUp}
-        onClick={inputClickHander}
+        onClick={inputClickHandler}
         onBlur={handleCancel}
         autoComplete="off"
         sx={inputSx}
         data-testid="editable-dropdown-textfield"
       />,
-    [handleCancel, handleKeyUp, inputClickHander, inputSx]
+    [handleCancel, handleKeyUp, inputClickHandler, inputSx]
   );
 
   let inner;
