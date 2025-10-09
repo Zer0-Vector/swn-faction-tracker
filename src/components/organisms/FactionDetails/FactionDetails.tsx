@@ -21,15 +21,7 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
 
   const isSmallViewport = useMediaQuery("(max-width:600px)");
 
-  const updateHomeworld = useCallback((val: string) => {
-    console.log("Updating homeworld: ", val);
-    const selectedId = locations.getAll().find(loc => loc.name === val)?.id
-    if (selectedId === undefined) {
-      console.error("Could not find location: ", val);
-      return;
-    }
-    factions.update(faction.id, "homeworldId", selectedId);
-  }, [faction.id, factions, locations]);
+
 
   const updateTag = useCallback((val: string) => {
     factions.update(faction.id, "tag", val);
@@ -42,13 +34,11 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
     gap: 0.25,
   }), [isSmallViewport]);
 
-
-
   console.log("Rendering FactionDetails...");
 
   return (
     <Container disableGutters={true} sx={containerSx} data-testid="faction-details">
-      <HomeworldItem homeworldId={faction.homeworldId} onUpdate={updateHomeworld} />
+      <HomeworldItem factionId={faction.id} homeworldId={faction.homeworldId} />
       <TagItem tag={faction.tag} onUpdate={updateTag} />
       <HpItem id={faction.id} hp={faction.hp} maxHp={faction.maxHp} />
       <AttributesItem {...faction} />
