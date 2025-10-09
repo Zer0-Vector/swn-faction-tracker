@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { SluggedEntity } from "../SluggedEntity";
+import { SluggedEntity } from "../../types/SluggedEntity";
 
-import { SluggedOrderedSet } from "./SluggedOrderedSet";
+import { SluggedOrderedSet } from "../SluggedOrderedSet";
 
 const blanks = [ "", " ", "\t", "\f", "\r", "\n", " \t \f \r\n" ];
 

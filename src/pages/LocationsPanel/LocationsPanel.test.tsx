@@ -6,7 +6,7 @@ import { render, screen } from "@testing-library/react";
 import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
-import LocationInfo from "../../types/LocationInfo";
+import LocationInfo from "../../utils/LocationInfo";
 import UiState from "../../types/UiState";
 
 import LocationsPanel from "./LocationsPanel";

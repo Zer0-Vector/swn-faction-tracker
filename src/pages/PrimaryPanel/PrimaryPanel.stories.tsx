@@ -9,9 +9,9 @@ import { LocationContext, LocationContextType, LocationsPoset } from "../../cont
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
-import FactionInfo from "../../types/FactionInfo";
-import LocationInfo from "../../types/LocationInfo";
-import PurchasedAsset from "../../types/PurchasedAsset";
+import FactionInfo from "../../utils/FactionInfo";
+import LocationInfo from "../../utils/LocationInfo";
+import PurchasedAsset from "../../utils/PurchasedAsset";
 import UiState from "../../types/UiState";
 
 import PrimaryPanel from "./PrimaryPanel";

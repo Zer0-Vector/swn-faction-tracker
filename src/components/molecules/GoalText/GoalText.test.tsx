@@ -5,7 +5,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import GoalType from "../../../types/GoalType";
 import { Maybe } from "../../../types/Maybe";
@@ -18,6 +18,7 @@ const mockSetGoal = vi.fn();
 const mockContext = {
   factions: {
     update: mockSetGoal as FactionPoset['update'],
+    subscribe: vi.fn() as FactionPoset['subscribe'],
   } as FactionPoset,
 } as FactionContextType;
 

@@ -6,7 +6,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import UiState from "../../../types/UiState";
 
 import FactionListActionToolbar from "./FactionListActionToolbar";
@@ -38,6 +38,7 @@ function renderIt(route = "/") {
         getAll: () => [] as FactionInfo[],
         slugGet: mockGetFaction as FactionPoset['slugGet'],
         remove: mockRemoveFaction as FactionPoset['remove'],
+        subscribe: vi.fn() as FactionPoset['subscribe'],
       } as FactionPoset,
     }}>
       <MemoryRouter initialEntries={[route]}>

@@ -1,7 +1,9 @@
+import LocationStatsInfo from "../types/LocationStatsInfo";
 import { NamedSluggedEntity } from "./NamedElementPoset";
 
-export default class LocationInfo implements NamedSluggedEntity {
 
+
+export default class LocationInfo implements NamedSluggedEntity, LocationStatsInfo {
   constructor(
     public readonly id: string,
     public slug: string,

@@ -1,7 +1,7 @@
 import { useContext, useMemo } from "react";
 
 import { useSelectionDialog } from "../../../hooks/useSelectionDialog";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import { TurnPhase } from "../../../types/TurnPhase";
 import { useFactions } from "../../FactionContext";
 import { UiStateContext } from "../../UiStateContext";

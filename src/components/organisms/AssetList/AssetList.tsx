@@ -11,7 +11,7 @@ import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
 import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 import { Maybe } from "../../../types/Maybe";
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 import AssetDetails from "../AssetDetails";
 
 interface AssetSummaryProps extends RequiredChildrenProps<string> {
@@ -46,7 +46,7 @@ export default function AssetList() {
   const { assetSlug, factionSlug } = useSelectionSlug();
   const nav = useNavigate();
 
-  
+
   const handleSelectAsset = (pa: PurchasedAsset) => (_evt: React.SyntheticEvent, expanded: boolean) => {
     if (expanded) {
       console.debug("Selecting asset", pa.slug);
@@ -59,7 +59,7 @@ export default function AssetList() {
   if (faction === undefined) {
     return <Typography color="error">No faction selected!</Typography>;
   }
-  
+
   console.log("Rendering asset list: ", assets);
   return (
     // TODO make drag and drop
@@ -70,7 +70,7 @@ export default function AssetList() {
             const expanded = pa.slug === assetSlug;
             const name = pa.nickname ? `${pa.nickname} (${pa.name})` : pa.name;
             return (
-              <Accordion key={index} expanded={expanded} onChange={handleSelectAsset(pa)}>
+              <Accordion key={`${pa.slug}_${index}`} expanded={expanded} onChange={handleSelectAsset(pa)}>
                 <AssetSummary expanded={expanded}>{name}</AssetSummary>
                 <AccordionDetails><AssetDetails asset={pa} /></AccordionDetails>
               </Accordion>

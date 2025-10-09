@@ -2,7 +2,7 @@ import React from "react";
 
 import { render, screen, within } from "@testing-library/react";
 
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 
 import AssetDetails from "./AssetDetails";
 import { describe, expect, it } from "vitest";

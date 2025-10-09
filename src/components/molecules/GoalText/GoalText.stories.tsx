@@ -3,7 +3,7 @@ import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import { MockAction } from "../../__mocks__/MockAction";
 
 import GoalText from "./GoalText";

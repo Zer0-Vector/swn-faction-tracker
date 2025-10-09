@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { NamedElementPoset, NamedSluggedEntity } from "./NamedElementPoset";
+import { NamedElementPoset, NamedSluggedEntity } from "../NamedElementPoset";
 
 describe('NamedElementPoset(x => x, [], undefined)', () => {
   let poset: NamedElementPoset<NamedSluggedEntity>;
@@ -84,9 +84,10 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
     poset.add({ name: "cb" });
     poset.add({ name: "az" });
     const unsubscribe = poset.subscribe(fn);
+
     expect(() => poset.reorder(1, 0)).not.toThrow();
     expect(fn).toBeCalledTimes(1);
-    expect(fn).toBeCalledWith({ type: "REORDER" });
+    expect(fn).toBeCalledWith({ type: "REORDER", previousIndex: 1, index: 0, id: poset.slugGet("cb")?.id });
     unsubscribe();
   });
 
@@ -96,7 +97,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
     const unsubscribe = poset.subscribe(fn);
     expect(poset.update(element.id, "name", "de")).toBe(element);
     expect(fn).toBeCalledTimes(1);
-    expect(fn).toBeCalledWith({ type: "UPDATE", id: element.id, key: "name" });
+    expect(fn).toBeCalledWith({ type: "UPDATE", id: element.id, key: "name", value: "de" });
     unsubscribe();
   });
 
@@ -106,7 +107,7 @@ describe('NamedElementPoset(x => x, [], undefined)', () => {
     const unsubscribe = poset.subscribe(fn);
     expect(poset.update(element.id, "name", "de")).toBe(element);
     expect(fn).toBeCalledTimes(1);
-    expect(fn).toBeCalledWith({ type: "UPDATE", id: element.id, key: "name" });
+    expect(fn).toBeCalledWith({ type: "UPDATE", id: element.id, key: "name", value: "de" });
     unsubscribe();
     poset.update(element.id, "name", "ef");
     expect(fn).not.toBeCalledTimes(2);

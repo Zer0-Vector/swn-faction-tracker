@@ -1,19 +1,17 @@
-import React, { ComponentProps, useMemo } from "react";
+import React, { useMemo } from "react";
 
-import { Meta, Story } from "@storybook/react";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import LocationInfo from "../../../types/LocationInfo";
+import LocationInfo from "../../../utils/LocationInfo";
 import { generateSlug } from "../../../utils/SlugGenerator";
 
 import AddLocationDialog from "./AddLocationDialog";
 
-type PropsType = ComponentProps<typeof AddLocationDialog>;
-
 export default {
   component: AddLocationDialog,
-} as Meta<PropsType>;
+} as ComponentMeta<typeof AddLocationDialog>;
 
 interface MockProviderProps extends RequiredChildrenProps {
   locations: LocationInfo[];
@@ -38,7 +36,7 @@ const MockProvider = ({ locations, children }: MockProviderProps) => {
   );
 };
 
-export const Default: Story<PropsType> = args => (
+export const Default: ComponentStory<typeof AddLocationDialog> = args => (
   <MockProvider locations={[
     {
       id: "123",

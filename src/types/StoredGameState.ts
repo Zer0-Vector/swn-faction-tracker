@@ -1,6 +1,6 @@
-import FactionInfo from "./FactionInfo";
-import LocationInfo from "./LocationInfo";
-import PurchasedAsset from "./PurchasedAsset";
+import FactionInfo from "../utils/FactionInfo";
+import LocationInfo from "../utils/LocationInfo";
+import PurchasedAsset from "../utils/PurchasedAsset";
 
 export default interface StoredGameState {
   factions: [key: string, value: FactionInfo][];

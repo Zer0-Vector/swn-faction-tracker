@@ -1,5 +1,5 @@
-import { Maybe } from "../Maybe";
-import { SluggedEntity } from "../SluggedEntity";
+import { Maybe } from "../types/Maybe";
+import { SluggedEntity } from "../types/SluggedEntity";
 
 
 export interface ISluggedOrderedSet<T extends SluggedEntity> {
@@ -48,6 +48,12 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
    * @returns An array of the elements in this set in order.
    */
   getAll(): T[];
+
+  /**
+   * @returns Element at the index given.
+   * @throws {RangeError} If the index is out of bounds
+   */
+  at(index: number): T;
 
   /**
    * Moves an element from its current index to a target index.
@@ -169,6 +175,13 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     return this.id2element.get(id);
   }
 
+  at(index: number): T {
+    if (this.order.length === 0 || index < 0 || index >= this.order.length) {
+      throw new RangeError("Index out of bounds");
+    }
+    return this.get(this.order[index])!;
+  }
+
   slugGet(slug: string): Maybe<T> {
     const id = this.slug2id.get(slug);
     if (id === undefined) {
@@ -211,4 +224,107 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     return this.slug2id.get(slug);
   }
 
+}
+
+export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity> implements ISluggedOrderedSet<T> {
+
+  private readonly id2index: Map<string, number>;
+  private readonly slug2id: Map<string, string>;
+  private elements: T[];
+
+  constructor() {
+    this.id2index = new Map();
+    this.slug2id = new Map();
+    this.elements = [];
+  }
+
+  get size(): number {
+    return this.elements.length;
+  }
+
+  add(element: T): void {
+    const nextIndex = this.elements.length;
+    this.elements = [...this.elements, element];
+    this.id2index.set(element.id, nextIndex);
+    this.slug2id.set(element.slug, element.id);
+  }
+  remove(id: string): boolean {
+    const index = this.id2index.get(id);
+    if (index === undefined) {
+      return false;
+    }
+
+    const [deleted] = this.elements.splice(index, 1);
+
+    this.id2index.delete(deleted.id);
+    this.slug2id.delete(deleted.slug);
+    this.elements = [...this.elements];
+
+    return true;
+  }
+  renameSlug(updateInfo: SluggedEntity): void {
+    const storedElement = this.get(updateInfo.id);
+    if (storedElement === undefined) {
+      throw new Error(`Unknown element with id=${updateInfo.id}`);
+    }
+
+    if (updateInfo.slug.trim().length === 0) {
+      throw Error("Cannot rename slug to blank");
+    }
+
+    if (this.slug2id.has(updateInfo.slug)) {
+      throw new Error(`Slug conflict: ${updateInfo.slug}`);
+    }
+
+    const trimmed = updateInfo.slug.trim();
+    this.slug2id.set(trimmed, updateInfo.id);
+    this.slug2id.delete(storedElement.slug);
+    storedElement.slug = trimmed;
+  }
+  get(id: string): Maybe<T> {
+    const index = this.id2index.get(id);
+    if (index === undefined) {
+      return undefined;
+    }
+
+    return this.elements[index];
+  }
+  slugGet(slug: string): Maybe<T> {
+    const id = this.slug2id.get(slug);
+    if (!id) {
+      return undefined;
+    }
+    return this.get(id);
+  }
+  getAll(): T[] {
+    return this.elements;
+  }
+  at(index: number): T {
+    return this.elements[index];
+  }
+  reorder(source: number, target: number): void {
+    if (source < 0 || source >= this.elements.length) {
+      throw new Error(`Source index out of bounds: ${source}`);
+    }
+
+    if (target < 0 || target >= this.elements.length) {
+      throw new Error(`Target index out of bounds: ${target}`);
+    }
+
+    const [removed] = this.elements.splice(source, 1);
+    this.elements.splice(target, 0, removed);
+    this.elements = [...this.elements];
+  }
+  hasId(id: string): boolean {
+    return this.id2index.has(id);
+  }
+  hasSlug(slug: string): boolean {
+    return this.slug2id.has(slug);
+  }
+  noConflicts(entity: SluggedEntity): boolean {
+    return !this.hasId(entity.id) && !this.hasSlug(entity.slug);
+  }
+  getId(slug: string): Maybe<string> {
+    return this.slug2id.get(slug);
+  }
 }

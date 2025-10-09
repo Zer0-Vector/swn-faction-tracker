@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useFactions } from "../../../contexts/FactionContext";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import { GoalTypes, isGoalType } from "../../../types/GoalType";
 import { ControlledDropDown } from "../ControlledDropDown";
 
@@ -9,7 +9,7 @@ interface GoalTextProps {
   readonly faction: FactionInfo;
 }
 
-export default function GoalText({faction}: GoalTextProps) {
+export default function GoalText({ faction }: GoalTextProps) {
   const factions = useFactions();
 
   const handleUpdate = React.useCallback((val: string) => {

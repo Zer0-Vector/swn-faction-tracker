@@ -1,11 +1,11 @@
 import { v4 as randomUuid } from "uuid";
 
-import { generateSlug } from "../../utils/SlugGenerator";
-import { Maybe } from "../Maybe";
-import { IObservable, Observable } from "../Observable";
-import type { Prettify } from "../Prettify";
-import { SluggedEntity } from "../SluggedEntity";
-import { ISluggedOrderedSet, SluggedOrderedSet } from "../SluggedOrderedSet";
+import { generateSlug } from "./SlugGenerator";
+import { Maybe } from "../types/Maybe";
+import { IObservable, Observable } from "./Observable";
+import type { Prettify } from "../types/Prettify";
+import { SluggedEntity } from "../types/SluggedEntity";
+import { ISluggedOrderedSet, SluggedCopyOnWriteArrayPoset } from "./SluggedOrderedSet";
 
 export type NamedSluggedEntity = Prettify<Named<SluggedEntity>>;
 
@@ -39,24 +39,40 @@ export interface INamedElementPoset<
   checkName(args: Named<Pick<A, M>>): boolean;
 }
 
-type NamedElementFactoryFn<T extends NamedSluggedEntity, A> = (input: NamedSluggedEntity & A) => T;
+type NamedElementFactoryFn<T extends NamedSluggedEntity, A> = (input: Prettify<NamedSluggedEntity & A>) => T;
 
-type NamedElementPosetActionType = "ADD" | "REMOVE" | "REORDER" | "UPDATE";
+type NamedElementPosetActions<T> = {
+  ADD: {
+    id: string,
+  },
+  REMOVE: {
+    id: string,
+  },
+  REORDER: {
+    id: string,
+    index: number,
+    previousIndex: number,
+  },
+  UPDATE: {
+    id: string,
+    key: keyof T,
+    value: T[keyof T]
+  }
+}
 
-type NamedElementPosetAction<T> = {
-  type: NamedElementPosetActionType,
-  id: string,
-} | {
-  type: "REORDER",
-} | {
-  type: "UPDATE",
-  id: string,
-  key: keyof T,
-};
+export type NamedElementPosetAction<T> = {
+  [K in keyof NamedElementPosetActions<T>]: Prettify<{
+    type: K
+  } & NamedElementPosetActions<T>[K]>
+}[keyof NamedElementPosetActions<T>];
 
 type FilterFuncGenerator<X, Y> = (args: X) => (arg: Y) => boolean;
 
-export class NamedElementPoset<T extends NamedSluggedEntity & A, A = {}, N extends keyof Named<A>  = never, M extends keyof A = never>
+export class NamedElementPoset<
+    T extends NamedSluggedEntity & A,
+    A = {},
+    N extends keyof Named<A>  = never,
+    M extends keyof A = never>
   extends Observable<NamedElementPosetAction<T>>
   implements INamedElementPoset<T, A, N> {
 
@@ -67,7 +83,7 @@ export class NamedElementPoset<T extends NamedSluggedEntity & A, A = {}, N exten
   constructor(factory: NamedElementFactoryFn<T, A>, elements: T[] = [], filterFunc?: FilterFuncGenerator<Omit<Named<Pick<A, M>>, "name">, T>) {
     super();
     this.factory = factory;
-    this.set = new SluggedOrderedSet();
+    this.set = new SluggedCopyOnWriteArrayPoset();
     elements.forEach(e => {
       this.set.add(factory(e));
     });
@@ -112,10 +128,15 @@ export class NamedElementPoset<T extends NamedSluggedEntity & A, A = {}, N exten
 
   reorder(source: number, target: number): void {
     this.set.reorder(source, target);
-    this.notifyObservers({ type: "REORDER" });
+    this.notifyObservers({
+      type: "REORDER",
+      id: this.set.at(target).id,
+      index: target,
+      previousIndex: source,
+    });
   }
 
-  update<K extends keyof Omit<T, N | keyof SluggedEntity>>(id: string, key: K, value: T[K]): NamedSluggedEntity {
+  update<K extends keyof Omit<T, N | keyof SluggedEntity>>(id: string, key: K, value: T[K]): T {
     const element = this.set.get(id);
     if (element === undefined) {
       throw new Error(`Cannot update ${String(key)}, unknown id=${id} keys: ${this.set.getAll().map(e => e.slug)}`);
@@ -128,7 +149,7 @@ export class NamedElementPoset<T extends NamedSluggedEntity & A, A = {}, N exten
       element.slug = this.getNextSlug({...element, name: value });
     }
     element[key] = value;
-    this.notifyObservers({ type: "UPDATE", id, key });
+    this.notifyObservers({ type: "UPDATE", id, key, value });
     return element;
   }
 

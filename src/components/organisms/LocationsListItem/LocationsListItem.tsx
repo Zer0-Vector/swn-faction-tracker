@@ -14,7 +14,7 @@ import { styled, SxProps, Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { useLocations } from "../../../contexts/LocationContext";
-import LocationInfo from "../../../types/LocationInfo";
+import LocationInfo from "../../../utils/LocationInfo";
 import { ControlledText } from "../../molecules/ControlledText";
 
 

@@ -3,7 +3,7 @@ import React from "react";
 import { SxProps, Theme } from "@mui/material/styles";
 
 import { useFactions } from "../../../contexts/FactionContext";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import StatText from "../../atoms/StatText";
 import { ControlledStat } from "../ControlledStat";
 

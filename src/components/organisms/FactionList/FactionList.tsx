@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 
 import { useFactions } from "../../../contexts/FactionContext";
 import { useSelectedFaction } from "../../../hooks/useSelectedFaction";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import AssetList from "../AssetList";
 import AssetListActionsToolbar from "../AssetListActionsToolbar";
 import FactionDetails from "../FactionDetails";
