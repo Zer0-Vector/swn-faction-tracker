@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 
 import EditableDropDownText from "./EditableDropDownText";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { userEvent } from "@testing-library/user-event";
 
 const options = [
   "test-one",
@@ -16,10 +17,14 @@ const options = [
 const mockOnUpdate = vi.fn();
 
 function renderIt() {
-  render(<EditableDropDownText onUpdate={mockOnUpdate} selectableOptions={options} data-testid="test-eddt">test-one</EditableDropDownText>);
+  return {
+    user: userEvent.setup({ delay: 750 }),
+
+    ...render(<EditableDropDownText onUpdate={mockOnUpdate} selectableOptions={options} data-testid="test-eddt">test-one</EditableDropDownText>),
+  }
 }
 
-describe('default EditableDropDownText', () => {
+describe('default EditableDropDownText', { timeout: 15000 }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -38,14 +43,14 @@ describe('default EditableDropDownText', () => {
     expect(button).not.toBeVisible();
   });
 
-  it('redners dropdown after edit button clicked', () => {
-    renderIt();
+  it('renders dropdown after edit button clicked', async () => {
+    const {user} = renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
     const button = within(outer).getByTestId("editable-dropdown-button");
     expect(button).toBeInTheDocument();
     expect(button).not.toBeVisible();
-    fireEvent.click(button);
+    await user.click(button);
 
     expect(within(outer).queryByTestId("editable-dropdown-text")).not.toBeInTheDocument();
     expect(within(outer).getByTestId("editable-dropdown-autocomplete")).toBeInTheDocument();
@@ -53,38 +58,62 @@ describe('default EditableDropDownText', () => {
   });
 
   it('calls onUpdate if option clicked', async () => {
-    renderIt();
+    const {user} = renderIt();
+
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
-    const button = within(outer).getByTestId("editable-dropdown-button");
-    expect(button).toBeInTheDocument();
-    expect(button).not.toBeVisible();
-    fireEvent.click(button);
 
-    const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
-    expect(autocomplete).toBeInTheDocument();
+    const setupDropdownForSelection = async () => {
+      const button = within(outer).getByTestId("editable-dropdown-button");
+      expect(button).toBeInTheDocument();
+      await user.click(button);
 
-    const listbox = within(outer).getByRole("listbox");
+      const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
+      expect(autocomplete).toBeInTheDocument();
+    }
+
+    await setupDropdownForSelection();
+
+    let listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
-    const options = within(listbox).getAllByRole("option");
-    expect(options.length).toBe(5);
-    const selection = options[Math.floor(Math.random() * 4) + 1];// NOSONAR
-    fireEvent.click(selection);
+    let optionItems = within(listbox).getAllByRole("option");
+    expect(optionItems.length).toBe(options.length);
+
+    const selectedIndex = Math.floor(Math.random() * optionItems.length);
+    const selection = optionItems[selectedIndex];// NOSONAR
+    await user.click(selection);
 
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
 
     expect(mockOnUpdate).toBeCalledTimes(1);
     expect(mockOnUpdate).toBeCalledWith(selection.textContent);
+
+    mockOnUpdate.mockClear();
+    await setupDropdownForSelection();
+
+    listbox = within(outer).getByRole("listbox");
+    expect(listbox).toBeInTheDocument();
+    optionItems = within(listbox).getAllByRole("option");
+    expect(optionItems.length).toBe(options.length);
+
+    const selection2 = optionItems[(selectedIndex + 1) % optionItems.length];
+    await user.click(selection2);
+
+    await waitFor(() => expect(listbox).not.toBeInTheDocument());
+
+    expect(mockOnUpdate).toBeCalledTimes(1);
+    expect(mockOnUpdate).toBeCalledWith(selection2.textContent);
+
   });
 
-  it('cancels update on Escape keyUp', () => {
-    renderIt();
+  it('cancels update on Escape', async () => {
+    const { user } = renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
     const button = within(outer).getByTestId("editable-dropdown-button");
     expect(button).toBeInTheDocument();
     expect(button).not.toBeVisible();
-    fireEvent.click(button);
+    await user.click(button);
 
     const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
     expect(autocomplete).toBeInTheDocument();
@@ -93,7 +122,7 @@ describe('default EditableDropDownText', () => {
     expect(listbox).toBeInTheDocument();
     const textfield = within(outer).getByTestId("editable-dropdown-textfield");
     expect(textfield).toBeInTheDocument();
-    fireEvent.keyUp(textfield, { key: 'Escape' });
+    await user.keyboard("{Escape}");
 
     expect(listbox).not.toBeInTheDocument();
     expect(mockOnUpdate).not.toBeCalled();
