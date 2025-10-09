@@ -1,0 +1,59 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "jsx": "react-jsx",
+    "types": [
+      "vitest/globals",
+      "@testing-library/jest-dom"
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@molecules/*": [
+        "components/molecules/*"
+      ],
+      "@organisms/*": [
+        "components/organisms/*"
+      ],
+      "@atoms/*": [
+        "components/atoms/*"
+      ],
+      "@contexts/*": [
+        "contexts/*"
+      ],
+      "@controllers/*": [
+        "controllers/*"
+      ],
+      "@data/*": [
+        "data/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@style/*": [
+        "style/*"
+      ],
+      "@templates/*": [
+        "templates/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@sft/*": [
+        "types/*"
+      ]
+    },
+    "rootDir": "src",
+  },
+  "include": [
+    "src"
+  ],
+}
