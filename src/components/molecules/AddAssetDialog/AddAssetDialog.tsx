@@ -6,10 +6,10 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 
 import ASSETS from "../../../data/Assets";
-import Nullable from "../../../types/Nullable";
+import type Nullable from "../../../types/Nullable";
 import TextUtils from "../../../utils/TextUtils";
 import MessageDialog from "../../atoms/MessageDialog";
-import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
+import type { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 interface AddAssetDialogProps {
   readonly open: boolean;

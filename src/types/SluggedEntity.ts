@@ -1,5 +1,5 @@
 export interface Identifiable {
-  id: string;
+  readonly id: string;
 }
 
 export interface SluggedEntity extends Identifiable {

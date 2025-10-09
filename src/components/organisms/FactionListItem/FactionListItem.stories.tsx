@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 
 import FactionListItem from "./FactionListItem";

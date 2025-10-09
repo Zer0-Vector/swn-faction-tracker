@@ -1,15 +1,15 @@
 import { AssetActionInfo } from "./AssetActions";
-import { AssetRestrcition } from "./AssetRestrictions";
+import { AssetRestriction } from "./AssetRestrictions";
 import AssetType from "./AssetType";
 import { AssetAttribute, FactionAttribute } from "./FactionAttribute";
 import Nullable from "./Nullable";
 
-export type DiceDefinition = 
+export type DiceDefinition =
   | `${number}d${number}`
   | `${number}d${number}+${number}`
   | `${number}d${number}-${number}`;
 
-export type AssetAttackResult = 
+export type AssetAttackResult =
   | { type: "REVEAL_STEALTHED" }
   | { type: "DAMAGE", damage: DiceDefinition };
 
@@ -35,5 +35,5 @@ export default interface AssetInfo {
   note: AssetNote[];
   upkeep: number;
   action: Nullable<AssetActionInfo>;
-  restriction: Nullable<AssetRestrcition>;
+  restriction: Nullable<AssetRestriction>;
 }
