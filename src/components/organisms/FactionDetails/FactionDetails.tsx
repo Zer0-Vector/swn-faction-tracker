@@ -17,11 +17,8 @@ interface FactionDetailsProps {
 
 export default function FactionDetails({ faction }: FactionDetailsProps) {
   const factions = useFactions();
-  const locations = useLocations();
 
   const isSmallViewport = useMediaQuery("(max-width:600px)");
-
-
 
   const updateTag = useCallback((val: string) => {
     factions.update(faction.id, "tag", val);
