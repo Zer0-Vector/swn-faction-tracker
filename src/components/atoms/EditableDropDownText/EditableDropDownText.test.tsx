@@ -1,6 +1,6 @@
 import React from "react";
 
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 
 import EditableDropDownText from "./EditableDropDownText";
 import { beforeEach, describe, expect, it, vi } from "vitest";
