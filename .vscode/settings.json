@@ -3,7 +3,8 @@
     "Appender",
     "homeworld",
     "maxhp",
-    "NOSONAR"
+    "NOSONAR",
+    "STEALTHED"
   ],
   "sonarlint.connectedMode.project": {
     "connectionId": "zer0-vector",
@@ -30,6 +31,8 @@
     "ärthur",
     "infiles",
     "chromaui",
-    "sonarqube"
-  ]
+    "sonarqube",
+    "firestore"
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
