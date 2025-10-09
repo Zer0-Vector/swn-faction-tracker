@@ -32,7 +32,8 @@
     "infiles",
     "chromaui",
     "sonarqube",
-    "firestore"
+    "firestore",
+    "dtid",
   ],
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }
