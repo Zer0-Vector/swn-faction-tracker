@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useFactions } from "../../../contexts/FactionContext";
 import { useLocations } from "../../../contexts/LocationContext";
 import FactionInfo from "../../../utils/FactionInfo";
-import { AttributesItem, GoalItem, HomeworldItem, HpItem, TagItem } from "./items";
+import { AttributesItem, GoalItem, GoalProgressItem, HomeworldItem, HpItem, TagItem } from "./items";
 
 
 interface FactionDetailsProps {
@@ -53,6 +53,7 @@ export default function FactionDetails({ faction }: FactionDetailsProps) {
       <HpItem id={faction.id} hp={faction.hp} maxHp={faction.maxHp} />
       <AttributesItem {...faction} />
       <GoalItem faction={faction} />
+      <GoalProgressItem faction={faction} />
     </Container>
   );
 }
