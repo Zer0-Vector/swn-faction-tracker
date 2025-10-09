@@ -20,12 +20,17 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   }, [AUTH]);
 
   useEffect(() => {
-    return AUTH.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        controller.setLoginState("LOGGED_IN");
-      }
-    });
+    return AUTH.onAuthStateChanged((loggedInUser) => {
+        console.log("AuthStateChanged: logged in? ", !!loggedInUser);
+        if (loggedInUser) {
+          console.log("Login detected: ", loggedInUser.email);
+          setUser(loggedInUser);
+          controller.setLoginState("LOGGED_IN");
+        } else if (user) {
+          setUser(null);
+          controller.setLoginState("LOGGED_OUT");
+        }
+      });
   }, [AUTH, controller]);
 
   return {
