@@ -155,7 +155,7 @@ describe('default FactionDetails', () => {
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("attr-label");
     expect(header).toBeInTheDocument();
-    expect(header.textContent).toEqual("F/C/W:");
+    expect(header.textContent).toEqual("Force/Cunning/Wealth:");
     const item = within(container).getByTestId("attr-item");
     expect(item).toBeInTheDocument();
 
