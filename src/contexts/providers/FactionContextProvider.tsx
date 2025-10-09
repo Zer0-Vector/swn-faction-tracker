@@ -1,41 +1,41 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import FactionInfo from "../../types/FactionInfo";
-import { NamedElementPoset } from "../../types/NamedElementPoset";
+import FactionInfo from "../../utils/FactionInfo";
+import { NamedElementPosetAction } from "../../utils/NamedElementPoset";
 import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
-import { FactionContext } from "../FactionContext";
+import { FactionContext, FactionPoset } from "../FactionContext";
 import { useLocations } from "../LocationContext";
+import type LocationInfo from "../../utils/LocationInfo";
 
 export function FactionContextProvider({ children }: ReadonlyPropsWithChildren) {
   const [storedFactions, setStoredFactions] = useLocalStorage<FactionInfo[]>("swn-faction-tracker.factions", []);
-  const factions = useRef(new NamedElementPoset(
-    FactionInfo.from,
-    storedFactions
-  ));
+  const factionsPoset = new FactionPoset(storedFactions);
   const locations = useLocations();
 
+  const onFactionsChanged = (action: NamedElementPosetAction<FactionInfo>) => {
+    setStoredFactions(factionsPoset.getAll());
+    // TODO queue update for remote storage
+  }
+
+  const onLocationChanged = (action: NamedElementPosetAction<LocationInfo>): void => {
+    if (action.type === "REMOVE") {
+      factionsPoset.getAll()
+        .filter(f => f.homeworldId === action.id)
+        .forEach(f => factionsPoset.update(f.id, "homeworldId", undefined));
+    }
+  };
+
   useEffect(() => {
-    const factionsUnsubscribe = factions.current.subscribe(() => {
-      setStoredFactions(factions.current.getAll());
-    });
-    const locationsUnsubscribe = locations.subscribe(action => {
-      if (action.type === "REMOVE") {
-        factions.current.getAll().forEach(f => {
-          if (f.homeworldId === action.id) {
-            factions.current.update(f.id, "homeworldId", undefined);
-          }
-        });
-      }
-    });
+    const factionsUnsubscribe = factionsPoset.subscribe(onFactionsChanged);
+    const locationsUnsubscribe = locations.subscribe(onLocationChanged);
     return () => {
       factionsUnsubscribe();
       locationsUnsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [factionsPoset, locations]);
 
-  const context = useMemo(() => ({ factions: factions.current }), [factions]);
+  const context = useMemo(() => ({ factions: factionsPoset }), [factionsPoset]);
 
   return (
     <FactionContext.Provider value={context}>
