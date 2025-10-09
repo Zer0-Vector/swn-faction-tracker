@@ -13,6 +13,7 @@ import { describe, expect, it, vi } from "vitest";
 const mockContext = {
   factions: {
     update: vi.fn() as FactionPoset['update'],
+    subscribe: vi.fn() as FactionPoset['subscribe'],
   } as FactionPoset,
 } as FactionContextType;
 

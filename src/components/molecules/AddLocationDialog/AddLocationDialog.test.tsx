@@ -15,6 +15,9 @@ function renderWithContext(context?: LocationContextType) {
   const locationContext = context || {
     locations: {
       checkName: mockCheckLocationName as LocationsPoset['checkName'],
+      subscribe(cb) {
+        return () => {};
+      }
     } as LocationsPoset,
   };
 
@@ -32,6 +35,9 @@ describe('default AddLocationDialog', () => {
       <LocationContext.Provider value={{
         locations: {
           checkName: vi.fn() as LocationsPoset['checkName'],
+          subscribe(cb) {
+            return () => {};
+          }
         } as LocationsPoset,
       }}>
         <AddLocationDialog open={false} onClose={vi.fn()} onCreate={vi.fn()} />
@@ -208,6 +214,9 @@ describe('default AddLocationDialog', () => {
     const { mockClose, mockCreate } = renderWithContext({
       locations: {
         checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
+        subscribe(cb) {
+          return () => {};
+        }
       } as LocationsPoset,
     });
     const { input: nameField } = assertEmptyField("location-name-field", "Location Name");
