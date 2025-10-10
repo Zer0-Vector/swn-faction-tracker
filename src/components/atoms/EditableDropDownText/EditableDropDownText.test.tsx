@@ -83,9 +83,11 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
     const selection = optionItems[selectedIndex];// NOSONAR
     await user.click(selection);
 
-    await waitFor(() => expect(listbox).not.toBeInTheDocument());
+    await waitFor(() => {
+      expect(listbox).not.toBeInTheDocument()
+      expect(mockOnUpdate).toBeCalledTimes(1);
+    });
 
-    expect(mockOnUpdate).toBeCalledTimes(1);
     expect(mockOnUpdate).toBeCalledWith(selection.textContent);
 
     mockOnUpdate.mockClear();
