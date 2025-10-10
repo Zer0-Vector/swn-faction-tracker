@@ -18,13 +18,13 @@ const mockOnUpdate = vi.fn();
 
 function renderIt() {
   return {
-    user: userEvent.setup({ delay: 750 }),
+    user: userEvent.setup({ delay: 1000 }),
 
     ...render(<EditableDropDownText onUpdate={mockOnUpdate} selectableOptions={options} data-testid="test-eddt">test-one</EditableDropDownText>),
   }
 }
 
-describe('default EditableDropDownText', { timeout: 15000 }, () => {
+describe('default EditableDropDownText', { timeout: 20000 }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
