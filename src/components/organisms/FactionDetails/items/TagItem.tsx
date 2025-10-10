@@ -1,29 +1,16 @@
-import { useFactions } from "@/contexts/FactionContext";
-import { useCallback, useMemo } from "react";
-import { TAGS } from "../../../../data/Tags";
-import { Maybe } from "../../../../types/Maybe";
-import { ControlledDropDown } from "../../../molecules/ControlledDropDown";
+import React from "react";
 import { Item, ItemHeader } from "./helpers";
+import TagText, { TagTextProps } from "@/components/molecules/TagText/TagText";
 
-type TagItemProps = {
-  factionId: string,
-  tag: Maybe<string>,
-}
+type TagItemProps = TagTextProps
 
-export default function TagItem({ tag, factionId }: Readonly<TagItemProps>) {
-  const factions = useFactions();
-  const tagOptions = useMemo(() => Object.keys(TAGS), []);
-
-  const updateTag = useCallback((val: string) => {
-    factions.update(factionId, "tag", val);
-  }, [factionId, factions]);
-
+export default function TagItem(props: Readonly<TagItemProps>) {
   return (
     <>
       <ItemHeader data-testid="tag-label">Tag:</ItemHeader>
       <Item data-testid="tag-item">
-        <ControlledDropDown onUpdate={updateTag} selectableOptions={tagOptions} data-testid="tag">{tag || "Unknown"}</ControlledDropDown>
+        <TagText {...props} />
       </Item>
     </>
-  )
+  );
 }
