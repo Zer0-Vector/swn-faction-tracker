@@ -15,6 +15,6 @@ module.exports = {
   },
   env: config => ({
     ...config,
-    REACT_APP_FIREBASE_CONFIG: "{\"apiKey\": \"storybook\", \"projectId\": \"swn-faction-tracker-test\", \"messagingSenderId\": \"123\", \"appId\": \"test\"}"
+    VITE_FIREBASE_CONFIG: "{\"apiKey\": \"storybook\", \"projectId\": \"swn-faction-tracker-test\", \"messagingSenderId\": \"123\", \"appId\": \"test\"}"
   }),
 }
