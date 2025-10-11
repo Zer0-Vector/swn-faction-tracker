@@ -10,23 +10,20 @@ import { useAuthProvider } from "./useAuthProvider";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
-  Auth,
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
   getAuth,
-  NextOrObserver,
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
   signOut,
-  Unsubscribe,
-  User,
-  UserCredential,
 } from "firebase/auth";
 
+import type { Auth, User, UserCredential } from "firebase/auth";
+
 vi.mock("firebase/app");
-// vi.mock("firebase/auth");
 
 const mocks = vi.hoisted(() => ({
   onAuthStateChanged: vi.fn(),
@@ -111,8 +108,7 @@ describe('useAuthProvider', () => {
   it('calls setPersistence on mount', () => {
     render(<TestComp name="setPersistence on mount" />);
     expect(setPersistence).toBeCalledTimes(1);
-    // FIXME not sure why this fails
-    // expect(mockSetPersistence).toBeCalledWith(expect.anything(), expect.objectContaining({ type: "LOCAL" }));
+    expect(setPersistence).toBeCalledWith(expect.anything(), expect.objectContaining({ type: browserLocalPersistence.type }));
   });
 
   it('calls unsubscribe on unmount', async () => {

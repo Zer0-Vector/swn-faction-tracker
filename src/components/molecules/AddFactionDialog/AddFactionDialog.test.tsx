@@ -3,13 +3,15 @@ import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
-import FactionInfo from "../../../types/FactionInfo";
-import { Named } from "../../../types/NamedElementPoset";
+import FactionInfo from "../../../utils/FactionInfo";
+import { Named } from "../../../utils/NamedElementPoset";
 
 import AddFactionDialog from "./AddFactionDialog";
 import { describe, expect, it, vi } from "vitest";
 
-const EMPTY_CONTEXT = {} as FactionContextType;
+const EMPTY_CONTEXT = {
+  factions: new FactionPoset(),
+} as FactionContextType;
 
 function renderWithContext(context?: FactionContextType) {
   const mockClose = vi.fn();
@@ -107,6 +109,10 @@ describe('default AddFactionDialog', () => {
     renderWithContext({
       factions: {
         checkName: (s: Named) => true,
+        subscribe(cb) {
+          // nop
+          return () => {}
+        }
       } as FactionPoset,
     });
     const dialog = screen.getByTestId("add-faction-dialog");
@@ -132,6 +138,9 @@ describe('default AddFactionDialog', () => {
     const context: FactionContextType = {
       factions: {
         checkName: (s: Named) => false,
+        subscribe(cb) {
+          return () => {};
+        }
       } as FactionPoset,
     };
     renderWithContext(context);
@@ -189,6 +198,9 @@ describe('default AddFactionDialog', () => {
       factions: {
         getAll: () => ([] as FactionInfo[]),
         checkName: (s: Named) => true,
+        subscribe(cb) {
+          return () => {};
+        }
       } as FactionPoset,
     });
     const inAsset = screen.getByTestId("faction-name-field");

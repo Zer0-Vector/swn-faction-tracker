@@ -1,4 +1,4 @@
-import FactionInfo from "./FactionInfo";
+import FactionInfo from "../utils/FactionInfo";
 
 export interface TurnInfo {
   faction: FactionInfo;

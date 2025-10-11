@@ -7,7 +7,7 @@ import { AssetContext, AssetContextType, AssetPoset } from "../../../contexts/As
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import UiState from "../../../types/UiState";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";
@@ -22,6 +22,7 @@ const mockGetId = vi.fn();
 const mockFactionContext: FactionContextType = {
   factions: {
     slugGet: mockGetFaction as FactionPoset['slugGet'],
+    subscribe: vi.fn() as FactionPoset['subscribe'],
   } as FactionPoset,
 };
 

@@ -7,8 +7,8 @@ import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import FactionInfo from "../../../types/FactionInfo";
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import FactionInfo from "../../../utils/FactionInfo";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 import UiState from "../../../types/UiState";
 
 import AssetListActionsToolbar from "./AssetListActionsToolbar";

@@ -8,7 +8,7 @@ import { LocationContext, LocationsPoset } from "../../contexts/LocationContext"
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
-import LocationInfo from "../../types/LocationInfo";
+import LocationInfo from "../../utils/LocationInfo";
 import UiState from "../../types/UiState";
 import { generateSlug } from "../../utils/SlugGenerator";
 

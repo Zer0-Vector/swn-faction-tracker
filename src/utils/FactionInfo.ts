@@ -1,7 +1,7 @@
-import FactionStatsInfo from "./FactionStatsInfo";
-import GoalInfo from "./GoalInfo";
+import FactionStatsInfo from "../types/FactionStatsInfo";
+import GoalInfo from "../types/GoalInfo";
 import { NamedSluggedEntity } from "./NamedElementPoset";
-import { Prettify } from "./Prettify";
+import { Prettify } from "../types/Prettify";
 
 interface StatInfo { xpCost: number, hpValue: number }
 

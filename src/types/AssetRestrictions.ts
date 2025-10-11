@@ -16,6 +16,6 @@ interface AttackerRestriction extends IAssetRestriction<AttackerRestrictionDetai
   type: "ATTACKER";
 }
 
-export type AssetRestrcition =
+export type AssetRestriction =
   | AttackerRestriction;
 

@@ -6,7 +6,7 @@ import { Meta, Story } from "@storybook/react";
 
 import { LocationContext, LocationsPoset } from "../../../contexts/LocationContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import LocationInfo from "../../../types/LocationInfo";
+import LocationInfo from "../../../utils/LocationInfo";
 import { ExtendedStoryProps } from "../../__mocks__/ExtendedStoryProps";
 
 import LocationsList from "./LocationsList";

@@ -25,7 +25,7 @@ interface UserMenuProps {
 export default function UserMenu({ user }: UserMenuProps) {
   const [open, setOpen] = useState<boolean>(false);
   const btnRef = useRef<Nullable<HTMLButtonElement>>(null);
-  const { controller: uiController } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController } = useContext(UiStateContext);
 
   const icon: JSX.Element = user === null ? <PersonOutlinedIcon /> : <PersonIcon />;
 
@@ -62,6 +62,7 @@ export default function UserMenu({ user }: UserMenuProps) {
     }
   }, [handleLogin, handleLogout, handleSettings, user]);
 
+  // FIXME: rework this so we're not rendering elements that aren't shown
   const dialogItems: JSX.Element = useMemo(() => {
     if (user === null) {
       return (

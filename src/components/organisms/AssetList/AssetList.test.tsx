@@ -5,7 +5,7 @@ import { render, screen } from "@testing-library/react";
 
 import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 
 import AssetList from "./AssetList";
 import { describe, expect, it } from "vitest";
@@ -20,6 +20,7 @@ function renderIt(assets: PurchasedAsset[], route = "/factions/test-faction") {
             slug: factionSlug,
             name: factionSlug.replaceAll(/-/g, " "),
           }),
+          subscribe: vi.fn() as FactionPoset['subscribe'],
         } as FactionPoset,
       }}>
         <AssetContext.Provider value={{

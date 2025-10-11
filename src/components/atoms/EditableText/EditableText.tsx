@@ -34,7 +34,7 @@ interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<str
   editable?: boolean;
 }
 
-export type EditableTextProps = 
+export type EditableTextProps =
   & Prefixed<Pick<TextFieldProps, "variant" | "sx">, "input">
   & Pick<TypographyProps, "variant" | "sx">
   & Required<Pick<TextFieldProps, "id">>
@@ -164,7 +164,7 @@ export default function EditableText({
           size="small"
         />
       </ValidationContext.Provider>
-    ); 
+    );
   } else {
     inner = (
       <Typography

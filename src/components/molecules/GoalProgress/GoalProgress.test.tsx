@@ -5,7 +5,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import GoalInfo from "../../../types/GoalInfo";
 import UiState from "../../../types/UiState";
 
@@ -18,6 +18,7 @@ const mockContext: FactionContextType = {
   factions: {
     slugGet: mockSlugGet as FactionPoset['slugGet'],
     update: mockUpdate as FactionPoset['update'],
+    subscribe: vi.fn() as FactionPoset['subscribe'],
   } as FactionPoset,
 };
 

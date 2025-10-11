@@ -11,9 +11,9 @@ import {
 } from "../../../contexts/LocationContext";
 import { TagsList } from "../../../data/Tags";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import { GoalTypes } from "../../../types/GoalType";
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 
 import FactionList from "./FactionList";
 

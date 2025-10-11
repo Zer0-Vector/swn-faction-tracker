@@ -4,7 +4,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import { Named } from "../../../types/NamedElementPoset";
+import { Named } from "../../../utils/NamedElementPoset";
 import { generateSlug } from "../../../utils/SlugGenerator";
 
 import AddFactionDialog from "./AddFactionDialog";

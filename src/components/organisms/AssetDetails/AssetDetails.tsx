@@ -9,11 +9,11 @@ import Typography from "@mui/material/Typography";
 import ASSETS, { isAsset } from "../../../data/Assets";
 import { AssetAttackResult } from "../../../types/AssetInfo";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 import TestableProps from "../../../types/TestableProps";
 import TextUtils from "../../../utils/TextUtils";
 
-interface AssetDetailsProps {
+export interface AssetDetailsProps {
   asset: PurchasedAsset;
 }
 

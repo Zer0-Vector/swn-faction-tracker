@@ -9,7 +9,7 @@ import { styled, SxProps } from "@mui/material/styles";
 
 import { useFactions } from "../../../contexts/FactionContext";
 import { useSelectionSlug } from "../../../hooks/useSelectionSlug";
-import FactionInfo from "../../../types/FactionInfo";
+import FactionInfo from "../../../utils/FactionInfo";
 import { ValidationFn } from "../../../types/ValidationFn";
 import { ControlledText } from "../../molecules/ControlledText";
 import FactionStatSummary from "../../molecules/FactionStatSummary";

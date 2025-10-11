@@ -6,8 +6,8 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { AssetContext, AssetPoset } from "../../../contexts/AssetContext";
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import FactionInfo from "../../../types/FactionInfo";
-import PurchasedAsset from "../../../types/PurchasedAsset";
+import FactionInfo from "../../../utils/FactionInfo";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 
 import AssetList from "./AssetList";
 
