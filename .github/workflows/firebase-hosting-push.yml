@@ -1,0 +1,51 @@
+name: Deploy to Firebase Hosting Live Channel on Tag v*.*.*
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+permissions:
+  checks: write
+  contents: read
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    outputs:
+      on_main: ${{ steps.check.outputs.on_main }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check if tag is on main branch
+        id: check
+        run: |
+          git fetch origin main
+          if git merge-base --is-ancestor $(git rev-parse origin/main) $(git rev-parse HEAD); then
+            echo "on_main=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "on_main=false" >> "$GITHUB_OUTPUT"
+          fi
+  build_and_deploy:
+    needs: check_branch
+    if: needs.check_branch.outputs.on_main == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.details_url }}
+    concurrency:
+      group: production
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        id: deploy
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SWN_FACTIONS }}
+          projectId: swn-factions
+          channelId: live
