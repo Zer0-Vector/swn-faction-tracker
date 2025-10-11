@@ -23,3 +23,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SWN_FACTIONS }}
           projectId: swn-factions
+          expires: 7d
