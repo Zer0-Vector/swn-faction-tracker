@@ -17,7 +17,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --build && vite build",
+    "build": "tsc --version && tsc --build --verbose && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "ci-test": "vitest run",
