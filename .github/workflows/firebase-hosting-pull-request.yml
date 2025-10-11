@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch:
 permissions:
   checks: write
