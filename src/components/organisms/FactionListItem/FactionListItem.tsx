@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import type { DraggableProvided } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
@@ -16,7 +16,7 @@ import FactionStatSummary from "../../molecules/FactionStatSummary";
 import HealthDisplay from "../../molecules/HealthDisplay";
 
 interface FactionListRowProps {
-  readonly dragHandleProps: DraggableProvidedDragHandleProps | undefined;
+  readonly dragHandleProps: DraggableProvided["dragHandleProps"];
   readonly isDragging: boolean;
   readonly faction: FactionInfo;
 }
