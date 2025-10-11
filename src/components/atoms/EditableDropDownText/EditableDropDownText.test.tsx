@@ -18,7 +18,7 @@ const mockOnUpdate = vi.fn();
 
 function renderIt() {
   return {
-    user: userEvent.setup({ delay: 1000 }),
+    user: userEvent.setup({ delay: 1500 }),
 
     ...render(<EditableDropDownText onUpdate={mockOnUpdate} selectableOptions={options} data-testid="test-eddt">test-one</EditableDropDownText>),
   }
@@ -101,9 +101,11 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
     const selection2 = optionItems[(selectedIndex + 1) % optionItems.length];
     await user.click(selection2);
 
-    await waitFor(() => expect(listbox).not.toBeInTheDocument());
+    await waitFor(() => {
+      expect(listbox).not.toBeInTheDocument()
+      expect(mockOnUpdate).toBeCalledTimes(1);
+    });
 
-    expect(mockOnUpdate).toBeCalledTimes(1);
     expect(mockOnUpdate).toBeCalledWith(selection2.textContent);
 
   });
