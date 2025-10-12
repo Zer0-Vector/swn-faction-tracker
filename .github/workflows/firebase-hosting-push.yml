@@ -1,8 +1,8 @@
-name: Deploy to Firebase Hosting Live Channel on Tag v*.*.*
+name: Deploy to Live Channel on Push to release Branch
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - release
 permissions:
   checks: write
   contents: read
@@ -10,23 +10,23 @@ jobs:
   check_branch:
     runs-on: ubuntu-latest
     outputs:
-      on_main: ${{ steps.check.outputs.on_main }}
+      on_release: ${{ steps.check.outputs.on_release }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check if tag is on main branch
+      - name: Check if tag is on release branch
         id: check
         run: |
-          git fetch origin main
+          git fetch origin release
           if git merge-base --is-ancestor $(git rev-parse origin/main) $(git rev-parse HEAD); then
-            echo "on_main=true" >> "$GITHUB_OUTPUT"
+            echo "on_release=true" >> "$GITHUB_OUTPUT"
           else
-            echo "on_main=false" >> "$GITHUB_OUTPUT"
+            echo "on_release=false" >> "$GITHUB_OUTPUT"
           fi
   build_and_deploy:
     needs: check_branch
-    if: needs.check_branch.outputs.on_main == 'true'
+    if: needs.check_branch.outputs.on_release == 'true'
     runs-on: ubuntu-latest
     environment:
       name: production
