@@ -1,6 +1,6 @@
 {
   "name": "swn-faction-tracker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -206,6 +206,5 @@
     "vitest": "^3.2.4",
     "webpack": "^5.75.0"
   },
-  "readme": "ERROR: No README data found!",
-  "_id": "swn-faction-tracker@0.2.0"
+  "readme": "ERROR: No README data found!"
 }
