@@ -25,7 +25,11 @@
     "lint-fix": "npx eslint --ext .tsx,.ts --fix .",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "chromatic": "npx chromatic"
+    "chromatic": "npx chromatic",
+
+    "preversion": "git switch main && git switch -c prepare/${npm_package_version} && npm run ci-test",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && git switch -"
   },
   "eslintConfig": {
     "plugins": [
