@@ -5,7 +5,7 @@ import GoalProgress from "../../../molecules/GoalProgress";
 
 import { Item, ItemHeader } from "./helpers";
 
-type GoalProgressItemProps = { faction: FactionInfo };
+interface GoalProgressItemProps { faction: FactionInfo }
 
 export default function GoalProgressItem({ faction }: Readonly<GoalProgressItemProps>) {
   return (

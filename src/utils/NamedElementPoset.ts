@@ -42,7 +42,7 @@ export interface INamedElementPoset<
 
 type NamedElementFactoryFn<T extends NamedSluggedEntity, A> = (input: Prettify<NamedSluggedEntity & A>) => T;
 
-type NamedElementPosetActions<T> = {
+interface NamedElementPosetActions<T> {
   ADD: {
     id: string,
   },

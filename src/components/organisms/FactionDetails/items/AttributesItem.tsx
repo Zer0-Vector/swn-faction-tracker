@@ -2,12 +2,12 @@ import FactionStatSummary from "../../../molecules/FactionStatSummary";
 
 import { Item, ItemHeader } from "./helpers";
 
-type AttributesItemProps = {
+interface AttributesItemProps {
   id: string,
   force: number,
   cunning: number,
   wealth: number,
-};
+}
 
 export default function AttributesItem({ id, force, cunning, wealth }: Readonly<AttributesItemProps>) {
   return (
