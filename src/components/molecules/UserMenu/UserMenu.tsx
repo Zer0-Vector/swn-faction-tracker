@@ -25,7 +25,7 @@ interface UserMenuProps {
 export default function UserMenu({ user }: UserMenuProps) {
   const [open, setOpen] = useState<boolean>(false);
   const btnRef = useRef<Nullable<HTMLButtonElement>>(null);
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { controller: uiController } = useContext(UiStateContext);
 
   const icon: JSX.Element = user === null ? <PersonOutlinedIcon /> : <PersonIcon />;
 
