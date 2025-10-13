@@ -1,6 +1,8 @@
 import React from "react";
-import { Item, ItemHeader } from "./helpers";
+
 import TagText, { TagTextProps } from "@/components/molecules/TagText/TagText";
+
+import { Item, ItemHeader } from "./helpers";
 
 type TagItemProps = TagTextProps
 

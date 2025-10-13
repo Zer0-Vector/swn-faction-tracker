@@ -10,9 +10,11 @@ type LocationRequiredProps = {
 };
 
 export class LocationsPoset extends NamedElementPoset<LocationInfo, LocationRequiredProps> {
+
   constructor(elements: LocationInfo[] = []) {
     super(LocationInfo.from, elements)
   }
+
 }
 
 export interface LocationContextType {

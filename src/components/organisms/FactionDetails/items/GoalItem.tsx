@@ -1,6 +1,8 @@
 import React from "react";
+
 import type FactionInfo from "../../../../utils/FactionInfo";
 import GoalText from "../../../molecules/GoalText";
+
 import { Item, ItemHeader } from "./helpers";
 
 type GoalItemProps = {

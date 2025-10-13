@@ -1,7 +1,8 @@
 import ASSETS, { isAsset } from "../data/Assets";
-import { NamedSluggedEntity } from "./NamedElementPoset";
 import Nullable from "../types/Nullable";
 import { Prettify } from "../types/Prettify";
+
+import { NamedSluggedEntity } from "./NamedElementPoset";
 
 export default class PurchasedAsset implements NamedSluggedEntity {
 

@@ -1,8 +1,10 @@
 import React from "react";
+
 import FactionHpSummary from "../../../molecules/FactionHpSummary";
+
 import { Item, ItemHeader } from "./helpers";
 
-type HpItemProps = {
+interface HpItemProps {
   readonly id: string,
   readonly hp: number,
   readonly maxHp: number,

@@ -1,4 +1,5 @@
 import FactionStatSummary from "../../../molecules/FactionStatSummary";
+
 import { Item, ItemHeader } from "./helpers";
 
 type AttributesItemProps = {

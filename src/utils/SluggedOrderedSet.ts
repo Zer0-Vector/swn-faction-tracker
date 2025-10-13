@@ -327,4 +327,5 @@ export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity> implements IS
   getId(slug: string): Maybe<string> {
     return this.slug2id.get(slug);
   }
+
 }

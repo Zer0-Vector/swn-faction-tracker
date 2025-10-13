@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import FactionInfo from "../../utils/FactionInfo";
-import { NamedElementPosetAction } from "../../utils/NamedElementPoset";
 import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
+import FactionInfo from "../../utils/FactionInfo";
+import type LocationInfo from "../../utils/LocationInfo";
+import { NamedElementPosetAction } from "../../utils/NamedElementPoset";
 import { FactionContext, FactionPoset } from "../FactionContext";
 import { useLocations } from "../LocationContext";
-import type LocationInfo from "../../utils/LocationInfo";
 
 export function FactionContextProvider({ children }: ReadonlyPropsWithChildren) {
   const [storedFactions, setStoredFactions] = useLocalStorage<FactionInfo[]>("swn-faction-tracker.factions", []);

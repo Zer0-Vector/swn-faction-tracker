@@ -1,11 +1,12 @@
 import { v4 as randomUuid } from "uuid";
 
-import { generateSlug } from "./SlugGenerator";
 import { Maybe } from "../types/Maybe";
-import { IObservable, Observable } from "./Observable";
 import type { Prettify } from "../types/Prettify";
 import { SluggedEntity } from "../types/SluggedEntity";
+
+import { IObservable, Observable } from "./Observable";
 import { ISluggedOrderedSet, SluggedCopyOnWriteArrayPoset } from "./SluggedOrderedSet";
+import { generateSlug } from "./SlugGenerator";
 
 export type NamedSluggedEntity = Prettify<Named<SluggedEntity>>;
 

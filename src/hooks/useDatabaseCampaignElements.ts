@@ -1,17 +1,19 @@
-import { FactionPoset } from "../contexts/FactionContext";
-import { Named } from "../utils/NamedElementPoset";
-import { Identifiable } from "../types/SluggedEntity";
 import { useEffect, useState } from "react";
-import { Prettify } from "../types/Prettify";
-import { LocationsPoset } from "../contexts/LocationContext";
-import { AssetPoset } from "../contexts/AssetContext";
-import { useFirestore } from "./useFirestore";
-import { useAuth } from "./useAuth";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+
+import { AssetPoset } from "../contexts/AssetContext";
+import { FactionPoset } from "../contexts/FactionContext";
+import { LocationsPoset } from "../contexts/LocationContext";
+import { Prettify } from "../types/Prettify";
 import { Serialized } from "../types/Serialized";
-import PurchasedAsset from "../utils/PurchasedAsset";
+import { Identifiable } from "../types/SluggedEntity";
 import FactionInfo from "../utils/FactionInfo";
 import LocationInfo from "../utils/LocationInfo";
+import { Named } from "../utils/NamedElementPoset";
+import PurchasedAsset from "../utils/PurchasedAsset";
+
+import { useAuth } from "./useAuth";
+import { useFirestore } from "./useFirestore";
 
 type SectorInfo = Prettify<Named<{
   description?: string,
