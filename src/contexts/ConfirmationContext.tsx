@@ -1,7 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
 
-import MessageDialog, { DialogActionHandler, DialogActionResult } from "../components/atoms/MessageDialog";
 import { ReadonlyPropsWithChildren } from "@/types/ReadonlyPropsWithChildren";
+
+import MessageDialog, { DialogActionHandler, DialogActionResult } from "../components/atoms/MessageDialog";
 
 export interface ConfirmationOptions {
   title: string;
