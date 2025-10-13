@@ -1,5 +1,4 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import reactPlugin from "eslint-plugin-react";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from "typescript-eslint";
@@ -7,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
+import globals from "globals";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +17,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(["**/*.stories.*", "**/*.test.*", "storybook-static/"]),
+  globalIgnores(["**/*.stories.*", "**/*.test.*", "storybook-static/", "build/", ".storybook/"]),
   js.configs.recommended,
   tseslint.configs.strict,
   compat.config(reactPlugin.configs.recommended),
@@ -38,6 +38,11 @@ export default defineConfig([
       parser: tseslint.parser,
       ecmaVersion: "latest",
       sourceType: "script",
+      globals: {
+        ...globals.browser,
+        document: "readonly",
+        console: "readonly",
+      },
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
