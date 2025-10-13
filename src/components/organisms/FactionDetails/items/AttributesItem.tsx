@@ -1,3 +1,5 @@
+import React from "react";
+
 import FactionStatSummary from "../../../molecules/FactionStatSummary";
 
 import { Item, ItemHeader } from "./helpers";
