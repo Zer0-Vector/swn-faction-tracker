@@ -16,7 +16,7 @@ export function ValidatedTextField({ onChange, id, error, ...others }: Validated
   const [changed, setChanged] = useState<boolean>(false);
 
   const handleChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
-    !changed && setChanged(true);
+    if (!changed) setChanged(true);
     const valid = !!evt.target.value || !others.required;
     try {
       const validationResult = validation.validate(id, evt.target.value);
@@ -24,7 +24,7 @@ export function ValidatedTextField({ onChange, id, error, ...others }: Validated
     } catch (e) {
       console.error(e);
     } finally {
-      onChange && onChange(evt);
+      if (onChange) onChange(evt);
     }
   }, [changed, id, onChange, others.required, validation]);
 
