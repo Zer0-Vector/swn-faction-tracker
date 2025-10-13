@@ -28,7 +28,7 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
 
   const options = useMemo(() => (
     Object.entries(ASSETS)
-      .filter(([name, _]) => name !== "Base of Influence")
+      .filter(([name]) => name !== "Base of Influence")
       .map(([name, item]) => {
         const group = `${TextUtils.titleCase(item.attribute)} ${item.level}`;
         return {
