@@ -16,7 +16,7 @@ export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
   const factions = useFactions();
 
   useEffect(() => {
-    const assetsUnsubscribe = assets.current.subscribe((action) => {
+    const assetsUnsubscribe = assets.current.subscribe(() => {
       setStoredAssets(assets.current.getAll());
       // TODO queue update for remote storage
     });
