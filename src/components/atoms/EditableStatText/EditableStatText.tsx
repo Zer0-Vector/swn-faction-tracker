@@ -119,7 +119,7 @@ export default function EditableStatText({
     return result;
   }, []);
 
-  const handleInputChange = useCallback((_evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback(() => {
     if (!textFieldRef.current) {
       return;
     }
