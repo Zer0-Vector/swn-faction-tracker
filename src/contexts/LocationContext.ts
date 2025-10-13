@@ -3,11 +3,11 @@ import React from "react";
 import LocationInfo from "../utils/LocationInfo";
 import { NamedElementPoset } from "../utils/NamedElementPoset";
 
-type LocationRequiredProps = {
+interface LocationRequiredProps {
   tl: number;
   x: number;
   y: number;
-};
+}
 
 export class LocationsPoset extends NamedElementPoset<LocationInfo, LocationRequiredProps> {
 

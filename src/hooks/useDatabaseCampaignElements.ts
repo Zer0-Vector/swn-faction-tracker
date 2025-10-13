@@ -26,14 +26,14 @@ export type CampaignInfo = Prettify<Named<Identifiable> & {
   sector?: SectorInfo,
 }>;
 
-export type CampaignElements = {
+export interface CampaignElements {
   campaign: CampaignInfo,
   factions: FactionPoset,
   locations: LocationsPoset,
   assets: AssetPoset,
-};
+}
 
-type CampaignElementsWrapper = { elements: CampaignElements };
+interface CampaignElementsWrapper { elements: CampaignElements }
 
 type SerializedElement =
     | Serialized<PurchasedAsset, "asset">

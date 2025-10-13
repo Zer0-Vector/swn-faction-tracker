@@ -5,9 +5,9 @@ import GoalText from "../../../molecules/GoalText";
 
 import { Item, ItemHeader } from "./helpers";
 
-type GoalItemProps = {
+interface GoalItemProps {
   faction: FactionInfo,
-};
+}
 
 export default function GoalItem({ faction }: Readonly<GoalItemProps>) {
   return (<>
