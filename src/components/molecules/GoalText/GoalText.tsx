@@ -1,8 +1,8 @@
 import React from "react";
 
 import { useFactions } from "../../../contexts/FactionContext";
-import FactionInfo from "../../../utils/FactionInfo";
 import { GoalTypes, isGoalType } from "../../../types/GoalType";
+import FactionInfo from "../../../utils/FactionInfo";
 import { ControlledDropDown } from "../ControlledDropDown";
 
 interface GoalTextProps {

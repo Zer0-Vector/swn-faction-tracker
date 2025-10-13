@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import PurchasedAsset from "../../utils/PurchasedAsset";
 import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
+import PurchasedAsset from "../../utils/PurchasedAsset";
 import { AssetContext, AssetContextType, AssetPoset } from "../AssetContext";
 import { useFactions } from "../FactionContext";
 import { useLocations } from "../LocationContext";

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import LocationInfo from "../../utils/LocationInfo";
 import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
+import LocationInfo from "../../utils/LocationInfo";
 import { LocationContext, LocationsPoset } from "../LocationContext";
 
 export function LocationContextProvider({ children }: ReadonlyPropsWithChildren) {

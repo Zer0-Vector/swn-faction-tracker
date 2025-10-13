@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 
 import Container from "@mui/material/Container";
-
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import FactionInfo from "../../../utils/FactionInfo";
+
 import { AttributesItem, GoalItem, GoalProgressItem, HomeworldItem, HpItem, TagItem } from "./items";
 
 

@@ -4,9 +4,11 @@ import FactionInfo from "../utils/FactionInfo";
 import { NamedElementPoset } from "../utils/NamedElementPoset";
 
 export class FactionPoset extends NamedElementPoset<FactionInfo> {
+
   constructor(elements: FactionInfo[] = []) {
     super(FactionInfo.from, elements);
   }
+
 }
 
 export interface FactionContextType {

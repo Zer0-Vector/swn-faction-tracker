@@ -1,10 +1,12 @@
 import React, { useCallback } from "react";
-import { ControlledDropDown } from "../ControlledDropDown";
-import { useLocations } from "@/contexts/LocationContext";
+
 import { useFactions } from "@/contexts/FactionContext";
+import { useLocations } from "@/contexts/LocationContext";
 import { Maybe } from "@/types/Maybe";
 
-export type HomeworldTextProps = {
+import { ControlledDropDown } from "../ControlledDropDown";
+
+export interface HomeworldTextProps {
   factionId: string,
   homeworldId: Maybe<string>,
 }

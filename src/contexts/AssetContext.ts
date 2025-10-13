@@ -4,6 +4,7 @@ import { NamedElementPoset } from "../utils/NamedElementPoset";
 import PurchasedAsset from "../utils/PurchasedAsset";
 
 export class AssetPoset extends NamedElementPoset<PurchasedAsset, { factionId: string }, "name", "factionId"> {
+
   constructor(elements: PurchasedAsset[] = []) {
     super(PurchasedAsset.from, elements,
       (args: { factionId: string }) =>
@@ -12,6 +13,7 @@ export class AssetPoset extends NamedElementPoset<PurchasedAsset, { factionId: s
           }
     );
   }
+
 }
 
 export interface AssetContextType {

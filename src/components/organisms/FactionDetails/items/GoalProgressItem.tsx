@@ -1,6 +1,8 @@
 import React from "react";
+
 import FactionInfo from "../../../../utils/FactionInfo";
 import GoalProgress from "../../../molecules/GoalProgress";
+
 import { Item, ItemHeader } from "./helpers";
 
 type GoalProgressItemProps = { faction: FactionInfo };

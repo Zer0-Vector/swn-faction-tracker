@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography";
 import ASSETS, { isAsset } from "../../../data/Assets";
 import { AssetAttackResult } from "../../../types/AssetInfo";
 import { RequiredChildrenProps } from "../../../types/ChildrenProps";
-import PurchasedAsset from "../../../utils/PurchasedAsset";
 import TestableProps from "../../../types/TestableProps";
+import PurchasedAsset from "../../../utils/PurchasedAsset";
 import TextUtils from "../../../utils/TextUtils";
 
 export interface AssetDetailsProps {

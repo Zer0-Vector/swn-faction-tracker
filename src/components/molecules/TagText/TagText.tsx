@@ -1,16 +1,17 @@
 import React, { useCallback, useMemo } from "react";
+
 import { useFactions } from "@/contexts/FactionContext";
 import { TAGS } from "@/data/Tags";
 import { Maybe } from "@/types/Maybe";
+
 import { ControlledDropDown } from "../ControlledDropDown";
 
-export type TagTextProps = {
+export interface TagTextProps {
   factionId: string,
   tag: Maybe<string>,
-};
+}
 
 export default function TagText({ factionId, tag }: Readonly<TagTextProps>) {
-
   const factions = useFactions();
   const tagOptions = useMemo(() => Object.keys(TAGS), []);
 
