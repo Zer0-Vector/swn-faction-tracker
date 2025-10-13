@@ -35,7 +35,7 @@ export function TurnPhaseContextProvider({ children }: ReadonlyPropsWithChildren
     },
   ], [selectFactionPhase, setGoalPhase]);
 
-  const onSelectAction = useCallback((action: FactionAction) => {
+  const onSelectAction = useCallback(() => {
     // TODO
   }, []);
 

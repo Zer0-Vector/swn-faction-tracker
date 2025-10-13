@@ -13,7 +13,7 @@ export function FactionContextProvider({ children }: ReadonlyPropsWithChildren) 
   const factionsPoset = new FactionPoset(storedFactions);
   const locations = useLocations();
 
-  const onFactionsChanged = (action: NamedElementPosetAction<FactionInfo>) => {
+  const onFactionsChanged = () => {
     setStoredFactions(factionsPoset.getAll());
     // TODO queue update for remote storage
   }
