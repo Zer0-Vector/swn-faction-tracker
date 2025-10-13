@@ -1,6 +1,7 @@
-import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 import MessageDialog, { DialogActionHandler, DialogActionResult } from "../components/atoms/MessageDialog";
+import { ReadonlyPropsWithChildren } from "@/types/ReadonlyPropsWithChildren";
 
 export interface ConfirmationOptions {
   title: string;
@@ -15,7 +16,7 @@ interface PromiseRefType {
   resolve: (confirmed: boolean) => void;
 }
 
-export function ConfirmationContextProvider({ children }: PropsWithChildren<{}>) {
+export function ConfirmationContextProvider({ children }: ReadonlyPropsWithChildren) {
   const [options, setOptions] = useState<ConfirmationOptions>({} as ConfirmationOptions);
   const [open, setOpen] = useState<boolean>(false);
   const promiseRef = useRef<PromiseRefType>();
@@ -44,7 +45,7 @@ export function ConfirmationContextProvider({ children }: PropsWithChildren<{}>)
         buttons={["Cancel", "Confirm"]}
         closeable={true}
         onAction={handleAction}
-      /> 
+      />
     </>
   );
 }
