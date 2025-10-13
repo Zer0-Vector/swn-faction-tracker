@@ -10,7 +10,7 @@ import { generateSlug } from "./SlugGenerator";
 
 export type NamedSluggedEntity = Prettify<Named<SluggedEntity>>;
 
-export type Named<T = {}> = T & { name: string };
+export type Named<T = object> = T & { name: string };
 
 export type NamedEntityWithReadonlyProps<TProps, ReadonlyKeys extends keyof Named<TProps>> =
     NamedSluggedEntity & TProps & Readonly<Pick<Named<TProps>, ReadonlyKeys>>;
@@ -23,7 +23,7 @@ export type NamedEntityWithReadonlyProps<TProps, ReadonlyKeys extends keyof Name
  */
 export interface INamedElementPoset<
   T extends NamedSluggedEntity & A,
-  A = {},
+  A = object,
   N extends keyof Named<A> = never,
   M extends keyof A = never
 >
@@ -71,7 +71,7 @@ type FilterFuncGenerator<X, Y> = (args: X) => (arg: Y) => boolean;
 
 export class NamedElementPoset<
     T extends NamedSluggedEntity & A,
-    A = {},
+    A = object,
     N extends keyof Named<A>  = never,
     M extends keyof A = never>
   extends Observable<NamedElementPosetAction<T>>
