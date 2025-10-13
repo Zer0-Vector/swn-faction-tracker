@@ -179,6 +179,8 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     if (this.order.length === 0 || index < 0 || index >= this.order.length) {
       throw new RangeError("Index out of bounds");
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- since order only contains valid ids, this is never undefined
     return this.get(this.order[index])!;
   }
 
