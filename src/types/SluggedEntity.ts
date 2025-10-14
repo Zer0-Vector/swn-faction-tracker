@@ -5,4 +5,3 @@ export interface Identifiable {
 export interface SluggedEntity extends Identifiable {
   slug: string;
 }
-

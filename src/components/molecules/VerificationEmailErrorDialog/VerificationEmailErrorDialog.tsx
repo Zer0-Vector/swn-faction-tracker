@@ -5,7 +5,8 @@ import { useAuth } from "../../../hooks/useAuth";
 import MessageDialog from "../../atoms/MessageDialog";
 
 const VerificationEmailErrorDialog = () => {
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController } =
+    useContext(UiStateContext);
   const { currentUser, logout } = useAuth();
   const open = uiState.loginState === "VERIFICATION_ERROR";
 

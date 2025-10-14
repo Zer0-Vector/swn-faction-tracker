@@ -13,33 +13,43 @@ export interface TurnPhaseContextType {
   onSelectAction(action: FactionAction): void;
 }
 
-export const TurnPhaseContext = React.createContext<TurnPhaseContextType>({} as TurnPhaseContextType);
+export const TurnPhaseContext = React.createContext<TurnPhaseContextType>(
+  {} as TurnPhaseContextType
+);
 
-export function TurnPhaseContextProvider({ children }: ReadonlyPropsWithChildren) {
+export function TurnPhaseContextProvider({
+  children,
+}: ReadonlyPropsWithChildren) {
   const selectFactionPhase = useSelectFactionPhase();
   const setGoalPhase = useSetGoalPhase();
-  const phases = useMemo<TurnPhase[]>(() => [
-    selectFactionPhase,
-    setGoalPhase,
-    {
-      name: "Select Action",
-      onClick: () => {
-        // TODO
+  const phases = useMemo<TurnPhase[]>(
+    () => [
+      selectFactionPhase,
+      setGoalPhase,
+      {
+        name: "Select Action",
+        onClick: () => {
+          // TODO
+        },
       },
-    },
-    {
-      name: "",
-      icon: React.createElement(EllipsisIcon),
-      title: "Select an action to reveal the remaining steps",
-      onClick: undefined,
-    },
-  ], [selectFactionPhase, setGoalPhase]);
+      {
+        name: "",
+        icon: React.createElement(EllipsisIcon),
+        title: "Select an action to reveal the remaining steps",
+        onClick: undefined,
+      },
+    ],
+    [selectFactionPhase, setGoalPhase]
+  );
 
   const onSelectAction = useCallback(() => {
     // TODO
   }, []);
 
-  const turnPhaseContext = useMemo<TurnPhaseContextType>(() => ({ phases, onSelectAction }), [onSelectAction, phases]);
+  const turnPhaseContext = useMemo<TurnPhaseContextType>(
+    () => ({ phases, onSelectAction }),
+    [onSelectAction, phases]
+  );
 
   return (
     <TurnPhaseContext.Provider value={turnPhaseContext}>

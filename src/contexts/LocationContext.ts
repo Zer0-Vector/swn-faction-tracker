@@ -9,12 +9,13 @@ interface LocationRequiredProps {
   y: number;
 }
 
-export class LocationsPoset extends NamedElementPoset<LocationInfo, LocationRequiredProps> {
-
+export class LocationsPoset extends NamedElementPoset<
+  LocationInfo,
+  LocationRequiredProps
+> {
   constructor(elements: LocationInfo[] = []) {
-    super(LocationInfo.from, elements)
+    super(LocationInfo.from, elements);
   }
-
 }
 
 export interface LocationContextType {
@@ -25,8 +26,12 @@ export const LocationContext = React.createContext({} as LocationContextType);
 
 export const useLocations = () => {
   const ctx = React.useContext(LocationContext);
-  if (!ctx) throw new Error("useLocations must be used within a LocationContextProvider");
+  if (!ctx)
+    throw new Error(
+      "useLocations must be used within a LocationContextProvider"
+    );
   return React.useSyncExternalStore(
-      ctx.locations.subscribe.bind(ctx.locations),
-      () => ctx.locations);
+    ctx.locations.subscribe.bind(ctx.locations),
+    () => ctx.locations
+  );
 };

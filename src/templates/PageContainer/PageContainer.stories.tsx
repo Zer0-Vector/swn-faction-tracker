@@ -14,26 +14,28 @@ import PageContainer from "./PageContainer";
 export default {
   component: PageContainer,
   decorators: [
-    story => (
-      <MemoryRouter>
-        {story()}
-      </MemoryRouter>
-    ),
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "LOGGED_OUT",
-          editMode: "VIEW",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => <MemoryRouter>{story()}</MemoryRouter>,
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "LOGGED_OUT",
+            editMode: "VIEW",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
-    story => (
-      <AuthContext.Provider value={{
-        currentUser: null,
-      } as ProvidedAuth}>
+    (story) => (
+      <AuthContext.Provider
+        value={
+          {
+            currentUser: null,
+          } as ProvidedAuth
+        }
+      >
         {story()}
       </AuthContext.Provider>
     ),

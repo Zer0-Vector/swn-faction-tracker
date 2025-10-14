@@ -4,16 +4,26 @@ import { render, screen, within } from "@testing-library/react";
 
 import { userEvent } from "@testing-library/user-event";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
-import { LocationContext, LocationContextType, LocationsPoset } from "../../../contexts/LocationContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../../contexts/FactionContext";
+import {
+  LocationContext,
+  LocationContextType,
+  LocationsPoset,
+} from "../../../contexts/LocationContext";
 import FactionInfo from "../../../utils/FactionInfo";
 
 import FactionDetails from "./FactionDetails";
 import { describe, expect, it, vi } from "vitest";
-import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
+import {
+  UiStateContext,
+  UiStateContextType,
+} from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import UiState from "../../../types/UiState";
-
 
 let mockFaction: FactionInfo;
 
@@ -32,7 +42,7 @@ const mockUiStateContext: UiStateContextType = (() => {
     loginState: "LOGGED_OUT",
     turnIndex: 0,
     turnState: "OFF",
-    turnInfo: undefined
+    turnInfo: undefined,
   };
   const ctx = {
     state,
@@ -50,7 +60,7 @@ let mockFactionId;
 
 function renderIt() {
   return {
-    user: userEvent.setup({ delay: 500, }),
+    user: userEvent.setup({ delay: 500 }),
     ...render(
       <UiStateContext.Provider value={mockUiStateContext}>
         <LocationContext.Provider value={mockLocationContext}>
@@ -59,12 +69,11 @@ function renderIt() {
           </FactionContext.Provider>
         </LocationContext.Provider>
       </UiStateContext.Provider>
-    )
-  }
+    ),
+  };
 }
 
-
-describe('default FactionDetails', () => {
+describe("default FactionDetails", () => {
   beforeAll(() => {
     const faction = mockContext.factions.add({
       name: "Test Faction",
@@ -78,14 +87,14 @@ describe('default FactionDetails', () => {
     mockFaction = mockContext.factions.get(fid)!;
   });
 
-  it('renders container', () => {
+  it("renders container", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     expect(container).toBeInTheDocument();
     expect(container).not.toBeEmptyDOMElement();
   });
 
-  it('renders homeworld', () => {
+  it("renders homeworld", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("homeworld-label");
@@ -94,7 +103,7 @@ describe('default FactionDetails', () => {
     expect(item).toBeInTheDocument();
   });
 
-  it('renders tag', () => {
+  it("renders tag", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("tag-label");
@@ -105,7 +114,7 @@ describe('default FactionDetails', () => {
     expect(child).toBeInTheDocument();
   });
 
-  it('renders hp', () => {
+  it("renders hp", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("hp-label");
@@ -118,7 +127,7 @@ describe('default FactionDetails', () => {
     expect(maxhp).toBeInTheDocument();
   });
 
-  it('renders attributes', () => {
+  it("renders attributes", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("attr-label");
@@ -136,7 +145,7 @@ describe('default FactionDetails', () => {
     expect(wealth).toBeInTheDocument();
   });
 
-  it('renders goal', () => {
+  it("renders goal", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("goal-label");
@@ -149,7 +158,7 @@ describe('default FactionDetails', () => {
     expect(hp).toBeInTheDocument();
   });
 
-  it('renders progress', () => {
+  it("renders progress", () => {
     renderIt();
     const container = screen.getByTestId("faction-details");
     const header = within(container).getByTestId("goal-progress-label");
@@ -161,5 +170,4 @@ describe('default FactionDetails', () => {
     const tally = within(item).getByTestId("goal-progress-empty");
     expect(tally).toBeInTheDocument();
   });
-
 });

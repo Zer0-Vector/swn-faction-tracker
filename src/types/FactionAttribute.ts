@@ -1,7 +1,4 @@
-type FactionAttributeTypes = 
-  | "FORCE"
-  | "CUNNING"
-  | "WEALTH";
+type FactionAttributeTypes = "FORCE" | "CUNNING" | "WEALTH";
 
 export type FactionAttribute = FactionAttributeTypes;
 

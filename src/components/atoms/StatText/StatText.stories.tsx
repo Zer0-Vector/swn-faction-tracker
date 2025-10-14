@@ -8,7 +8,9 @@ export default {
   component: StatText,
 } as ComponentMeta<typeof StatText>;
 
-export const Default: ComponentStory<typeof StatText> = (args) => <StatText {...args} />;
+export const Default: ComponentStory<typeof StatText> = (args) => (
+  <StatText {...args} />
+);
 Default.args = {
   children: "Test 123",
 };

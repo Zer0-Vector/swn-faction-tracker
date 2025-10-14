@@ -12,27 +12,27 @@ describe("ValidationController", () => {
     controller = new ValidationController(mockValidators);
   });
 
-  it('isAllValid is false on init', () => {
+  it("isAllValid is false on init", () => {
     expect(controller.isAllValid()).toBe(false);
   });
 
-  it.each(["one", "two"])('isValid is false on init for %p', (k: string) => {
+  it.each(["one", "two"])("isValid is false on init for %p", (k: string) => {
     expect(controller.isValid(k)).toBe(false);
   });
 
-  it('isValid throws Error on unknown key', () => {
+  it("isValid throws Error on unknown key", () => {
     const f = () => controller.isValid("three");
     expect(f).toThrowError(/Unknown/);
     expect(f).toThrowError(/three/);
   });
 
-  it('validate throws Error on unknown key', () => {
+  it("validate throws Error on unknown key", () => {
     const f = () => controller.validate("four", "test");
     expect(f).toThrowError(/Unknown/);
     expect(f).toThrowError(/four/);
   });
 
-  it('on validated, validate returns true when valid', () => {
+  it("on validated, validate returns true when valid", () => {
     mockValidators.one.mockImplementationOnce(() => true);
     const result = controller.validate("one", "test");
     expect(result).toBe(true);
@@ -40,7 +40,7 @@ describe("ValidationController", () => {
     expect(controller.isAllValid()).toBe(false);
   });
 
-  it('when all are validated, isAllValid returns true', () => {
+  it("when all are validated, isAllValid returns true", () => {
     mockValidators.one.mockImplementationOnce(() => true);
     mockValidators.two.mockImplementationOnce(() => true);
     expect(controller.isAllValid()).toBe(false);

@@ -23,14 +23,14 @@ export const TagsList = [
   "Warlike",
 ] as const;
 
-export type Tag = typeof TagsList[number];
+export type Tag = (typeof TagsList)[number];
 
 type TagsMap = {
   [K in Tag]: TagInfo;
 };
 
 export const TAGS: TagsMap = {
-  "Colonists": {
+  Colonists: {
     name: "Colonists",
     effects: [
       {
@@ -109,7 +109,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Fanatical": {
+  Fanatical: {
     name: "Fanatical",
     effects: [
       {
@@ -126,7 +126,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Imperialists": {
+  Imperialists: {
     name: "Imperialists",
     effects: [
       {
@@ -139,7 +139,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Machiavellian": {
+  Machiavellian: {
     name: "Machiavellian",
     effects: [
       {
@@ -188,7 +188,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Pirates": {
+  Pirates: {
     name: "Pirates",
     effects: [
       {
@@ -218,7 +218,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Plutocratic": {
+  Plutocratic: {
     name: "Plutocratic",
     effects: [
       {
@@ -264,7 +264,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Savage": {
+  Savage: {
     name: "Savage",
     effects: [
       {
@@ -280,7 +280,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Scavengers": {
+  Scavengers: {
     name: "Scavengers",
     effects: [
       {
@@ -301,7 +301,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Secretive": {
+  Secretive: {
     name: "Secretive",
     effects: [
       {
@@ -323,7 +323,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Theocratic": {
+  Theocratic: {
     name: "Theocratic",
     effects: [
       {
@@ -337,7 +337,7 @@ export const TAGS: TagsMap = {
       },
     ],
   },
-  "Warlike": {
+  Warlike: {
     name: "Warlike",
     effects: [
       {

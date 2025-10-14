@@ -15,8 +15,13 @@ export function TurnPhaseStepper() {
       {phases.map((phase, i) => (
         <Step key={phase.name}>
           <Tooltip title={phase.title} enterDelay={300}>
-            <div>{/* needed for tooltip display over disabled button */}
-              <StepButton icon={phase.icon} onClick={phase.onClick} disabled={i < index ? true : undefined}>
+            <div>
+              {/* needed for tooltip display over disabled button */}
+              <StepButton
+                icon={phase.icon}
+                onClick={phase.onClick}
+                disabled={i < index ? true : undefined}
+              >
                 {phase.name}
               </StepButton>
             </div>

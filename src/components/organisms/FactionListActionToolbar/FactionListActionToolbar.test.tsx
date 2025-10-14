@@ -1,7 +1,13 @@
 import React, { useMemo } from "react";
 import { MemoryRouter, useLocation } from "react-router-dom";
 
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 
 import { FactionContext, FactionPoset } from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
@@ -14,13 +20,16 @@ import { describe, expect, it, vi } from "vitest";
 
 function TestComp() {
   const { pathname } = useLocation();
-  const mc = useMemo(() => ({
+  const mc = useMemo(
+    () => ({
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
       } as UiState,
       controller: {} as UiStateController,
-    }), []);
+    }),
+    []
+  );
   return (
     <UiStateContext.Provider value={mc}>
       <FactionListActionToolbar />
@@ -33,14 +42,16 @@ const mockGetFaction = vi.fn();
 const mockRemoveFaction = vi.fn();
 function renderIt(route = "/") {
   render(
-    <FactionContext.Provider value={{
-      factions: {
-        getAll: () => [] as FactionInfo[],
-        slugGet: mockGetFaction as FactionPoset['slugGet'],
-        remove: mockRemoveFaction as FactionPoset['remove'],
-        subscribe: vi.fn() as FactionPoset['subscribe'],
-      } as FactionPoset,
-    }}>
+    <FactionContext.Provider
+      value={{
+        factions: {
+          getAll: () => [] as FactionInfo[],
+          slugGet: mockGetFaction as FactionPoset["slugGet"],
+          remove: mockRemoveFaction as FactionPoset["remove"],
+          subscribe: vi.fn() as FactionPoset["subscribe"],
+        } as FactionPoset,
+      }}
+    >
       <MemoryRouter initialEntries={[route]}>
         <TestComp />
       </MemoryRouter>
@@ -48,8 +59,8 @@ function renderIt(route = "/") {
   );
 }
 
-describe('FactionListActionToolbar', () => {
-  it('renders buttons', () => {
+describe("FactionListActionToolbar", () => {
+  it("renders buttons", () => {
     renderIt();
     const box = screen.getByTestId("faction-list-action-toolbar");
     expect(box).toBeInTheDocument();
@@ -61,8 +72,8 @@ describe('FactionListActionToolbar', () => {
     expect(btnRemove).toBeDisabled();
   });
 
-  it('remove button is enabled when faction selected', () => {
-    mockGetFaction.mockImplementationOnce(() => ({} as FactionInfo));
+  it("remove button is enabled when faction selected", () => {
+    mockGetFaction.mockImplementationOnce(() => ({}) as FactionInfo);
     renderIt("/factions/test-faction");
     const loc = screen.getByTestId("test-path");
     expect(loc.textContent).toBe("/factions/test-faction");
@@ -74,10 +85,13 @@ describe('FactionListActionToolbar', () => {
   it.todo("AddFactionDialog calls controller after faction added");
 
   it("remove button shows RemoveFactionDialog and removes faction when confirmed", async () => {
-    mockGetFaction.mockImplementation(() => ({
-      id: "test-1234",
-      slug: "test-faction",
-    } as FactionInfo));
+    mockGetFaction.mockImplementation(
+      () =>
+        ({
+          id: "test-1234",
+          slug: "test-faction",
+        }) as FactionInfo
+    );
     renderIt("/factions/test-faction");
     const btnRemove = screen.getByTestId("lat-remove");
     expect(btnRemove).not.toBeDisabled();

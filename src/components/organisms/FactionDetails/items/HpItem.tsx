@@ -5,9 +5,9 @@ import FactionHpSummary from "../../../molecules/FactionHpSummary";
 import { Item, ItemHeader } from "./helpers";
 
 interface HpItemProps {
-  readonly id: string,
-  readonly hp: number,
-  readonly maxHp: number,
+  readonly id: string;
+  readonly hp: number;
+  readonly maxHp: number;
 }
 
 export default function HpItem({ id, hp, maxHp }: HpItemProps) {
@@ -15,8 +15,13 @@ export default function HpItem({ id, hp, maxHp }: HpItemProps) {
     <>
       <ItemHeader data-testid="hp-label">HP:</ItemHeader>
       <Item data-testid="hp-item">
-        <FactionHpSummary factionId={id} hp={hp} maxHp={maxHp} data-testid="hp-summary" />
+        <FactionHpSummary
+          factionId={id}
+          hp={hp}
+          maxHp={maxHp}
+          data-testid="hp-summary"
+        />
       </Item>
     </>
-  )
+  );
 }

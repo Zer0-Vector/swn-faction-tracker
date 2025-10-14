@@ -8,17 +8,21 @@ import { ValidationController } from "../../../controllers/ValidationController"
 import { ValidatedTextField } from "./ValidatedTextField";
 import { describe, expect, it } from "vitest";
 
-describe('one ValidatedTextField', () => {
+describe("one ValidatedTextField", () => {
   const validator = new ValidationController({
     test1: (val: string) => {
       return val.length > 5;
     },
   });
 
-  it('shows error only if changed and invalid', () => {
+  it("shows error only if changed and invalid", () => {
     render(
       <ValidationContext.Provider value={validator}>
-        <ValidatedTextField id="test1" label="Test One" data-testid="test-one" />
+        <ValidatedTextField
+          id="test1"
+          label="Test One"
+          data-testid="test-one"
+        />
       </ValidationContext.Provider>
     );
     const theDiv = screen.getByTestId("test-one");
@@ -46,7 +50,7 @@ describe('one ValidatedTextField', () => {
   });
 });
 
-describe('two ValidatedTextField', () => {
+describe("two ValidatedTextField", () => {
   const validator = new ValidationController({
     test1: (val: string) => {
       return val.length > 5;
@@ -56,11 +60,19 @@ describe('two ValidatedTextField', () => {
     },
   });
 
-  it('is only valid if all fields are valid', () => {
+  it("is only valid if all fields are valid", () => {
     render(
       <ValidationContext.Provider value={validator}>
-        <ValidatedTextField id="test1" label="Test One" data-testid="test-one" />
-        <ValidatedTextField id="test2" label="Test Two" data-testid="test-two" />
+        <ValidatedTextField
+          id="test1"
+          label="Test One"
+          data-testid="test-one"
+        />
+        <ValidatedTextField
+          id="test2"
+          label="Test Two"
+          data-testid="test-two"
+        />
       </ValidationContext.Provider>
     );
     // inspect the first field

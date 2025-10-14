@@ -8,7 +8,6 @@ import { RequiredChildrenProps } from "../../../types/ChildrenProps";
 
 import FactionListItem from "./FactionListItem";
 
-
 interface MockProviderProps extends RequiredChildrenProps {
   factions: FactionPoset;
 }
@@ -36,20 +35,12 @@ const mockedFactions: FactionPoset = {
 export default {
   component: FactionListItem,
   decorators: [
-    story => (
-      <MemoryRouter initialEntries={["/"]}>
-        {story()}
-      </MemoryRouter>
-    ),
-    story => (
-      <MockProvider factions={mockedFactions}>
-        {story()}
-      </MockProvider>
-    ),
+    (story) => <MemoryRouter initialEntries={["/"]}>{story()}</MemoryRouter>,
+    (story) => <MockProvider factions={mockedFactions}>{story()}</MockProvider>,
   ],
 } as ComponentMeta<typeof FactionListItem>;
 
-const Template: ComponentStory<typeof FactionListItem> = args => {
+const Template: ComponentStory<typeof FactionListItem> = (args) => {
   return <FactionListItem {...args} />;
 };
 

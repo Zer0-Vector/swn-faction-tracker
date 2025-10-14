@@ -14,23 +14,29 @@ import LoginDialog from "./LoginDialog";
 export default {
   component: LoginDialog,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "LOGGING_IN",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "LOGGING_IN",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
-    story => (
-      <AuthContext.Provider value={{
-        login: (...args) => {
-          action("login")(...args);
-          return Promise.resolve({});
-        },
-      } as ProvidedAuth}>
+    (story) => (
+      <AuthContext.Provider
+        value={
+          {
+            login: (...args) => {
+              action("login")(...args);
+              return Promise.resolve({});
+            },
+          } as ProvidedAuth
+        }
+      >
         {story()}
       </AuthContext.Provider>
     ),

@@ -1,5 +1,5 @@
-name: 'PlantUML Generator'
-description: 'Generates diagrams using PlantUML'
+name: "PlantUML Generator"
+description: "Generates diagrams using PlantUML"
 inputs:
   infiles:
     description: input files

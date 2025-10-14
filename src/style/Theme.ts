@@ -4,7 +4,7 @@ import { BASE, COLORS, DARK, DARKER, LIGHT, LIGHTER } from "./Colors";
 
 export const THEME = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
       main: COLORS.pastel.primary[BASE],
       light: COLORS.pastel.primary[LIGHT],
@@ -32,8 +32,7 @@ export const THEME = createTheme({
       paper: COLORS["greyish darkest"].primary[LIGHT],
       paper2: COLORS["greyish darkest"].primary[LIGHTER],
     },
-    text: {
-    },
+    text: {},
   },
   typography: {
     body1: {

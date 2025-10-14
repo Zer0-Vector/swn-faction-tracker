@@ -2,7 +2,11 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { LocationContext, LocationContextType, LocationsPoset } from "../../../contexts/LocationContext";
+import {
+  LocationContext,
+  LocationContextType,
+  LocationsPoset,
+} from "../../../contexts/LocationContext";
 
 import AddLocationDialog from "./AddLocationDialog";
 import { describe, expect, it, vi } from "vitest";
@@ -14,44 +18,50 @@ function renderWithContext(context?: LocationContextType) {
 
   const locationContext = context || {
     locations: {
-      checkName: mockCheckLocationName as LocationsPoset['checkName'],
+      checkName: mockCheckLocationName as LocationsPoset["checkName"],
       subscribe(cb) {
         return () => {};
-      }
+      },
     } as LocationsPoset,
   };
 
   render(
     <LocationContext.Provider value={locationContext}>
-      <AddLocationDialog open={true} onClose={mockClose} onCreate={mockCreate} />
+      <AddLocationDialog
+        open={true}
+        onClose={mockClose}
+        onCreate={mockCreate}
+      />
     </LocationContext.Provider>
   );
   return { mockClose, mockCreate, mockCheckLocationName };
 }
 
-describe('default AddLocationDialog', () => {
-  it('does not render when open=false', () => {
+describe("default AddLocationDialog", () => {
+  it("does not render when open=false", () => {
     render(
-      <LocationContext.Provider value={{
-        locations: {
-          checkName: vi.fn() as LocationsPoset['checkName'],
-          subscribe(cb) {
-            return () => {};
-          }
-        } as LocationsPoset,
-      }}>
+      <LocationContext.Provider
+        value={{
+          locations: {
+            checkName: vi.fn() as LocationsPoset["checkName"],
+            subscribe(cb) {
+              return () => {};
+            },
+          } as LocationsPoset,
+        }}
+      >
         <AddLocationDialog open={false} onClose={vi.fn()} onCreate={vi.fn()} />
       </LocationContext.Provider>
     );
     expect(screen.queryByTestId("add-location-dialog")).not.toBeInTheDocument();
   });
 
-  it('renders shown when open=true', () => {
+  it("renders shown when open=true", () => {
     renderWithContext();
     expect(screen.getByTestId("add-location-dialog")).toBeInTheDocument();
   });
 
-  it('renders buttons', () => {
+  it("renders buttons", () => {
     renderWithContext();
     const dialog = screen.getByTestId("add-location-dialog");
     const btnAdd = within(dialog).getByText("Create");
@@ -63,7 +73,7 @@ describe('default AddLocationDialog', () => {
     expect(btnCancel).toBeInstanceOf(HTMLButtonElement);
   });
 
-  it('renders title', () => {
+  it("renders title", () => {
     renderWithContext();
     const divTitle = screen.getByTestId("message-dialog-title");
     expect(divTitle).toBeInTheDocument();
@@ -71,7 +81,7 @@ describe('default AddLocationDialog', () => {
     expect(divTitle.textContent).toEqual("Add Location");
   });
 
-  it('renders instructions content text', () => {
+  it("renders instructions content text", () => {
     renderWithContext();
     const divInst = screen.getByTestId("message-dialog-message");
     expect(divInst).toBeInTheDocument();
@@ -79,7 +89,7 @@ describe('default AddLocationDialog', () => {
     expect(divInst).toHaveTextContent("new location");
   });
 
-  it('renders input field location name', () => {
+  it("renders input field location name", () => {
     renderWithContext();
     const inAsset = screen.getByTestId("location-name-field");
     expect(inAsset).toBeInTheDocument();
@@ -91,7 +101,7 @@ describe('default AddLocationDialog', () => {
     expect(field).not.toHaveValue();
   });
 
-  it('does nothing when the field is empty', () => {
+  it("does nothing when the field is empty", () => {
     const { mockCreate, mockClose } = renderWithContext();
     const inAsset = screen.getByTestId("location-name-field");
     expect(inAsset).toBeInTheDocument();
@@ -127,10 +137,13 @@ describe('default AddLocationDialog', () => {
     return { textField, input };
   }
 
-  it('enables Create button when all fields are non-empty', () => {
+  it("enables Create button when all fields are non-empty", () => {
     const { mockCheckLocationName } = renderWithContext();
     mockCheckLocationName.mockImplementation(() => true);
-    const { input: nameField } = assertEmptyField("location-name-field", "Location Name");
+    const { input: nameField } = assertEmptyField(
+      "location-name-field",
+      "Location Name"
+    );
     fireEvent.input(nameField, { target: { value: "abc" } });
     expect(nameField).toHaveValue("abc");
 
@@ -142,15 +155,15 @@ describe('default AddLocationDialog', () => {
     const tlField = within(textField).getByDisplayValue("");
     expect(tlField).toBeInTheDocument();
     expect(tlField).toBeInstanceOf(HTMLInputElement);
-    fireEvent.change(tlField, { target : { value: "1" } });
+    fireEvent.change(tlField, { target: { value: "1" } });
     expect(tlField).toHaveValue("1");
 
     const { input: xField } = assertEmptyField("location-x-field", "X");
-    fireEvent.input(xField, { target : { value: "2" } });
+    fireEvent.input(xField, { target: { value: "2" } });
     expect(xField).toHaveValue(2);
 
     const { input: yField } = assertEmptyField("location-y-field", "Y");
-    fireEvent.input(yField, { target : { value: "3" } });
+    fireEvent.input(yField, { target: { value: "3" } });
     expect(yField).toHaveValue(3);
 
     const actions = screen.getByTestId("message-dialog-actions");
@@ -160,7 +173,7 @@ describe('default AddLocationDialog', () => {
     expect(btnCreate).not.toBeDisabled();
   });
 
-  it('marks the field with error class when duplicate name given', () => {
+  it("marks the field with error class when duplicate name given", () => {
     const { mockCheckLocationName } = renderWithContext();
     mockCheckLocationName.mockImplementation(() => false);
 
@@ -188,7 +201,7 @@ describe('default AddLocationDialog', () => {
     expect(wrapperDiv).toHaveClass("Mui-error");
   });
 
-  it('calls onClose when cancelled', () => {
+  it("calls onClose when cancelled", () => {
     const { mockCreate, mockClose } = renderWithContext();
     const inAsset = screen.getByTestId("location-name-field");
     expect(inAsset).toBeInTheDocument();
@@ -210,16 +223,19 @@ describe('default AddLocationDialog', () => {
     expect(mockClose).toBeCalledTimes(1);
   });
 
-  it('calls onCreate when given a unique name and other non-empty details', () => {
+  it("calls onCreate when given a unique name and other non-empty details", () => {
     const { mockClose, mockCreate } = renderWithContext({
       locations: {
-        checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
+        checkName: (s: Parameters<LocationsPoset["checkName"]>[0]) => true,
         subscribe(cb) {
           return () => {};
-        }
+        },
       } as LocationsPoset,
     });
-    const { input: nameField } = assertEmptyField("location-name-field", "Location Name");
+    const { input: nameField } = assertEmptyField(
+      "location-name-field",
+      "Location Name"
+    );
     fireEvent.input(nameField, { target: { value: "abc" } });
     expect(nameField).toHaveValue("abc");
 
@@ -231,15 +247,15 @@ describe('default AddLocationDialog', () => {
     const tlField = within(textField).getByDisplayValue("");
     expect(tlField).toBeInTheDocument();
     expect(tlField).toBeInstanceOf(HTMLInputElement);
-    fireEvent.change(tlField, { target : { value: "1" } });
+    fireEvent.change(tlField, { target: { value: "1" } });
     expect(tlField).toHaveValue("1");
 
     const { input: xField } = assertEmptyField("location-x-field", "X");
-    fireEvent.input(xField, { target : { value: "2" } });
+    fireEvent.input(xField, { target: { value: "2" } });
     expect(xField).toHaveValue(2);
 
     const { input: yField } = assertEmptyField("location-y-field", "Y");
-    fireEvent.input(yField, { target : { value: "3" } });
+    fireEvent.input(yField, { target: { value: "3" } });
     expect(yField).toHaveValue(3);
 
     const actions = screen.getByTestId("message-dialog-actions");

@@ -16,7 +16,12 @@ type ColorType = {
   [K in Shade]: string;
 };
 
-type ColorVariant = "pastel" | "very light pale pastel" | "greyish darkest" | "greyish lightest" | "shiny";
+type ColorVariant =
+  | "pastel"
+  | "very light pale pastel"
+  | "greyish darkest"
+  | "greyish lightest"
+  | "shiny";
 
 interface MainPalette {
   primary: ColorType;
@@ -28,7 +33,7 @@ type PaletteMap = { [K in ColorVariant]: MainPalette };
 
 // https://paletton.com/#uid=33x0I0kmpJc6c+ygdUgrbuKqJdi
 export const COLORS: PaletteMap = {
-  "pastel": {
+  pastel: {
     primary: {
       [DARKER]: "#0F2D44",
       [DARK]: "#0F2D44",
@@ -123,7 +128,7 @@ export const COLORS: PaletteMap = {
       [LIGHTER]: "#F5D4DE",
     },
   },
-  "shiny": {
+  shiny: {
     primary: {
       [DARKER]: "#003D6B",
       [DARK]: "#004F8B",

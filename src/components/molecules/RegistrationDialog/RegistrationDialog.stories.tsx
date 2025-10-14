@@ -29,26 +29,28 @@ const mockAuth = {
 export default {
   component: RegistrationDialog,
   decorators: [
-    story => (
-      <AuthContext.Provider value={mockAuth}>
-        {story()}
-      </AuthContext.Provider>
+    (story) => (
+      <AuthContext.Provider value={mockAuth}>{story()}</AuthContext.Provider>
     ),
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "REGISTERING",
-        } as UiState,
-        controller: {
-          ...MockAction("setLoginState"),
-        } as unknown as UiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "REGISTERING",
+          } as UiState,
+          controller: {
+            ...MockAction("setLoginState"),
+          } as unknown as UiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof RegistrationDialog>;
 
-const Template: ComponentStory<typeof RegistrationDialog> = () => <RegistrationDialog />;
+const Template: ComponentStory<typeof RegistrationDialog> = () => (
+  <RegistrationDialog />
+);
 
 export const Default = Template.bind({});

@@ -14,29 +14,37 @@ import LogoutConfirmDialog from "./LogoutConfirmDialog";
 export default {
   component: LogoutConfirmDialog,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "LOGGING_OUT",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "LOGGING_OUT",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
-    story => (
-      <AuthContext.Provider value ={{
-        logout: () => {
-          action("logout")([]);
-          return Promise.resolve();
-        },
-      } as ProvidedAuth}>
+    (story) => (
+      <AuthContext.Provider
+        value={
+          {
+            logout: () => {
+              action("logout")([]);
+              return Promise.resolve();
+            },
+          } as ProvidedAuth
+        }
+      >
         {story()}
       </AuthContext.Provider>
     ),
-  ],  
+  ],
 } as ComponentMeta<typeof LogoutConfirmDialog>;
 
-const Template: ComponentStory<typeof LogoutConfirmDialog> = () => <LogoutConfirmDialog />;
+const Template: ComponentStory<typeof LogoutConfirmDialog> = () => (
+  <LogoutConfirmDialog />
+);
 
 export const Default = Template.bind({});

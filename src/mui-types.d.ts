@@ -1,6 +1,6 @@
 import "@mui/material/styles/createPalette";
 
-declare module '@mui/material/styles/createPalette' {
+declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
     paper2: string;
   }
@@ -14,8 +14,8 @@ declare module '@mui/material/styles/createPalette' {
   }
 }
 
-declare module '@mui/material/ToggleButtonGroup/ToggleButtonGroup' {
+declare module "@mui/material/ToggleButtonGroup/ToggleButtonGroup" {
   interface ToggleButtonGroupPropsColorOverrides {
-    tertiary: PaletteOptions['tertiary'];
+    tertiary: PaletteOptions["tertiary"];
   }
 }

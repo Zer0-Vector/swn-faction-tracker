@@ -17,33 +17,36 @@ import { useLocations } from "../../../contexts/LocationContext";
 import LocationInfo from "../../../utils/LocationInfo";
 import { ControlledText } from "../../molecules/ControlledText";
 
+type LocationsListItemProps = Pick<DraggableProps, "index" | "draggableId"> & {
+  isSelected: boolean;
+  locationInfo: LocationInfo;
+};
 
-type LocationsListItemProps =
-  & Pick<DraggableProps, "index" | "draggableId">
-  & {
-    isSelected: boolean,
-    locationInfo: LocationInfo,
-  };
+const Column = React.memo(
+  styled(Box)(({ theme }) => ({
+    padding: theme.spacing(1),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }))
+);
 
-const Column = React.memo(styled(Box)(({ theme }) => ({
-  padding: theme.spacing(1),
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-})));
+const Item = React.memo(
+  styled(Paper)(({ theme }) => ({
+    ...theme.typography.body1,
+    px: theme.spacing(1),
+  }))
+);
 
-const Item = React.memo(styled(Paper)(({ theme }) => ({
-  ...theme.typography.body1,
-  px: theme.spacing(1),
-})));
-
-const ItemHeader = React.memo(styled(Item)(() => ({
-  fontWeight: "bold",
-  textAlign: "right",
-  whiteSpace: "nowrap",
-  overflow: "clip",
-  textOverflow: "ellipsis",
-})));
+const ItemHeader = React.memo(
+  styled(Item)(() => ({
+    fontWeight: "bold",
+    textAlign: "right",
+    whiteSpace: "nowrap",
+    overflow: "clip",
+    textOverflow: "ellipsis",
+  }))
+);
 
 interface SummaryProps {
   isDragging: boolean;
@@ -51,7 +54,12 @@ interface SummaryProps {
   onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const SummaryComp = ({ isSelected, isDragging, children, onClick }: PropsWithChildren<SummaryProps>) => {
+const SummaryComp = ({
+  isSelected,
+  isDragging,
+  children,
+  onClick,
+}: PropsWithChildren<SummaryProps>) => {
   const sx = useMemo<SxProps<Theme>>(() => {
     const notDraggingColor = isSelected ? "action.selected" : "inherit";
     return {
@@ -82,18 +90,26 @@ const SummaryComp = ({ isSelected, isDragging, children, onClick }: PropsWithChi
 
 const Summary = React.memo(SummaryComp);
 
-export function LocationsListItem({ index, draggableId, isSelected, locationInfo }: LocationsListItemProps) {
+export function LocationsListItem({
+  index,
+  draggableId,
+  isSelected,
+  locationInfo,
+}: LocationsListItemProps) {
   const hasSmallWidth = useMediaQuery("(max-width:600px)");
   const iconSx = useMemo<SxProps<Theme>>(() => ({ display: "flex" }), []);
   const nav = useNavigate();
   const locations = useLocations();
 
-  const updateNameHandler = useCallback((val: string) => {
-    const result = locations.update(locationInfo.id, "name", val);
-    if (isSelected) {
-      nav(`/locations/${result.slug}`);
-    }
-  }, [isSelected, locationInfo.id, locations, nav]);
+  const updateNameHandler = useCallback(
+    (val: string) => {
+      const result = locations.update(locationInfo.id, "name", val);
+      if (isSelected) {
+        nav(`/locations/${result.slug}`);
+      }
+    },
+    [isSelected, locationInfo.id, locations, nav]
+  );
 
   const selectionHandler = useCallback(() => {
     if (isSelected) {
@@ -113,26 +129,42 @@ export function LocationsListItem({ index, draggableId, isSelected, locationInfo
           expanded={isSelected}
           disableGutters={true}
         >
-          <Summary onClick={selectionHandler} isDragging={snapshot.isDragging} isSelected={isSelected}>
+          <Summary
+            onClick={selectionHandler}
+            isDragging={snapshot.isDragging}
+            isSelected={isSelected}
+          >
             <Column>
-              <Icon
-                {...provided.dragHandleProps}
-                component="div"
-                sx={iconSx}
-              >
+              <Icon {...provided.dragHandleProps} component="div" sx={iconSx}>
                 <DragHandleIcon />
               </Icon>
             </Column>
             <Column>
-              <ControlledText id="location-name" onUpdate={updateNameHandler} variant="body2">{locationInfo.name}</ControlledText>
+              <ControlledText
+                id="location-name"
+                onUpdate={updateNameHandler}
+                variant="body2"
+              >
+                {locationInfo.name}
+              </ControlledText>
             </Column>
           </Summary>
           <AccordionDetails>
             <Grid container spacing={1}>
-              <Grid item xs={cellWidth}><ItemHeader>Tech Level</ItemHeader></Grid>
-              <Grid item xs={cellWidth}><Item>{locationInfo.tl}</Item></Grid>
-              <Grid item xs={cellWidth}><ItemHeader>Coordinates</ItemHeader></Grid>
-              <Grid item xs={cellWidth}><Item>{locationInfo.x}, {locationInfo.y}</Item></Grid>
+              <Grid item xs={cellWidth}>
+                <ItemHeader>Tech Level</ItemHeader>
+              </Grid>
+              <Grid item xs={cellWidth}>
+                <Item>{locationInfo.tl}</Item>
+              </Grid>
+              <Grid item xs={cellWidth}>
+                <ItemHeader>Coordinates</ItemHeader>
+              </Grid>
+              <Grid item xs={cellWidth}>
+                <Item>
+                  {locationInfo.x}, {locationInfo.y}
+                </Item>
+              </Grid>
             </Grid>
           </AccordionDetails>
         </Accordion>

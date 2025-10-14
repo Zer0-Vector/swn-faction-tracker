@@ -7,7 +7,5 @@ export type ControlledTextProps = Readonly<Omit<EditableTextProps, "editable">>;
 
 export function ControlledText(props: ControlledTextProps) {
   const { state } = useContext(UiStateContext);
-  return (
-    <EditableText {...props} editable={state.editMode === "EDIT"} />
-  );
+  return <EditableText {...props} editable={state.editMode === "EDIT"} />;
 }

@@ -11,7 +11,10 @@ import { LocationsListItem } from "../LocationsListItem";
 function useLocationsList() {
   const locations = useLocations();
   const [list, setList] = useState(locations.getAll());
-  useEffect(() => locations.subscribe(() => setList(locations.getAll())), [locations]);
+  useEffect(
+    () => locations.subscribe(() => setList(locations.getAll())),
+    [locations]
+  );
 
   return {
     locations: list,
@@ -23,19 +26,26 @@ export default function LocationsList() {
   const { locations, reorder } = useLocationsList();
   const { locationSlug: selectedLocationId } = useSelectionSlug();
 
-  const handleDragEnd = useCallback((result: DropResult) => {
-    if (result.reason === 'DROP') {
-      if (result.destination) {
-        reorder(result.source.index, result.destination?.index);
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      if (result.reason === "DROP") {
+        if (result.destination) {
+          reorder(result.source.index, result.destination?.index);
+        }
       }
-    }
-  }, [reorder]);
+    },
+    [reorder]
+  );
 
   if (locations.length === 0) {
     return (
       <>
-        <Typography variant="body1" color="warning.main">No Locations</Typography>
-        <Typography variant="body2">Create locations using the buttons above.</Typography>
+        <Typography variant="body1" color="warning.main">
+          No Locations
+        </Typography>
+        <Typography variant="body2">
+          Create locations using the buttons above.
+        </Typography>
       </>
     );
   }
@@ -49,7 +59,9 @@ export default function LocationsList() {
             ref={provided.innerRef}
             data-testid="locations-list-container"
             padding={2}
-            bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
+            bgcolor={
+              snapshot.isDraggingOver ? "background.paper2" : "background.paper"
+            }
           >
             {locations.map((val, index) => (
               <LocationsListItem

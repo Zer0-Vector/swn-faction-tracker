@@ -2,37 +2,51 @@ import React, { useCallback, useRef, useState } from "react";
 
 import { ReadonlyPropsWithChildren } from "@/types/ReadonlyPropsWithChildren";
 
-import MessageDialog, { DialogActionHandler, DialogActionResult } from "../components/atoms/MessageDialog";
+import MessageDialog, {
+  DialogActionHandler,
+  DialogActionResult,
+} from "../components/atoms/MessageDialog";
 
 export interface ConfirmationOptions {
   title: string;
   message: string;
 }
 
-export type ConfirmationContextType = (options: ConfirmationOptions) => Promise<boolean>;
+export type ConfirmationContextType = (
+  options: ConfirmationOptions
+) => Promise<boolean>;
 
-export const ConfirmationContext = React.createContext<ConfirmationContextType>(Promise.reject);
+export const ConfirmationContext = React.createContext<ConfirmationContextType>(
+  Promise.reject
+);
 
 interface PromiseRefType {
   resolve: (confirmed: boolean) => void;
 }
 
-export function ConfirmationContextProvider({ children }: ReadonlyPropsWithChildren) {
-  const [options, setOptions] = useState<ConfirmationOptions>({} as ConfirmationOptions);
+export function ConfirmationContextProvider({
+  children,
+}: ReadonlyPropsWithChildren) {
+  const [options, setOptions] = useState<ConfirmationOptions>(
+    {} as ConfirmationOptions
+  );
   const [open, setOpen] = useState<boolean>(false);
   const promiseRef = useRef<PromiseRefType>();
   const openConfirmation = useCallback<ConfirmationContextType>((options) => {
-      return new Promise((resolve) => {
-        promiseRef.current = { resolve };
-        setOptions(options);
-        setOpen(true);
-      });
+    return new Promise((resolve) => {
+      promiseRef.current = { resolve };
+      setOptions(options);
+      setOpen(true);
+    });
   }, []);
 
-  const handleAction = useCallback<DialogActionHandler>((result: DialogActionResult) => {
-    setOpen(false);
-    promiseRef.current?.resolve(result.reason === "Confirm");
-  }, []);
+  const handleAction = useCallback<DialogActionHandler>(
+    (result: DialogActionResult) => {
+      setOpen(false);
+      promiseRef.current?.resolve(result.reason === "Confirm");
+    },
+    []
+  );
 
   return (
     <>

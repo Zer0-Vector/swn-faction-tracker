@@ -2,7 +2,11 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../utils/FactionInfo";
@@ -16,9 +20,9 @@ const mockSlugGet = vi.fn();
 const mockUpdate = vi.fn();
 const mockContext: FactionContextType = {
   factions: {
-    slugGet: mockSlugGet as FactionPoset['slugGet'],
-    update: mockUpdate as FactionPoset['update'],
-    subscribe: vi.fn() as FactionPoset['subscribe'],
+    slugGet: mockSlugGet as FactionPoset["slugGet"],
+    update: mockUpdate as FactionPoset["update"],
+    subscribe: vi.fn() as FactionPoset["subscribe"],
   } as FactionPoset,
 };
 
@@ -32,13 +36,15 @@ const mockFaction = {
 
 function renderIt(faction = mockFaction) {
   render(
-    <UiStateContext.Provider value={{
-      state: {
-        editMode: "EDIT",
-        loginState: "LOGGED_IN",
-      } as UiState,
-      controller: {} as UiStateController,
-    }}>
+    <UiStateContext.Provider
+      value={{
+        state: {
+          editMode: "EDIT",
+          loginState: "LOGGED_IN",
+        } as UiState,
+        controller: {} as UiStateController,
+      }}
+    >
       <FactionContext.Provider value={mockContext}>
         <GoalProgress faction={faction} />
       </FactionContext.Provider>
@@ -46,13 +52,13 @@ function renderIt(faction = mockFaction) {
   );
 }
 
-describe('default GoalProgress', () => {
+describe("default GoalProgress", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSlugGet.mockImplementationOnce(() => mockFaction);
   });
 
-  it('renders faction goal', () => {
+  it("renders faction goal", () => {
     renderIt();
     const theSpan = screen.getByTestId("goal-progress");
     expect(theSpan).toBeInTheDocument();
@@ -66,7 +72,7 @@ describe('default GoalProgress', () => {
     expect(testArg.textContent).toEqual("22");
   });
 
-  it('calls controller when tally is updated', () => {
+  it("calls controller when tally is updated", () => {
     renderIt();
     const prog = screen.getByTestId("goal-tally");
     fireEvent.doubleClick(prog);
@@ -85,13 +91,14 @@ describe('default GoalProgress', () => {
     });
   });
 
-  it('calls controller when target is updated', () => {
+  it("calls controller when target is updated", () => {
     renderIt();
     const testArg = screen.getByTestId("goal-target");
     fireEvent.doubleClick(testArg);
     const testArgTextField = screen.getByTestId("goal-target-textfield");
     expect(testArgTextField).toBeInTheDocument();
-    const testArgTextFieldInput = within(testArgTextField).getByDisplayValue("22");
+    const testArgTextFieldInput =
+      within(testArgTextField).getByDisplayValue("22");
     expect(testArgTextFieldInput).toBeInTheDocument();
     expect(testArgTextFieldInput).toBeInstanceOf(HTMLInputElement);
 
@@ -105,8 +112,8 @@ describe('default GoalProgress', () => {
   });
 });
 
-describe('empty GoalProgress', () => {
-  it('renders instruction text', () => {
+describe("empty GoalProgress", () => {
+  it("renders instruction text", () => {
     renderIt({} as FactionInfo);
     const elem = screen.getByTestId("goal-progress-empty");
     expect(elem).toBeInTheDocument();

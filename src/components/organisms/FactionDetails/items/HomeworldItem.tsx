@@ -15,5 +15,5 @@ export default function HomeworldItem(props: Readonly<HomeworldItemProps>) {
         <HomeworldText {...props} />
       </Item>
     </>
-  )
+  );
 }

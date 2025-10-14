@@ -3,37 +3,37 @@ import { SluggedEntity } from "../../types/SluggedEntity";
 
 import { SluggedOrderedSet } from "../SluggedOrderedSet";
 
-const blanks = [ "", " ", "\t", "\f", "\r", "\n", " \t \f \r\n" ];
+const blanks = ["", " ", "\t", "\f", "\r", "\n", " \t \f \r\n"];
 
-describe('SluggedOrderedSet', () => {
+describe("SluggedOrderedSet", () => {
   let set: SluggedOrderedSet<SluggedEntity>;
 
   beforeEach(() => {
     set = new SluggedOrderedSet();
   });
 
-  describe('constructor', () => {
-    it('with args adds each element', () => {
+  describe("constructor", () => {
+    it("with args adds each element", () => {
       const elements = [
         { id: "1", slug: "one" },
         { id: "2", slug: "two" },
         { id: "3", slug: "three" },
       ];
       set = new SluggedOrderedSet(elements);
-      elements.forEach(e => {
+      elements.forEach((e) => {
         expect(set.get(e.id)).toBe(e);
         expect(set.slugGet(e.slug)).toBe(e);
         expect(set.getAll()).toEqual(elements);
       });
     });
 
-    it('empty set is empty', () => {
+    it("empty set is empty", () => {
       expect(set.getAll().length).toBe(0);
     });
   });
 
-  describe('getAll', () => {
-    it('elements are returned in order', () => {
+  describe("getAll", () => {
+    it("elements are returned in order", () => {
       const e1 = { id: "123", slug: "aaa" };
       const e2 = { id: "234", slug: "bbb" };
       const e3 = { id: "345", slug: "ccc" };
@@ -44,15 +44,15 @@ describe('SluggedOrderedSet', () => {
     });
   });
 
-  describe('get/slugGet', () => {
-    it('getting element that DNE is undefined', () => {
+  describe("get/slugGet", () => {
+    it("getting element that DNE is undefined", () => {
       expect(set.get("dne")).toBeUndefined();
       expect(set.slugGet("dne")).toBeUndefined();
     });
   });
 
-  describe('add', () => {
-    it('adding an element adds an element', () => {
+  describe("add", () => {
+    it("adding an element adds an element", () => {
       const element = { id: "1", slug: "abc" };
       set.add(element);
       expect(set.getAll().length).toBe(1);
@@ -61,35 +61,35 @@ describe('SluggedOrderedSet', () => {
       expect(set.slugGet("abc")).toBe(element);
     });
 
-    it('adding element with conflicting id throws', () => {
+    it("adding element with conflicting id throws", () => {
       const e1 = { id: "6", slug: "fff" };
       const e2 = { id: "6", slug: "ggg" };
       set.add(e1);
       expect(() => set.add(e2)).toThrowError("id");
     });
 
-    it('adding element with conflicting slug throws', () => {
+    it("adding element with conflicting slug throws", () => {
       const e1 = { id: "8", slug: "hhh" };
       const e2 = { id: "9", slug: "hhh" };
       set.add(e1);
       expect(() => set.add(e2)).toThrowError("slug");
     });
 
-    describe.each(blanks)('adding element using blank (%j)', blank => {
-      it('id throws', () => {
+    describe.each(blanks)("adding element using blank (%j)", (blank) => {
+      it("id throws", () => {
         const el = { id: blank, slug: "slug" };
         expect(() => set.add(el)).toThrowError("blank");
       });
 
-      it('slug throws', () => {
+      it("slug throws", () => {
         const el = { id: "id", slug: blank };
         expect(() => set.add(el)).toThrowError("blank");
       });
     });
   });
 
-  describe('remove', () => {
-    it('removing an element removes the element', () => {
+  describe("remove", () => {
+    it("removing an element removes the element", () => {
       const e1 = { id: "123", slug: "slug1" };
       const e2 = { id: "222", slug: "slug2" };
       const e3 = { id: "333", slug: "slug3" };
@@ -103,13 +103,13 @@ describe('SluggedOrderedSet', () => {
       expect(set.slugGet(e1.slug)).toBeUndefined();
     });
 
-    it('removing an element that DNE returns false', () => {
+    it("removing an element that DNE returns false", () => {
       expect(set.remove("dne")).toBe(false);
     });
   });
 
-  describe('reorder', () => {
-    it('reordering an element changes getAll ordering', () => {
+  describe("reorder", () => {
+    it("reordering an element changes getAll ordering", () => {
       const e1 = { id: "345", slug: "ccc" };
       const e2 = { id: "456", slug: "ddd" };
       const e3 = { id: "567", slug: "eee" };
@@ -122,7 +122,7 @@ describe('SluggedOrderedSet', () => {
       expect(set.getAll()).toEqual([e2, e3, e1]);
     });
 
-    it('reordering index out of bounds throws', () => {
+    it("reordering index out of bounds throws", () => {
       set.add({ id: "e1", slug: "e-1" });
       set.add({ id: "e2", slug: "e-2" });
       expect(() => set.reorder(-1, 0)).toThrowError("index");
@@ -132,8 +132,8 @@ describe('SluggedOrderedSet', () => {
     });
   });
 
-  describe('renameSlug', () => {
-    it('changes slug', () => {
+  describe("renameSlug", () => {
+    it("changes slug", () => {
       const e = { id: "123", slug: "before" };
       set.add(e);
       set.renameSlug({ id: "123", slug: "after" });
@@ -142,19 +142,23 @@ describe('SluggedOrderedSet', () => {
       expect(set.slugGet("after")).toBe(e);
     });
 
-    it('throws if element DNE', () => {
-      expect(() => set.renameSlug({ id: "10", slug: "dne" })).toThrowError("id");
+    it("throws if element DNE", () => {
+      expect(() => set.renameSlug({ id: "10", slug: "dne" })).toThrowError(
+        "id"
+      );
     });
 
-    it('throws if slug already exists', () => {
+    it("throws if slug already exists", () => {
       set.add({ id: "1", slug: "one" });
       set.add({ id: "2", slug: "two" });
       expect(() => set.renameSlug({ id: "1", slug: "two" })).toThrowError();
     });
 
-    it.each(blanks)('throws if slug is blank (%j)', blank => {
+    it.each(blanks)("throws if slug is blank (%j)", (blank) => {
       set.add({ id: "1", slug: "one" });
-      expect(() => set.renameSlug({ id: "1", slug: blank })).toThrowError("blank");
+      expect(() => set.renameSlug({ id: "1", slug: blank })).toThrowError(
+        "blank"
+      );
     });
   });
 });

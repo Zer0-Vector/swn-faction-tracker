@@ -2,14 +2,13 @@ import { IValidationController } from "../../types/IValidationController";
 import { ValidationFn } from "../../types/ValidationFn";
 
 export class ValidationController implements IValidationController {
-
   private valid;
 
   constructor(
     private readonly validators: { readonly [id: string]: ValidationFn }
   ) {
     this.valid = {} as { -readonly [P in keyof typeof validators]: boolean };
-    Object.keys(validators).forEach(k => {
+    Object.keys(validators).forEach((k) => {
       this.valid[k] = false;
     });
   }
@@ -42,5 +41,4 @@ export class ValidationController implements IValidationController {
       this.valid[k] = false;
     }
   }
-
 }

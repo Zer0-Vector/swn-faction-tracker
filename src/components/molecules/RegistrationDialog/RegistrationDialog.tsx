@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
 
@@ -23,10 +29,17 @@ const DEFAULT_VALIDATION_INFO: ValidationInfo = {
 };
 
 const RegistrationDialog = () => {
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
-  const [emailValid, setEmailValid] = useState<ValidationInfo>(DEFAULT_VALIDATION_INFO);
-  const [passwordValid, setPasswordValid] = useState<ValidationInfo>(DEFAULT_VALIDATION_INFO);
-  const [confirmValid, setConfirmValid] = useState<ValidationInfo>(DEFAULT_VALIDATION_INFO);
+  const { state: uiState, controller: uiController } =
+    useContext(UiStateContext);
+  const [emailValid, setEmailValid] = useState<ValidationInfo>(
+    DEFAULT_VALIDATION_INFO
+  );
+  const [passwordValid, setPasswordValid] = useState<ValidationInfo>(
+    DEFAULT_VALIDATION_INFO
+  );
+  const [confirmValid, setConfirmValid] = useState<ValidationInfo>(
+    DEFAULT_VALIDATION_INFO
+  );
   const [matchingValid, setMatchingValid] = useState<boolean>(false);
   const confirmRef = useRef<Nullable<HTMLInputElement>>(null);
   const passwordRef = useRef<Nullable<HTMLInputElement>>(null);
@@ -34,12 +47,17 @@ const RegistrationDialog = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { signup, sendEmailVerification } = useAuth();
 
-  const open = uiState.loginState === "REGISTERING"
+  const open =
+    uiState.loginState === "REGISTERING"
     || uiState.loginState === "REGISTER_WAITING";
 
-  const submitDisabled = !emailValid.hasChanged || !emailValid.valid
-    || !passwordValid.hasChanged || !passwordValid.valid
-    || !confirmValid.hasChanged || !confirmValid.valid
+  const submitDisabled =
+    !emailValid.hasChanged
+    || !emailValid.valid
+    || !passwordValid.hasChanged
+    || !passwordValid.valid
+    || !confirmValid.hasChanged
+    || !confirmValid.valid
     || !matchingValid;
 
   const clearField = (field: Nullable<HTMLInputElement>) => {
@@ -55,76 +73,119 @@ const RegistrationDialog = () => {
     setErrorMessage(null);
   }, []);
 
-  const handleRegister = useCallback(async (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    setErrorMessage(null);
-    if (!emailRef.current || !passwordRef.current || submitDisabled) {
-      console.warn("Cannot submit: ", !!emailRef.current, !!passwordRef.current, submitDisabled);
-      return;
-    }
-
-    uiController.setLoginState("REGISTER_WAITING");
-    let user: User;
-    try {
-      user = await signup(emailRef.current.value, passwordRef.current.value);
-      console.info("Register success.");
-    } catch (reason) {
-      console.error("Could not register: ", reason);
-      if (reason instanceof FirebaseError) {
-        setErrorMessage(`Error registering (${reason.code}). ${reason.message}`);
-      } else {
-        setErrorMessage(`Error registering (${reason})`);
+  const handleRegister = useCallback(
+    async (evt: React.FormEvent<HTMLFormElement>) => {
+      evt.preventDefault();
+      setErrorMessage(null);
+      if (!emailRef.current || !passwordRef.current || submitDisabled) {
+        console.warn(
+          "Cannot submit: ",
+          !!emailRef.current,
+          !!passwordRef.current,
+          submitDisabled
+        );
+        return;
       }
-      uiController.setLoginState("REGISTERING");
-      return;
-    }
-    
-    try {
-      await sendEmailVerification(user);
-      console.info("Email verification sent.");
-      uiController.setLoginState("REGISTERED"); // show email verification instructions
-      handleClearForm();
-    } catch (reason) {
-      console.error("Could not send email verification: ", reason);
-      uiController.setLoginState("VERIFICATION_ERROR"); //  show error dialog with resend link
-    }
-  }, [handleClearForm, sendEmailVerification, signup, submitDisabled, uiController]);
+
+      uiController.setLoginState("REGISTER_WAITING");
+      let user: User;
+      try {
+        user = await signup(emailRef.current.value, passwordRef.current.value);
+        console.info("Register success.");
+      } catch (reason) {
+        console.error("Could not register: ", reason);
+        if (reason instanceof FirebaseError) {
+          setErrorMessage(
+            `Error registering (${reason.code}). ${reason.message}`
+          );
+        } else {
+          setErrorMessage(`Error registering (${reason})`);
+        }
+        uiController.setLoginState("REGISTERING");
+        return;
+      }
+
+      try {
+        await sendEmailVerification(user);
+        console.info("Email verification sent.");
+        uiController.setLoginState("REGISTERED"); // show email verification instructions
+        handleClearForm();
+      } catch (reason) {
+        console.error("Could not send email verification: ", reason);
+        uiController.setLoginState("VERIFICATION_ERROR"); //  show error dialog with resend link
+      }
+    },
+    [
+      handleClearForm,
+      sendEmailVerification,
+      signup,
+      submitDisabled,
+      uiController,
+    ]
+  );
 
   const handleCancel = useCallback(() => {
     uiController.setLoginState("LOGGING_IN");
   }, [uiController]);
 
-  const getChangeHandler = (setter: React.Dispatch<React.SetStateAction<ValidationInfo>>) => (
+  const getChangeHandler =
+    (setter: React.Dispatch<React.SetStateAction<ValidationInfo>>) =>
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       setter({
         hasChanged: true,
         valid: evt.target.value.length > 0,
       });
-    }
-  );
+    };
 
   const isValid = useCallback((info: ValidationInfo) => {
     return !info.hasChanged || info.valid;
   }, []);
 
   useEffect(() => {
-    setMatchingValid(!(passwordValid.hasChanged && confirmValid.hasChanged) || (confirmRef.current !== null && passwordRef.current !== null && confirmRef.current.value === passwordRef.current.value));
-  }, [confirmRef.current?.value, confirmValid.hasChanged, passwordRef.current?.value, passwordValid.hasChanged]);
+    setMatchingValid(
+      !(passwordValid.hasChanged && confirmValid.hasChanged)
+        || (confirmRef.current !== null
+          && passwordRef.current !== null
+          && confirmRef.current.value === passwordRef.current.value)
+    );
+  }, [
+    confirmRef.current?.value,
+    confirmValid.hasChanged,
+    passwordRef.current?.value,
+    passwordValid.hasChanged,
+  ]);
 
   console.debug("Rendering RegistrationDialog...");
 
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth={true} data-testid="registration-dialog">
+    <Dialog
+      open={open}
+      maxWidth="sm"
+      fullWidth={true}
+      data-testid="registration-dialog"
+    >
       <form onSubmit={handleRegister}>
         <DialogTitle>Registration</DialogTitle>
         <DialogContent>
-          <DialogContentText marginBottom={2}>Enter your email and create a password.</DialogContentText>
-          {errorMessage ? <Typography color="error" marginBottom={2} data-testid="registration-dialog-error-message">{errorMessage}</Typography> : null}
-          <Container sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 1,
-          }}>
+          <DialogContentText marginBottom={2}>
+            Enter your email and create a password.
+          </DialogContentText>
+          {errorMessage ? (
+            <Typography
+              color="error"
+              marginBottom={2}
+              data-testid="registration-dialog-error-message"
+            >
+              {errorMessage}
+            </Typography>
+          ) : null}
+          <Container
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 1,
+            }}
+          >
             <TextField
               label="Email"
               error={!isValid(emailValid)}
@@ -149,8 +210,20 @@ const RegistrationDialog = () => {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} variant="outlined" data-testid="registration-dialog-cancel-button">Back</Button>
-          <Button type="submit" disabled={submitDisabled} data-testid="registration-dialog-register-button">Register</Button>
+          <Button
+            onClick={handleCancel}
+            variant="outlined"
+            data-testid="registration-dialog-cancel-button"
+          >
+            Back
+          </Button>
+          <Button
+            type="submit"
+            disabled={submitDisabled}
+            data-testid="registration-dialog-register-button"
+          >
+            Register
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

@@ -1,8 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
 import { SxProps, Theme } from "@mui/material";
-import Autocomplete, { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
+import Autocomplete, {
+  AutocompleteRenderInputParams,
+} from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
@@ -32,8 +40,7 @@ interface EditableDropDownTextBaseProps extends RequiredChildrenProps<string> {
   editable?: boolean;
 }
 
-export type EditableDropDownTextProps =
-  & EditableDropDownTextBaseProps
+export type EditableDropDownTextProps = EditableDropDownTextBaseProps
   & Prefixed<Pick<TextFieldProps, "sx">, "input">
   & Pick<TypographyProps, "sx">
   & Prefixed<Pick<TypographyProps, "variant">, "text">
@@ -47,7 +54,7 @@ export default function EditableDropDownText({
   inputSx,
   selectableOptions,
   editable = true,
-   "data-testid": dtid,
+  "data-testid": dtid,
 }: EditableDropDownTextProps) {
   const [editing, setEditing] = useState<boolean>(false);
   const textFieldRef = useRef<HTMLInputElement>(null);
@@ -60,12 +67,15 @@ export default function EditableDropDownText({
     }
   }, [editing, textFieldRef.current]);
 
-  const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
-    evt.stopPropagation();
-    if (editable) {
-      setEditing(true);
-    }
-  }, [editable]);
+  const enterEditMode = useCallback(
+    (evt: React.MouseEvent<HTMLElement>) => {
+      evt.stopPropagation();
+      if (editable) {
+        setEditing(true);
+      }
+    },
+    [editable]
+  );
 
   const handleCancel = useCallback(() => {
     if (editing) {
@@ -73,37 +83,48 @@ export default function EditableDropDownText({
     }
   }, [editing]);
 
-  const handleKeyUp = useCallback((evt: React.KeyboardEvent<HTMLElement>) => {
-    if (evt.key === 'Escape') {
-      handleCancel();
-    }
-  }, [handleCancel]);
-
-  const dropdownChanged = useCallback((evt: React.SyntheticEvent, val: Nullable<string>) => {
-    if (editing) {
-      if (val !== null && val.trim().length > 0) {
-        onUpdate(val);
+  const handleKeyUp = useCallback(
+    (evt: React.KeyboardEvent<HTMLElement>) => {
+      if (evt.key === "Escape") {
+        handleCancel();
       }
-      setEditing(false);
-    }
-  }, [editing, onUpdate]);
+    },
+    [handleCancel]
+  );
 
-  const clickHandler = useCallback((evt: React.MouseEvent<HTMLElement>) => {
-    if (clicked) {
-      evt.stopPropagation();
-      setClicked(false);
-    } else {
-      setClicked(true);
-      setTimeout(() => setClicked(false), 250);
-    }
-  }, [clicked]);
+  const dropdownChanged = useCallback(
+    (evt: React.SyntheticEvent, val: Nullable<string>) => {
+      if (editing) {
+        if (val !== null && val.trim().length > 0) {
+          onUpdate(val);
+        }
+        setEditing(false);
+      }
+    },
+    [editing, onUpdate]
+  );
+
+  const clickHandler = useCallback(
+    (evt: React.MouseEvent<HTMLElement>) => {
+      if (clicked) {
+        evt.stopPropagation();
+        setClicked(false);
+      } else {
+        setClicked(true);
+        setTimeout(() => setClicked(false), 250);
+      }
+    },
+    [clicked]
+  );
 
   const inputClickHandler = useCallback<React.MouseEventHandler>((evt) => {
     evt.stopPropagation();
   }, []);
 
-  const autocompleteTextField = useCallback<(params: AutocompleteRenderInputParams) => React.ReactNode>(
-    params =>
+  const autocompleteTextField = useCallback<
+    (params: AutocompleteRenderInputParams) => React.ReactNode
+  >(
+    (params) => (
       <TextField
         {...params}
         inputRef={textFieldRef}
@@ -113,7 +134,8 @@ export default function EditableDropDownText({
         autoComplete="off"
         sx={inputSx}
         data-testid="editable-dropdown-textfield"
-      />,
+      />
+    ),
     [handleCancel, handleKeyUp, inputClickHandler, inputSx]
   );
 
@@ -147,16 +169,21 @@ export default function EditableDropDownText({
     );
   }
 
-  const boxSx = useMemo(() => ({
-    "& .MuiIconButton-root": {
-      visibility: editing ? "unset" : "hidden",
-    },
-    "&:hover .MuiIconButton-root": {
-      visibility: editing ? "unset" : "visible",
-    },
-  }), [editing]);
+  const boxSx = useMemo(
+    () => ({
+      "& .MuiIconButton-root": {
+        visibility: editing ? "unset" : "hidden",
+      },
+      "&:hover .MuiIconButton-root": {
+        visibility: editing ? "unset" : "visible",
+      },
+    }),
+    [editing]
+  );
 
-  const iconTitle = editable ? "Click to edit value" : "Enable edit mode to edit value";
+  const iconTitle = editable
+    ? "Click to edit value"
+    : "Enable edit mode to edit value";
 
   const iconSx = useMemo<SxProps<Theme>>(() => ({ pointerEvents: "auto" }), []);
 

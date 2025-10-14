@@ -3,14 +3,18 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import TagText from "./TagText";
 import { TAGS } from "@/data/Tags";
-import { FactionContext, FactionContextType, FactionPoset } from "@/contexts/FactionContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "@/contexts/FactionContext";
 import FactionInfo from "@/utils/FactionInfo";
 
 const mockContext: FactionContextType = {
   factions: {
     subscribe: vi.fn() as FactionPoset["subscribe"],
-  } as FactionPoset
-}
+  } as FactionPoset,
+};
 
 function renderIt() {
   return {
@@ -18,8 +22,8 @@ function renderIt() {
       <FactionContext.Provider value={mockContext}>
         <TagText factionId="test" tag={TAGS.Colonists.name} />
       </FactionContext.Provider>
-    )
-  }
+    ),
+  };
 }
 
 describe("TagText", () => {
@@ -30,6 +34,6 @@ describe("TagText", () => {
     expect(component).not.toBeEmptyDOMElement();
     expect(component).toHaveTextContent(TAGS.Colonists.name);
   });
-  
+
   it.todo("updates tag on edit");
 });

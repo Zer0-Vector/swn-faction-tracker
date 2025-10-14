@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import { render, screen } from '@testing-library/react';
+import { render, screen } from "@testing-library/react";
 
 import { test, expect } from "vitest";
 
-import App from './App';
+import App from "./App";
 
-test('renders without crashing', () => {
+test("renders without crashing", () => {
   render(<App />);
   const appRoot = screen.getByTestId("page-container");
   expect(appRoot).toBeDefined();

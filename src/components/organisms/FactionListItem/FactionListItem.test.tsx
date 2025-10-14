@@ -2,9 +2,19 @@ import React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { BrowserRouter } from "react-router-dom";
 
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../utils/FactionInfo";
@@ -18,11 +28,11 @@ const mockUpdateFaction = vi.fn();
 const mockCheckName = vi.fn();
 const mockContext: FactionContextType = {
   factions: {
-    slugGet: mockGetFaction as FactionPoset['get'],
-    getAll: vi.fn() as FactionPoset['getAll'],
-    update: mockUpdateFaction as FactionPoset['update'],
-    checkName: mockCheckName as FactionPoset['checkName'],
-    subscribe: vi.fn() as FactionPoset['subscribe'],
+    slugGet: mockGetFaction as FactionPoset["get"],
+    getAll: vi.fn() as FactionPoset["getAll"],
+    update: mockUpdateFaction as FactionPoset["update"],
+    checkName: mockCheckName as FactionPoset["checkName"],
+    subscribe: vi.fn() as FactionPoset["subscribe"],
   } as FactionPoset,
 };
 
@@ -40,13 +50,15 @@ const mockFaction: FactionInfo = {
 
 function renderIt() {
   render(
-    <UiStateContext.Provider value={{
-      state: {
-        editMode: "EDIT",
-        loginState: "LOGGED_IN",
-      } as UiState,
-      controller: {} as UiStateController,
-    }}>
+    <UiStateContext.Provider
+      value={{
+        state: {
+          editMode: "EDIT",
+          loginState: "LOGGED_IN",
+        } as UiState,
+        controller: {} as UiStateController,
+      }}
+    >
       <FactionContext.Provider value={mockContext}>
         <FactionListItem
           dragHandleProps={{} as DraggableProvidedDragHandleProps}
@@ -59,14 +71,14 @@ function renderIt() {
   );
 }
 
-describe('FactionListItem', () => {
-  it('renders item container', () => {
+describe("FactionListItem", () => {
+  it("renders item container", () => {
     renderIt();
     const listItem = screen.getByTestId("faction-list-item");
     expect(listItem).toBeInTheDocument();
   });
 
-  it('renders drag handle', () => {
+  it("renders drag handle", () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-drag-handle-col");
     expect(col).toBeInTheDocument();
@@ -75,7 +87,7 @@ describe('FactionListItem', () => {
     expect(icon).toBeInstanceOf(SVGElement);
   });
 
-  it('renders name', () => {
+  it("renders name", () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
     expect(col).toBeInTheDocument();
@@ -84,7 +96,7 @@ describe('FactionListItem', () => {
     expect(name).toHaveTextContent(mockFaction.name);
   });
 
-  it('renders health bar', () => {
+  it("renders health bar", () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-health-col");
     expect(col).toBeInTheDocument();
@@ -94,7 +106,7 @@ describe('FactionListItem', () => {
     expect(bar).toHaveClass("MuiLinearProgress-colorError");
   });
 
-  it('renders attributes', () => {
+  it("renders attributes", () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-attributes-col");
     expect(col).toBeInTheDocument();
@@ -113,14 +125,14 @@ describe('FactionListItem', () => {
   });
 });
 
-describe('FactionListItem behaviors', () => {
+describe("FactionListItem behaviors", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.history.pushState({}, "", "/");
     mockCheckName.mockImplementation(() => true);
   });
 
-  it('editing the faction name calls controller', async () => {
+  it("editing the faction name calls controller", async () => {
     mockGetFaction.mockImplementation((id: string) => mockFaction);
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
@@ -134,14 +146,18 @@ describe('FactionListItem behaviors', () => {
     expect(textInput).toBeInTheDocument();
     expect(textInput).toHaveValue("Test Faction");
     fireEvent.change(textInput, { target: { value: "blah" } });
-    fireEvent.keyUp(textInput, { key: 'Enter' });
+    fireEvent.keyUp(textInput, { key: "Enter" });
     await waitFor(() => expect(mockUpdateFaction).toBeCalledTimes(1));
     expect(mockUpdateFaction).toBeCalledWith("test", "name", "blah");
   });
 
-  it('editing a selected name redirect to new name', async () => {
+  it("editing a selected name redirect to new name", async () => {
     mockGetFaction.mockImplementation((id: string) => mockFaction);
-    mockUpdateFaction.mockImplementationOnce(() => ({ id: "123", name: "blah", slug: "blah" }));
+    mockUpdateFaction.mockImplementationOnce(() => ({
+      id: "123",
+      name: "blah",
+      slug: "blah",
+    }));
     renderIt();
     expect(window.location.pathname).toBe("/");
     const col = screen.getByTestId("faction-list-item-name-col");
@@ -156,13 +172,13 @@ describe('FactionListItem behaviors', () => {
     // eslint-disable-next-line testing-library/no-node-access
     const textInput = textfield.querySelector("input") as HTMLInputElement;
     fireEvent.change(textInput, { target: { value: "blah" } });
-    fireEvent.keyUp(textInput, { key: 'Enter' });
+    fireEvent.keyUp(textInput, { key: "Enter" });
     await waitFor(() => expect(mockUpdateFaction).toBeCalledTimes(1));
     expect(mockUpdateFaction).toBeCalledWith("test", "name", "blah");
     expect(window.location.pathname).toBe("/factions/blah");
   });
 
-  it('clicking on the faction row selects it, the deselects it', () => {
+  it("clicking on the faction row selects it, the deselects it", () => {
     renderIt();
     const col = screen.getByTestId("faction-list-item-name-col");
     const name = within(col).getByTestId("faction-list-item-name");

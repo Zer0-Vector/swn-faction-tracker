@@ -1,6 +1,9 @@
 export function generateSlug(name: string, currentValues?: string[]): string {
   // replace groups of non-word characters with a single hyphen
-  const simple = name.trim().toLowerCase().replaceAll(/[\W_]+/g, "-");
+  const simple = name
+    .trim()
+    .toLowerCase()
+    .replaceAll(/[\W_]+/g, "-");
 
   // if there are no current values, then this is unique. done.
   if (currentValues === undefined) {
@@ -18,17 +21,16 @@ export function generateSlug(name: string, currentValues?: string[]): string {
   let index = strIndex !== undefined ? parseInt(strIndex) : 1;
 
   console.assert(index > 0, "index is invalid: ", index);
-  const matches = currentValues.filter(val => val.startsWith(baseName));
+  const matches = currentValues.filter((val) => val.startsWith(baseName));
   if (matches.length === 0) {
     return `${simple}-1`;
   }
 
   const indexes = matches
-      .map(val => val.match(`${baseName}-(\\d+)`)?.at(1))
-      .map(val => val ? parseInt(val) : 0);
+    .map((val) => val.match(`${baseName}-(\\d+)`)?.at(1))
+    .map((val) => (val ? parseInt(val) : 0));
   if (indexes.includes(index)) {
     index = Math.max(...indexes) + 1;
   }
   return `${baseName}-${index}`;
 }
-

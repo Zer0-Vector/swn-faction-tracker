@@ -5,7 +5,10 @@ import { User } from "firebase/auth";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { AuthContext } from "../../../contexts/AuthContext";
-import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
+import {
+  UiStateContext,
+  UiStateContextType,
+} from "../../../contexts/UiStateContext";
 import LoginState from "../../../types/LoginState";
 import Nullable from "../../../types/Nullable";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
@@ -24,8 +27,10 @@ const mockContext = {
 const mockSignUp = vi.fn();
 const mockSendEmailVerification = vi.fn();
 const mockAuth = {
-  signup: mockSignUp as (e: string, p: string)=>Promise<User>,
-  sendEmailVerification: mockSendEmailVerification as (u:Nullable<User>)=>Promise<void>,
+  signup: mockSignUp as (e: string, p: string) => Promise<User>,
+  sendEmailVerification: mockSendEmailVerification as (
+    u: Nullable<User>
+  ) => Promise<void>,
 } as ProvidedAuth;
 
 function renderOpened() {
@@ -38,40 +43,48 @@ function renderOpened() {
   );
 }
 
-describe('default RegistrationDialog', () => {
-  it('is hidden when not in valid registering state', () => {
+describe("default RegistrationDialog", () => {
+  it("is hidden when not in valid registering state", () => {
     render(
-      <UiStateContext.Provider value={{
-        state: {},
-        controller: {},
-      } as UiStateContextType}>
+      <UiStateContext.Provider
+        value={
+          {
+            state: {},
+            controller: {},
+          } as UiStateContextType
+        }
+      >
         <RegistrationDialog />
       </UiStateContext.Provider>
     );
     expect(screen.queryByTestId("registration-dialog")).not.toBeInTheDocument();
   });
 
-  it('is shown when in valid registration state', () => {
+  it("is shown when in valid registration state", () => {
     renderOpened();
     expect(screen.getByTestId("registration-dialog")).toBeInTheDocument();
   });
 
-  it('renders register and cancel buttons', () => {
+  it("renders register and cancel buttons", () => {
     renderOpened();
-    const registerButton = screen.getByTestId("registration-dialog-register-button");
+    const registerButton = screen.getByTestId(
+      "registration-dialog-register-button"
+    );
     expect(registerButton).toBeInTheDocument();
     expect(registerButton).toBeInstanceOf(HTMLButtonElement);
     expect(registerButton).toHaveTextContent("Register");
     expect(registerButton.getAttribute("type")).toBe("submit");
     expect(registerButton).toBeDisabled();
 
-    const cancelButton = screen.getByTestId("registration-dialog-cancel-button");
+    const cancelButton = screen.getByTestId(
+      "registration-dialog-cancel-button"
+    );
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton).toBeInstanceOf(HTMLButtonElement);
     expect(cancelButton).toHaveTextContent("Back");
   });
 
-  it('renders email, password, and confirmation fields', () => {
+  it("renders email, password, and confirmation fields", () => {
     renderOpened();
     const emailField = screen.getByLabelText("Email");
     expect(emailField).toBeInTheDocument();
@@ -85,9 +98,11 @@ describe('default RegistrationDialog', () => {
     expect(confirmField.getAttribute("type")).toBe("password");
   });
 
-  it('register button enables when fields are non-empty and passwords match', () => {
+  it("register button enables when fields are non-empty and passwords match", () => {
     renderOpened();
-    const registerButton = screen.getByTestId("registration-dialog-register-button");
+    const registerButton = screen.getByTestId(
+      "registration-dialog-register-button"
+    );
     expect(registerButton).toBeDisabled();
 
     const emailField = screen.getByLabelText("Email");
@@ -101,7 +116,7 @@ describe('default RegistrationDialog', () => {
     expect(registerButton).not.toBeDisabled();
   });
 
-  it('password and confirm fields are error highlighted when passwords do not match', () => {
+  it("password and confirm fields are error highlighted when passwords do not match", () => {
     renderOpened();
 
     const emailField = screen.getByLabelText("Email");
@@ -128,7 +143,7 @@ describe('default RegistrationDialog', () => {
     expect(confirmWrapper).toHaveClass("Mui-error");
   });
 
-  it('creates a user on submit with valid email and matching passwords', async () => {
+  it("creates a user on submit with valid email and matching passwords", async () => {
     mockSignUp.mockResolvedValueOnce({} as User);
     mockSendEmailVerification.mockResolvedValueOnce(null);
     renderOpened();
@@ -136,7 +151,9 @@ describe('default RegistrationDialog', () => {
     const emailField = screen.getByLabelText("Email");
     const passwordField = screen.getByLabelText("Password");
     const confirmField = screen.getByLabelText("Confirm Password");
-    const registerButton = screen.getByTestId("registration-dialog-register-button");
+    const registerButton = screen.getByTestId(
+      "registration-dialog-register-button"
+    );
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
     fireEvent.input(passwordField, { target: { value: "123" } });
@@ -144,24 +161,34 @@ describe('default RegistrationDialog', () => {
     expect(registerButton).not.toBeDisabled();
     fireEvent.click(registerButton);
 
-    expect(mockContext.controller.setLoginState).toBeCalledWith("REGISTER_WAITING");
-    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
+    expect(mockContext.controller.setLoginState).toBeCalledWith(
+      "REGISTER_WAITING"
+    );
+    await waitFor(() =>
+      expect(mockContext.controller.setLoginState).toBeCalledTimes(2)
+    );
     expect(mockSignUp).toBeCalledTimes(1);
     expect(mockSignUp).toBeCalledWith("a@b.c", "123");
     expect(mockSendEmailVerification).toBeCalledTimes(1);
     expect(mockContext.controller.setLoginState).toBeCalledWith("REGISTERED");
   });
 
-  it('on register error shows error message', async () => {
-    mockSignUp.mockRejectedValueOnce(new FirebaseError("testing-123", "fake-error"));
+  it("on register error shows error message", async () => {
+    mockSignUp.mockRejectedValueOnce(
+      new FirebaseError("testing-123", "fake-error")
+    );
     renderOpened();
 
     const emailField = screen.getByLabelText("Email");
     const passwordField = screen.getByLabelText("Password");
     const confirmField = screen.getByLabelText("Confirm Password");
-    const registerButton = screen.getByTestId("registration-dialog-register-button");
+    const registerButton = screen.getByTestId(
+      "registration-dialog-register-button"
+    );
 
-    expect(screen.queryByTestId("registration-dialog-error-message")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("registration-dialog-error-message")
+    ).not.toBeInTheDocument();
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
     fireEvent.input(passwordField, { target: { value: "123" } });
@@ -169,11 +196,17 @@ describe('default RegistrationDialog', () => {
     expect(registerButton).not.toBeDisabled();
     fireEvent.click(registerButton);
 
-    expect(mockContext.controller.setLoginState).toBeCalledWith("REGISTER_WAITING");
-    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledWith("REGISTERING"));
-    const errorMessage = screen.getByTestId("registration-dialog-error-message");
+    expect(mockContext.controller.setLoginState).toBeCalledWith(
+      "REGISTER_WAITING"
+    );
+    await waitFor(() =>
+      expect(mockContext.controller.setLoginState).toBeCalledWith("REGISTERING")
+    );
+    const errorMessage = screen.getByTestId(
+      "registration-dialog-error-message"
+    );
     expect(errorMessage).toHaveTextContent("testing-123");
   });
 
-  it.todo('handles error with send email verification');
+  it.todo("handles error with send email verification");
 });

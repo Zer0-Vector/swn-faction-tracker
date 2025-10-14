@@ -1,9 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
+    "composite": true
   },
-  "files": [
-    "vite.config.ts"
-  ]
+  "files": ["vite.config.ts"]
 }
