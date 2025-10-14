@@ -22,6 +22,8 @@
     "test": "vitest",
     "ci-test": "vitest run",
     "lint": "npx eslint --cache --exit-on-fatal-error",
+    "check-style": "npx prettier . --check",
+    "prettify": "npx prettier . --write",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic",
