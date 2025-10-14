@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import globals from "globals";
+import configPrettier from "eslint-config-prettier";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,7 @@ export default defineConfig([
   js.configs.recommended,
   tseslint.configs.strict,
   compat.config(reactPlugin.configs.recommended),
+  configPrettier,
   {
     files: ["src/**/*.{ts,tsx}"],
     settings: {
@@ -52,17 +54,8 @@ export default defineConfig([
     },
 
     rules: {
-      "no-extra-semi": "error",
-      "padded-blocks": ["warn", {
-        blocks: "never",
-        classes: "always",
-        switches: "never",
-      }],
-
       "one-var": ["error", "never"],
       "no-empty-pattern": "off",
-      "no-unexpected-multiline": "error",
-      "eol-last": ["error", "always"],
       "no-empty-function": "off",
       "@typescript-eslint/no-empty-function": "warn",
       "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
