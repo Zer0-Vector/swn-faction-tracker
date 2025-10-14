@@ -14,29 +14,37 @@ import { PasswordResetDialog } from "./PasswordResetDialog";
 export default {
   component: PasswordResetDialog,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "RESETTING_PASSWORD",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "RESETTING_PASSWORD",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
-    story => (
-      <AuthContext.Provider value={{
-        sendPasswordResetEmail: (...args) => {
-          action("sendPasswordResetEmail")(...args);
-          return Promise.resolve();
-        },
-      } as ProvidedAuth}>
+    (story) => (
+      <AuthContext.Provider
+        value={
+          {
+            sendPasswordResetEmail: (...args) => {
+              action("sendPasswordResetEmail")(...args);
+              return Promise.resolve();
+            },
+          } as ProvidedAuth
+        }
+      >
         {story()}
       </AuthContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof PasswordResetDialog>;
 
-const Template: ComponentStory<typeof PasswordResetDialog> = () => <PasswordResetDialog />;
+const Template: ComponentStory<typeof PasswordResetDialog> = () => (
+  <PasswordResetDialog />
+);
 
 export const Default = Template.bind({});

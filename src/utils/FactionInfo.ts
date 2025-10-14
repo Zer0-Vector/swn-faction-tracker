@@ -4,9 +4,12 @@ import { Prettify } from "../types/Prettify";
 
 import { NamedSluggedEntity } from "./NamedElementPoset";
 
-interface StatInfo { xpCost: number, hpValue: number }
+interface StatInfo {
+  xpCost: number;
+  hpValue: number;
+}
 
-export const STAT_INFO: {[rating: number]:StatInfo} = {
+export const STAT_INFO: { [rating: number]: StatInfo } = {
   0: {
     xpCost: 0,
     hpValue: 0,
@@ -53,8 +56,9 @@ export const STAT_INFO: {[rating: number]:StatInfo} = {
   },
 };
 
-export default class FactionInfo implements FactionStatsInfo, NamedSluggedEntity {
-
+export default class FactionInfo
+  implements FactionStatsInfo, NamedSluggedEntity
+{
   readonly id: string;
   slug: string;
   name: string;
@@ -79,7 +83,11 @@ export default class FactionInfo implements FactionStatsInfo, NamedSluggedEntity
   }
 
   get maxHp(): number {
-    const maxHp = 4 + STAT_INFO[this.force].hpValue + STAT_INFO[this.cunning].hpValue + STAT_INFO[this.wealth].hpValue;
+    const maxHp =
+      4
+      + STAT_INFO[this.force].hpValue
+      + STAT_INFO[this.cunning].hpValue
+      + STAT_INFO[this.wealth].hpValue;
     return maxHp;
   }
 
@@ -88,5 +96,4 @@ export default class FactionInfo implements FactionStatsInfo, NamedSluggedEntity
     Object.assign(newInfo, info);
     return newInfo;
   }
-
 }

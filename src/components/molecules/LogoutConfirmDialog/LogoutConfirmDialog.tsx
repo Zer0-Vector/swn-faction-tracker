@@ -6,28 +6,32 @@ import MessageDialog from "../../atoms/MessageDialog";
 import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 
 const LogoutConfirmDialog = () => {
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController } =
+    useContext(UiStateContext);
   const { logout } = useAuth();
 
-  const handleAction = useCallback<DialogActionHandler>(async (result) => {
-    if (result.reason !== "Logout") {
-      uiController.setLoginState("LOGGED_IN");
-    } else {
-      try {
-        uiController.setLoginState("LOGOUT_WAITING");
-        await logout();
-        uiController.setLoginState("LOGGED_OUT");
-      } catch (reason) {
-        console.error("Logout failed: ", reason);
+  const handleAction = useCallback<DialogActionHandler>(
+    async (result) => {
+      if (result.reason !== "Logout") {
         uiController.setLoginState("LOGGED_IN");
+      } else {
+        try {
+          uiController.setLoginState("LOGOUT_WAITING");
+          await logout();
+          uiController.setLoginState("LOGGED_OUT");
+        } catch (reason) {
+          console.error("Logout failed: ", reason);
+          uiController.setLoginState("LOGGED_IN");
+        }
       }
-    }
-  }, [logout, uiController]);
+    },
+    [logout, uiController]
+  );
 
   console.log("Rendering LogoutConfirmDialog...");
 
   return (
-    <MessageDialog 
+    <MessageDialog
       data-testid="logout-confirmation"
       title="Confirm Logout"
       message="Logout?"

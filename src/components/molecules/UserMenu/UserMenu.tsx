@@ -1,7 +1,13 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { User } from "firebase/auth";
 
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -27,7 +33,8 @@ export default function UserMenu({ user }: UserMenuProps) {
   const btnRef = useRef<Nullable<HTMLButtonElement>>(null);
   const { controller: uiController } = useContext(UiStateContext);
 
-  const icon: JSX.Element = user === null ? <PersonOutlinedIcon /> : <PersonIcon />;
+  const icon: JSX.Element =
+    user === null ? <PersonOutlinedIcon /> : <PersonIcon />;
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -53,11 +60,19 @@ export default function UserMenu({ user }: UserMenuProps) {
 
   const menuItems: JSX.Element[] = useMemo(() => {
     if (user === null) {
-      return [<MenuItem key="0" onClick={handleLogin}>Login</MenuItem>];
+      return [
+        <MenuItem key="0" onClick={handleLogin}>
+          Login
+        </MenuItem>,
+      ];
     } else {
       return [
-        <MenuItem key="1" onClick={handleSettings} disabled>Settings</MenuItem>,
-        <MenuItem key="2" onClick={handleLogout}>Logout</MenuItem>,
+        <MenuItem key="1" onClick={handleSettings} disabled>
+          Settings
+        </MenuItem>,
+        <MenuItem key="2" onClick={handleLogout}>
+          Logout
+        </MenuItem>,
       ];
     }
   }, [handleLogin, handleLogout, handleSettings, user]);
@@ -85,7 +100,7 @@ export default function UserMenu({ user }: UserMenuProps) {
     }
   }, [user]);
 
-  const iconClickHandler = useCallback(() => setOpen(prev => !prev), []);
+  const iconClickHandler = useCallback(() => setOpen((prev) => !prev), []);
   const menuCloseHandler = useCallback(() => setOpen(false), []);
 
   console.debug("Rendering UserMenu... logged in? ", !!user);

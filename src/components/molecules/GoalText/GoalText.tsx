@@ -12,11 +12,14 @@ interface GoalTextProps {
 export default function GoalText({ faction }: GoalTextProps) {
   const factions = useFactions();
 
-  const handleUpdate = React.useCallback((val: string) => {
-    if (isGoalType(val)) {
-      factions.update(faction.id, "goal", { type: val });
-    }
-  }, [faction.id, factions]);
+  const handleUpdate = React.useCallback(
+    (val: string) => {
+      if (isGoalType(val)) {
+        factions.update(faction.id, "goal", { type: val });
+      }
+    },
+    [faction.id, factions]
+  );
 
   return (
     <ControlledDropDown

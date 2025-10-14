@@ -10,24 +10,24 @@ import HealthDisplay from "./HealthDisplay";
 export default {
   component: HealthDisplay,
   decorators: [
-    story => (
-      <div style={{ padding: 10, margin: 10 }}>
-        {story()}
-      </div>
-    ),
-    story => (
-      <FactionContext.Provider value={{
-        factions: {
-          ...MockAction("update"),
-        } as unknown as FactionPoset,
-      }}>
+    (story) => <div style={{ padding: 10, margin: 10 }}>{story()}</div>,
+    (story) => (
+      <FactionContext.Provider
+        value={{
+          factions: {
+            ...MockAction("update"),
+          } as unknown as FactionPoset,
+        }}
+      >
         {story()}
       </FactionContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof HealthDisplay>;
 
-const Template: ComponentStory<typeof HealthDisplay> = args => <HealthDisplay {...args} />;
+const Template: ComponentStory<typeof HealthDisplay> = (args) => (
+  <HealthDisplay {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

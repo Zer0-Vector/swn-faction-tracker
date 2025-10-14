@@ -8,7 +8,10 @@ import { useFactions } from "../FactionContext";
 import { useLocations } from "../LocationContext";
 
 export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
-  const [storedAssets, setStoredAssets] = useLocalStorage<PurchasedAsset[]>("swn-faction-tracker.assets", []);
+  const [storedAssets, setStoredAssets] = useLocalStorage<PurchasedAsset[]>(
+    "swn-faction-tracker.assets",
+    []
+  );
 
   const assets = useRef(new AssetPoset(storedAssets));
 
@@ -21,19 +24,21 @@ export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
       // TODO queue update for remote storage
     });
 
-    const locationsUnsubscribe = locations.subscribe(action => {
+    const locationsUnsubscribe = locations.subscribe((action) => {
       if (action.type === "REMOVE") {
-        assets.current.getAll()
-          .filter(a => a.locationId === action.id)
-          .forEach(a => assets.current.update(a.id, "locationId", undefined));
+        assets.current
+          .getAll()
+          .filter((a) => a.locationId === action.id)
+          .forEach((a) => assets.current.update(a.id, "locationId", undefined));
       }
     });
 
-    const factionsUnsubscribe = factions.subscribe(action => {
+    const factionsUnsubscribe = factions.subscribe((action) => {
       if (action.type === "REMOVE") {
-        assets.current.getAll()
-            .filter(a => a.factionId === action.id)
-            .forEach(a => assets.current.remove(a.id));
+        assets.current
+          .getAll()
+          .filter((a) => a.factionId === action.id)
+          .forEach((a) => assets.current.remove(a.id));
       }
     });
 
@@ -44,11 +49,12 @@ export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
     };
   }, [assets, locations, factions]);
 
-  const context = useMemo<AssetContextType>(() => ({ assets: assets.current }), []);
+  const context = useMemo<AssetContextType>(
+    () => ({ assets: assets.current }),
+    []
+  );
 
   return (
-    <AssetContext.Provider value={context}>
-      {children}
-    </AssetContext.Provider>
+    <AssetContext.Provider value={context}>{children}</AssetContext.Provider>
   );
 }

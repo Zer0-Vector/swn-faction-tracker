@@ -14,25 +14,31 @@ export default {
   component: FactionHpSummary,
 } as ComponentMeta<typeof FactionHpSummary>;
 
-const Template: ComponentStory<typeof FactionHpSummary> = args => {
+const Template: ComponentStory<typeof FactionHpSummary> = (args) => {
   const [hp, setHp] = useState<number>(args.hp);
-  const uiStateContext = useMemo(() => ({
-    state: {
-      editMode: "EDIT",
-      loginState: "LOGGED_IN",
-    } as UiState,
-    controller: {} as UiStateController,
-  }), []);
+  const uiStateContext = useMemo(
+    () => ({
+      state: {
+        editMode: "EDIT",
+        loginState: "LOGGED_IN",
+      } as UiState,
+      controller: {} as UiStateController,
+    }),
+    []
+  );
 
-  const factionContext = useMemo(() => ({
-    factions: {
-      update: (...params: Parameters<FactionPoset['update']>) => {
-        params[1] === "hp" && setHp(params[2] as number);
-        action("update")(params);
-      },
-    } as FactionPoset,
-  }), []);
-  
+  const factionContext = useMemo(
+    () => ({
+      factions: {
+        update: (...params: Parameters<FactionPoset["update"]>) => {
+          params[1] === "hp" && setHp(params[2] as number);
+          action("update")(params);
+        },
+      } as FactionPoset,
+    }),
+    []
+  );
+
   return (
     <UiStateContext.Provider value={uiStateContext}>
       <FactionContext.Provider value={factionContext}>

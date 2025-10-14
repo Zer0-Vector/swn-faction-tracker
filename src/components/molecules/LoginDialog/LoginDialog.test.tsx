@@ -4,7 +4,10 @@ import { User } from "firebase/auth";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { AuthContext } from "../../../contexts/AuthContext";
-import { UiStateContext, UiStateContextType } from "../../../contexts/UiStateContext";
+import {
+  UiStateContext,
+  UiStateContextType,
+} from "../../../contexts/UiStateContext";
 import LoginState from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
@@ -16,15 +19,15 @@ const mockContext = {
     loginState: "LOGGING_IN",
   } as UiState,
   controller: {
-    setLoginState: vi.fn(state => {
+    setLoginState: vi.fn((state) => {
       console.log("TEST SET_LOGIN_STATE: ", state);
-    }) as (state:LoginState) => void,
+    }) as (state: LoginState) => void,
   },
 } as UiStateContextType;
 
 const mockLogin = vi.fn();
 const mockAuth = {
-  login: mockLogin as (e: string, p: string)=>Promise<User>,
+  login: mockLogin as (e: string, p: string) => Promise<User>,
 } as ProvidedAuth;
 
 function renderOpened() {
@@ -37,25 +40,27 @@ function renderOpened() {
   );
 }
 
-describe('default LoginDialog', () => {
+describe("default LoginDialog", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  })
-  it('displays nothing when not open', () => {
+  });
+  it("displays nothing when not open", () => {
     render(
-      <UiStateContext.Provider value={
-        {
-          state: {},
-          controller: {},
-        } as UiStateContextType
-      }>
+      <UiStateContext.Provider
+        value={
+          {
+            state: {},
+            controller: {},
+          } as UiStateContextType
+        }
+      >
         <LoginDialog />
       </UiStateContext.Provider>
     );
     expect(screen.queryByTestId("login-dialog")).not.toBeInTheDocument();
   });
 
-  it('displays dialog with buttons and TextFields when open', () => {
+  it("displays dialog with buttons and TextFields when open", () => {
     renderOpened();
     const loginDialog = screen.getByTestId("login-dialog");
     expect(loginDialog).toBeInTheDocument();
@@ -92,7 +97,7 @@ describe('default LoginDialog', () => {
     expect(passwordField).toHaveValue("");
   });
 
-  it('sets login state on cancel', () => {
+  it("sets login state on cancel", () => {
     renderOpened();
     const cancelButton = screen.getByTestId("login-dialog-cancel-button");
     fireEvent.click(cancelButton);
@@ -100,7 +105,7 @@ describe('default LoginDialog', () => {
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_OUT");
   });
 
-  it('login button enabled after entering credentials', () => {
+  it("login button enabled after entering credentials", () => {
     renderOpened();
     const emailField = screen.getByLabelText("Email");
     const passwordField = screen.getByLabelText("Password");
@@ -112,8 +117,10 @@ describe('default LoginDialog', () => {
     expect(loginButton).not.toBeDisabled();
   });
 
-  it('after login click with verified credentials, LoginState=LOGGED_IN', async () => {
-    mockLogin.mockImplementationOnce(() => Promise.resolve({ emailVerified: true } as User));
+  it("after login click with verified credentials, LoginState=LOGGED_IN", async () => {
+    mockLogin.mockImplementationOnce(() =>
+      Promise.resolve({ emailVerified: true } as User)
+    );
     renderOpened();
     const emailField = screen.getByLabelText("Email");
     const passwordField = screen.getByLabelText("Password");
@@ -123,13 +130,19 @@ describe('default LoginDialog', () => {
     fireEvent.input(passwordField, { target: { value: "123" } });
     fireEvent.click(loginButton);
 
-    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
-    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
+    await waitFor(() =>
+      expect(mockContext.controller.setLoginState).toBeCalledTimes(2)
+    );
+    expect(mockContext.controller.setLoginState).toBeCalledWith(
+      "LOGIN_WAITING"
+    );
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGED_IN");
   });
 
-  it('after login with unverified credentials, LoginState=NEEDS_VERIFICATION', async () => {
-    mockLogin.mockImplementationOnce(() => Promise.resolve({ emailVerified: false } as User));
+  it("after login with unverified credentials, LoginState=NEEDS_VERIFICATION", async () => {
+    mockLogin.mockImplementationOnce(() =>
+      Promise.resolve({ emailVerified: false } as User)
+    );
     renderOpened();
     const emailField = screen.getByLabelText("Email");
     const passwordField = screen.getByLabelText("Password");
@@ -139,25 +152,37 @@ describe('default LoginDialog', () => {
     fireEvent.input(passwordField, { target: { value: "123" } });
     fireEvent.click(loginButton);
 
-    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
-    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
-    expect(mockContext.controller.setLoginState).toBeCalledWith("NEEDS_VERIFICATION");
+    expect(mockContext.controller.setLoginState).toBeCalledWith(
+      "LOGIN_WAITING"
+    );
+    await waitFor(() =>
+      expect(mockContext.controller.setLoginState).toBeCalledTimes(2)
+    );
+    expect(mockContext.controller.setLoginState).toBeCalledWith(
+      "NEEDS_VERIFICATION"
+    );
   });
 
-  it('after failed login, LoginState=LOGGING_IN with error message', async () => {
+  it("after failed login, LoginState=LOGGING_IN with error message", async () => {
     mockLogin.mockImplementationOnce(() => Promise.reject({ code: "testing" }));
     renderOpened();
     const emailField = screen.getByLabelText("Email");
     const passwordField = screen.getByLabelText("Password");
     const loginButton = screen.getByTestId("login-dialog-login-button");
-    expect(screen.queryByTestId("login-dialog-error-message")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("login-dialog-error-message")
+    ).not.toBeInTheDocument();
 
     fireEvent.input(emailField, { target: { value: "a@b.c" } });
     fireEvent.input(passwordField, { target: { value: "123" } });
     fireEvent.click(loginButton);
 
-    expect(mockContext.controller.setLoginState).toBeCalledWith("LOGIN_WAITING");
-    await waitFor(() => expect(mockContext.controller.setLoginState).toBeCalledTimes(2));
+    expect(mockContext.controller.setLoginState).toBeCalledWith(
+      "LOGIN_WAITING"
+    );
+    await waitFor(() =>
+      expect(mockContext.controller.setLoginState).toBeCalledTimes(2)
+    );
     expect(mockContext.controller.setLoginState).toBeCalledWith("LOGGING_IN");
     const errorMessage = screen.getByTestId("login-dialog-error-message");
     expect(errorMessage).toBeInTheDocument();

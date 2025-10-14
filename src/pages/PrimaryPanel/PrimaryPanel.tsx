@@ -8,7 +8,10 @@ import FactionListActionToolbar from "../../components/organisms/FactionListActi
 
 export default function PrimaryPanel() {
   console.debug("Rendering PrimaryPanel...");
-  const boxSx = useMemo<SxProps<Theme>>(() => ({ gridColumnStart: "1", gridColumnEnd: "3" }), []);
+  const boxSx = useMemo<SxProps<Theme>>(
+    () => ({ gridColumnStart: "1", gridColumnEnd: "3" }),
+    []
+  );
   return (
     <Box sx={boxSx}>
       <FactionListActionToolbar />

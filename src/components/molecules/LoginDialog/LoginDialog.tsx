@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { FirebaseError } from "firebase/app";
 
 import Button from "@mui/material/Button";
@@ -19,13 +25,22 @@ import { ValidationInfo } from "../../../types/ValidationInfo";
 import Link from "../../atoms/Link";
 
 export default function LoginDialog() {
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
-  const [usernameValid, setUsernameValid] = useState<ValidationInfo>({hasChanged: false, valid: false});
-  const [passwordValid, setPasswordValid] = useState({hasChanged: false, valid: false});
+  const { state: uiState, controller: uiController } =
+    useContext(UiStateContext);
+  const [usernameValid, setUsernameValid] = useState<ValidationInfo>({
+    hasChanged: false,
+    valid: false,
+  });
+  const [passwordValid, setPasswordValid] = useState({
+    hasChanged: false,
+    valid: false,
+  });
   const emailRef = useRef<Nullable<HTMLInputElement>>(null);
   const passwordRef = useRef<Nullable<HTMLInputElement>>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const open = uiState.loginState === "LOGGING_IN" || uiState.loginState === "LOGIN_WAITING";
+  const open =
+    uiState.loginState === "LOGGING_IN"
+    || uiState.loginState === "LOGIN_WAITING";
 
   const { login } = useAuth();
 
@@ -52,61 +67,70 @@ export default function LoginDialog() {
     handleClearForm();
   }, [handleClearForm, uiController]);
 
-  const handleLogin = useCallback<React.FormEventHandler<HTMLFormElement>>(async (evt) => {
-    evt.preventDefault();
-    const username = emailRef.current?.value;
-    const password = passwordRef.current?.value;
-    
-    if (!username || !password) {
-      console.error("Username or password not set: ", username, !!password);
-      uiController.setLoginState("LOGGED_OUT");
-      return;
-    }
+  const handleLogin = useCallback<React.FormEventHandler<HTMLFormElement>>(
+    async (evt) => {
+      evt.preventDefault();
+      const username = emailRef.current?.value;
+      const password = passwordRef.current?.value;
 
-    uiController.setLoginState("LOGIN_WAITING");
-    try {
-      const user = await login(username, password);
-      console.info("Logged in as:", user.email);
-      if (user.emailVerified) {
-        console.debug("verified");
-        uiController.setLoginState("LOGGED_IN");
-        handleClearForm();
-      } else {
-        console.warn("User not email verified");
-        uiController.setLoginState("NEEDS_VERIFICATION");
+      if (!username || !password) {
+        console.error("Username or password not set: ", username, !!password);
+        uiController.setLoginState("LOGGED_OUT");
+        return;
       }
-    } catch (reason) {
-      console.error("Error logging in: ", reason);
-      if (reason instanceof FirebaseError) {
-        switch (reason.code) {
-          case "auth/user-not-found":
-          case "auth/invalid-email":
-          case "auth/wrong-password":
-            setErrorMessage("Invalid credentials.");
-            emailRef.current?.select();
-            break;
-          case "auth/too-many-requests":
-            setErrorMessage("Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.");
-            break;
-          default:
-            setErrorMessage(`An error occurred logging in (${reason.code}).`);
-            break;
+
+      uiController.setLoginState("LOGIN_WAITING");
+      try {
+        const user = await login(username, password);
+        console.info("Logged in as:", user.email);
+        if (user.emailVerified) {
+          console.debug("verified");
+          uiController.setLoginState("LOGGED_IN");
+          handleClearForm();
+        } else {
+          console.warn("User not email verified");
+          uiController.setLoginState("NEEDS_VERIFICATION");
+        }
+      } catch (reason) {
+        console.error("Error logging in: ", reason);
+        if (reason instanceof FirebaseError) {
+          switch (reason.code) {
+            case "auth/user-not-found":
+            case "auth/invalid-email":
+            case "auth/wrong-password":
+              setErrorMessage("Invalid credentials.");
+              emailRef.current?.select();
+              break;
+            case "auth/too-many-requests":
+              setErrorMessage(
+                "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
+              );
+              break;
+            default:
+              setErrorMessage(`An error occurred logging in (${reason.code}).`);
+              break;
           }
-      } else {
-        setErrorMessage(`An unknown error occurred logging in (${reason}).`);
+        } else {
+          setErrorMessage(`An unknown error occurred logging in (${reason}).`);
+        }
+        uiController.setLoginState("LOGGING_IN");
       }
-      uiController.setLoginState("LOGGING_IN");
-    }
-  }, [handleClearForm, login, uiController]);
+    },
+    [handleClearForm, login, uiController]
+  );
 
-  const handleUsernameChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
+  const handleUsernameChange = useCallback<
+    React.ChangeEventHandler<HTMLInputElement>
+  >((evt) => {
     setUsernameValid({
       hasChanged: true,
       valid: evt.target.value !== "",
     });
   }, []);
 
-  const handlePasswordChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
+  const handlePasswordChange = useCallback<
+    React.ChangeEventHandler<HTMLInputElement>
+  >((evt) => {
     setPasswordValid({
       hasChanged: true,
       valid: evt.target.value !== "",
@@ -116,44 +140,63 @@ export default function LoginDialog() {
   const usernameError = usernameValid.hasChanged && !usernameValid.valid;
   const passwordError = passwordValid.hasChanged && !passwordValid.valid;
   const buttonDisabled =
-      !usernameValid.hasChanged 
-      || !usernameValid.valid
-      || !passwordValid.hasChanged
-      || !passwordValid.valid;
+    !usernameValid.hasChanged
+    || !usernameValid.valid
+    || !passwordValid.hasChanged
+    || !passwordValid.valid;
 
-  const containerSx = useMemo<SxProps>(() => ({
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: 2,
-    textAlign: "center",
-  }), []);
+  const containerSx = useMemo<SxProps>(
+    () => ({
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 2,
+      textAlign: "center",
+    }),
+    []
+  );
 
-  const tfSx = useMemo<SxProps>(() => ({
-    gridColumn: "1 / 3",
-  }), []);
+  const tfSx = useMemo<SxProps>(
+    () => ({
+      gridColumn: "1 / 3",
+    }),
+    []
+  );
 
   const handleRegisterClick = useCallback(
-    () => uiController.setLoginState("REGISTERING"), 
+    () => uiController.setLoginState("REGISTERING"),
     [uiController]
   );
-  
+
   const handlePasswordResetClick = useCallback(
     () => uiController.setLoginState("RESETTING_PASSWORD"),
     [uiController]
   );
-  
+
   console.debug("Rendering LoginDialog...");
 
   return (
-    <Dialog open={open} fullWidth={true} maxWidth="sm" data-testid="login-dialog">
+    <Dialog
+      open={open}
+      fullWidth={true}
+      maxWidth="sm"
+      data-testid="login-dialog"
+    >
       <form onSubmit={handleLogin} data-testid="login-dialog-form">
         <DialogTitle data-testid="login-dialog-title">Login</DialogTitle>
         <DialogContent>
-          <DialogContentText marginBottom={2}>Enter your credentials.</DialogContentText>
-          {errorMessage ? <Typography color="error" marginBottom={2} data-testid="login-dialog-error-message">{errorMessage}</Typography> : null}
-          <Container
-            disableGutters
-            sx={containerSx}>
+          <DialogContentText marginBottom={2}>
+            Enter your credentials.
+          </DialogContentText>
+          {errorMessage ? (
+            <Typography
+              color="error"
+              marginBottom={2}
+              data-testid="login-dialog-error-message"
+            >
+              {errorMessage}
+            </Typography>
+          ) : null}
+          <Container disableGutters sx={containerSx}>
             <TextField
               id="email"
               label="Email"
@@ -181,8 +224,19 @@ export default function LoginDialog() {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} data-testid="login-dialog-cancel-button">Cancel</Button>
-          <Button type="submit" disabled={buttonDisabled} data-testid="login-dialog-login-button">Login</Button>
+          <Button
+            onClick={handleCancel}
+            data-testid="login-dialog-cancel-button"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={buttonDisabled}
+            data-testid="login-dialog-login-button"
+          >
+            Login
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

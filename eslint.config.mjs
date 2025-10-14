@@ -14,11 +14,17 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
+  allConfig: js.configs.all,
 });
 
 export default defineConfig([
-  globalIgnores(["**/*.stories.*", "**/*.test.*", "storybook-static/", "build/", ".storybook/"]),
+  globalIgnores([
+    "**/*.stories.*",
+    "**/*.test.*",
+    "storybook-static/",
+    "build/",
+    ".storybook/",
+  ]),
   js.configs.recommended,
   tseslint.configs.strict,
   compat.config(reactPlugin.configs.recommended),
@@ -26,12 +32,12 @@ export default defineConfig([
   {
     files: ["src/**/*.{ts,tsx}"],
     settings: {
-      "react": {
+      react: {
         version: "detect",
-      }
+      },
     },
     plugins: {
-      "react": reactPlugin,
+      react: reactPlugin,
       "@typescript-eslint": tseslint.plugin,
       "simple-import-sort": simpleImportSort,
     },
@@ -60,19 +66,22 @@ export default defineConfig([
       "@typescript-eslint/no-empty-function": "warn",
       "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
       "no-useless-computed-key": "off",
-      "simple-import-sort/imports": ["warn", {
-        groups: [
-          ["^react$", "^[a-z]"],
-          ["^@"],
-          ["^~"],
-          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
-          ["^.+\\.s?css$"],
-          ["^\\u0000"],
-        ],
-      }],
+      "simple-import-sort/imports": [
+        "warn",
+        {
+          groups: [
+            ["^react$", "^[a-z]"],
+            ["^@"],
+            ["^~"],
+            ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+            ["^.+\\.s?css$"],
+            ["^\\u0000"],
+          ],
+        },
+      ],
 
       "simple-import-sort/exports": "warn",
       "prefer-const": "warn",
     },
-  }
+  },
 ]);

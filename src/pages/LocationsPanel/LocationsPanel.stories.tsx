@@ -4,7 +4,10 @@ import { MemoryRouter } from "react-router-dom";
 import { action } from "@storybook/addon-actions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
+import {
+  LocationContext,
+  LocationsPoset,
+} from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
@@ -54,59 +57,62 @@ const locations: LocationInfo[] = [
   },
 ];
 
-const getLocationsPoset = (locations: LocationInfo[]) => ({
-  getAll() {
-    return locations;
-  },
-  slugGet(locationSlug) {
-    return locations.find(v => v.slug === locationSlug);
-  },
-  checkName(args) {
-    return !locations.map(l => l.slug).includes(generateSlug(args.name));
-  },
-  add(info) {
-    action("add")(info);
-  },
-  reorder(source, destination?) {
-    action("reorder")(source, destination);
-  },
-  remove(selectedLocation) {
-    action("remove")(selectedLocation);
-  },
-  update(id, key, value) {
-    action("update")(id, key, value);
-  },
-  subscribe(...args) {
-    action("subscribe")(args);
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => { };
-  },
-} as LocationsPoset);
+const getLocationsPoset = (locations: LocationInfo[]) =>
+  ({
+    getAll() {
+      return locations;
+    },
+    slugGet(locationSlug) {
+      return locations.find((v) => v.slug === locationSlug);
+    },
+    checkName(args) {
+      return !locations.map((l) => l.slug).includes(generateSlug(args.name));
+    },
+    add(info) {
+      action("add")(info);
+    },
+    reorder(source, destination?) {
+      action("reorder")(source, destination);
+    },
+    remove(selectedLocation) {
+      action("remove")(selectedLocation);
+    },
+    update(id, key, value) {
+      action("update")(id, key, value);
+    },
+    subscribe(...args) {
+      action("subscribe")(args);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
+    },
+  }) as LocationsPoset;
 
 export default {
   component: LocationsPanel,
   decorators: [
-    story => (
-      <MemoryRouter initialEntries={["/"]}>
+    (story) => <MemoryRouter initialEntries={["/"]}>{story()}</MemoryRouter>,
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            editMode: "EDIT",
+          } as UiState,
+          controller: {} as UiStateController,
+        }}
+      >
         {story()}
-      </MemoryRouter>
+      </UiStateContext.Provider>
     ),
-    story => <UiStateContext.Provider value={{
-      state: {
-        editMode: "EDIT",
-      } as UiState,
-      controller: {} as UiStateController,
-    }}>
-      {story()}
-    </UiStateContext.Provider>,
   ],
 } as ComponentMeta<typeof LocationsPanel>;
 
-const Template: ComponentStory<typeof LocationsPanel> = () => <LocationsPanel />;
+const Template: ComponentStory<typeof LocationsPanel> = () => (
+  <LocationsPanel />
+);
 
 export const Default = Template.bind({});
 Default.decorators = [
-  story => (
+  (story) => (
     <MockProvider locations={getLocationsPoset(locations)}>
       {story()}
     </MockProvider>
@@ -115,9 +121,7 @@ Default.decorators = [
 
 export const Empty = Template.bind({});
 Empty.decorators = [
-  story => (
-    <MockProvider locations={getLocationsPoset([])}>
-      {story()}
-    </MockProvider>
+  (story) => (
+    <MockProvider locations={getLocationsPoset([])}>{story()}</MockProvider>
   ),
 ];

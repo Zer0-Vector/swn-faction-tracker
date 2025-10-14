@@ -37,31 +37,37 @@ const locations = [
 ];
 
 const MockProvider = ({ children, factions }: MockProviderProps) => {
-  const mockLocationContext = React.useMemo(() => ({
-    locations: {
-      getAll() {
-        return locations;
-      },
-      get(locationId) {
-        return locations.find((loc) => loc.id === locationId);
-      },
-    } as LocationsPoset,
-  }), []);
+  const mockLocationContext = React.useMemo(
+    () => ({
+      locations: {
+        getAll() {
+          return locations;
+        },
+        get(locationId) {
+          return locations.find((loc) => loc.id === locationId);
+        },
+      } as LocationsPoset,
+    }),
+    []
+  );
 
-  const mockFactionContext = React.useMemo(() => ({
-    factions: {
-      getAll() {
-        return factions;
-      },
-      slugGet(factionSlug) {
-        return factions.find((f) => f.slug === factionSlug);
-      },
-      subscribe(_) {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        return () => { };
-      },
-    } as FactionPoset,
-  }), [factions]);
+  const mockFactionContext = React.useMemo(
+    () => ({
+      factions: {
+        getAll() {
+          return factions;
+        },
+        slugGet(factionSlug) {
+          return factions.find((f) => f.slug === factionSlug);
+        },
+        subscribe(_) {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          return () => {};
+        },
+      } as FactionPoset,
+    }),
+    [factions]
+  );
 
   const mockAssetContext = React.useMemo(
     () => ({
@@ -71,7 +77,7 @@ const MockProvider = ({ children, factions }: MockProviderProps) => {
         },
         subscribe(_) {
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          return () => { };
+          return () => {};
         },
       } as AssetPoset,
     }),
@@ -111,23 +117,23 @@ const Template: Story<ComponentProps<typeof FactionList> & AdditionalArgs> = (
   <MockProvider
     factions={[...Array(args.numberOfFactions).keys()].map(
       (n) =>
-      ({
-        id: `${n}`,
-        slug: `faction-${n}`,
-        name: `Faction ${n}`,
-        cunning: n % 3,
-        force: n % 4,
-        hp: n % 10,
-        maxHp: (n % 5) + 1,
-        wealth: n % 5,
-        xp: 0,
-        goal: {
-          type: GoalTypes[n % GoalTypes.length],
-          tally: n % 6,
-          target: n % 3,
-        },
-        tag: TagsList[n % TagsList.length],
-      } as FactionInfo)
+        ({
+          id: `${n}`,
+          slug: `faction-${n}`,
+          name: `Faction ${n}`,
+          cunning: n % 3,
+          force: n % 4,
+          hp: n % 10,
+          maxHp: (n % 5) + 1,
+          wealth: n % 5,
+          xp: 0,
+          goal: {
+            type: GoalTypes[n % GoalTypes.length],
+            tally: n % 6,
+            target: n % 3,
+          },
+          tag: TagsList[n % TagsList.length],
+        }) as FactionInfo
     )}
   >
     <FactionList />

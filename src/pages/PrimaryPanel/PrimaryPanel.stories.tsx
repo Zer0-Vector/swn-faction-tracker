@@ -4,8 +4,16 @@ import { MemoryRouter } from "react-router-dom";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { AssetContext, AssetPoset } from "../../contexts/AssetContext";
-import { FactionContext, FactionContextType, FactionPoset } from "../../contexts/FactionContext";
-import { LocationContext, LocationContextType, LocationsPoset } from "../../contexts/LocationContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../contexts/FactionContext";
+import {
+  LocationContext,
+  LocationContextType,
+  LocationsPoset,
+} from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import { RequiredChildrenProps } from "../../types/ChildrenProps";
@@ -19,19 +27,19 @@ import PrimaryPanel from "./PrimaryPanel";
 export default {
   component: PrimaryPanel,
   decorators: [
-    story => (
-      <MemoryRouter>
+    (story) => <MemoryRouter>{story()}</MemoryRouter>,
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            editMode: "EDIT",
+          } as UiState,
+          controller: {} as UiStateController,
+        }}
+      >
         {story()}
-      </MemoryRouter>
+      </UiStateContext.Provider>
     ),
-    story => <UiStateContext.Provider value={{
-      state: {
-        editMode: "EDIT",
-      } as UiState,
-      controller: {} as UiStateController,
-    }}>
-      {story()}
-    </UiStateContext.Provider>,
   ],
 } as ComponentMeta<typeof PrimaryPanel>;
 
@@ -100,44 +108,47 @@ const assets: PurchasedAsset[] = [
   },
 ];
 
-const getLocationPoset = (locations: LocationInfo[] = []) => ({
-  getAll() {
-    return locations;
-  },
-  get(locationId) {
-    return locations.find(loc => loc.id === locationId);
-  },
-  subscribe(_) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
-  },
-} as LocationsPoset);
+const getLocationPoset = (locations: LocationInfo[] = []) =>
+  ({
+    getAll() {
+      return locations;
+    },
+    get(locationId) {
+      return locations.find((loc) => loc.id === locationId);
+    },
+    subscribe(_) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
+    },
+  }) as LocationsPoset;
 
-const getFactionPoset = (factions: FactionInfo[] = []) => ({
-  getAll() {
-    return factions;
-  },
-  slugGet(factionSlug) {
-    return factions.find(f => f.slug === factionSlug);
-  },
-  subscribe(_) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
-  },
-} as FactionPoset);
+const getFactionPoset = (factions: FactionInfo[] = []) =>
+  ({
+    getAll() {
+      return factions;
+    },
+    slugGet(factionSlug) {
+      return factions.find((f) => f.slug === factionSlug);
+    },
+    subscribe(_) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
+    },
+  }) as FactionPoset;
 
-const getAssetPoset = (assets: PurchasedAsset[] = []) => ({
-  getAll() {
-    return assets;
-  },
-  slugGet(assetSlug) {
-    return assets.find(a => a.slug === assetSlug);
-  },
-  subscribe(_) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
-  },
-} as AssetPoset);
+const getAssetPoset = (assets: PurchasedAsset[] = []) =>
+  ({
+    getAll() {
+      return assets;
+    },
+    slugGet(assetSlug) {
+      return assets.find((a) => a.slug === assetSlug);
+    },
+    subscribe(_) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
+    },
+  }) as AssetPoset;
 
 interface MockProviderProps extends RequiredChildrenProps {
   factions: FactionContextType;
@@ -145,25 +156,34 @@ interface MockProviderProps extends RequiredChildrenProps {
   assets: AssetPoset;
 }
 
-const MockProvider = ({ children, factions, locations, assets }: MockProviderProps) => {
+const MockProvider = ({
+  children,
+  factions,
+  locations,
+  assets,
+}: MockProviderProps) => {
   const mockAssetContext = React.useMemo(() => ({ assets }), [assets]);
   return (
-  <LocationContext.Provider value={locations}>
-    <FactionContext.Provider value={factions}>
-      <AssetContext.Provider value={mockAssetContext}>
-        {children}
-      </AssetContext.Provider>
-    </FactionContext.Provider>
-  </LocationContext.Provider>
-);
+    <LocationContext.Provider value={locations}>
+      <FactionContext.Provider value={factions}>
+        <AssetContext.Provider value={mockAssetContext}>
+          {children}
+        </AssetContext.Provider>
+      </FactionContext.Provider>
+    </LocationContext.Provider>
+  );
 };
 
 const Template: ComponentStory<typeof PrimaryPanel> = () => <PrimaryPanel />;
 
 export const Default = Template.bind({});
 Default.decorators = [
-  story => (
-    <MockProvider factions={{ factions: getFactionPoset(factions)}} locations={{ locations: getLocationPoset(locations)}} assets={getAssetPoset(assets)}>
+  (story) => (
+    <MockProvider
+      factions={{ factions: getFactionPoset(factions) }}
+      locations={{ locations: getLocationPoset(locations) }}
+      assets={getAssetPoset(assets)}
+    >
       {story()}
     </MockProvider>
   ),
@@ -171,8 +191,12 @@ Default.decorators = [
 
 export const Empty = Template.bind({});
 Empty.decorators = [
-  story => (
-    <MockProvider factions={{ factions: getFactionPoset() }} locations={{ locations: getLocationPoset() }} assets={getAssetPoset()}>
+  (story) => (
+    <MockProvider
+      factions={{ factions: getFactionPoset() }}
+      locations={{ locations: getLocationPoset() }}
+      assets={getAssetPoset()}
+    >
       {story()}
     </MockProvider>
   ),

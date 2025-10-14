@@ -10,7 +10,7 @@ export function PasswordResetErrorDialog() {
   const handleAction = useCallback<DialogActionHandler>(() => {
     controller.setLoginState("LOGGING_IN");
   }, [controller]);
-  
+
   return (
     <MessageDialog
       open={state.loginState === "PASSWORD_RESET_ERROR"}

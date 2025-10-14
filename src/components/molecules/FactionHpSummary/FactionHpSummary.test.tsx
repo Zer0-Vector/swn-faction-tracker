@@ -2,7 +2,11 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import UiState from "../../../types/UiState";
@@ -12,29 +16,36 @@ import { describe, expect, it, vi } from "vitest";
 
 const mockContext = {
   factions: {
-    update: vi.fn() as FactionPoset['update'],
-    subscribe: vi.fn() as FactionPoset['subscribe'],
+    update: vi.fn() as FactionPoset["update"],
+    subscribe: vi.fn() as FactionPoset["subscribe"],
   } as FactionPoset,
 } as FactionContextType;
 
 function renderIt(factionId = "tf123") {
   render(
-    <UiStateContext.Provider value={{
-      state: {
-        editMode: "EDIT",
-        loginState: "LOGGED_IN",
-      } as UiState,
-      controller: {} as UiStateController,
-    }}>
+    <UiStateContext.Provider
+      value={{
+        state: {
+          editMode: "EDIT",
+          loginState: "LOGGED_IN",
+        } as UiState,
+        controller: {} as UiStateController,
+      }}
+    >
       <FactionContext.Provider value={mockContext}>
-        <FactionHpSummary data-testid="test123" hp={123} maxHp={456} factionId={factionId} />
+        <FactionHpSummary
+          data-testid="test123"
+          hp={123}
+          maxHp={456}
+          factionId={factionId}
+        />
       </FactionContext.Provider>
     </UiStateContext.Provider>
   );
 }
 
-describe('<FactionHpSummary />', () => {
-  it('renders hp and maxHp when faction exists', () => {
+describe("<FactionHpSummary />", () => {
+  it("renders hp and maxHp when faction exists", () => {
     renderIt();
     const box = screen.getByTestId("faction-hp-box");
     const hp = within(box).getByTestId("hp");
@@ -46,7 +57,7 @@ describe('<FactionHpSummary />', () => {
     expect(maxHp.textContent).toEqual("456");
   });
 
-  it('renders TextField after double click on hp', () => {
+  it("renders TextField after double click on hp", () => {
     renderIt();
 
     const box = screen.getByTestId("faction-hp-box");
@@ -61,7 +72,7 @@ describe('<FactionHpSummary />', () => {
     expect(textfield).toHaveClass("MuiTextField-root");
   });
 
-  it('updates hp on Enter and valid value', () => {
+  it("updates hp on Enter and valid value", () => {
     renderIt();
     const box = screen.getByTestId("faction-hp-box");
 

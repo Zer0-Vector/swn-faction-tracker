@@ -5,8 +5,8 @@ import { describe, it, expect } from "vitest";
 
 import StatText from "./StatText";
 
-describe('default StatText component', () => {
-  it('renders a span with children text', () => {
+describe("default StatText component", () => {
+  it("renders a span with children text", () => {
     render(<StatText data-testid="stattext-1">test 123</StatText>);
     const component = screen.getByTestId("stattext-1");
     expect(component).toBeDefined();
@@ -15,9 +15,13 @@ describe('default StatText component', () => {
   });
 });
 
-describe('StatText component with custom component', () => {
-  it('renders using specified component', () => {
-    render(<StatText component="p" data-testid="stattext-2">test 456</StatText>);
+describe("StatText component with custom component", () => {
+  it("renders using specified component", () => {
+    render(
+      <StatText component="p" data-testid="stattext-2">
+        test 456
+      </StatText>
+    );
     const component = screen.getByTestId("stattext-2");
     expect(component).toBeDefined();
     expect(component.textContent).toBe("test 456");
@@ -25,9 +29,13 @@ describe('StatText component with custom component', () => {
   });
 });
 
-describe('StatText component with custom variant', () => {
-  it('renders with variant class', () => {
-    render(<StatText variant="subtitle1" data-testid="stattext-3">test 789</StatText>);
+describe("StatText component with custom variant", () => {
+  it("renders with variant class", () => {
+    render(
+      <StatText variant="subtitle1" data-testid="stattext-3">
+        test 789
+      </StatText>
+    );
     const component = screen.getByTestId("stattext-3");
     expect(component).toBeDefined();
     expect(component.textContent).toBe("test 789");

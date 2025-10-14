@@ -15,13 +15,15 @@ const mockOnRemoveClick = vi.fn();
 
 function renderIt(removable = false) {
   render(
-    <UiStateContext.Provider value={{
-      state: {
-        editMode: "EDIT",
-        loginState: "LOGGED_IN",
-      } as UiState,
-      controller: {} as UiStateController,
-    }}>
+    <UiStateContext.Provider
+      value={{
+        state: {
+          editMode: "EDIT",
+          loginState: "LOGGED_IN",
+        } as UiState,
+        controller: {} as UiStateController,
+      }}
+    >
       <ListActionToolbar
         removable={removable}
         onAddClick={mockOnAddClick}
@@ -34,37 +36,40 @@ function renderIt(removable = false) {
   );
 }
 
-describe('ListActionToolbar', () => {
+describe("ListActionToolbar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it.each<GameMode>(
-    ["VIEW", "TURN"]
-  )('does not render when editMode=%p', (mode) => {
-    render(
-      <UiStateContext.Provider value={{
-        state: {
-          editMode: mode,
-          loginState: "LOGGED_IN",
-        } as UiState,
-        controller: {} as UiStateController,
-      }}>
-        <ListActionToolbar
-          removable={true}
-          onAddClick={mockOnAddClick}
-          onRemoveClick={mockOnRemoveClick}
-          data-testid="test-lat"
+  it.each<GameMode>(["VIEW", "TURN"])(
+    "does not render when editMode=%p",
+    (mode) => {
+      render(
+        <UiStateContext.Provider
+          value={{
+            state: {
+              editMode: mode,
+              loginState: "LOGGED_IN",
+            } as UiState,
+            controller: {} as UiStateController,
+          }}
         >
-          <p>test</p>
-        </ListActionToolbar>
-      </UiStateContext.Provider>
-    );
-    const lat = screen.queryByTestId("test-lat");
-    expect(lat).not.toBeInTheDocument();
-  });
+          <ListActionToolbar
+            removable={true}
+            onAddClick={mockOnAddClick}
+            onRemoveClick={mockOnRemoveClick}
+            data-testid="test-lat"
+          >
+            <p>test</p>
+          </ListActionToolbar>
+        </UiStateContext.Provider>
+      );
+      const lat = screen.queryByTestId("test-lat");
+      expect(lat).not.toBeInTheDocument();
+    }
+  );
 
-  it('renders buttons and children', () => {
+  it("renders buttons and children", () => {
     renderIt();
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
@@ -86,7 +91,7 @@ describe('ListActionToolbar', () => {
     expect(removeIcon).toBeInstanceOf(SVGElement);
   });
 
-  it('enables remove button when removable=true', () => {
+  it("enables remove button when removable=true", () => {
     renderIt(true);
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
@@ -97,7 +102,7 @@ describe('ListActionToolbar', () => {
     expect(btnRemove).not.toBeDisabled();
   });
 
-  it('calls onAddClick when add button clicked', () => {
+  it("calls onAddClick when add button clicked", () => {
     renderIt();
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
@@ -112,7 +117,7 @@ describe('ListActionToolbar', () => {
     expect(mockOnRemoveClick).not.toBeCalled();
   });
 
-  it('calls onRemoveClick when enabled remove button clicked', () => {
+  it("calls onRemoveClick when enabled remove button clicked", () => {
     renderIt(true);
     const lat = screen.getByTestId("test-lat");
     expect(lat).toBeInTheDocument();
@@ -127,4 +132,3 @@ describe('ListActionToolbar', () => {
     expect(mockOnAddClick).not.toBeCalled();
   });
 });
-

@@ -2,23 +2,14 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom"
-    ],
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./*"]
     },
-    "rootDir": "src",
+    "rootDir": "src"
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"]
 }

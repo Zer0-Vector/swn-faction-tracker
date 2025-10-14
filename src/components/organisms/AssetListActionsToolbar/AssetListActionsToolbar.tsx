@@ -22,35 +22,45 @@ export default function AssetListActionsToolbar() {
   const nav = useNavigate();
   const faction = useSelectedFaction();
 
-  const handleAdd = useCallback((assetName: string) => {
-    if (faction !== undefined) {
-      assets.add({ name: assetName, factionId: faction.id });
-    } else {
-      console.error("Could not add asset. No faction selected.");
-    }
-  }, [assets, faction]);
+  const handleAdd = useCallback(
+    (assetName: string) => {
+      if (faction !== undefined) {
+        assets.add({ name: assetName, factionId: faction.id });
+      } else {
+        console.error("Could not add asset. No faction selected.");
+      }
+    },
+    [assets, faction]
+  );
 
   const handleAddClick = useCallback(() => setAddOpen(true), []);
   const handleRemoveClick = useCallback(() => setRemoveOpen(true), []);
   const handleAddDialogClose = useCallback(() => setAddOpen(false), []);
-  
-  const handleRemoveAction = useCallback<DialogActionHandler>((result) => {
-    setRemoveOpen(false);
-    if (result.reason === "Remove") {
-      if (factionSlug && assetSlug) {
-        console.debug(`RemoveAsset: faction=${factionSlug}, asset=${assetSlug}`);
-        const assetId = assets.getId(assetSlug);
-        if (assetId !== undefined) {
-          assets.remove(assetId);
-          nav(`/factions/${factionSlug}`);
+
+  const handleRemoveAction = useCallback<DialogActionHandler>(
+    (result) => {
+      setRemoveOpen(false);
+      if (result.reason === "Remove") {
+        if (factionSlug && assetSlug) {
+          console.debug(
+            `RemoveAsset: faction=${factionSlug}, asset=${assetSlug}`
+          );
+          const assetId = assets.getId(assetSlug);
+          if (assetId !== undefined) {
+            assets.remove(assetId);
+            nav(`/factions/${factionSlug}`);
+          } else {
+            console.error("Could not remove asset. Unknown slug.", assetSlug);
+          }
         } else {
-          console.error("Could not remove asset. Unknown slug.", assetSlug);
+          console.error(
+            `Illegal selection state. factionId=${factionSlug}, assetId=${assetSlug}`
+          );
         }
-      } else {
-        console.error(`Illegal selection state. factionId=${factionSlug}, assetId=${assetSlug}`);
       }
-    }
-  }, [assetSlug, assets, factionSlug, nav]);
+    },
+    [assetSlug, assets, factionSlug, nav]
+  );
 
   return (
     <ListActionToolbar

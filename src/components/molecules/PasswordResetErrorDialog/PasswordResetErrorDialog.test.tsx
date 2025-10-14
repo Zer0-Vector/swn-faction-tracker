@@ -10,18 +10,20 @@ import UiState from "../../../types/UiState";
 import { PasswordResetErrorDialog } from "./PasswordResetErrorDialog";
 import { describe, expect, it, vi } from "vitest";
 
-describe('PasswordResetErrorDialog', () => {
-  it('returns to LoginState=LOGGING_IN after close', () => {
+describe("PasswordResetErrorDialog", () => {
+  it("returns to LoginState=LOGGING_IN after close", () => {
     const mockSetLoginState = vi.fn();
     render(
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "PASSWORD_RESET_ERROR",
-        } as UiState,
-        controller: {
-          setLoginState: mockSetLoginState as (s:LoginState)=>void,
-        } as UiStateController,
-      }}>
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "PASSWORD_RESET_ERROR",
+          } as UiState,
+          controller: {
+            setLoginState: mockSetLoginState as (s: LoginState) => void,
+          } as UiStateController,
+        }}
+      >
         <PasswordResetErrorDialog />
       </UiStateContext.Provider>
     );

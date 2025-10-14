@@ -1,17 +1,11 @@
 {
-  "cSpell.words": [
-    "Appender",
-    "homeworld",
-    "maxhp",
-    "NOSONAR",
-    "STEALTHED"
-  ],
+  "cSpell.words": ["Appender", "homeworld", "maxhp", "NOSONAR", "STEALTHED"],
   "sonarlint.connectedMode.project": {
     "connectionId": "zer0-vector",
     "projectKey": "Zer0-Vector_swn-faction-tracker"
   },
   "files.associations": {
-    "firestore.indexes.json": "jsonc",
+    "firestore.indexes.json": "jsonc"
   },
   "cSpell.ignorePaths": [
     "package-lock.json",
@@ -24,7 +18,7 @@
     ".gitignore",
     "firestore.*",
     "firebase.json",
-    ".env*",
+    ".env*"
   ],
   "cSpell.ignoreWords": [
     "webfonts",
@@ -33,6 +27,6 @@
     "chromaui",
     "sonarqube",
     "firestore",
-    "dtid",
-  ],
+    "dtid"
+  ]
 }

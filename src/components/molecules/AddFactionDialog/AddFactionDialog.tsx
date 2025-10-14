@@ -13,22 +13,32 @@ interface AddFactionDialogProps {
   readonly onCreate: (val: string) => void;
 }
 
-export default function AddFactionDialog({ open, onClose, onCreate }: AddFactionDialogProps) {
+export default function AddFactionDialog({
+  open,
+  onClose,
+  onCreate,
+}: AddFactionDialogProps) {
   const factions = useFactions();
-  const [formState, setFormState] = useState<FormInfo>({value: "", valid: false});
+  const [formState, setFormState] = useState<FormInfo>({
+    value: "",
+    valid: false,
+  });
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleInputChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = evt.target.value;
-    const uniqueName = factions.checkName({ name: newText });
-    const isNotBlank = newText.trim().length > 0;
-    const newState = {
-      value: newText,
-      valid: isNotBlank && uniqueName,
-    };
-    console.debug(isNotBlank, uniqueName);
-    setFormState(newState);
-  }, [factions]);
+  const handleInputChange = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      const newText = evt.target.value;
+      const uniqueName = factions.checkName({ name: newText });
+      const isNotBlank = newText.trim().length > 0;
+      const newState = {
+        value: newText,
+        valid: isNotBlank && uniqueName,
+      };
+      console.debug(isNotBlank, uniqueName);
+      setFormState(newState);
+    },
+    [factions]
+  );
 
   const handleClose = useCallback(() => {
     setFormState({ value: "", valid: false });
@@ -36,15 +46,21 @@ export default function AddFactionDialog({ open, onClose, onCreate }: AddFaction
     onClose();
   }, [onClose]);
 
-  const handleAction = useCallback<DialogActionHandler>((result) => {
-    if (result.reason === "Create" && formState.valid) {
-      onCreate(formState.value);
-    }
-    handleClose();
-  }, [formState.valid, formState.value, handleClose, onCreate]);
+  const handleAction = useCallback<DialogActionHandler>(
+    (result) => {
+      if (result.reason === "Create" && formState.valid) {
+        onCreate(formState.value);
+      }
+      handleClose();
+    },
+    [formState.valid, formState.value, handleClose, onCreate]
+  );
 
   const buttons = useMemo(() => ["Cancel", "Create"], []);
-  const disabledButtons = useMemo(() => !formState.valid ? ["Create"] : [], [formState.valid]);
+  const disabledButtons = useMemo(
+    () => (!formState.valid ? ["Create"] : []),
+    [formState.valid]
+  );
 
   return (
     <MessageDialog

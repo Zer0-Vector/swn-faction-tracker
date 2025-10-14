@@ -8,11 +8,14 @@ import Link from "../../atoms/Link";
 import MessageDialog from "../../atoms/MessageDialog";
 
 const NeedsVerificationDialog = () => {
-  const { state: uiState, controller: uiController } = useContext(UiStateContext);
+  const { state: uiState, controller: uiController } =
+    useContext(UiStateContext);
   const { currentUser, sendEmailVerification, logout } = useAuth();
-  const open = uiState.loginState === "NEEDS_VERIFICATION" || uiState.loginState === "REGISTERED";
+  const open =
+    uiState.loginState === "NEEDS_VERIFICATION"
+    || uiState.loginState === "REGISTERED";
   const [sent, setSent] = useState<boolean>(false);
-  
+
   const handleResend = useCallback(async () => {
     if (currentUser) {
       try {
@@ -42,11 +45,22 @@ const NeedsVerificationDialog = () => {
     }
   }, [logout, uiController]);
 
-  const sendLink = useMemo(() => 
-    sent
-    ? <Typography color="info" fontStyle="italic">Sent!</Typography>
-    : <Link onClick={handleResend} data-testid="verification-dialog-resend-link">Resend Verification Email</Link>,
-  [handleResend, sent]);
+  const sendLink = useMemo(
+    () =>
+      sent ? (
+        <Typography color="info" fontStyle="italic">
+          Sent!
+        </Typography>
+      ) : (
+        <Link
+          onClick={handleResend}
+          data-testid="verification-dialog-resend-link"
+        >
+          Resend Verification Email
+        </Link>
+      ),
+    [handleResend, sent]
+  );
 
   return (
     <MessageDialog

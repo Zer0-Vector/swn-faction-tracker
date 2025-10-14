@@ -2,7 +2,11 @@ import React from "react";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../../contexts/FactionContext";
 import FactionInfo from "../../../utils/FactionInfo";
 import { Named } from "../../../utils/NamedElementPoset";
 
@@ -24,23 +28,23 @@ function renderWithContext(context?: FactionContextType) {
   return { mockClose, mockCreate };
 }
 
-describe('default AddFactionDialog', () => {
-  it('does not render when open=false', () => {
+describe("default AddFactionDialog", () => {
+  it("does not render when open=false", () => {
     render(
       <FactionContext.Provider value={EMPTY_CONTEXT}>
         {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <AddFactionDialog open={false} onClose={() => { }} onCreate={() => { }} />
+        <AddFactionDialog open={false} onClose={() => {}} onCreate={() => {}} />
       </FactionContext.Provider>
     );
     expect(screen.queryByTestId("add-faction-dialog")).not.toBeInTheDocument();
   });
 
-  it('renders shown when open=true', () => {
+  it("renders shown when open=true", () => {
     renderWithContext();
     expect(screen.getByTestId("add-faction-dialog")).toBeInTheDocument();
   });
 
-  it('renders buttons', () => {
+  it("renders buttons", () => {
     renderWithContext();
     const dialog = screen.getByTestId("add-faction-dialog");
     const btnAdd = within(dialog).getByText("Create");
@@ -54,7 +58,7 @@ describe('default AddFactionDialog', () => {
     expect(btnCancel).toHaveTextContent("Cancel");
   });
 
-  it('renders title', () => {
+  it("renders title", () => {
     renderWithContext();
     const divTitle = screen.getByTestId("message-dialog-title");
     expect(divTitle).toBeInTheDocument();
@@ -62,7 +66,7 @@ describe('default AddFactionDialog', () => {
     expect(divTitle.textContent).toEqual("Add Faction");
   });
 
-  it('renders instructions content text', () => {
+  it("renders instructions content text", () => {
     renderWithContext();
     const divInst = screen.getByTestId("message-dialog-message");
     expect(divInst).toBeInTheDocument();
@@ -71,7 +75,7 @@ describe('default AddFactionDialog', () => {
     expect(divInst).toHaveTextContent("new faction");
   });
 
-  it('renders input field faction name', () => {
+  it("renders input field faction name", () => {
     renderWithContext();
     const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
@@ -83,7 +87,7 @@ describe('default AddFactionDialog', () => {
     expect(field).not.toHaveValue();
   });
 
-  it('does nothing when the field is empty', () => {
+  it("does nothing when the field is empty", () => {
     const { mockCreate, mockClose } = renderWithContext();
     const dialog = screen.getByTestId("add-faction-dialog");
     const inAsset = within(dialog).getByTestId("faction-name-field");
@@ -105,14 +109,14 @@ describe('default AddFactionDialog', () => {
     expect(mockClose).not.toBeCalled();
   });
 
-  it('enables Create button when field is non-empty', () => {
+  it("enables Create button when field is non-empty", () => {
     renderWithContext({
       factions: {
         checkName: (s: Named) => true,
         subscribe(cb) {
           // nop
-          return () => {}
-        }
+          return () => {};
+        },
       } as FactionPoset,
     });
     const dialog = screen.getByTestId("add-faction-dialog");
@@ -134,13 +138,13 @@ describe('default AddFactionDialog', () => {
     expect(btnCreate).not.toBeDisabled();
   });
 
-  it('marks the field with error class when duplicate name given', () => {
+  it("marks the field with error class when duplicate name given", () => {
     const context: FactionContextType = {
       factions: {
         checkName: (s: Named) => false,
         subscribe(cb) {
           return () => {};
-        }
+        },
       } as FactionPoset,
     };
     renderWithContext(context);
@@ -171,7 +175,7 @@ describe('default AddFactionDialog', () => {
     expect(wrapperDiv).toHaveClass("Mui-error");
   });
 
-  it('calls onClose when cancelled', () => {
+  it("calls onClose when cancelled", () => {
     const { mockCreate, mockClose } = renderWithContext();
     const inAsset = screen.getByTestId("faction-name-field");
     expect(inAsset).toBeInTheDocument();
@@ -193,14 +197,14 @@ describe('default AddFactionDialog', () => {
     expect(mockClose).toBeCalledTimes(1);
   });
 
-  it('calls onCreate when given a unique name', () => {
+  it("calls onCreate when given a unique name", () => {
     const { mockClose, mockCreate } = renderWithContext({
       factions: {
-        getAll: () => ([] as FactionInfo[]),
+        getAll: () => [] as FactionInfo[],
         checkName: (s: Named) => true,
         subscribe(cb) {
           return () => {};
-        }
+        },
       } as FactionPoset,
     });
     const inAsset = screen.getByTestId("faction-name-field");

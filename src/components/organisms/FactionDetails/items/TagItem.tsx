@@ -4,7 +4,7 @@ import TagText, { TagTextProps } from "@/components/molecules/TagText/TagText";
 
 import { Item, ItemHeader } from "./helpers";
 
-type TagItemProps = TagTextProps
+type TagItemProps = TagTextProps;
 
 export default function TagItem(props: Readonly<TagItemProps>) {
   return (

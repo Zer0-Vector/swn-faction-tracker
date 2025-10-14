@@ -7,13 +7,9 @@
     {
       "name": "Launch via NPM",
       "request": "launch",
-      "runtimeArgs": [
-        "start"
-      ],
+      "runtimeArgs": ["start"],
       "runtimeExecutable": "npm",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "type": "node"
     },
     {
@@ -35,7 +31,7 @@
       "reloadOnChange": {
         "watch": "${workspaceFolder}/src/**/*.js",
         "ignore": "**/node_modules/**"
-      },
+      }
     }
   ]
 }

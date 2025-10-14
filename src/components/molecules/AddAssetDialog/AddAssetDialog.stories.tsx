@@ -8,7 +8,9 @@ export default {
   component: AddAssetDialog,
 } as ComponentMeta<typeof AddAssetDialog>;
 
-export const Default: ComponentStory<typeof AddAssetDialog> = args => <AddAssetDialog {...args} />;
+export const Default: ComponentStory<typeof AddAssetDialog> = (args) => (
+  <AddAssetDialog {...args} />
+);
 Default.args = {
   open: true,
 };

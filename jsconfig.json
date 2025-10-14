@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "files": ["./eslint.config.mjs"],
+  "files": ["./eslint.config.mjs"]
 }

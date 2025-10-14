@@ -5,14 +5,18 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 
 import EditableText from "./EditableText";
 
-describe('default EditableText', () => {
+describe("default EditableText", () => {
   const mockUpdate = vi.fn();
 
   function renderIt(text: string) {
-    render(<EditableText id="test" data-testid="test-text" onUpdate={mockUpdate}>{text}</EditableText>);
+    render(
+      <EditableText id="test" data-testid="test-text" onUpdate={mockUpdate}>
+        {text}
+      </EditableText>
+    );
   }
 
-  it('displays children', () => {
+  it("displays children", () => {
     renderIt("Test 123");
     const component = screen.getByTestId("test-text");
     expect(component).toBeInTheDocument();
@@ -21,7 +25,7 @@ describe('default EditableText', () => {
     expect(text).toHaveTextContent("Test 123");
   });
 
-  it('changes to text input after edit button click', () => {
+  it("changes to text input after edit button click", () => {
     renderIt("Test 456");
     const theDiv = screen.getByTestId("test-text");
     expect(theDiv).toBeInstanceOf(HTMLDivElement);
@@ -40,7 +44,7 @@ describe('default EditableText', () => {
     expect(input).toHaveValue("Test 456");
   });
 
-  it('calls onUpdate on `Enter`', () => {
+  it("calls onUpdate on `Enter`", () => {
     renderIt("Test 789");
 
     const theDiv = screen.getByTestId("test-text");
@@ -56,4 +60,3 @@ describe('default EditableText', () => {
     expect(mockUpdate).toHaveBeenCalledWith("Test 101112");
   });
 });
-

@@ -29,16 +29,19 @@ const locations = [
 ];
 
 const MockProvider = ({ children }: RequiredChildrenProps) => {
-  const mockContext = React.useMemo(() => ({
-    locations: {
-      getAll() {
-        return locations;
-      },
-      get(locationId: string) {
-        return locations.find((loc) => loc.id === locationId);
-      },
-    } as LocationsPoset,
-  }), []);
+  const mockContext = React.useMemo(
+    () => ({
+      locations: {
+        getAll() {
+          return locations;
+        },
+        get(locationId: string) {
+          return locations.find((loc) => loc.id === locationId);
+        },
+      } as LocationsPoset,
+    }),
+    []
+  );
 
   return (
     <LocationContext.Provider value={mockContext}>

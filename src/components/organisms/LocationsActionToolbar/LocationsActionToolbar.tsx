@@ -15,30 +15,38 @@ export default function LocationsActionToolbar() {
   const selectedLocation = useSelectedLocation();
   const nav = useNavigate();
 
-  const handleOpenAddDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {
-    evt.stopPropagation();
-    setAddDialogOpen(true);
-  }, []);
+  const handleOpenAddDialog: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback((evt) => {
+      evt.stopPropagation();
+      setAddDialogOpen(true);
+    }, []);
 
   const handleCloseAdd = useCallback(() => setAddDialogOpen(false), []);
 
-  const handleCreate = useCallback((info: {name: string, tl: number, x: number, y: number}) => {
-    locations.add(info);
-    handleCloseAdd();
-  }, [handleCloseAdd, locations]);
+  const handleCreate = useCallback(
+    (info: { name: string; tl: number; x: number; y: number }) => {
+      locations.add(info);
+      handleCloseAdd();
+    },
+    [handleCloseAdd, locations]
+  );
 
-  const handleOpenRemoveDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {
-    evt.stopPropagation();
-    setRemoveDialogOpen(true);
-  }, []);
+  const handleOpenRemoveDialog: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback((evt) => {
+      evt.stopPropagation();
+      setRemoveDialogOpen(true);
+    }, []);
 
-  const handleRemoveAction = useCallback<DialogActionHandler>((result) => {
-    setRemoveDialogOpen(false);
-    if (selectedLocation && result.reason === "Remove") {
-      locations.remove(selectedLocation.id);
-      nav("/locations");
-    }
-  }, [locations, nav, selectedLocation]);
+  const handleRemoveAction = useCallback<DialogActionHandler>(
+    (result) => {
+      setRemoveDialogOpen(false);
+      if (selectedLocation && result.reason === "Remove") {
+        locations.remove(selectedLocation.id);
+        nav("/locations");
+      }
+    },
+    [locations, nav, selectedLocation]
+  );
 
   return (
     <ListActionToolbar

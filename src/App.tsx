@@ -1,35 +1,39 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
 
-import { AuthContext } from './contexts/AuthContext';
-import { ConfirmationContextProvider } from './contexts/ConfirmationContext';
-import { DialogContextProvider } from './contexts/DialogContext';
-import { DataProvider } from './contexts/providers/DataProvider';
-import { TurnPhaseContextProvider } from './contexts/TurnPhaseContext';
-import { UiStateContext } from './contexts/UiStateContext';
-import { IUiStateController, UiStateController } from './controllers/UiStateController';
-import { useAuthProvider } from './hooks/useAuthProvider';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import LocationsPanel from './pages/LocationsPanel';
-import PrimaryPanel from './pages/PrimaryPanel';
-import { THEME } from './style/Theme';
-import PageContainer from './templates/PageContainer';
-import UiState from './types/UiState';
+import { AuthContext } from "./contexts/AuthContext";
+import { ConfirmationContextProvider } from "./contexts/ConfirmationContext";
+import { DialogContextProvider } from "./contexts/DialogContext";
+import { DataProvider } from "./contexts/providers/DataProvider";
+import { TurnPhaseContextProvider } from "./contexts/TurnPhaseContext";
+import { UiStateContext } from "./contexts/UiStateContext";
+import {
+  IUiStateController,
+  UiStateController,
+} from "./controllers/UiStateController";
+import { useAuthProvider } from "./hooks/useAuthProvider";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import LocationsPanel from "./pages/LocationsPanel";
+import PrimaryPanel from "./pages/PrimaryPanel";
+import { THEME } from "./style/Theme";
+import PageContainer from "./templates/PageContainer";
+import UiState from "./types/UiState";
 
 function App() {
-  const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState",
-    {
-      loginState: "LOGGED_OUT",
-      editMode: "VIEW",
-      turnState: "IDLE",
-      turnInfo: undefined,
-      turnIndex: 0,
-    }
-  );
+  const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", {
+    loginState: "LOGGED_OUT",
+    editMode: "VIEW",
+    turnState: "IDLE",
+    turnInfo: undefined,
+    turnIndex: 0,
+  });
 
-  const uiController: IUiStateController = useMemo(() => new UiStateController(setUiState), []);
+  const uiController: IUiStateController = useMemo(
+    () => new UiStateController(setUiState),
+    []
+  );
 
   useEffect(() => {
     console.debug("LoginState: ", uiState.loginState);
@@ -37,7 +41,10 @@ function App() {
 
   const auth = useAuthProvider(uiController);
 
-  const uiStateContext = useMemo(() => ({ state: uiState, controller: uiController }), [uiState, uiController]);
+  const uiStateContext = useMemo(
+    () => ({ state: uiState, controller: uiController }),
+    [uiState, uiController]
+  );
 
   console.debug("Rendering App...");
 
@@ -61,13 +68,19 @@ function App() {
                               <Route index element={<PrimaryPanel />} />
                               <Route path="assets">
                                 <Route index element={<PrimaryPanel />} />
-                                <Route path=":assetId" element={<PrimaryPanel />} />
+                                <Route
+                                  path=":assetId"
+                                  element={<PrimaryPanel />}
+                                />
                               </Route>
                             </Route>
                           </Route>
                           <Route path="locations">
                             <Route index element={<LocationsPanel />} />
-                            <Route path=":locationId" element={<LocationsPanel />} />
+                            <Route
+                              path=":locationId"
+                              element={<LocationsPanel />}
+                            />
                           </Route>
                         </Route>
                       </Routes>

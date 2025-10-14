@@ -3,8 +3,16 @@ import { MemoryRouter, useLocation } from "react-router-dom";
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { AssetContext, AssetContextType, AssetPoset } from "../../../contexts/AssetContext";
-import { FactionContext, FactionContextType, FactionPoset } from "../../../contexts/FactionContext";
+import {
+  AssetContext,
+  AssetContextType,
+  AssetPoset,
+} from "../../../contexts/AssetContext";
+import {
+  FactionContext,
+  FactionContextType,
+  FactionPoset,
+} from "../../../contexts/FactionContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
 import { UiStateController } from "../../../controllers/UiStateController";
 import FactionInfo from "../../../utils/FactionInfo";
@@ -21,17 +29,17 @@ const mockGetId = vi.fn();
 
 const mockFactionContext: FactionContextType = {
   factions: {
-    slugGet: mockGetFaction as FactionPoset['slugGet'],
-    subscribe: vi.fn() as FactionPoset['subscribe'],
+    slugGet: mockGetFaction as FactionPoset["slugGet"],
+    subscribe: vi.fn() as FactionPoset["subscribe"],
   } as FactionPoset,
 };
 
 const mockContext: AssetContextType = {
   assets: {
-    slugGet: mockGetAsset as AssetPoset['slugGet'],
-    add: mockAddAsset as AssetPoset['add'],
-    remove: mockRemoveAsset as AssetPoset['remove'],
-    getId: mockGetId as AssetPoset['getId'],
+    slugGet: mockGetAsset as AssetPoset["slugGet"],
+    add: mockAddAsset as AssetPoset["add"],
+    remove: mockRemoveAsset as AssetPoset["remove"],
+    getId: mockGetId as AssetPoset["getId"],
   } as AssetPoset,
 };
 
@@ -41,15 +49,18 @@ const mockFaction = {
   name: "Test Faction",
 } as FactionInfo;
 
-const  TestComp = () => {
+const TestComp = () => {
   const { pathname } = useLocation();
-  const uiStateContext = React.useMemo(() => ({
+  const uiStateContext = React.useMemo(
+    () => ({
       state: {
         editMode: "EDIT",
         loginState: "LOGGED_IN",
       } as UiState,
       controller: {} as UiStateController,
-    }), []);
+    }),
+    []
+  );
   return (
     <UiStateContext.Provider value={uiStateContext}>
       <div data-testid="test-location">{pathname}</div>
@@ -74,14 +85,14 @@ beforeEach(() => {
   mockGetFaction.mockImplementationOnce(() => mockFaction);
 });
 
-describe('default AssetListActionsToolbar', () => {
-  it('renders', () => {
+describe("default AssetListActionsToolbar", () => {
+  it("renders", () => {
     renderIt();
     const assetLat = screen.getByTestId("asset-lat");
     expect(assetLat).toBeInTheDocument();
   });
 
-  it('when location does not have assetId, remove button is disabled', () => {
+  it("when location does not have assetId, remove button is disabled", () => {
     renderIt();
     const assetLat = screen.getByTestId("asset-lat");
     const add = within(assetLat).getByTestId("lat-add");
@@ -93,7 +104,7 @@ describe('default AssetListActionsToolbar', () => {
     expect(remove).toBeDisabled();
   });
 
-  it('add button opens AddAssetDialog', () => {
+  it("add button opens AddAssetDialog", () => {
     renderIt();
     const assetLat = screen.getByTestId("asset-lat");
     const add = within(assetLat).getByTestId("lat-add");
@@ -105,7 +116,7 @@ describe('default AssetListActionsToolbar', () => {
     expect(dialog).toBeInTheDocument();
   });
 
-  it('adding asset calls controller', () => {
+  it("adding asset calls controller", () => {
     mockGetFaction.mockImplementationOnce(() => mockFaction);
     renderIt(["/factions/test-faction"]);
     const assetLat = screen.getByTestId("asset-lat");
@@ -127,15 +138,18 @@ describe('default AssetListActionsToolbar', () => {
     const btnAdd = within(dialog).getByText("Add");
     fireEvent.click(btnAdd);
     expect(mockContext.assets.add).toBeCalledTimes(1);
-    expect(mockContext.assets.add).toBeCalledWith({ factionId: "test-faction-1234", name: optionText });
+    expect(mockContext.assets.add).toBeCalledWith({
+      factionId: "test-faction-1234",
+      name: optionText,
+    });
   });
 });
 
-describe('asset selected AssetListActionsToolbar', () => {
+describe("asset selected AssetListActionsToolbar", () => {
   beforeEach(() => {
     mockGetId.mockImplementationOnce(() => "test-1234");
   });
-  it('when asset selected, remove button is enabled', () => {
+  it("when asset selected, remove button is enabled", () => {
     renderIt(["/factions/test-faction/assets/test-asset-1"]);
     const assetLat = screen.getByTestId("asset-lat");
     const add = within(assetLat).getByTestId("lat-add");
@@ -147,7 +161,7 @@ describe('asset selected AssetListActionsToolbar', () => {
     expect(remove).not.toBeDisabled();
   });
 
-  it('when remove button enabled, click shows confirm dialog', () => {
+  it("when remove button enabled, click shows confirm dialog", () => {
     renderIt(["/factions/test-faction/assets/test-asset-1"]);
     const assetLat = screen.getByTestId("asset-lat");
     const fabRemove = within(assetLat).getByTestId("lat-remove");
@@ -159,7 +173,7 @@ describe('asset selected AssetListActionsToolbar', () => {
     expect(dlgRemove).toBeInTheDocument();
   });
 
-  it('confirm remove asset calls controller and navigates to faction', () => {
+  it("confirm remove asset calls controller and navigates to faction", () => {
     renderIt(["/factions/test-faction/assets/test-asset-1"]);
     const assetLat = screen.getByTestId("asset-lat");
     const fabRemove = within(assetLat).getByTestId("lat-remove");

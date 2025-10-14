@@ -11,11 +11,15 @@ export default {
   component: ValidatedTextField,
 } as ComponentMeta<typeof ValidatedTextField>;
 
-const Template: ComponentStory<typeof ValidatedTextField> = args => {
+const Template: ComponentStory<typeof ValidatedTextField> = (args) => {
   return (
-    <ValidationContext.Provider value={new ValidationController({
-      ["test-123"]: (val) => val.length > 0 && val !== "fail",
-    })}>
+    <ValidationContext.Provider
+      value={
+        new ValidationController({
+          ["test-123"]: (val) => val.length > 0 && val !== "fail",
+        })
+      }
+    >
       <ValidatedTextField {...args} />
     </ValidationContext.Provider>
   );

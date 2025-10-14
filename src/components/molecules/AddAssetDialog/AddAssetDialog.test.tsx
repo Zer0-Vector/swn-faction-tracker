@@ -12,22 +12,22 @@ function renderIt(open = true) {
   render(<AddAssetDialog open={open} onClose={mockClose} onAdd={mockAdd} />);
 }
 
-describe('default AddAssetDialog', () => {
+describe("default AddAssetDialog", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  
-  it('does not render when open=false', () => {
+
+  it("does not render when open=false", () => {
     renderIt(false);
     expect(screen.queryByTestId("add-asset-dialog")).not.toBeInTheDocument();
   });
 
-  it('renders shown when open=true', () => {
+  it("renders shown when open=true", () => {
     renderIt();
     expect(screen.getByTestId("add-asset-dialog")).toBeInTheDocument();
   });
 
-  it('renders buttons', () => {
+  it("renders buttons", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
     const btnAdd = within(dialog).getByText("Add");
@@ -41,7 +41,7 @@ describe('default AddAssetDialog', () => {
     expect(btnCancel).toHaveTextContent("Cancel");
   });
 
-  it('renders title', () => {
+  it("renders title", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
@@ -51,7 +51,7 @@ describe('default AddAssetDialog', () => {
     expect(divTitle.textContent).toEqual("Add Asset");
   });
 
-  it('renders instructions content text', () => {
+  it("renders instructions content text", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
@@ -62,7 +62,7 @@ describe('default AddAssetDialog', () => {
     expect(divInst).toHaveTextContent("asset");
   });
 
-  it('renders input field and autocomplete for asset selection', () => {
+  it("renders input field and autocomplete for asset selection", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
@@ -81,7 +81,7 @@ describe('default AddAssetDialog', () => {
     expect(divAuto).toHaveClass("MuiAutocomplete-root");
   });
 
-  it('renders autocomplete dropdown when clicked', () => {
+  it("renders autocomplete dropdown when clicked", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
@@ -104,7 +104,7 @@ describe('default AddAssetDialog', () => {
     expect(field).toHaveValue("Hitmen");
   });
 
-  it('calls onClose when canceled', () => {
+  it("calls onClose when canceled", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
@@ -116,7 +116,7 @@ describe('default AddAssetDialog', () => {
     expect(mockAdd).not.toBeCalled();
   });
 
-  it('does nothing when nothing is selected', () => {
+  it("does nothing when nothing is selected", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 
@@ -127,7 +127,7 @@ describe('default AddAssetDialog', () => {
     expect(mockAdd).not.toBeCalled();
   });
 
-  it('calls onAdd when confirming selection', () => {
+  it("calls onAdd when confirming selection", () => {
     renderIt();
     const dialog = screen.getByTestId("add-asset-dialog");
 

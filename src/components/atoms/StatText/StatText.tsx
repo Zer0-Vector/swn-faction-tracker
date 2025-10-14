@@ -4,11 +4,10 @@ import Typography, { TypographyProps } from "@mui/material/Typography";
 
 import TestableProps from "../../../types/TestableProps";
 
-type StatTextProps = 
-  & TypographyProps
-  & Required<Pick<TypographyProps, "children">>
-  & { component?: React.ElementType }
-  & TestableProps;
+type StatTextProps = TypographyProps
+  & Required<Pick<TypographyProps, "children">> & {
+    component?: React.ElementType;
+  } & TestableProps;
 
 export default function StatText(props: StatTextProps) {
   return (

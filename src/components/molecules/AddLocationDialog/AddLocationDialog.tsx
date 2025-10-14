@@ -12,53 +12,73 @@ import { DialogActionHandler } from "../../atoms/MessageDialog/MessageDialog";
 interface AddLocationDialogProps {
   readonly open: boolean;
   readonly onClose: () => void;
-  readonly onCreate: (loc: { name: string, tl: number, x: number, y: number }) => void;
+  readonly onCreate: (loc: {
+    name: string;
+    tl: number;
+    x: number;
+    y: number;
+  }) => void;
 }
 
 type Coordinate<T> = [x: T, y: T];
 
 const BLANK_FORM_INFO: FormInfo = { value: "", valid: false };
-const BLANK_COORDS: FormInfo<Coordinate<string>> = { value: ["", ""], valid: false };
+const BLANK_COORDS: FormInfo<Coordinate<string>> = {
+  value: ["", ""],
+  valid: false,
+};
 
 type FormInfoSetter = (val: FormInfo) => void;
 type StringValidator = (val: string) => boolean;
 
-export default function AddLocationDialog({ open, onClose, onCreate }: AddLocationDialogProps) {
+export default function AddLocationDialog({
+  open,
+  onClose,
+  onCreate,
+}: AddLocationDialogProps) {
   const locations = useLocations();
   const [nameText, setNameText] = useState<FormInfo>(BLANK_FORM_INFO);
   const [tlText, setTlText] = useState<FormInfo>(BLANK_FORM_INFO);
-  const [coords, setCoords] = useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
+  const [coords, setCoords] =
+    useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (setter: FormInfoSetter, valid?: StringValidator) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = evt.target.value;
-    const isValid = valid === undefined || valid(newText);
-    const isNotBlank = newText !== undefined && newText.trim().length > 0;
-    const newState = {
-      value: newText,
-      valid: isNotBlank && isValid,
+  const handleChange =
+    (setter: FormInfoSetter, valid?: StringValidator) =>
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      const newText = evt.target.value;
+      const isValid = valid === undefined || valid(newText);
+      const isNotBlank = newText !== undefined && newText.trim().length > 0;
+      const newState = {
+        value: newText,
+        valid: isNotBlank && isValid,
+      };
+      setter(newState);
     };
-    setter(newState);
-  };
 
-  const handleCoordsChange = (index: number) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (index > 1) {
-      throw new Error("wtf...index is out of range");
-    }
+  const handleCoordsChange =
+    (index: number) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+      if (index > 1) {
+        throw new Error("wtf...index is out of range");
+      }
 
-    const newText = evt.target.value;
-    console.log(`validating index ${index}...`);
-    const newCoords: Coordinate<string> = index === 0 ? [newText, coords.value[1]] : [coords.value[0], newText];
-    const isNotBlank = newText !== undefined && newText.trim().length > 0;
-    const newState = {
-      value: newCoords,
-      valid: isNotBlank,
+      const newText = evt.target.value;
+      console.log(`validating index ${index}...`);
+      const newCoords: Coordinate<string> =
+        index === 0 ? [newText, coords.value[1]] : [coords.value[0], newText];
+      const isNotBlank = newText !== undefined && newText.trim().length > 0;
+      const newState = {
+        value: newCoords,
+        valid: isNotBlank,
+      };
+      console.log("setting coords: ", newState);
+      setCoords(newState);
     };
-    console.log("setting coords: ", newState);
-    setCoords(newState);
-  };
 
-  const isNotDuplicateName = useCallback((val: string) => locations.checkName({ name: val }), [locations]);
+  const isNotDuplicateName = useCallback(
+    (val: string) => locations.checkName({ name: val }),
+    [locations]
+  );
 
   const isInteger = (val: string) => {
     try {
@@ -84,7 +104,13 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
       && tlText.valid
       && coords.valid
     );
-  }, [coords.valid, isNotDuplicateName, nameText.valid, nameText.value, tlText.valid]);
+  }, [
+    coords.valid,
+    isNotDuplicateName,
+    nameText.valid,
+    nameText.value,
+    tlText.valid,
+  ]);
 
   const handleCreate = useCallback(() => {
     if (allValid()) {
@@ -97,15 +123,21 @@ export default function AddLocationDialog({ open, onClose, onCreate }: AddLocati
     }
   }, [allValid, coords.value, nameText.value, onCreate, tlText.value]);
 
-  const handleAction = useCallback<DialogActionHandler>((result) => {
-    if (result.reason === "Create") {
-      handleCreate();
-    }
-    handleClose();
-  }, [handleClose, handleCreate]);
+  const handleAction = useCallback<DialogActionHandler>(
+    (result) => {
+      if (result.reason === "Create") {
+        handleCreate();
+      }
+      handleClose();
+    },
+    [handleClose, handleCreate]
+  );
 
   const buttons = useMemo(() => ["Cancel", "Create"], []);
-  const disabledButtons = useMemo(() => !allValid() ? ["Create"] : [], [allValid]);
+  const disabledButtons = useMemo(
+    () => (!allValid() ? ["Create"] : []),
+    [allValid]
+  );
 
   return (
     <MessageDialog
