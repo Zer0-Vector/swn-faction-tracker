@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { ReadonlyPropsWithChildren } from "@/types/ReadonlyPropsWithChildren";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -39,7 +40,7 @@ const GridItemComp = ({ xs, children }: GridItemProps) => (
 
 const GridItem = React.memo(GridItemComp);
 
-export default function PageContainer({ children }: PageContainerProps) {
+export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
   const { state } = useContext(UiStateContext);
   const location = useLocation();
   const { currentUser } = useAuth();
