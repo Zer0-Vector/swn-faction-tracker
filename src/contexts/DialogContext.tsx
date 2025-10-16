@@ -32,11 +32,9 @@ interface PromiseRefType {
 
 export function DialogContextProvider({ children }: ReadonlyPropsWithChildren) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [options, setOptions] = useState<DialogOptions<any>>(
-    {} as DialogOptions<any>
-  );
+  const [options, setOptions] = useState<DialogOptions<any>>({} as DialogOptions<any>);
   const [open, setOpen] = useState<boolean>(false);
-  const promiseRef = useRef<PromiseRefType>();
+  const promiseRef = useRef<PromiseRefType>(null);
   const openConfirmation = useCallback<DialogContextType>((options) => {
     return new Promise((resolve) => {
       promiseRef.current = { resolve };

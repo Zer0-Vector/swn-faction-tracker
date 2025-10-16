@@ -31,7 +31,7 @@ export function ConfirmationContextProvider({
     {} as ConfirmationOptions
   );
   const [open, setOpen] = useState<boolean>(false);
-  const promiseRef = useRef<PromiseRefType>();
+  const promiseRef = useRef<PromiseRefType>(null);
   const openConfirmation = useCallback<ConfirmationContextType>((options) => {
     return new Promise((resolve) => {
       promiseRef.current = { resolve };
