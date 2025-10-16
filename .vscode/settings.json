@@ -27,6 +27,7 @@
     "chromaui",
     "sonarqube",
     "firestore",
-    "dtid"
+    "dtid",
+    "thiz",
   ]
 }
