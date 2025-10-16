@@ -23,7 +23,7 @@ import { ValidatedTextField } from "../ValidatedTextField";
 
 interface EditableTextBaseProps
   extends TestableProps,
-    RequiredChildrenProps<string> {
+  RequiredChildrenProps<string> {
   /**
    * Callback for editing the field.
    * @param newValue The updated value for the field.
@@ -186,7 +186,7 @@ export default function EditableText({
         <ValidatedTextField
           id={id}
           inputRef={textFieldRef}
-          InputProps={textFieldInputProps}
+          slotProps={{ input: textFieldInputProps }}
           onKeyUp={handleKeyUp}
           onChange={handleChange}
           onInput={handleInput}

@@ -151,16 +151,16 @@ export function LocationsListItem({
           </Summary>
           <AccordionDetails>
             <Grid container spacing={1}>
-              <Grid item xs={cellWidth}>
+              <Grid size={cellWidth}>
                 <ItemHeader>Tech Level</ItemHeader>
               </Grid>
-              <Grid item xs={cellWidth}>
+              <Grid size={cellWidth}>
                 <Item>{locationInfo.tl}</Item>
               </Grid>
-              <Grid item xs={cellWidth}>
+              <Grid size={cellWidth}>
                 <ItemHeader>Coordinates</ItemHeader>
               </Grid>
-              <Grid item xs={cellWidth}>
+              <Grid size={cellWidth}>
                 <Item>
                   {locationInfo.x}, {locationInfo.y}
                 </Item>
