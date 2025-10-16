@@ -136,7 +136,7 @@ export default function AddLocationDialog({
 
   const buttons = useMemo(() => ["Cancel", "Create"], []);
   const disabledButtons = useMemo(
-    () => (!allValid() ? ["Create"] : []),
+    () => (allValid() ? [] : ["Create"]),
     [allValid]
   );
 

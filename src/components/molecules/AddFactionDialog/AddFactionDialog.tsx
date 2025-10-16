@@ -58,7 +58,7 @@ export default function AddFactionDialog({
 
   const buttons = useMemo(() => ["Cancel", "Create"], []);
   const disabledButtons = useMemo(
-    () => (!formState.valid ? ["Create"] : []),
+    () => (formState.valid ? [] : ["Create"]),
     [formState.valid]
   );
 
