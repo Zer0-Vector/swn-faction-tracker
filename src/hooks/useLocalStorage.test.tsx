@@ -1,5 +1,4 @@
-import React from "react";
-import { act } from "react-dom/test-utils";
+import React, { JSX, act } from "react";
 
 import { render, screen } from "@testing-library/react";
 
