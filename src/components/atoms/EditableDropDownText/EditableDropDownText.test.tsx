@@ -86,10 +86,12 @@ describe("default EditableDropDownText", { timeout: 20000 }, () => {
       expect(button).toBeInTheDocument();
       await user.click(button);
 
-      const autocomplete = within(outer).getByTestId(
-        "editable-dropdown-autocomplete"
-      );
-      expect(autocomplete).toBeInTheDocument();
+
+      await waitFor(() => expect(
+        within(outer).findByTestId("editable-dropdown-autocomplete")
+      ).toBeDefined());
+
+      expect(within(outer).getByTestId("editable-dropdown-autocomplete")).toBeInTheDocument();
     };
 
     await setupDropdownForSelection();
