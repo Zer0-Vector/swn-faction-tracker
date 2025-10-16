@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import { ThemeProvider } from "@mui/material/styles";
 
 import { AuthContext } from "./contexts/AuthContext";
 import { ConfirmationContextProvider } from "./contexts/ConfirmationContext";
