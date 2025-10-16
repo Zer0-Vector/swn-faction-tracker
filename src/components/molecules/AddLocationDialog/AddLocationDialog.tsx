@@ -31,6 +31,7 @@ const BLANK_COORDS: FormInfo<Coordinate<string>> = {
 type FormInfoSetter = (val: FormInfo) => void;
 type StringValidator = (val: string) => boolean;
 
+// FIXME refactor into sub-components
 export default function AddLocationDialog({
   open,
   onClose,
@@ -41,7 +42,7 @@ export default function AddLocationDialog({
   const [tlText, setTlText] = useState<FormInfo>(BLANK_FORM_INFO);
   const [coords, setCoords] =
     useState<FormInfo<Coordinate<string>>>(BLANK_COORDS);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   const handleChange =
     (setter: FormInfoSetter, valid?: StringValidator) =>
@@ -93,7 +94,7 @@ export default function AddLocationDialog({
     setNameText(BLANK_FORM_INFO);
     setTlText(BLANK_FORM_INFO);
     setCoords({ value: ["", ""], valid: false });
-    inputRef.current?.focus();
+    nameRef.current?.focus();
     onClose();
   }, [onClose]);
 
@@ -154,7 +155,7 @@ export default function AddLocationDialog({
           id="location-name"
           label="Location Name"
           variant="filled"
-          inputRef={inputRef}
+          inputRef={nameRef}
           type="text"
           placeholder="Enter Location Name"
           autoFocus={true}
@@ -169,7 +170,6 @@ export default function AddLocationDialog({
           id="location-tl"
           label="Tech Level"
           variant="filled"
-          inputRef={inputRef}
           autoFocus={false}
           value={tlText.value}
           onChange={handleChange(setTlText, isInteger)}
