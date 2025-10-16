@@ -46,8 +46,7 @@ const LabeledItemComponent = ({
     <Item sx={sx} data-testid={dataTestId}>
       <Grid container columnSpacing={2}>
         <Grid
-          item
-          xs={xsLabel || "auto"}
+          size={xsLabel || "auto"}
           fontWeight="bold"
           textAlign="right"
           overflow="clip"
@@ -57,8 +56,7 @@ const LabeledItemComponent = ({
           {label}
         </Grid>
         <Grid
-          item
-          xs={xsContent || "auto"}
+          size={xsContent || "auto"}
           textAlign="left"
           data-testid="content"
         >
@@ -132,7 +130,7 @@ const AssetDetailsComponent = ({ asset }: AssetDetailsProps) => {
     ? `${TextUtils.titleCase(attack.offense)} vs. ${TextUtils.titleCase(attack.defense)}, ${dmgText(attack.result)}`
     : "None";
   const counterText = counter || "None";
-  const typeText = TextUtils.titleCase(type.replaceAll(/_/g, " "));
+  const typeText = TextUtils.titleCase(type.replaceAll("_", " "));
   const upkeepText = upkeep === 0 ? "None" : `${upkeep} FacCred`;
 
   return (

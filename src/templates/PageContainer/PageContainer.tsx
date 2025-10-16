@@ -28,8 +28,7 @@ type GridItemProps = { xs: GridSize } & RequiredChildrenProps;
 
 const GridItemComp = ({ xs, children }: GridItemProps) => (
   <Grid
-    item
-    xs={xs}
+    size={xs}
     display="flex"
     justifyContent="flex-start"
     alignItems="center"
