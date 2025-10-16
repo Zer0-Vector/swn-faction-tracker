@@ -82,7 +82,7 @@ export default function AddLocationDialog({
 
   const isInteger = (val: string) => {
     try {
-      parseInt(val);
+      Number.parseInt(val);
       return true;
     } catch {
       return false;
@@ -116,9 +116,9 @@ export default function AddLocationDialog({
     if (allValid()) {
       onCreate({
         name: nameText.value,
-        tl: parseInt(tlText.value),
-        x: parseInt(coords.value[0]),
-        y: parseInt(coords.value[1]),
+        tl: Number.parseInt(tlText.value),
+        x: Number.parseInt(coords.value[0]),
+        y: Number.parseInt(coords.value[1]),
       });
     }
   }, [allValid, coords.value, nameText.value, onCreate, tlText.value]);

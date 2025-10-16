@@ -39,7 +39,7 @@ export type EditableStatTextProps = EditableStatTextBaseProps
 
 function maybeParseIntStat(val: string): Maybe<number> {
   try {
-    return parseInt(val);
+    return Number.parseInt(val);
   } catch (e) {
     console.error("Invalid stat value:", val, e);
     return undefined;
@@ -117,8 +117,8 @@ export default function EditableStatText({
   const validate = useCallback((val: string): boolean => {
     let result = true;
     try {
-      const n = parseInt(val);
-      result = !isNaN(n) && n >= 0;
+      const n = Number.parseInt(val);
+      result = !Number.isNaN(n) && n >= 0;
     } catch {
       result = false;
     }
