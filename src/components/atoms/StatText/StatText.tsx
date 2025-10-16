@@ -11,16 +11,14 @@ type StatTextProps = TypographyProps
 
 export default function StatText(props: StatTextProps) {
   return (
-    <>
-      <Typography
-        variant="body2"
-        component="span"
-        color="text.primary"
-        {...props}
-        data-testid={props["data-testid"]}
-      >
-        {props.children}
-      </Typography>
-    </>
+    <Typography
+      variant="body2"
+      component="span"
+      color="text.primary"
+      {...props}
+      data-testid={props["data-testid"]}
+    >
+      {props.children}
+    </Typography>
   );
 }
