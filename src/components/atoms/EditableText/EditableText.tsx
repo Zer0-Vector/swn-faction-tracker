@@ -46,7 +46,7 @@ export type EditableTextProps = Prefixed<
   Pick<TextFieldProps, "variant" | "sx">,
   "input"
 >
-  & Pick<TypographyProps, "variant" | "sx">
+  & Partial<Pick<TypographyProps, "variant" | "sx">>
   & Required<Pick<TextFieldProps, "id">>
   & EditableTextBaseProps;
 

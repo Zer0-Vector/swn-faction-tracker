@@ -34,8 +34,8 @@ interface EditableStatTextBaseProps extends TestableProps {
 }
 
 export type EditableStatTextProps = EditableStatTextBaseProps
-  & Pick<TypographyProps, "sx">
-  & Prefixed<Pick<TextFieldProps, "sx">, "input">;
+  & Partial<Pick<TypographyProps, "sx">>
+  & Partial<Prefixed<Pick<TextFieldProps, "sx">, "input">>;
 
 function maybeParseIntStat(val: string): Maybe<number> {
   try {

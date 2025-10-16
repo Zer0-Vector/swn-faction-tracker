@@ -41,9 +41,9 @@ interface EditableDropDownTextBaseProps extends RequiredChildrenProps<string> {
 }
 
 export type EditableDropDownTextProps = EditableDropDownTextBaseProps
-  & Prefixed<Pick<TextFieldProps, "sx">, "input">
-  & Pick<TypographyProps, "sx">
-  & Prefixed<Pick<TypographyProps, "variant">, "text">
+  & Partial<Prefixed<Pick<TextFieldProps, "sx">, "input">>
+  & Partial<Pick<TypographyProps, "sx">>
+  & Partial<Prefixed<Pick<TypographyProps, "variant">, "text">>
   & TestableProps;
 
 export default function EditableDropDownText({
