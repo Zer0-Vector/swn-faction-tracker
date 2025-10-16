@@ -59,7 +59,7 @@ function App() {
                   <Router>
                     <PageContainer>
                       <Routes>
-                        {/* UGLY is there another way???? */}
+                        {/* XXX is there another way???? */}
                         <Route path="/">
                           <Route index element={<PrimaryPanel />} />
                           <Route path="factions">
