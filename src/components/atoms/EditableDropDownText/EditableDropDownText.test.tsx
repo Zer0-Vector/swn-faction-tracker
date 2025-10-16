@@ -75,8 +75,7 @@ describe("default EditableDropDownText", { timeout: 20000 }, () => {
     ).toBeInTheDocument();
   });
 
-  // FIXME: RACE CONDITION
-  it.todo("calls onUpdate if option clicked", async () => {
+  it("calls onUpdate if option clicked", async () => {
     const { user } = renderIt();
 
     const outer = screen.getByTestId("test-eddt");
