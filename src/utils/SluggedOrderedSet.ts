@@ -1,9 +1,7 @@
 import { Maybe } from "../types/Maybe";
 import { SluggedEntity } from "../types/SluggedEntity";
 
-
 export interface ISluggedOrderedSet<T extends SluggedEntity> {
-
   size: number;
 
   /**
@@ -94,8 +92,9 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
  * An ordered set with elements having two unique identifiers: `id` and `slug`.
  * The ordering is based on the order elements are added, however, elements can be reordered.
  */
-export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrderedSet<T> {
-
+export class SluggedOrderedSet<T extends SluggedEntity>
+  implements ISluggedOrderedSet<T>
+{
   private readonly id2element: Map<string, T>;
   private readonly slug2id: Map<string, string>;
   private readonly order: string[];
@@ -109,7 +108,7 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     this.id2element = new Map<string, T>();
     this.slug2id = new Map<string, string>();
     this.order = [];
-    initialValues.forEach(value => {
+    initialValues.forEach((value) => {
       this.add(value);
     });
   }
@@ -179,6 +178,8 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
     if (this.order.length === 0 || index < 0 || index >= this.order.length) {
       throw new RangeError("Index out of bounds");
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- since order only contains valid ids, this is never undefined
     return this.get(this.order[index])!;
   }
 
@@ -192,7 +193,7 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
 
   getAll(): T[] {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.order.map(id => this.id2element.get(id)!);
+    return this.order.map((id) => this.id2element.get(id)!);
   }
 
   reorder(source: number, target: number) {
@@ -223,11 +224,11 @@ export class SluggedOrderedSet<T extends SluggedEntity> implements ISluggedOrder
   getId(slug: string): Maybe<string> {
     return this.slug2id.get(slug);
   }
-
 }
 
-export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity> implements ISluggedOrderedSet<T> {
-
+export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity>
+  implements ISluggedOrderedSet<T>
+{
   private readonly id2index: Map<string, number>;
   private readonly slug2id: Map<string, string>;
   private elements: T[];

@@ -11,19 +11,23 @@ import { PasswordResetErrorDialog } from "./PasswordResetErrorDialog";
 export default {
   component: PasswordResetErrorDialog,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "PASSWORD_RESET_ERROR",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "PASSWORD_RESET_ERROR",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof PasswordResetErrorDialog>;
 
-const Template: ComponentStory<typeof PasswordResetErrorDialog> = () => <PasswordResetErrorDialog />;
+const Template: ComponentStory<typeof PasswordResetErrorDialog> = () => (
+  <PasswordResetErrorDialog />
+);
 
 export const Default = Template.bind({});

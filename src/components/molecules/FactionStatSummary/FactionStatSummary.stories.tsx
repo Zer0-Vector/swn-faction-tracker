@@ -10,19 +10,23 @@ import FactionStatSummary from "./FactionStatSummary";
 export default {
   component: FactionStatSummary,
   decorators: [
-    story => (
-      <FactionContext.Provider value={{
-        factions: {
-          ...MockAction("update"),
-        } as unknown as FactionPoset,
-      }}>
+    (story) => (
+      <FactionContext.Provider
+        value={{
+          factions: {
+            ...MockAction("update"),
+          } as unknown as FactionPoset,
+        }}
+      >
         {story()}
       </FactionContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof FactionStatSummary>;
 
-const Template: ComponentStory<typeof FactionStatSummary> = args => <FactionStatSummary {...args} />;
+const Template: ComponentStory<typeof FactionStatSummary> = (args) => (
+  <FactionStatSummary {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

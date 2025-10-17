@@ -17,8 +17,10 @@ export const FactionContext = React.createContext({} as FactionContextType);
 
 export const useFactions = () => {
   const ctx = React.useContext(FactionContext);
-  if (!ctx) throw new Error("useFactions must be used within a FactionContextProvider");
+  if (!ctx)
+    throw new Error("useFactions must be used within a FactionContextProvider");
   return React.useSyncExternalStore(
-      ctx.factions.subscribe.bind(ctx.factions),
-      () => ctx.factions);
+    ctx.factions.subscribe.bind(ctx.factions),
+    () => ctx.factions
+  );
 };

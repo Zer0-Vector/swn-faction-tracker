@@ -12,28 +12,33 @@ export default function ModeToggleButtons() {
   const { state, controller } = useContext(UiStateContext);
   const confirm = useConfirmation();
 
-  const handleChange = useCallback((_: React.MouseEvent, value: Nullable<string>) => {
-    if (value === null) { // when active button is clicked
-      return;
-    }
-
-    if (isGameMode(value)) {
-      if (state.editMode === "TURN" && value !== "TURN") {
-        confirm({
-          title: "End Turn Confirmation",
-          message: "The turn is incomplete. Do you really want to end the turn?",
-        }).then((confirmed: boolean) => {
-          if (confirmed) {
-            controller.setEditMode(value, true);
-          }
-        });
-      } else {
-        controller.setEditMode(value);
+  const handleChange = useCallback(
+    (_: React.MouseEvent, value: Nullable<string>) => {
+      if (value === null) {
+        // when active button is clicked
+        return;
       }
-    } else {
-      console.warn("Unknown ModeToggleButton value: ", value);
-    }
-  }, [confirm, controller, state.editMode]);
+
+      if (isGameMode(value)) {
+        if (state.editMode === "TURN" && value !== "TURN") {
+          confirm({
+            title: "End Turn Confirmation",
+            message:
+              "The turn is incomplete. Do you really want to end the turn?",
+          }).then((confirmed: boolean) => {
+            if (confirmed) {
+              controller.setEditMode(value, true);
+            }
+          });
+        } else {
+          controller.setEditMode(value);
+        }
+      } else {
+        console.warn("Unknown ModeToggleButton value: ", value);
+      }
+    },
+    [confirm, controller, state.editMode]
+  );
 
   console.debug("Rendering ModeToggleButtons...");
 
@@ -44,9 +49,15 @@ export default function ModeToggleButtons() {
       color="tertiary"
       onChange={handleChange}
     >
-      <ToggleButton value="VIEW" fullWidth={true}>View</ToggleButton>
-      <ToggleButton value="EDIT" fullWidth={true}>Free Edit</ToggleButton>
-      <ToggleButton value="TURN" fullWidth={true}>Take Turn</ToggleButton>
+      <ToggleButton value="VIEW" fullWidth={true}>
+        View
+      </ToggleButton>
+      <ToggleButton value="EDIT" fullWidth={true}>
+        Free Edit
+      </ToggleButton>
+      <ToggleButton value="TURN" fullWidth={true}>
+        Take Turn
+      </ToggleButton>
     </ToggleButtonGroup>
   );
 }

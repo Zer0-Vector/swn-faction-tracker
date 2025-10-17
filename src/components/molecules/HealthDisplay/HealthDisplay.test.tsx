@@ -2,7 +2,10 @@ import React from "react";
 
 import { render } from "@testing-library/react";
 
-import { FactionContext, FactionContextType } from "../../../contexts/FactionContext";
+import {
+  FactionContext,
+  FactionContextType,
+} from "../../../contexts/FactionContext";
 
 import HealthDisplay from "./HealthDisplay";
 import { describe, it } from "vitest";
@@ -17,7 +20,7 @@ function renderIt() {
   );
 }
 
-describe('HealthDisplay', () => {
-  it.todo('renders faction hp and maxHp');
-  it.todo('render tooltip on hover');
+describe("HealthDisplay", () => {
+  it.todo("renders faction hp and maxHp");
+  it.todo("render tooltip on hover");
 });

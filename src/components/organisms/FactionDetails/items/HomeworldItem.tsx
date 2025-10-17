@@ -1,7 +1,9 @@
 import React from "react";
-import { Item, ItemHeader } from "./helpers";
-import HomeworldText from "@/components/molecules/HomeworldText";
+
 import type { HomeworldTextProps } from "@/components/molecules/HomeworldText";
+import HomeworldText from "@/components/molecules/HomeworldText";
+
+import { Item, ItemHeader } from "./helpers";
 
 export type HomeworldItemProps = HomeworldTextProps;
 
@@ -13,5 +15,5 @@ export default function HomeworldItem(props: Readonly<HomeworldItemProps>) {
         <HomeworldText {...props} />
       </Item>
     </>
-  )
+  );
 }

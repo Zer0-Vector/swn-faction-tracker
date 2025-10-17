@@ -11,7 +11,13 @@ export interface LinkProps extends TestableProps, RequiredChildrenProps {
 
 const Link = ({ children, onClick, "data-testid": dtid }: LinkProps) => {
   return (
-    <MuiLink onClick={onClick} sx={{ "&:hover": { cursor: "pointer" } }} data-testid={dtid}>{children}</MuiLink>
+    <MuiLink
+      onClick={onClick}
+      sx={{ "&:hover": { cursor: "pointer" } }}
+      data-testid={dtid}
+    >
+      {children}
+    </MuiLink>
   );
 };
 

@@ -10,7 +10,7 @@ export const TurnStates = [
   "COMPLETE",
 ] as const;
 
-export type TurnState = typeof TurnStates[number];
+export type TurnState = (typeof TurnStates)[number];
 
 export function isTurnState(s: string): s is TurnState {
   return TurnStates.includes(s as TurnState);

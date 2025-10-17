@@ -19,10 +19,10 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ vars.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm install
       - run: npm run build
-      - name: 'Upload Artifacts'
+      - name: "Upload Artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -38,7 +38,7 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ vars.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm install
       - run: npm run ci-test -- --coverage
       - name: SonarCloud Scan
@@ -59,7 +59,7 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ vars.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm install
       - name: Publish to Chromatic
         uses: chromaui/action@v1
@@ -74,9 +74,9 @@ jobs:
         with:
           infiles: design/**/*.plantuml
           outdir: png
-      - name: 'Upload Diagrams'
+      - name: "Upload Diagrams"
         uses: actions/upload-artifact@v4
         with:
           name: diagrams
-          path: 'png/**/*.png'
+          path: "png/**/*.png"
           if-no-files-found: error

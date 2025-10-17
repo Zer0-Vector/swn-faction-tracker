@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
 import { InputBaseProps, SxProps, Theme } from "@mui/material";
@@ -15,7 +21,9 @@ import TestableProps from "../../../types/TestableProps";
 import { ValidationFn } from "../../../types/ValidationFn";
 import { ValidatedTextField } from "../ValidatedTextField";
 
-interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<string> {
+interface EditableTextBaseProps
+  extends TestableProps,
+  RequiredChildrenProps<string> {
   /**
    * Callback for editing the field.
    * @param newValue The updated value for the field.
@@ -34,9 +42,11 @@ interface EditableTextBaseProps extends TestableProps, RequiredChildrenProps<str
   editable?: boolean;
 }
 
-export type EditableTextProps =
-  & Prefixed<Pick<TextFieldProps, "variant" | "sx">, "input">
-  & Pick<TypographyProps, "variant" | "sx">
+export type EditableTextProps = Prefixed<
+  Pick<TextFieldProps, "variant" | "sx">,
+  "input"
+>
+  & Partial<Pick<TypographyProps, "variant" | "sx">>
   & Required<Pick<TextFieldProps, "id">>
   & EditableTextBaseProps;
 
@@ -63,9 +73,15 @@ export default function EditableText({
     }
   }, [editing]);
 
-  const validator = useMemo(() => new ValidationController({
-    [id]: (val: string) => val.trim().length > 0 && (validate === undefined || validate(val.trim())),
-  }), [id, validate]);
+  const validator = useMemo(
+    () =>
+      new ValidationController({
+        [id]: (val: string) =>
+          val.trim().length > 0
+          && (validate === undefined || validate(val.trim())),
+      }),
+    [id, validate]
+  );
 
   const enterEditMode = useCallback<React.MouseEventHandler>((evt) => {
     evt.stopPropagation();
@@ -80,29 +96,37 @@ export default function EditableText({
     }
   }, [editing, validator]);
 
-  const exitEditMode = useCallback((evt: React.SyntheticEvent) => {
-    evt.preventDefault();
-    if (editing && validator.isAllValid()) {
-      if (hasChanged && onUpdate) {
-        console.debug(`Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`);
-        onUpdate(textFieldRef.current?.value as string);
+  const exitEditMode = useCallback(
+    (evt: React.SyntheticEvent) => {
+      evt.preventDefault();
+      if (editing && validator.isAllValid()) {
+        if (hasChanged && onUpdate) {
+          console.debug(
+            `Changing ${textFieldRef.current?.id}: ${textFieldRef.current?.value}`
+          );
+          onUpdate(textFieldRef.current?.value as string);
+        }
+        setEditing(false);
+        setHasChanged(false);
+        validator.reset();
       }
-      setEditing(false);
-      setHasChanged(false);
-      validator.reset();
-    }
-  }, [editing, hasChanged, onUpdate, validator]);
+    },
+    [editing, hasChanged, onUpdate, validator]
+  );
 
-  const handleKeyUp = useCallback((evt: React.KeyboardEvent<HTMLElement>) => {
-    if (evt.key === 'Escape') {
-      handleCancel();
-    } else if (evt.key === 'Enter') {
-      if (textFieldRef.current) {
-        setFieldWidth(textFieldRef.current.value.length);
+  const handleKeyUp = useCallback(
+    (evt: React.KeyboardEvent<HTMLElement>) => {
+      if (evt.key === "Escape") {
+        handleCancel();
+      } else if (evt.key === "Enter") {
+        if (textFieldRef.current) {
+          setFieldWidth(textFieldRef.current.value.length);
+        }
+        exitEditMode(evt);
       }
-      exitEditMode(evt);
-    }
-  }, [exitEditMode, handleCancel]);
+    },
+    [exitEditMode, handleCancel]
+  );
 
   const handleChange = useCallback(() => {
     if (editing && !hasChanged) {
@@ -114,34 +138,46 @@ export default function EditableText({
     evt.stopPropagation();
   }, []);
 
-  const handleInput = useCallback<React.ChangeEventHandler<HTMLInputElement>>((evt) => {
-    setFieldWidth(evt.target.value.length);
-  }, []);
-
-  const boxSx = useMemo<SxProps<Theme>>(() => ({
-    "& .MuiIconButton-root": {
-      visibility: editing ? "unset" : "hidden",
+  const handleInput = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    (evt) => {
+      setFieldWidth(evt.target.value.length);
     },
-    "&:hover .MuiIconButton-root": {
-      visibility: editing ? "unset" : "visible",
-    },
-    overflow: "clip",
-  }), [editing]);
+    []
+  );
 
-  const textFieldInputProps = useMemo<Partial<InputBaseProps>>(() => ({
-    sx: {
-      minWidth: "3ch",
-      width: fieldWidth + "ch",
-      maxWidth: "100%",
-    },
-  }), [fieldWidth]);
+  const boxSx = useMemo<SxProps<Theme>>(
+    () => ({
+      "& .MuiIconButton-root": {
+        visibility: editing ? "unset" : "hidden",
+      },
+      "&:hover .MuiIconButton-root": {
+        visibility: editing ? "unset" : "visible",
+      },
+      overflow: "clip",
+    }),
+    [editing]
+  );
 
-  const textStyle = useMemo<SxProps<Theme>>(() => ({
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    ...sx,
-  }), [sx]);
+  const textFieldInputProps = useMemo<Partial<InputBaseProps>>(
+    () => ({
+      sx: {
+        minWidth: "3ch",
+        width: fieldWidth + "ch",
+        maxWidth: "100%",
+      },
+    }),
+    [fieldWidth]
+  );
+
+  const textStyle = useMemo<SxProps<Theme>>(
+    () => ({
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      ...sx,
+    }),
+    [sx]
+  );
 
   let inner: React.ReactNode;
   if (editing) {
@@ -150,7 +186,7 @@ export default function EditableText({
         <ValidatedTextField
           id={id}
           inputRef={textFieldRef}
-          InputProps={textFieldInputProps}
+          slotProps={{ input: textFieldInputProps }}
           onKeyUp={handleKeyUp}
           onChange={handleChange}
           onInput={handleInput}
@@ -190,7 +226,12 @@ export default function EditableText({
       data-testid={dtid}
     >
       {inner}
-      <IconButton size="small" onClick={enterEditMode} disabled={!editable} data-testid="editable-text-button">
+      <IconButton
+        size="small"
+        onClick={enterEditMode}
+        disabled={!editable}
+        data-testid="editable-text-button"
+      >
         <EditIcon fontSize="inherit" />
       </IconButton>
     </Box>

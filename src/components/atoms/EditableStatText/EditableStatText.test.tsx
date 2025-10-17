@@ -5,18 +5,26 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import EditableStatText from "./EditableStatText";
 import { describe, expect, it, vi } from "vitest";
 
-describe('default EditableStatText', () => {
-  it('renders StatText initially', () => {
+describe("default EditableStatText", () => {
+  it("renders StatText initially", () => {
     const updateMethod = vi.fn();
-    render(<EditableStatText onUpdate={updateMethod} data-testid="test1">{111}</EditableStatText>);
+    render(
+      <EditableStatText onUpdate={updateMethod} data-testid="test1">
+        {111}
+      </EditableStatText>
+    );
     const component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
   });
 
-  it('renders input after double-click', () => {
+  it("renders input after double-click", () => {
     const updateMethod = vi.fn();
-    render(<EditableStatText onUpdate={updateMethod} data-testid="test2">{111}</EditableStatText>);
+    render(
+      <EditableStatText onUpdate={updateMethod} data-testid="test2">
+        {111}
+      </EditableStatText>
+    );
     let component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
@@ -27,9 +35,13 @@ describe('default EditableStatText', () => {
     expect(component).toBeInstanceOf(HTMLInputElement);
   });
 
-  it('calls updateValue callback after Enter key', async () => {
+  it("calls updateValue callback after Enter key", async () => {
     const updateMethod = vi.fn();
-    render(<EditableStatText data-testid="test3" onUpdate={updateMethod}>{111}</EditableStatText>);
+    render(
+      <EditableStatText data-testid="test3" onUpdate={updateMethod}>
+        {111}
+      </EditableStatText>
+    );
     let component = screen.getByText("111");
     expect(component).toBeDefined();
     expect(component).toBeInstanceOf(HTMLSpanElement);
@@ -55,8 +67,12 @@ describe('default EditableStatText', () => {
     expect(component).toBeInstanceOf(HTMLSpanElement);
   });
 
-  it('sets error when invalid input is given', () => {
-    render(<EditableStatText data-testid="test4" onUpdate={vi.fn()}>{321}</EditableStatText>);
+  it("sets error when invalid input is given", () => {
+    render(
+      <EditableStatText data-testid="test4" onUpdate={vi.fn()}>
+        {321}
+      </EditableStatText>
+    );
     let component = screen.getByText("321");
     expect(component).toBeInstanceOf(HTMLSpanElement);
     fireEvent.doubleClick(component);

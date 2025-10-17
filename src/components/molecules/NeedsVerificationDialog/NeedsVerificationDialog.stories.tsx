@@ -15,30 +15,38 @@ import NeedsVerificationDialog from "./NeedsVerificationDialog";
 export default {
   component: NeedsVerificationDialog,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "NEEDS_VERIFICATION",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "NEEDS_VERIFICATION",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
-    story => (
-      <AuthContext.Provider value={{
-        currentUser: {} as User,
-        sendEmailVerification: (u: User) => {
-          action("sendEmailVerification")(u);
-          return Promise.resolve();
-        },
-      } as ProvidedAuth}>
+    (story) => (
+      <AuthContext.Provider
+        value={
+          {
+            currentUser: {} as User,
+            sendEmailVerification: (u: User) => {
+              action("sendEmailVerification")(u);
+              return Promise.resolve();
+            },
+          } as ProvidedAuth
+        }
+      >
         {story()}
       </AuthContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof NeedsVerificationDialog>;
 
-const Template: ComponentStory<typeof NeedsVerificationDialog> = () => <NeedsVerificationDialog />;
+const Template: ComponentStory<typeof NeedsVerificationDialog> = () => (
+  <NeedsVerificationDialog />
+);
 
 export const Default = Template.bind({});

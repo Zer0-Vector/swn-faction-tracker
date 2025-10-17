@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react";
 
 import { SxProps } from "@mui/material";
-import Autocomplete, { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
+import Autocomplete, {
+  AutocompleteRenderInputParams,
+} from "@mui/material/Autocomplete";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 
@@ -23,28 +25,37 @@ interface AssetOption {
   disabled: boolean;
 }
 
-export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogProps) {
+export default function AddAssetDialog({
+  open,
+  onClose,
+  onAdd,
+}: AddAssetDialogProps) {
   const [selection, setSelection] = useState<string>("");
 
-  const options = useMemo(() => (
-    Object.entries(ASSETS)
-      .filter(([name, _]) => name !== "Base of Influence")
-      .map(([name, item]) => {
-        const group = `${TextUtils.titleCase(item.attribute)} ${item.level}`;
-        return {
-          name: name,
-          group: group,
-        } as AssetOption;
-      })
-  ), []);
+  const options = useMemo(
+    () =>
+      Object.entries(ASSETS)
+        .filter(([name]) => name !== "Base of Influence")
+        .map(([name, item]) => {
+          const group = `${TextUtils.titleCase(item.attribute)} ${item.level}`;
+          return {
+            name: name,
+            group: group,
+          } as AssetOption;
+        }),
+    []
+  );
 
-  const handleSelectionChanged = useCallback((_evt: React.SyntheticEvent, value: Nullable<AssetOption>) => {
-    if (value === null) {
-      setSelection("");
-    } else {
-      setSelection(value.name);
-    }
-  }, []);
+  const handleSelectionChanged = useCallback(
+    (_evt: React.SyntheticEvent, value: Nullable<AssetOption>) => {
+      if (value === null) {
+        setSelection("");
+      } else {
+        setSelection(value.name);
+      }
+    },
+    []
+  );
 
   const handleClose = useCallback(() => {
     setSelection("");
@@ -54,16 +65,32 @@ export default function AddAssetDialog({ open, onClose, onAdd }: AddAssetDialogP
   const formControlSx = useMemo<SxProps>(() => ({ my: 1, minWidth: 200 }), []);
   const autoGroupBy = useCallback((o: AssetOption): string => o.group, []);
   const autoOptLabel = useCallback((o: AssetOption): string => o.name, []);
-  const optionsAreEqual = useCallback((o: AssetOption, v: AssetOption): boolean => o.group === v.group && o.name === v.name, []);
+  const optionsAreEqual = useCallback(
+    (o: AssetOption, v: AssetOption): boolean =>
+      o.group === v.group && o.name === v.name,
+    []
+  );
   // ? extract TextField to custom component with React.memo?
-  const autoRenderInput = useCallback((params: AutocompleteRenderInputParams) => <TextField {...params} label="Select Asset" data-testid="selection-field" />, []);
+  const autoRenderInput = useCallback(
+    (params: AutocompleteRenderInputParams) => (
+      <TextField
+        {...params}
+        label="Select Asset"
+        data-testid="selection-field"
+      />
+    ),
+    []
+  );
 
-  const handleAction = useCallback<DialogActionHandler>((result) => {
-    handleClose();
-    if (result.reason === "Add" && selection !== "") {
-      onAdd(selection);
-    }
-  }, [handleClose, onAdd, selection]);
+  const handleAction = useCallback<DialogActionHandler>(
+    (result) => {
+      handleClose();
+      if (result.reason === "Add" && selection !== "") {
+        onAdd(selection);
+      }
+    },
+    [handleClose, onAdd, selection]
+  );
 
   return (
     <MessageDialog

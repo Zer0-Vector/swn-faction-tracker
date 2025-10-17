@@ -27,17 +27,16 @@ const MockProvider = ({ factions, children }: MockProviderProps) => {
 };
 
 const MockFactions = {
-  checkName: (s: Named<{}>) => generateSlug(s.name) !== "test-1" && generateSlug(s.name) !== "test-2",
+  checkName: (s: Named<{}>) =>
+    generateSlug(s.name) !== "test-1" && generateSlug(s.name) !== "test-2",
 } as FactionPoset;
 
-export const Default: ComponentStory<typeof AddFactionDialog> = args => <AddFactionDialog {...args} />;
+export const Default: ComponentStory<typeof AddFactionDialog> = (args) => (
+  <AddFactionDialog {...args} />
+);
 Default.args = {
   open: true,
 };
 Default.decorators = [
-  story => (
-    <MockProvider factions={MockFactions}>
-      {story()}
-    </MockProvider>
-  ),
+  (story) => <MockProvider factions={MockFactions}>{story()}</MockProvider>,
 ];

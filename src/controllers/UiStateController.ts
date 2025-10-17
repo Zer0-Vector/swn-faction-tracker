@@ -11,7 +11,7 @@ export type EditModeSetter = (mode: GameMode, forceEndTurn?: true) => void;
 export type TurnStateSetter = (state: Exclude<TurnState, "OFF">) => void;
 type TurnInfoSetterArg = ValueOrSetterArg<Maybe<TurnInfo>, TurnInfo>;
 export type TurnInfoSetter = (info: TurnInfoSetterArg) => void;
-export type TurnIndexSetter = ((setterOrValue: ValueOrSetterArg<number>) => void);
+export type TurnIndexSetter = (setterOrValue: ValueOrSetterArg<number>) => void;
 
 export interface IUiStateController {
   setLoginState: LoginStateSetter;
@@ -24,7 +24,6 @@ export interface IUiStateController {
 export type UiStateSetter = React.Dispatch<React.SetStateAction<UiState>>;
 
 export class UiStateController implements IUiStateController {
-
   private readonly setState: UiStateSetter;
 
   constructor(setState: UiStateSetter) {
@@ -32,36 +31,33 @@ export class UiStateController implements IUiStateController {
   }
 
   setTurnIndex(indexOrSetter: ValueOrSetterArg<number>) {
-    const nextTurnIndex = (typeof indexOrSetter === "function")
-      ? indexOrSetter
-      : () => indexOrSetter;
+    const nextTurnIndex =
+      typeof indexOrSetter === "function" ? indexOrSetter : () => indexOrSetter;
 
-    this.setState(prev => {
+    this.setState((prev) => {
       const turnIndex = nextTurnIndex(prev.turnIndex);
       if (turnIndex === prev.turnIndex) {
         return prev;
       }
-      return ({
+      return {
         ...prev,
         turnIndex,
-      });
+      };
     });
   }
 
   setTurnInfo(info: TurnInfoSetterArg) {
-    const nextTurnInfo = (typeof info === "function")
-      ? info
-      : () => info;
-    this.setState(prev => {
-      return ({
+    const nextTurnInfo = typeof info === "function" ? info : () => info;
+    this.setState((prev) => {
+      return {
         ...prev,
         turnInfo: nextTurnInfo(prev.turnInfo),
-      });
+      };
     });
   }
 
   setLoginState(state: LoginState): void {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       ...prev,
       loginState: state,
     }));
@@ -70,12 +66,16 @@ export class UiStateController implements IUiStateController {
   setEditMode(mode: GameMode, forceEndTurn?: true) {
     let needsForce = false;
 
-    this.setState(prev => {
+    this.setState((prev) => {
       if (prev.editMode === mode) {
         return prev;
       }
 
-      if (prev.editMode === "TURN" && prev.turnState !== "COMPLETE" && !forceEndTurn) {
+      if (
+        prev.editMode === "TURN"
+        && prev.turnState !== "COMPLETE"
+        && !forceEndTurn
+      ) {
         needsForce = true;
         return prev;
       }
@@ -95,10 +95,9 @@ export class UiStateController implements IUiStateController {
   }
 
   setTurnState: TurnStateSetter = (state) => {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       ...prev,
       turnState: state,
     }));
   };
-
 }

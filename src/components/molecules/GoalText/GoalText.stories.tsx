@@ -11,19 +11,23 @@ import GoalText from "./GoalText";
 export default {
   component: GoalText,
   decorators: [
-    story => (
-      <FactionContext.Provider value={{
-        factions: {
-          ...MockAction("update"),
-        } as unknown as FactionPoset,
-      }}>
+    (story) => (
+      <FactionContext.Provider
+        value={{
+          factions: {
+            ...MockAction("update"),
+          } as unknown as FactionPoset,
+        }}
+      >
         {story()}
       </FactionContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof GoalText>;
 
-const Template: ComponentStory<typeof GoalText> = args => <GoalText {...args} />;
+const Template: ComponentStory<typeof GoalText> = (args) => (
+  <GoalText {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

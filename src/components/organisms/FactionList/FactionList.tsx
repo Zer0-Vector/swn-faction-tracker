@@ -1,5 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
+import React, { JSX, useCallback, useEffect, useState } from "react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -15,11 +20,13 @@ import AssetListActionsToolbar from "../AssetListActionsToolbar";
 import FactionDetails from "../FactionDetails";
 import FactionListItem from "../FactionListItem";
 
-
 function useFactionsList() {
   const factions = useFactions();
   const [list, setList] = useState(factions.getAll());
-  useEffect(() => factions.subscribe(() => setList(factions.getAll())), [factions]);
+  useEffect(
+    () => factions.subscribe(() => setList(factions.getAll())),
+    [factions]
+  );
   return {
     factions: list,
     reorder: factions.reorder.bind(factions),
@@ -31,18 +38,25 @@ export default function FactionList(): JSX.Element {
   const theme = useTheme();
   const selectedFaction = useSelectedFaction();
 
-  const handleDragEnd = useCallback((result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    reorder(result.source.index, result.destination.index);
-  }, [reorder]);
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      if (!result.destination) {
+        return;
+      }
+      reorder(result.source.index, result.destination.index);
+    },
+    [reorder]
+  );
 
   if (factions.length === 0) {
     return (
       <>
-        <Typography variant="body1" color="warning.main">No Factions</Typography>
-        <Typography variant="body2">Create factions using the buttons above.</Typography>
+        <Typography variant="body1" color="warning.main">
+          No Factions
+        </Typography>
+        <Typography variant="body2">
+          Create factions using the buttons above.
+        </Typography>
       </>
     );
   }
@@ -56,7 +70,9 @@ export default function FactionList(): JSX.Element {
           <Stack
             spacing={theme.spacing(0.125)}
             padding={theme.spacing(2)}
-            bgcolor={snapshot.isDraggingOver ? "background.paper2" : "background.paper"}
+            bgcolor={
+              snapshot.isDraggingOver ? "background.paper2" : "background.paper"
+            }
             data-testid="faction-list-stack"
             ref={provided.innerRef}
             {...provided.droppableProps}
@@ -85,7 +101,9 @@ export default function FactionList(): JSX.Element {
                         <Box padding={1} bgcolor="background.paper">
                           <FactionDetails faction={faction} />
                           <Box marginTop={3}>
-                            <Typography variant="h3" textAlign="left">Assets</Typography>
+                            <Typography variant="h3" textAlign="left">
+                              Assets
+                            </Typography>
                             <AssetListActionsToolbar />
                             <AssetList />
                           </Box>

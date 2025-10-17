@@ -8,7 +8,9 @@ export default {
   component: AssetDetails,
 } as ComponentMeta<typeof AssetDetails>;
 
-const Template: ComponentStory<typeof AssetDetails> = args => <AssetDetails {...args} />;
+const Template: ComponentStory<typeof AssetDetails> = (args) => (
+  <AssetDetails {...args} />
+);
 
 export const SmugglersDetails = Template.bind({});
 SmugglersDetails.args = {

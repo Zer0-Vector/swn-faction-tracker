@@ -1,10 +1,19 @@
 import React from "react";
 
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import { UiStateContext } from "../../../contexts/UiStateContext";
-import { LoginStateSetter, UiStateController } from "../../../controllers/UiStateController";
+import {
+  LoginStateSetter,
+  UiStateController,
+} from "../../../controllers/UiStateController";
 import LoginState, { LoginStates } from "../../../types/LoginState";
 import { ProvidedAuth } from "../../../types/ProvidedAuth";
 import UiState from "../../../types/UiState";
@@ -17,47 +26,53 @@ const mockSend = vi.fn();
 const mockSetLoginState = vi.fn();
 function renderIt() {
   render(
-    <AuthContext.Provider value={{
-      sendPasswordResetEmail: mockSend as (e: string)=>Promise<void>,
-    } as ProvidedAuth}>
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "RESETTING_PASSWORD",
-        } as UiState,
-        controller: {
-          setLoginState: mockSetLoginState as LoginStateSetter,
-        } as UiStateController,
-      }}>
+    <AuthContext.Provider
+      value={
+        {
+          sendPasswordResetEmail: mockSend as (e: string) => Promise<void>,
+        } as ProvidedAuth
+      }
+    >
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "RESETTING_PASSWORD",
+          } as UiState,
+          controller: {
+            setLoginState: mockSetLoginState as LoginStateSetter,
+          } as UiStateController,
+        }}
+      >
         <PasswordResetDialog />
       </UiStateContext.Provider>
     </AuthContext.Provider>
   );
 }
 
-describe('PasswordResetDialog', () => {
+describe("PasswordResetDialog", () => {
+  beforeEach(() => {});
 
-  beforeEach(() => {
-
-  })
-
-  it.each(
-    [...LoginStates.filter(s => s !== "RESETTING_PASSWORD")]
-  )('does not show when LoginState=%p', (ls) => {
-    render(
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: ls,
-        } as UiState,
-        controller: {
-          setLoginState: mockSetLoginState as (s:LoginState)=>void,
-        } as UiStateController,
-      }}>
-        <PasswordResetDialog />
-      </UiStateContext.Provider>
-    );
-    const dialog = screen.queryByTestId("password-reset-dialog");
-    expect(dialog).not.toBeInTheDocument();
-  });
+  it.each([...LoginStates.filter((s) => s !== "RESETTING_PASSWORD")])(
+    "does not show when LoginState=%p",
+    (ls) => {
+      render(
+        <UiStateContext.Provider
+          value={{
+            state: {
+              loginState: ls,
+            } as UiState,
+            controller: {
+              setLoginState: mockSetLoginState as (s: LoginState) => void,
+            } as UiStateController,
+          }}
+        >
+          <PasswordResetDialog />
+        </UiStateContext.Provider>
+      );
+      const dialog = screen.queryByTestId("password-reset-dialog");
+      expect(dialog).not.toBeInTheDocument();
+    }
+  );
 
   it('shows when LoginState="RESETTING_PASSWORD"', () => {
     renderIt();
@@ -65,14 +80,14 @@ describe('PasswordResetDialog', () => {
     expect(dialog).toBeInTheDocument();
   });
 
-  it('asks for email', () => {
+  it("asks for email", () => {
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
     const message = within(dialog).getByTestId("message-dialog-message");
     expect(message).toHaveTextContent("email");
   });
 
-  it('OK disabled on blank field', () => {
+  it("OK disabled on blank field", () => {
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
     const ok = within(dialog).getByText("OK");
@@ -80,7 +95,7 @@ describe('PasswordResetDialog', () => {
     expect(ok).toBeDisabled();
   });
 
-  it('sends password reset email with valid email input', async () => {
+  it("sends password reset email with valid email input", async () => {
     mockSend.mockReturnValue(Promise.resolve());
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
@@ -99,7 +114,7 @@ describe('PasswordResetDialog', () => {
     expect(mockSetLoginState).toBeCalledWith("PASSWORD_RESET_SENT");
   });
 
-  it('if send password reset email fails, set state', async () => {
+  it("if send password reset email fails, set state", async () => {
     mockSend.mockClear(); // XXX: why is this needed?
     mockSend.mockReturnValue(Promise.reject(new Error()));
     renderIt();
@@ -119,7 +134,7 @@ describe('PasswordResetDialog', () => {
     expect(mockSetLoginState).toBeCalledWith("PASSWORD_RESET_ERROR");
   });
 
-  it('returns to login on cancel click', () => {
+  it("returns to login on cancel click", () => {
     renderIt();
     const dialog = screen.getByTestId("password-reset-dialog");
     const cancel = within(dialog).getByText("Cancel");

@@ -10,13 +10,17 @@ export default {
   component: EditableStatText,
 } as ComponentMeta<typeof EditableStatText>;
 
-const Template: ComponentStory<typeof EditableStatText> = args => {
+const Template: ComponentStory<typeof EditableStatText> = (args) => {
   const [text, setText] = useState<Maybe<number>>(args.children);
   const handleUpdate = (val: number) => {
     setText(val);
     args.onUpdate(val);
   };
-  return <EditableStatText {...args} onUpdate={handleUpdate}>{text}</EditableStatText>;
+  return (
+    <EditableStatText {...args} onUpdate={handleUpdate}>
+      {text}
+    </EditableStatText>
+  );
 };
 
 export const Default = Template.bind({});

@@ -11,7 +11,7 @@ export const FactionActionList = [
   "Use Asset Ability",
 ] as const;
 
-export type FactionAction = typeof FactionActionList[number];
+export type FactionAction = (typeof FactionActionList)[number];
 
 export function isFactionAction(s: string): s is FactionAction {
   return FactionActionList.includes(s as FactionAction);

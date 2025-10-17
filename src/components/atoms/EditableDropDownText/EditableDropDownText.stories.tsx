@@ -9,10 +9,16 @@ export default {
   component: EditableDropDownText,
 } as ComponentMeta<typeof EditableDropDownText>;
 
-export const Default: ComponentStory<typeof EditableDropDownText> = args => {
+export const Default: ComponentStory<typeof EditableDropDownText> = (args) => {
   const [text, setText] = useState<string>(args.children);
   return (
-    <EditableDropDownText {...args} onUpdate={s => { setText(s); args.onUpdate(s); }}>
+    <EditableDropDownText
+      {...args}
+      onUpdate={(s) => {
+        setText(s);
+        args.onUpdate(s);
+      }}
+    >
       {text}
     </EditableDropDownText>
   );

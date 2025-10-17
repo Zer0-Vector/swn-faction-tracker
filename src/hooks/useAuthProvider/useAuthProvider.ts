@@ -13,31 +13,36 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   const AUTH = firebaseAuth.getAuth(FirebaseApp);
 
   useEffect(() => {
-    firebaseAuth.setPersistence(AUTH, firebaseAuth.browserLocalPersistence)
-      .catch(reason => {
+    firebaseAuth
+      .setPersistence(AUTH, firebaseAuth.browserLocalPersistence)
+      .catch((reason) => {
         console.error("Error setting auth persistence: ", reason);
       });
   }, [AUTH]);
 
   useEffect(() => {
     return AUTH.onAuthStateChanged((loggedInUser) => {
-        console.log("AuthStateChanged: logged in? ", !!loggedInUser);
-        if (loggedInUser) {
-          console.log("Login detected: ", loggedInUser.email);
-          setUser(loggedInUser);
-          controller.setLoginState("LOGGED_IN");
-        } else if (user) {
-          setUser(null);
-          controller.setLoginState("LOGGED_OUT");
-        }
-      });
+      console.log("AuthStateChanged: logged in? ", !!loggedInUser);
+      if (loggedInUser) {
+        console.log("Login detected: ", loggedInUser.email);
+        setUser(loggedInUser);
+        controller.setLoginState("LOGGED_IN");
+      } else if (user) {
+        setUser(null);
+        controller.setLoginState("LOGGED_OUT");
+      }
+    });
   }, [AUTH, controller]);
 
   return {
     currentUser: user,
 
     login: async (email: string, password: string) => {
-      const { user } = await firebaseAuth.signInWithEmailAndPassword(AUTH, email, password);
+      const { user } = await firebaseAuth.signInWithEmailAndPassword(
+        AUTH,
+        email,
+        password
+      );
       setUser(user);
       return user;
     },
@@ -48,7 +53,11 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
     },
 
     signup: async (email: string, password: string) => {
-      const { user } = await firebaseAuth.createUserWithEmailAndPassword(AUTH, email, password);
+      const { user } = await firebaseAuth.createUserWithEmailAndPassword(
+        AUTH,
+        email,
+        password
+      );
       setUser(user);
       return user;
     },

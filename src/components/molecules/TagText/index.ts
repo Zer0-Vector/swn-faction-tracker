@@ -1,2 +1,2 @@
-export { default } from "./TagText"
 export type { TagTextProps } from "./TagText";
+export { default } from "./TagText";

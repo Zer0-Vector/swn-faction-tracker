@@ -1,3 +1,5 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
-export type ReadonlyPropsWithChildren<T = {}> = Readonly<PropsWithChildren<T>>;
+export type ReadonlyPropsWithChildren<T = object> = Readonly<
+  PropsWithChildren<T>
+>;

@@ -8,7 +8,9 @@ export default {
   component: MessageDialog,
 } as ComponentMeta<typeof MessageDialog>;
 
-const Template: ComponentStory<typeof MessageDialog> = args => <MessageDialog {...args} />;
+const Template: ComponentStory<typeof MessageDialog> = (args) => (
+  <MessageDialog {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {
@@ -22,7 +24,11 @@ WithChildren.args = {
   open: true,
   title: "Dialog Title",
   message: "Dialog Message",
-  children: <div>child <b>bold</b>, more text</div>,
+  children: (
+    <div>
+      child <b>bold</b>, more text
+    </div>
+  ),
 };
 
 export const WithButtons = Template.bind({});

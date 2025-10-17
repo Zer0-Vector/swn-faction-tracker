@@ -1,6 +1,13 @@
 import GoalType from "./GoalType";
 
-type GoalUnit = "Asset" | "Planet" | "Base" | "HP" | "Turn" | "Faction" | "FacCred";
+type GoalUnit =
+  | "Asset"
+  | "Planet"
+  | "Base"
+  | "HP"
+  | "Turn"
+  | "Faction"
+  | "FacCred";
 
 export default interface GoalInfo {
   type: GoalType;

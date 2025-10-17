@@ -33,15 +33,13 @@ interface EditableStatTextBaseProps extends TestableProps {
   editable?: boolean;
 }
 
-export type EditableStatTextProps =
-  & EditableStatTextBaseProps
-  & Pick<TypographyProps, "sx">
-  & Prefixed<Pick<TextFieldProps, "sx">, "input">;
-
+export type EditableStatTextProps = EditableStatTextBaseProps
+  & Partial<Pick<TypographyProps, "sx">>
+  & Partial<Prefixed<Pick<TextFieldProps, "sx">, "input">>;
 
 function maybeParseIntStat(val: string): Maybe<number> {
   try {
-    return parseInt(val);
+    return Number.parseInt(val);
   } catch (e) {
     console.error("Invalid stat value:", val, e);
     return undefined;
@@ -68,50 +66,59 @@ export default function EditableStatText({
     }
   }, [editing]);
 
-  const exitEditMode = useCallback((evt: React.SyntheticEvent<Element>) => {
-    evt.preventDefault();
-    if (editing && valid) {
-      if (hasChanged && textFieldRef.current) {
-        const val = maybeParseIntStat(textFieldRef.current.value);
-        try {
-          if (val !== undefined) {
-            onUpdate(val);
+  const exitEditMode = useCallback(
+    (evt: React.SyntheticEvent<Element>) => {
+      evt.preventDefault();
+      if (editing && valid) {
+        if (hasChanged && textFieldRef.current) {
+          const val = maybeParseIntStat(textFieldRef.current.value);
+          try {
+            if (val !== undefined) {
+              onUpdate(val);
+            }
+          } catch (e) {
+            console.error("Could not update:", textFieldRef.current.value, e);
           }
-        } catch (e) {
-          console.error("Could not update:", textFieldRef.current.value, e);
         }
+        setEditing(false);
+        setHasChanged(false);
       }
-      setEditing(false);
-      setHasChanged(false);
-    }
-  }, [editing, hasChanged, onUpdate, valid]);
+    },
+    [editing, hasChanged, onUpdate, valid]
+  );
 
-  const enterEditMode = useCallback((evt: React.MouseEvent<HTMLElement>) => {
-    evt.stopPropagation();
-    if (editable) {
-      setEditing(true);
-    }
-  }, [editable]);
+  const enterEditMode = useCallback(
+    (evt: React.MouseEvent<HTMLElement>) => {
+      evt.stopPropagation();
+      if (editable) {
+        setEditing(true);
+      }
+    },
+    [editable]
+  );
 
   const handleClick = useCallback((evt: React.MouseEvent<HTMLElement>) => {
     evt.stopPropagation();
   }, []);
 
-  const handleKeyUp = useCallback((evt: React.KeyboardEvent<HTMLElement>) => {
-    if (editing) {
-      if (evt.key === 'Escape') {
-        setEditing(false);
-      } else if (evt.key === 'Enter') {
-        exitEditMode(evt);
+  const handleKeyUp = useCallback(
+    (evt: React.KeyboardEvent<HTMLElement>) => {
+      if (editing) {
+        if (evt.key === "Escape") {
+          setEditing(false);
+        } else if (evt.key === "Enter") {
+          exitEditMode(evt);
+        }
       }
-    }
-  }, [editing, exitEditMode]);
+    },
+    [editing, exitEditMode]
+  );
 
   const validate = useCallback((val: string): boolean => {
     let result = true;
     try {
-      const n = parseInt(val);
-      result = !isNaN(n) && n >= 0;
+      const n = Number.parseInt(val);
+      result = !Number.isNaN(n) && n >= 0;
     } catch {
       result = false;
     }
@@ -119,7 +126,7 @@ export default function EditableStatText({
     return result;
   }, []);
 
-  const handleInputChange = useCallback((_evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback(() => {
     if (!textFieldRef.current) {
       return;
     }

@@ -3,7 +3,10 @@ import { MemoryRouter } from "react-router-dom";
 
 import { render, screen } from "@testing-library/react";
 
-import { LocationContext, LocationsPoset } from "../../contexts/LocationContext";
+import {
+  LocationContext,
+  LocationsPoset,
+} from "../../contexts/LocationContext";
 import { UiStateContext } from "../../contexts/UiStateContext";
 import { UiStateController } from "../../controllers/UiStateController";
 import LocationInfo from "../../utils/LocationInfo";
@@ -14,22 +17,26 @@ import { describe, expect, it, vi } from "vitest";
 
 function renderIt(locations: LocationInfo[] = []) {
   render(
-    <LocationContext.Provider value={{
-      locations: {
-        getAll: () => locations,
-        checkName: (s: Parameters<LocationsPoset['checkName']>[0]) => true,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        subscribe: (_) => () => {},
-        reorder: vi.fn() as LocationsPoset['reorder'],
-      } as LocationsPoset,
-    }}>
-      <UiStateContext.Provider value={{
-        state: {
-          editMode: "EDIT",
-          loginState: "LOGGED_IN",
-        } as UiState,
-        controller: {} as UiStateController,
-      }}>
+    <LocationContext.Provider
+      value={{
+        locations: {
+          getAll: () => locations,
+          checkName: (s: Parameters<LocationsPoset["checkName"]>[0]) => true,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          subscribe: (_) => () => {},
+          reorder: vi.fn() as LocationsPoset["reorder"],
+        } as LocationsPoset,
+      }}
+    >
+      <UiStateContext.Provider
+        value={{
+          state: {
+            editMode: "EDIT",
+            loginState: "LOGGED_IN",
+          } as UiState,
+          controller: {} as UiStateController,
+        }}
+      >
         <MemoryRouter>
           <LocationsPanel />
         </MemoryRouter>
@@ -38,8 +45,8 @@ function renderIt(locations: LocationInfo[] = []) {
   );
 }
 
-describe('default LocationsPanel', () => {
-  it('empty LocationsPanel shows LocationActionsToolbar', () => {
+describe("default LocationsPanel", () => {
+  it("empty LocationsPanel shows LocationActionsToolbar", () => {
     renderIt();
     const lat = screen.getByTestId("locations-action-toolbar");
     expect(lat).toBeInTheDocument();
@@ -47,7 +54,7 @@ describe('default LocationsPanel', () => {
     expect(list).not.toBeInTheDocument();
   });
 
-  it('nonempty LocationsPanel shows LocationActionsToolbar and LocationsList', () => {
+  it("nonempty LocationsPanel shows LocationActionsToolbar and LocationsList", () => {
     renderIt([
       {
         id: "test",

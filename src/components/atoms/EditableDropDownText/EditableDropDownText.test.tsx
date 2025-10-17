@@ -1,4 +1,4 @@
-import React from "react";
+import React, { act } from "react";
 
 import { render, screen, waitFor, within } from "@testing-library/react";
 
@@ -18,33 +18,45 @@ const mockOnUpdate = vi.fn();
 
 function renderIt() {
   return {
-    user: userEvent.setup({ delay: 1500 }),
+    user: userEvent.setup({ delay: 500 }),
 
-    ...render(<EditableDropDownText onUpdate={mockOnUpdate} selectableOptions={options} data-testid="test-eddt">test-one</EditableDropDownText>),
-  }
+    ...render(
+      <EditableDropDownText
+        onUpdate={mockOnUpdate}
+        selectableOptions={options}
+        data-testid="test-eddt"
+      >
+        test-one
+      </EditableDropDownText>
+    ),
+  };
 }
 
-describe('default EditableDropDownText', { timeout: 20000 }, () => {
+describe("default EditableDropDownText", { timeout: 20000 }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders text on init', () => {
+  it("renders text on init", () => {
     renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
     const text = within(outer).getByTestId("editable-dropdown-text");
     expect(text).toBeInTheDocument();
     expect(text).toHaveTextContent("test-one");
-    expect(within(outer).queryByTestId("editable-dropdown-textfield")).not.toBeInTheDocument();
-    expect(within(outer).queryByTestId("editable-dropdown-autocomplete")).not.toBeInTheDocument();
+    expect(
+      within(outer).queryByTestId("editable-dropdown-textfield")
+    ).not.toBeInTheDocument();
+    expect(
+      within(outer).queryByTestId("editable-dropdown-autocomplete")
+    ).not.toBeInTheDocument();
     const button = within(outer).getByTestId("editable-dropdown-button");
     expect(button).toBeInTheDocument();
     expect(button).not.toBeVisible();
   });
 
-  it('renders dropdown after edit button clicked', async () => {
-    const {user} = renderIt();
+  it("renders dropdown after edit button clicked", async () => {
+    const { user } = renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
     const button = within(outer).getByTestId("editable-dropdown-button");
@@ -52,14 +64,19 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
     expect(button).not.toBeVisible();
     await user.click(button);
 
-    expect(within(outer).queryByTestId("editable-dropdown-text")).not.toBeInTheDocument();
-    expect(within(outer).getByTestId("editable-dropdown-autocomplete")).toBeInTheDocument();
-    expect(within(outer).getByTestId("editable-dropdown-textfield")).toBeInTheDocument();
+    expect(
+      within(outer).queryByTestId("editable-dropdown-text")
+    ).not.toBeInTheDocument();
+    expect(
+      within(outer).getByTestId("editable-dropdown-autocomplete")
+    ).toBeInTheDocument();
+    expect(
+      within(outer).getByTestId("editable-dropdown-textfield")
+    ).toBeInTheDocument();
   });
 
-  // FIXME: RACE CONDITION
-  it.todo('calls onUpdate if option clicked', async () => {
-    const {user} = renderIt();
+  it("calls onUpdate if option clicked", async () => {
+    const { user } = renderIt();
 
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
@@ -69,9 +86,13 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
       expect(button).toBeInTheDocument();
       await user.click(button);
 
-      const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
-      expect(autocomplete).toBeInTheDocument();
-    }
+
+      await waitFor(() => expect(
+        within(outer).findByTestId("editable-dropdown-autocomplete")
+      ).toBeDefined(), { timeout: 5000 });
+
+      expect(within(outer).getByTestId("editable-dropdown-autocomplete")).toBeInTheDocument();
+    };
 
     await setupDropdownForSelection();
 
@@ -81,15 +102,15 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
     expect(optionItems.length).toBe(options.length);
 
     const selectedIndex = Math.floor(Math.random() * optionItems.length);
-    const selection = optionItems[selectedIndex];// NOSONAR
+    const selection = optionItems[selectedIndex]; // NOSONAR
     await user.click(selection);
 
-    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1));
+    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1), { timeout: 5000 });
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
 
     expect(mockOnUpdate).toBeCalledWith(selection.textContent);
 
-    mockOnUpdate.mockClear();
+    mockOnUpdate.mockReset();
     await setupDropdownForSelection();
 
     listbox = within(outer).getByRole("listbox");
@@ -100,14 +121,13 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
     const selection2 = optionItems[(selectedIndex + 1) % optionItems.length];
     await user.click(selection2);
 
-    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1));
+    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1), { timeout: 5000 });
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
 
     expect(mockOnUpdate).toBeCalledWith(selection2.textContent);
-
   });
 
-  it('cancels update on Escape', async () => {
+  it("cancels update on Escape", async () => {
     const { user } = renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
@@ -116,7 +136,9 @@ describe('default EditableDropDownText', { timeout: 20000 }, () => {
     expect(button).not.toBeVisible();
     await user.click(button);
 
-    const autocomplete = within(outer).getByTestId("editable-dropdown-autocomplete");
+    const autocomplete = within(outer).getByTestId(
+      "editable-dropdown-autocomplete"
+    );
     expect(autocomplete).toBeInTheDocument();
 
     const listbox = within(outer).getByRole("listbox");

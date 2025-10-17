@@ -46,60 +46,106 @@ const MessageDialog = ({
   children,
   "data-testid": dataTestId,
 }: MessageDialogProps) => {
-  const handleButtonClick = useCallback((button: string, event: React.SyntheticEvent) => {
-    event.stopPropagation();
-    onAction({ action: "BUTTON", reason: button });
-  }, [onAction]);
+  const handleButtonClick = useCallback(
+    (button: string, event: React.SyntheticEvent) => {
+      event.stopPropagation();
+      onAction({ action: "BUTTON", reason: button });
+    },
+    [onAction]
+  );
 
-  const handleCloseClick = useCallback((event: React.SyntheticEvent) => {
-    event.stopPropagation();
-    onAction({ action: "CLOSE", reason: "closeButton" });
-  }, [onAction]);
+  const handleCloseClick = useCallback(
+    (event: React.SyntheticEvent) => {
+      event.stopPropagation();
+      onAction({ action: "CLOSE", reason: "closeButton" });
+    },
+    [onAction]
+  );
 
-  type JustHandleClose = Exclude<ModalProps['onClose'], undefined>;
-  const handleClose = useCallback<JustHandleClose>((_, reason) => {
-    if (!modal) {
-      onAction({ action: "CLOSE", reason });
-    }
-  }, [modal, onAction]);
+  type JustHandleClose = Exclude<ModalProps["onClose"], undefined>;
+  const handleClose = useCallback<JustHandleClose>(
+    (_, reason) => {
+      if (!modal) {
+        onAction({ action: "CLOSE", reason });
+      }
+    },
+    [modal, onAction]
+  );
 
-  const buttonsClickHandlers = useMemo(() => (
-    buttons?.map(b => (evt: React.SyntheticEvent) => handleButtonClick(b, evt)) || []
-  ), [buttons, handleButtonClick]);
+  const buttonsClickHandlers = useMemo(
+    () =>
+      buttons?.map(
+        (b) => (evt: React.SyntheticEvent) => handleButtonClick(b, evt)
+      ) || [],
+    [buttons, handleButtonClick]
+  );
 
-  const renderedButtons = useMemo(() => (
-    buttons?.map((b, i) => <Button key={b} disabled={disabledButtons.includes(b)} onClick={buttonsClickHandlers[i]}>{b}</Button>)
-  ), [buttons, buttonsClickHandlers, disabledButtons]);
+  const renderedButtons = useMemo(
+    () =>
+      buttons?.map((b, i) => (
+        <Button
+          key={b}
+          disabled={disabledButtons.includes(b)}
+          onClick={buttonsClickHandlers[i]}
+        >
+          {b}
+        </Button>
+      )),
+    [buttons, buttonsClickHandlers, disabledButtons]
+  );
 
-  const closeButtonSx = useMemo<SxProps<Theme>>(() => ({
-    position: "absolute",
-    right: theme => theme.spacing(1),
-    top: theme => theme.spacing(1),
-    color: theme => theme.palette.grey[500],
-  }), []);
+  const closeButtonSx = useMemo<SxProps<Theme>>(
+    () => ({
+      position: "absolute",
+      right: (theme) => theme.spacing(1),
+      top: (theme) => theme.spacing(1),
+      color: (theme) => theme.palette.grey[500],
+    }),
+    []
+  );
 
   type JustSxFunc = (theme: Theme) => SystemStyleObject<Theme>;
-  const contentTextSx = useCallback<JustSxFunc>(theme => ({
-    marginBottom: theme.spacing(1.5),
-  }), []);
+  const contentTextSx = useCallback<JustSxFunc>(
+    (theme) => ({
+      marginBottom: theme.spacing(1.5),
+    }),
+    []
+  );
 
-  const closeButton = useMemo(() => (
-    closeable
-    ? (
-      <IconButton onClick={handleCloseClick} size="small" sx={closeButtonSx} data-testid="message-dialog-close-button">
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    ) : null
-  ), [closeButtonSx, closeable, handleCloseClick]);
+  const closeButton = useMemo(
+    () =>
+      closeable ? (
+        <IconButton
+          onClick={handleCloseClick}
+          size="small"
+          sx={closeButtonSx}
+          data-testid="message-dialog-close-button"
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      ) : null,
+    [closeButtonSx, closeable, handleCloseClick]
+  );
 
   return (
-    <Dialog open={open} fullWidth={fullWidth} maxWidth="xs" onClose={handleClose} data-testid={dataTestId}>
+    <Dialog
+      open={open}
+      fullWidth={fullWidth}
+      maxWidth="xs"
+      onClose={handleClose}
+      data-testid={dataTestId}
+    >
       <DialogTitle data-testid="message-dialog-title">
         {title}
         {closeButton}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText sx={contentTextSx} data-testid="message-dialog-message">{message}</DialogContentText>
+        <DialogContentText
+          sx={contentTextSx}
+          data-testid="message-dialog-message"
+        >
+          {message}
+        </DialogContentText>
         {children}
       </DialogContent>
       <DialogActions data-testid="message-dialog-actions">

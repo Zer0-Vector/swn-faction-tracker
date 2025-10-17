@@ -12,10 +12,12 @@ export const GoalTypes = [
   "Wealth of Worlds",
 ] as const;
 
-type GoalType = typeof GoalTypes[number];
+type GoalType = (typeof GoalTypes)[number];
 
 export function isGoalType(maybeGoal: unknown): maybeGoal is GoalType {
-  return typeof maybeGoal === "string" && GoalTypes.includes(maybeGoal as GoalType);
+  return (
+    typeof maybeGoal === "string" && GoalTypes.includes(maybeGoal as GoalType)
+  );
 }
 
 export default GoalType;

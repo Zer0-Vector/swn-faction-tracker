@@ -32,7 +32,8 @@ export default {
 
 const Template: Story<StoryProps> = (args) => {
   const [mode, setMode] = useState<GameMode>(args.mode);
-  const uiStateContext = useMemo(() => ({
+  const uiStateContext = useMemo(
+    () => ({
       state: {
         editMode: mode,
       } as UiState,
@@ -42,7 +43,9 @@ const Template: Story<StoryProps> = (args) => {
           setMode(val as GameMode);
         },
       } as UiStateController,
-    }), [mode]);
+    }),
+    [mode]
+  );
   return (
     <UiStateContext.Provider value={uiStateContext}>
       <ModeToggleButtons />

@@ -15,30 +15,38 @@ import VerificationEmailErrorDialog from "./VerificationEmailErrorDialog";
 export default {
   component: VerificationEmailErrorDialog,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {
-          loginState: "VERIFICATION_ERROR",
-        } as UiState,
-        controller: MockActionUiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {
+            loginState: "VERIFICATION_ERROR",
+          } as UiState,
+          controller: MockActionUiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
-    story => (
-      <AuthContext.Provider value={{
-        currentUser: {} as User,
-        logout: () => {
-          action("logout")([]);
-          return Promise.resolve();
-        },
-      } as ProvidedAuth}>
+    (story) => (
+      <AuthContext.Provider
+        value={
+          {
+            currentUser: {} as User,
+            logout: () => {
+              action("logout")([]);
+              return Promise.resolve();
+            },
+          } as ProvidedAuth
+        }
+      >
         {story()}
       </AuthContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof VerificationEmailErrorDialog>;
 
-const Template: ComponentStory<typeof VerificationEmailErrorDialog> = () => <VerificationEmailErrorDialog />;
+const Template: ComponentStory<typeof VerificationEmailErrorDialog> = () => (
+  <VerificationEmailErrorDialog />
+);
 
 export const Default = Template.bind({});

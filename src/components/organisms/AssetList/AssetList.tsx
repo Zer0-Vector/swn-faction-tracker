@@ -19,22 +19,31 @@ interface AssetSummaryProps extends RequiredChildrenProps<string> {
 }
 
 const AssetSummaryComponent = ({ expanded, children }: AssetSummaryProps) => {
-  const summarySx = useMemo(() => ({ backgroundColor: expanded ? "action.selected" : "inherit" }), [expanded]);
-  return (
-    <AccordionSummary sx={summarySx}>
-      {children}
-    </AccordionSummary>
+  const summarySx = useMemo(
+    () => ({ backgroundColor: expanded ? "action.selected" : "inherit" }),
+    [expanded]
   );
+  return <AccordionSummary sx={summarySx}>{children}</AccordionSummary>;
 };
 
-const AssetSummary = React.memo(AssetSummaryComponent, (prev, next) => (prev.expanded === next.expanded && prev.children === next.children));
+const AssetSummary = React.memo(
+  AssetSummaryComponent,
+  (prev, next) =>
+    prev.expanded === next.expanded && prev.children === next.children
+);
 
 function useAssetList(factionId: Maybe<string>) {
   const { assets } = useContext(AssetContext);
-  const [list, setList] = useState(assets.getAll().filter(a => a.factionId === factionId));
-  useEffect(() => assets.subscribe(
-    () => setList(assets.getAll().filter(a => a.factionId === factionId))
-  ), [assets, factionId]);
+  const [list, setList] = useState(
+    assets.getAll().filter((a) => a.factionId === factionId)
+  );
+  useEffect(
+    () =>
+      assets.subscribe(() =>
+        setList(assets.getAll().filter((a) => a.factionId === factionId))
+      ),
+    [assets, factionId]
+  );
   return {
     list,
   };
@@ -46,16 +55,16 @@ export default function AssetList() {
   const { assetSlug, factionSlug } = useSelectionSlug();
   const nav = useNavigate();
 
-
-  const handleSelectAsset = (pa: PurchasedAsset) => (_evt: React.SyntheticEvent, expanded: boolean) => {
-    if (expanded) {
-      console.debug("Selecting asset", pa.slug);
-      nav(`/factions/${factionSlug}/assets/${pa.slug}`);
-    } else {
-      console.debug("Deselecting asset", pa.slug);
-      nav(`/factions/${factionSlug}`);
-    }
-  };
+  const handleSelectAsset =
+    (pa: PurchasedAsset) => (_evt: React.SyntheticEvent, expanded: boolean) => {
+      if (expanded) {
+        console.debug("Selecting asset", pa.slug);
+        nav(`/factions/${factionSlug}/assets/${pa.slug}`);
+      } else {
+        console.debug("Deselecting asset", pa.slug);
+        nav(`/factions/${factionSlug}`);
+      }
+    };
   if (faction === undefined) {
     return <Typography color="error">No faction selected!</Typography>;
   }
@@ -64,22 +73,28 @@ export default function AssetList() {
   return (
     // TODO make drag and drop
     <>
-      {
-        assets.length > 0 ? (
-          assets.map((pa, index) => {
-            const expanded = pa.slug === assetSlug;
-            const name = pa.nickname ? `${pa.nickname} (${pa.name})` : pa.name;
-            return (
-              <Accordion key={`${pa.slug}_${index}`} expanded={expanded} onChange={handleSelectAsset(pa)}>
-                <AssetSummary expanded={expanded}>{name}</AssetSummary>
-                <AccordionDetails><AssetDetails asset={pa} /></AccordionDetails>
-              </Accordion>
-            );
-          })
-        ) : (
-          <Typography color="warning.main" fontStyle="italic">No Assets</Typography>
-        )
-      }
+      {assets.length > 0 ? (
+        assets.map((pa, index) => {
+          const expanded = pa.slug === assetSlug;
+          const name = pa.nickname ? `${pa.nickname} (${pa.name})` : pa.name;
+          return (
+            <Accordion
+              key={`${pa.slug}_${index}`}
+              expanded={expanded}
+              onChange={handleSelectAsset(pa)}
+            >
+              <AssetSummary expanded={expanded}>{name}</AssetSummary>
+              <AccordionDetails>
+                <AssetDetails asset={pa} />
+              </AccordionDetails>
+            </Accordion>
+          );
+        })
+      ) : (
+        <Typography color="warning.main" fontStyle="italic">
+          No Assets
+        </Typography>
+      )}
     </>
   );
 }

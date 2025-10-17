@@ -49,4 +49,3 @@ describe("HomeworldText", () => {
     expect(mockUpdate).toHaveBeenCalledWith("f1", "homeworldId", "loc2");
   });
 });
-

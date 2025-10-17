@@ -16,19 +16,17 @@ const mockAsset: PurchasedAsset = {
 };
 
 function renderIt() {
-  render(
-    <AssetDetails asset={mockAsset} />
-  );
+  render(<AssetDetails asset={mockAsset} />);
 }
 
-describe('AssetDetails', () => {
-  it('renders card', () => {
+describe("AssetDetails", () => {
+  it("renders card", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
   });
 
-  it('renders description', () => {
+  it("renders description", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
@@ -38,7 +36,7 @@ describe('AssetDetails', () => {
     expect(desc.textContent).toBeTruthy();
   });
 
-  it('renders attribute text', () => {
+  it("renders attribute text", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
@@ -48,7 +46,7 @@ describe('AssetDetails', () => {
     expect(attr.textContent).toBeTruthy();
   });
 
-  it('renders hp summary', () => {
+  it("renders hp summary", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
@@ -59,7 +57,7 @@ describe('AssetDetails', () => {
     expect(hp.textContent).toContain("/");
   });
 
-  it('renders type', () => {
+  it("renders type", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
@@ -69,7 +67,7 @@ describe('AssetDetails', () => {
     expect(type.textContent).toBeTruthy();
   });
 
-  it('renders upkeep', () => {
+  it("renders upkeep", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
@@ -85,7 +83,7 @@ describe('AssetDetails', () => {
     expect(content.textContent).toBeTruthy();
   });
 
-  it('renders attack', () => {
+  it("renders attack", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();
@@ -101,7 +99,7 @@ describe('AssetDetails', () => {
     expect(content.textContent).toBeTruthy();
   });
 
-  it('renders counter', () => {
+  it("renders counter", () => {
     renderIt();
     const card = screen.getByTestId("asset-details");
     expect(card).toBeInTheDocument();

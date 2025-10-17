@@ -1,4 +1,3 @@
-
 import { useFactions } from "../contexts/FactionContext";
 
 import { useSelectionSlug } from "./useSelectionSlug";

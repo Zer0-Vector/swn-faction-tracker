@@ -11,7 +11,7 @@ export type DiceDefinition =
 
 export type AssetAttackResult =
   | { type: "REVEAL_STEALTHED" }
-  | { type: "DAMAGE", damage: DiceDefinition };
+  | { type: "DAMAGE"; damage: DiceDefinition };
 
 export interface AssetAttackInfo {
   offense: FactionAttribute;

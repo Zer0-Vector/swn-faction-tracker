@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ vars.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0

@@ -11,13 +11,15 @@ import GoalProgress from "./GoalProgress";
 export default {
   component: GoalProgress,
   decorators: [
-    story => {
+    (story) => {
       return (
-        <FactionContext.Provider value={{
-          factions: {
-            ...MockAction("update"),
-          } as unknown as FactionPoset,
-        }}>
+        <FactionContext.Provider
+          value={{
+            factions: {
+              ...MockAction("update"),
+            } as unknown as FactionPoset,
+          }}
+        >
           {story()}
         </FactionContext.Provider>
       );
@@ -25,7 +27,9 @@ export default {
   ],
 } as ComponentMeta<typeof GoalProgress>;
 
-const Template: ComponentStory<typeof GoalProgress> = args => <GoalProgress {...args} />;
+const Template: ComponentStory<typeof GoalProgress> = (args) => (
+  <GoalProgress {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

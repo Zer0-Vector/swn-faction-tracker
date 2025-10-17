@@ -1,8 +1,10 @@
 import React from "react";
-import { Item, ItemHeader } from "./helpers";
+
 import TagText, { TagTextProps } from "@/components/molecules/TagText/TagText";
 
-type TagItemProps = TagTextProps
+import { Item, ItemHeader } from "./helpers";
+
+type TagItemProps = TagTextProps;
 
 export default function TagItem(props: Readonly<TagItemProps>) {
   return (

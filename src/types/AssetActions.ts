@@ -41,14 +41,9 @@ interface SacrificeActionInfo extends IAssetActionInfo<null> {
 }
 
 /* Instant Action */
-export type InstantTrigger = 
-  | "PERMISSION_GRANTED"
-  | "ATTACK"
-  | "DEFEND";
+export type InstantTrigger = "PERMISSION_GRANTED" | "ATTACK" | "DEFEND";
 
-export type InstantEffect = 
-  | "PERMISSION_DENIED"
-  | "PREVENT_TAG_DICE";
+export type InstantEffect = "PERMISSION_DENIED" | "PREVENT_TAG_DICE";
 
 interface InstantTest {
   offense: FactionAttribute;
@@ -70,7 +65,8 @@ interface SabotageActionInfo extends IAssetActionInfo<null> {
   type: "SABOTAGE";
 }
 
-interface AttackSideEffectInfo extends IAssetActionInfo<AttackSideEffectDetails> {
+interface AttackSideEffectInfo
+  extends IAssetActionInfo<AttackSideEffectDetails> {
   type: "ATTACK_SIDE_EFFECT";
 }
 
@@ -78,7 +74,8 @@ interface HarvestActionInfo extends IAssetActionInfo<HarvestActionDetails> {
   type: "HARVEST";
 }
 
-interface PurchaseTaxActionInfo extends IAssetActionInfo<PurchaseTaxActionDetails> {
+interface PurchaseTaxActionInfo
+  extends IAssetActionInfo<PurchaseTaxActionDetails> {
   type: "PURCHASE_TAX";
 }
 

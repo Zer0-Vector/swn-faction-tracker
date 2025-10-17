@@ -16,6 +16,6 @@ export const LoginStates = [
   "PASSWORD_RESET_ERROR", // showing error dialog; email may not be sent
 ] as const;
 
-type LoginState = typeof LoginStates[number];
+type LoginState = (typeof LoginStates)[number];
 
 export default LoginState;

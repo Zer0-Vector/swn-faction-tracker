@@ -13,20 +13,24 @@ import UserMenu from "./UserMenu";
 export default {
   component: UserMenu,
   decorators: [
-    story => (
-      <UiStateContext.Provider value={{
-        state: {} as UiState,
-        controller: {
-          ...MockAction("setLoginState"),
-        } as unknown as UiStateController,
-      }}>
+    (story) => (
+      <UiStateContext.Provider
+        value={{
+          state: {} as UiState,
+          controller: {
+            ...MockAction("setLoginState"),
+          } as unknown as UiStateController,
+        }}
+      >
         {story()}
       </UiStateContext.Provider>
     ),
   ],
 } as ComponentMeta<typeof UserMenu>;
 
-const Template: ComponentStory<typeof UserMenu> = args => <UserMenu {...args} />;
+const Template: ComponentStory<typeof UserMenu> = (args) => (
+  <UserMenu {...args} />
+);
 
 export const LoggedOut = Template.bind({});
 LoggedOut.args = {

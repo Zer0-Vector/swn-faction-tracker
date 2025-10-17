@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { ReadonlyPropsWithChildren } from "@/types/ReadonlyPropsWithChildren";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -27,8 +28,8 @@ export interface PageContainerProps {
 type GridItemProps = { xs: GridSize } & RequiredChildrenProps;
 
 const GridItemComp = ({ xs, children }: GridItemProps) => (
-  <Grid item
-    xs={xs}
+  <Grid
+    size={xs}
     display="flex"
     justifyContent="flex-start"
     alignItems="center"
@@ -39,49 +40,65 @@ const GridItemComp = ({ xs, children }: GridItemProps) => (
 
 const GridItem = React.memo(GridItemComp);
 
-export default function PageContainer({ children }: PageContainerProps) {
+export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
   const { state } = useContext(UiStateContext);
   const location = useLocation();
   const { currentUser } = useAuth();
 
   const tab = useMemo(
-    () => location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS", 
+    () =>
+      location.pathname.startsWith("/locations") ? "LOCATIONS" : "FACTIONS",
     [location.pathname]
   );
 
   console.debug("Rendering PageContainer...");
 
-  const tabSx = useMemo<SxProps<Theme>>(() => ({
-    color: "primary.contrastText",
-    '&:hover': {
-      color: "primary.light",
-      backgroundColor: "action.hover",
-    },
-  }), []);
+  const tabSx = useMemo<SxProps<Theme>>(
+    () => ({
+      color: "primary.contrastText",
+      "&:hover": {
+        color: "primary.light",
+        backgroundColor: "action.hover",
+      },
+    }),
+    []
+  );
 
-  const boxSx = useMemo<SxProps<Theme>>(() => ({
-    display: "flex",
-    minHeight: "100vh",
-    flexDirection: "column",
-    alignItems: "stretch",
-  }), []);
+  const boxSx = useMemo<SxProps<Theme>>(
+    () => ({
+      display: "flex",
+      minHeight: "100vh",
+      flexDirection: "column",
+      alignItems: "stretch",
+    }),
+    []
+  );
 
-  const appBarSx = useMemo<SxProps<Theme>>(() => ({ 
-    color: "primary.contrastText",
-    backgroundColor: "primary.dark",
-  }), []);
+  const appBarSx = useMemo<SxProps<Theme>>(
+    () => ({
+      color: "primary.contrastText",
+      backgroundColor: "primary.dark",
+    }),
+    []
+  );
 
-  const appTitleSx = useMemo<SxProps<Theme>>(() => ({
-    mr: 2,
-    color: "primary.contrastText",
-    whiteSpace: "nowrap",
-  }), []);
+  const appTitleSx = useMemo<SxProps<Theme>>(
+    () => ({
+      mr: 2,
+      color: "primary.contrastText",
+      whiteSpace: "nowrap",
+    }),
+    []
+  );
 
-  const containerSx = useMemo<SxProps<Theme>>(() => ({
-    width: "100vw",
-    display: "grid",
-    gridTemplateColumns: "40% 60%",
-  }), []);
+  const containerSx = useMemo<SxProps<Theme>>(
+    () => ({
+      width: "100vw",
+      display: "grid",
+      gridTemplateColumns: "40% 60%",
+    }),
+    []
+  );
 
   return (
     <>
@@ -89,9 +106,12 @@ export default function PageContainer({ children }: PageContainerProps) {
       <Box sx={boxSx} data-testid="page-container">
         <AppBar sx={appBarSx}>
           <Toolbar>
-            <Grid container>{/* TODO use different layout container */}
+            <Grid container>
+              {/* TODO use different layout container */}
               <GridItem xs={3.5}>
-                <Typography variant="h1" sx={appTitleSx}>SWN Faction Tracker</Typography>
+                <Typography variant="h1" sx={appTitleSx}>
+                  SWN Faction Tracker
+                </Typography>
               </GridItem>
               <GridItem xs={4.5}>
                 <Tabs value={tab} component="nav">
@@ -101,14 +121,14 @@ export default function PageContainer({ children }: PageContainerProps) {
                     component={Link}
                     to="/factions"
                     sx={tabSx}
-                    />
+                  />
                   <Tab
                     value="LOCATIONS"
                     label="Locations"
                     component={Link}
                     to="/locations"
                     sx={tabSx}
-                    />
+                  />
                 </Tabs>
               </GridItem>
               <GridItem xs={3}>
@@ -121,14 +141,17 @@ export default function PageContainer({ children }: PageContainerProps) {
           </Toolbar>
         </AppBar>
         <Toolbar id="appbar-shim" />
-        <Slide in={state.editMode === "TURN"} direction="down" appear={false} unmountOnExit={true}>
+        <Slide
+          in={state.editMode === "TURN"}
+          direction="down"
+          appear={false}
+          unmountOnExit={true}
+        >
           <Box paddingX={4} paddingY={2}>
-            <TurnPhaseStepper /> 
+            <TurnPhaseStepper />
           </Box>
         </Slide>
-        <Container sx={containerSx}>
-          {children}
-        </Container>
+        <Container sx={containerSx}>{children}</Container>
       </Box>
     </>
   );

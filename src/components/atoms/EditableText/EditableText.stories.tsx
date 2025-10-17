@@ -8,7 +8,7 @@ export default {
   component: EditableText,
 } as ComponentMeta<typeof EditableText>;
 
-const Template: ComponentStory<typeof EditableText> = args => {
+const Template: ComponentStory<typeof EditableText> = (args) => {
   const [text, setText] = useState<string>(args.children);
   const handleUpdate = (val: string) => {
     setText(val);
@@ -38,9 +38,7 @@ Boxed.args = {
   },
 };
 Boxed.decorators = [
-  story => (
-    <div style={{ maxWidth: "10ch", border: "solid black 1px" }}>
-      {story()}
-    </div>
+  (story) => (
+    <div style={{ maxWidth: "10ch", border: "solid black 1px" }}>{story()}</div>
   ),
 ];

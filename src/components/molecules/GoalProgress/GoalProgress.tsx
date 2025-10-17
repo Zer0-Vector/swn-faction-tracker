@@ -12,15 +12,16 @@ interface GoalProgressProps {
 }
 
 export default function GoalProgress({ faction }: GoalProgressProps) {
-  const factions  = useFactions();
-  const inputSx = React.useMemo<SxProps<Theme>>(() => ({
-    width: "5ch",
-  }), []);
+  const factions = useFactions();
+  const inputSx = React.useMemo<SxProps<Theme>>(
+    () => ({
+      width: "5ch",
+    }),
+    []
+  );
 
   if (!faction.goal) {
-    return (
-      <em data-testid="goal-progress-empty">Select Goal</em>
-    );
+    return <em data-testid="goal-progress-empty">Select Goal</em>;
   }
 
   const handleUpdateTally = (val: number) => {
@@ -47,9 +48,21 @@ export default function GoalProgress({ faction }: GoalProgressProps) {
 
   return (
     <span data-testid="goal-progress">
-      <ControlledStat data-testid="goal-tally" onUpdate={handleUpdateTally} inputSx={inputSx}>{tally}</ControlledStat>
+      <ControlledStat
+        data-testid="goal-tally"
+        onUpdate={handleUpdateTally}
+        inputSx={inputSx}
+      >
+        {tally}
+      </ControlledStat>
       <StatText>/</StatText>
-      <ControlledStat data-testid="goal-target" onUpdate={handleUpdateTarget} inputSx={inputSx}>{target}</ControlledStat>
+      <ControlledStat
+        data-testid="goal-target"
+        onUpdate={handleUpdateTarget}
+        inputSx={inputSx}
+      >
+        {target}
+      </ControlledStat>
     </span>
   );
 }

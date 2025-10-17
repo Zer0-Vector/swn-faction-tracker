@@ -53,7 +53,7 @@ const CunningAssetList = [
   "Saboteurs",
   "Blackmail",
   "Seductress",
-  
+
   // 3
   "Cyberninjas",
   "Stealth",
@@ -77,8 +77,7 @@ const AssetList = [
   ...WealthAssetList,
 ] as const;
 
-
-type AssetKey = typeof AssetList[number];
+type AssetKey = (typeof AssetList)[number];
 
 export function isAsset(name: string): name is AssetKey {
   return AssetList.includes(name as AssetKey);
@@ -91,7 +90,8 @@ type AssetMap = {
 const ASSETS: AssetMap = {
   /* Base of Influence */
   "Base of Influence": {
-    description: "This asset is special, and is required for purchasing or upgrading units on a particular world. Any damage done to a Base of Influence is also done to a faction's hit points. The cost of a Base of Influence equals its maximum hit points, which can be any number up to the total maximum hit points of its owning faction. A faction's bases of influence don't count against their maximum assets. A Base of Influence can only be purchased with the Expand Influence action.",
+    description:
+      "This asset is special, and is required for purchasing or upgrading units on a particular world. Any damage done to a Base of Influence is also done to a faction's hit points. The cost of a Base of Influence equals its maximum hit points, which can be any number up to the total maximum hit points of its owning faction. A faction's bases of influence don't count against their maximum assets. A Base of Influence can only be purchased with the Expand Influence action.",
     attribute: "SPECIAL",
     level: 1,
     maxHp: null,
@@ -107,8 +107,9 @@ const ASSETS: AssetMap = {
   },
 
   /* Cunning 1 */
-  "Smugglers": {
-    description: "Men and women skilled in extracting personnel. For one FacCred, the smugglers asset can transport itself and/or any one Special Forces unit to a planet up to two hexes away",
+  Smugglers: {
+    description:
+      "Men and women skilled in extracting personnel. For one FacCred, the smugglers asset can transport itself and/or any one Special Forces unit to a planet up to two hexes away",
     attribute: "CUNNING",
     level: 1,
     maxHp: 4,
@@ -138,8 +139,9 @@ const ASSETS: AssetMap = {
     },
     restriction: null,
   },
-  "Informers": {
-    description: "Minions that lace a planet's underworld, watchful for intruders. They can choose to Attack a faction without specifying a target asset. On a successful Cunning vs. Cunning attack, all Stealthed assets on the planet belonging to that faction are revealed. Informers can target a faction even if none of their assets are visible on a world; at worst, they simply learn that there are no stealthed assets.",
+  Informers: {
+    description:
+      "Minions that lace a planet's underworld, watchful for intruders. They can choose to Attack a faction without specifying a target asset. On a successful Cunning vs. Cunning attack, all Stealthed assets on the planet belonging to that faction are revealed. Informers can target a faction even if none of their assets are visible on a world; at worst, they simply learn that there are no stealthed assets.",
     attribute: "CUNNING",
     level: 1,
     maxHp: 3,
@@ -160,7 +162,8 @@ const ASSETS: AssetMap = {
     restriction: null,
   },
   "False Front": {
-    description: "This asset allows a faction to preserve more valuable resources. If another asset on the planet suffers enough damage to destroy it, the faction can sacrifice the false front instead to nullify the killing blow.",
+    description:
+      "This asset allows a faction to preserve more valuable resources. If another asset on the planet suffers enough damage to destroy it, the faction can sacrifice the false front instead to nullify the killing blow.",
     attribute: "CUNNING",
     level: 1,
     maxHp: 2,
@@ -180,8 +183,9 @@ const ASSETS: AssetMap = {
   },
 
   /* Cunning 2 */
-  "Lobbyists": {
-    description: "Usable to block the governmental permission that is sometimes required to buy an asset or transport it into a system. When a rival faction gains permission to do so, the Lobbyists can make an immediate Cunning vs. Cunning test against the faction; if successful, the permission is withdrawn and cannot be re-attempted until next turn.",
+  Lobbyists: {
+    description:
+      "Usable to block the governmental permission that is sometimes required to buy an asset or transport it into a system. When a rival faction gains permission to do so, the Lobbyists can make an immediate Cunning vs. Cunning test against the faction; if successful, the permission is withdrawn and cannot be re-attempted until next turn.",
     attribute: "CUNNING",
     level: 2,
     maxHp: 4,
@@ -206,8 +210,9 @@ const ASSETS: AssetMap = {
     },
     restriction: null,
   },
-  "Saboteurs": {
-    description: "Minions rained in launching strikes against enemy operations. An asset attacked by saboteurs cannot apply any Use Asset Ability action until the start of the attacking faction's next turn. This applies whether or not the attack was successful.",
+  Saboteurs: {
+    description:
+      "Minions rained in launching strikes against enemy operations. An asset attacked by saboteurs cannot apply any Use Asset Ability action until the start of the attacking faction's next turn. This applies whether or not the attack was successful.",
     attribute: "CUNNING",
     level: 2,
     maxHp: 6,
@@ -232,8 +237,9 @@ const ASSETS: AssetMap = {
     },
     restriction: null,
   },
-  "Blackmail": {
-    description: "Selectively degrade the effectiveness of an asset. Any attempt to attack or defend against Blackmail loses any bonus dice earned by tags.",
+  Blackmail: {
+    description:
+      "Selectively degrade the effectiveness of an asset. Any attempt to attack or defend against Blackmail loses any bonus dice earned by tags.",
     attribute: "CUNNING",
     level: 2,
     maxHp: 4,
@@ -262,8 +268,9 @@ const ASSETS: AssetMap = {
     },
     restriction: null,
   },
-  "Seductress": {
-    description: "They and their male equivalents subvert the leadership of enemy assets. As an action, a Seductress can travel to any world within one hex. As an attack, a Seductress does no damage, but an asset that has been successfully attacked immediately reveals any other Stealthed assets of that faction on the planet. Only Special Forces units can attack a Seductress.",
+  Seductress: {
+    description:
+      "They and their male equivalents subvert the leadership of enemy assets. As an action, a Seductress can travel to any world within one hex. As an attack, a Seductress does no damage, but an asset that has been successfully attacked immediately reveals any other Stealthed assets of that faction on the planet. Only Special Forces units can attack a Seductress.",
     attribute: "CUNNING",
     level: 2,
     maxHp: 4,
@@ -295,9 +302,9 @@ const ASSETS: AssetMap = {
       },
     },
   },
-  
+
   /* Cunning 3 */
-  "Cyberninjas": {
+  Cyberninjas: {
     description: "TODO",
     attribute: "CUNNING",
     level: 3,
@@ -319,7 +326,7 @@ const ASSETS: AssetMap = {
     action: null,
     restriction: null,
   },
-  "Stealth": {
+  Stealth: {
     description: "TODO",
     attribute: "CUNNING",
     level: 3,
@@ -364,10 +371,11 @@ const ASSETS: AssetMap = {
   /* Cunning 6 */
   /* Cunning 7 */
   /* Cunning 8 */
-  
+
   /* Force 1 */
   "Security Personnel": {
-    description: "Standard civilian guards or policemen, usually equipped with nonlethal weaponry or personal sidearms.",
+    description:
+      "Standard civilian guards or policemen, usually equipped with nonlethal weaponry or personal sidearms.",
     attribute: "FORCE",
     level: 1,
     maxHp: 3,
@@ -388,8 +396,9 @@ const ASSETS: AssetMap = {
     action: null,
     restriction: null,
   },
-  "Hitmen": {
-    description: "Crudely-equipped thugs and assassins with minimal training that have been aimed at a rival faction's leadership.",
+  Hitmen: {
+    description:
+      "Crudely-equipped thugs and assassins with minimal training that have been aimed at a rival faction's leadership.",
     attribute: "FORCE",
     level: 1,
     maxHp: 1,
@@ -411,7 +420,8 @@ const ASSETS: AssetMap = {
     restriction: null,
   },
   "Militia Unit": {
-    description: "Groups of lightly-equipped irregular troops with rudimentary military training but no heavy support.",
+    description:
+      "Groups of lightly-equipped irregular troops with rudimentary military training but no heavy support.",
     attribute: "FORCE",
     level: 1,
     maxHp: 4,
@@ -440,9 +450,9 @@ const ASSETS: AssetMap = {
   /* Force 6 */
   /* Force 7 */
   /* Force 8 */
-  
+
   /* Wealth 1 */
-  "Franchise": {
+  Franchise: {
     description: "TODO",
     attribute: "WEALTH",
     level: 1,
@@ -470,7 +480,7 @@ const ASSETS: AssetMap = {
       },
     },
   },
-  "Harvesters": {
+  Harvesters: {
     description: "TODO",
     attribute: "WEALTH",
     level: 1,
