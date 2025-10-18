@@ -10,19 +10,37 @@
       },
       "problemMatcher": [],
       "label": "npm: build",
-      "detail": "react-scripts build --verbose"
+      "detail": "tsc && vite build"
     },
     {
       "type": "npm",
-      "script": "start",
+      "script": "dev",
       "isBackground": true,
-      "problemMatcher": ["$eslint-compact", "$tsc-watch"],
-      "label": "npm: start",
-      "detail": "react-scripts start",
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": [{
+          "kind": "file",
+          "regexp": "^$",
+          "file": 1,
+          "message": 1
+          }],
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}"
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Vite v",
+          "endsPattern": "Local:|Network:"
+        }
+      },
+      "label": "npm: dev",
+      "detail": "vite start dev server",
       "group": "none",
       "runOptions": {
         "instanceLimit": 1
-      }
+      },
+
     }
   ]
 }
