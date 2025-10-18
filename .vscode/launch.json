@@ -7,7 +7,7 @@
     {
       "name": "Launch via NPM",
       "request": "launch",
-      "runtimeArgs": ["start"],
+      "runtimeArgs": ["dev"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "type": "node"
@@ -17,9 +17,9 @@
       "type": "firefox",
       "request": "launch",
       "reAttach": true,
-      "url": "http://localhost:3000",
+      "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/build",
-      "preLaunchTask": "npm: start",
+      "preLaunchTask": "npm: dev",
       "clearConsoleOnReload": true,
       "internalConsoleOptions": "openOnSessionStart",
       "pathMappings": [
@@ -27,11 +27,7 @@
           "url": "webpack:///./src/",
           "path": "${workspaceFolder}/src"
         }
-      ],
-      "reloadOnChange": {
-        "watch": "${workspaceFolder}/src/**/*.js",
-        "ignore": "**/node_modules/**"
-      }
+      ]
     }
   ]
 }
