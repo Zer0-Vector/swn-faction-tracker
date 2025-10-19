@@ -27,7 +27,6 @@ const GridItemComp = (props: GridItemProps) => (
     display="flex"
     justifyContent="center"
     alignItems="center"
-    border="red dotted 3px"
     {...props}
   >
     {props.children}
