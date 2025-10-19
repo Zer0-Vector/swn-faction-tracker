@@ -8,6 +8,7 @@ import { UiStateContext } from "@/contexts/UiStateContext";
 import { useAuth } from "@/hooks/useAuth";
 import { RequiredChildrenProps } from "@/types/ChildrenProps";
 import { ReadonlyPropsWithChildren } from "@/types/ReadonlyPropsWithChildren";
+import { SxProps } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -48,7 +49,7 @@ export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
 
   console.debug("Rendering PageContainer...");
 
-  const tabSx = {
+  const tabSx: SxProps = {
     color: "primary.contrastText",
     "&:hover": {
       color: "primary.light",
@@ -56,20 +57,20 @@ export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
     },
   };
 
-  const pageContainerSx = {
+  const pageContainerSx: SxProps = {
     display: "flex",
     minHeight: "100vh",
     flexDirection: "column",
     alignItems: "stretch",
   };
 
-  const appBarSx = {
+  const appBarSx: SxProps = {
     color: "primary.contrastText",
     backgroundColor: "primary.dark",
+    marginBottom: 2,
   };
 
-  const contentContainerSx = {
-    width: "100vw",
+  const contentContainerSx: SxProps = {
     display: "grid",
     gridTemplateColumns: "40% 60%",
   };
@@ -78,7 +79,7 @@ export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
     <>
       <CssBaseline />
       <Box sx={pageContainerSx} data-testid="page-container">
-        <AppBar sx={appBarSx} data-testid="app-bar">
+        <AppBar position="sticky" sx={appBarSx} data-testid="app-bar">
           <Toolbar data-testid="toolbar">
             <Grid container
                 spacing={{ lg: 4, md: 3, sm: 2, xs: 1}}
@@ -126,7 +127,6 @@ export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
             </Grid>
           </Toolbar>
         </AppBar>
-        <Toolbar id="appbar-shim" />
         <Slide
           in={state.editMode === "TURN"}
           direction="down"
