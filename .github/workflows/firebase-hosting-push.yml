@@ -19,7 +19,7 @@ jobs:
         id: check
         run: |
           git fetch origin release
-          if git merge-base --is-ancestor $(git rev-parse origin/main) $(git rev-parse HEAD); then
+          if git merge-base --is-ancestor $(git rev-parse origin/release) $(git rev-parse HEAD); then
             echo "on_release=true" >> "$GITHUB_OUTPUT"
           else
             echo "on_release=false" >> "$GITHUB_OUTPUT"
