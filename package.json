@@ -27,9 +27,9 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic",
-    "preversion": "git switch main && git switch -c prepare/${npm_package_version} && npm run ci-test",
+    "preversion": "git switch main && git switch -c prepare/%npm_package_version% && npm run ci-test",
     "version": "npm run build",
-    "postversion": "git push && git push --tags && git switch -"
+    "postversion": "git push && git push --tags"
   },
   "browserslist": {
     "production": [
