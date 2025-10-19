@@ -57,7 +57,7 @@ export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
     },
   };
 
-  const boxSx = {
+  const pageContainerSx = {
     display: "flex",
     minHeight: "100vh",
     flexDirection: "column",
@@ -78,7 +78,7 @@ export default function PageContainer({ children }: ReadonlyPropsWithChildren) {
   return (
     <>
       <CssBaseline />
-      <Box sx={boxSx} data-testid="page-container">
+      <Box sx={pageContainerSx} data-testid="page-container">
         <AppBar sx={appBarSx} data-testid="app-bar">
           <Toolbar data-testid="toolbar">
             <Grid container
