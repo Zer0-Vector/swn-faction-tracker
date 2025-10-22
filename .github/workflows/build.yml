@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - "**/*.plantuml"
+      - "**/*.md"
   workflow_dispatch:
 jobs:
   build:
@@ -47,7 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   chromatic:
-    # XXX: disabled for now
+    # FIXME: disabled for now until storybook works again
     if: false
     name: Chromatic Deployment
     runs-on: ubuntu-latest
@@ -65,18 +68,3 @@ jobs:
         uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-  diagrams:
-    name: Diagrams
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/plantuml
-        with:
-          infiles: design/**/*.plantuml
-          outdir: png
-      - name: "Upload Diagrams"
-        uses: actions/upload-artifact@v4
-        with:
-          name: diagrams
-          path: "png/**/*.png"
-          if-no-files-found: error
