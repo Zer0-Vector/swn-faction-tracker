@@ -89,6 +89,7 @@ const MessageDialog = ({
           key={b}
           disabled={disabledButtons.includes(b)}
           onClick={buttonsClickHandlers[i]}
+          data-testid={`message-dialog-button-${b}`}
         >
           {b}
         </Button>
