@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   chromatic:
-    # XXX: disabled for now
+    # FIXME: disabled for now until storybook works again
     if: false
     name: Chromatic Deployment
     runs-on: ubuntu-latest
