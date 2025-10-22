@@ -65,18 +65,3 @@ jobs:
         uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-  diagrams:
-    name: Diagrams
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/plantuml
-        with:
-          infiles: design/**/*.plantuml
-          outdir: png
-      - name: "Upload Diagrams"
-        uses: actions/upload-artifact@v4
-        with:
-          name: diagrams
-          path: "png/**/*.png"
-          if-no-files-found: error
