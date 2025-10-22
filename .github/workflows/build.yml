@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - "**.plantuml"
+      - "**.puml"
+      - "**.md"
   workflow_dispatch:
 jobs:
   build:
