@@ -10,7 +10,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import { ModalProps } from "@mui/material/Modal";
 import { SxProps, Theme } from "@mui/material/styles";
-import { SystemStyleObject } from "@mui/system/styleFunctionSx";
 
 import TestableProps from "../../../types/TestableProps";
 
@@ -107,10 +106,9 @@ const MessageDialog = ({
     []
   );
 
-  type JustSxFunc = (theme: Theme) => SystemStyleObject<Theme>;
-  const contentTextSx = useCallback<JustSxFunc>(
+  const contentTextSx = useMemo<SxProps<Theme>>(() =>
     (theme) => ({
-      marginBottom: theme.spacing(1.5),
+      marginBottom: theme.spacing(1),
     }),
     []
   );
