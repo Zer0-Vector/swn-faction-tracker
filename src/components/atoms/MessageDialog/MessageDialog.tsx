@@ -31,6 +31,7 @@ export interface MessageDialogProps extends TestableProps {
   children?: React.ReactNode;
   fullWidth?: boolean;
   disabledButtons?: string[];
+  maxWidth?: DialogProps["maxWidth"];
 }
 
 const MessageDialog = ({
@@ -43,6 +44,7 @@ const MessageDialog = ({
   closeable = true,
   modal = true,
   fullWidth = true,
+  maxWidth = "xs",
   children,
   "data-testid": dataTestId,
 }: MessageDialogProps) => {
@@ -131,7 +133,7 @@ const MessageDialog = ({
     <Dialog
       open={open}
       fullWidth={fullWidth}
-      maxWidth="xs"
+      maxWidth={maxWidth}
       onClose={handleClose}
       data-testid={dataTestId}
     >
