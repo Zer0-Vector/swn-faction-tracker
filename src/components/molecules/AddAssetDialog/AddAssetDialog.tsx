@@ -60,8 +60,11 @@ export default function AddAssetDialog({
     onClose();
   }, [onClose]);
 
-  const formControlSx = useCallback(
-    (theme: Theme) => ({ my: 1, minWidth: theme.breakpoints.values.xs }),
+  const formControlSx = useMemo<SxProps<Theme>>(
+    () => ({
+      my: 1,
+      minWidth: (theme) => theme.breakpoints.values.xs
+    }),
     []
   );
   const autoGroupBy = (o: AssetOption): string => o.group;
