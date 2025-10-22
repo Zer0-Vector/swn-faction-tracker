@@ -66,7 +66,7 @@ export default function AddAssetDialog({
   );
   const autoGroupBy = (o: AssetOption): string => o.group;
   const autoOptLabel = (o: AssetOption): string => o.name;
-  const optionsAreEqual = (o: AssetOption, v: AssetOption): boolean => o.group === v.group && o.name === v.name
+  const optionsAreEqual = (o: AssetOption, v: AssetOption): boolean => o.group === v.group && o.name === v.name;
   // Q: extract TextField to custom component with React.memo?
   const autoRenderInput = (params: AutocompleteRenderInputParams) => (
     <TextField
