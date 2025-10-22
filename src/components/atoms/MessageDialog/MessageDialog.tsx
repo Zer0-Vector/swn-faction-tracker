@@ -102,16 +102,12 @@ const MessageDialog = ({
       right: theme.spacing(1.5),
       top: theme.spacing(1.5),
       color: theme.palette.grey[400],
-    }),
-    []
-  );
+    }), []);
 
   const contentTextSx = useMemo<SxProps<Theme>>(() =>
     (theme) => ({
       marginBottom: theme.spacing(1),
-    }),
-    []
-  );
+    }), []);
 
   const closeButton = useMemo(
     () =>

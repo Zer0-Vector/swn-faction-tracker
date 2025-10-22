@@ -36,9 +36,7 @@ export default function FactionStatSummary({
     (theme) => ({
       ...theme.typography.body2,
       width: "3em",
-    }),
-    []
-  );
+    }), []);
 
   return (
     <>
