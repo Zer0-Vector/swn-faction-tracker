@@ -7,8 +7,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - "**.plantuml"
-      - "**.puml"
+      - "**.{plantuml,puml}"
       - "**.md"
   workflow_dispatch:
 jobs:
