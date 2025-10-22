@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 
-import { Theme } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
 import { useFactions } from "../../../contexts/FactionContext";
 import StatText from "../../atoms/StatText";
@@ -32,8 +32,8 @@ export default function FactionStatSummary({
     (val: number) => factions.update(factionId, "wealth", val),
     [factionId, factions]
   );
-  const handleInputSx = useCallback(
-    (theme: Theme) => ({
+  const handleInputSx = useMemo<SxProps<Theme>>(() =>
+    (theme) => ({
       ...theme.typography.body2,
       width: "3em",
     }),
