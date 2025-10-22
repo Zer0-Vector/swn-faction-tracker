@@ -126,7 +126,7 @@ export default function AddAssetDialog({
         <Typography fontSize={28} alignSelf="center" color={selection ? undefined : "warning"}>{selection ? selection.name : "Make a selection"}</Typography>
         <Typography
           variant="body2"
-          overflow="scroll"
+          overflow="auto"
           gridColumn="2"
         >
           {selection?.description}
