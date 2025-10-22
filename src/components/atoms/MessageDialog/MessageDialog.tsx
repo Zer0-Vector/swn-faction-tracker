@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -21,15 +21,15 @@ export interface DialogActionResult {
 export type DialogActionHandler = (result: DialogActionResult) => void;
 
 export interface MessageDialogProps extends TestableProps {
-  open: boolean;
-  title: string;
+  open: DialogProps["open"];
+  title: DialogProps["title"];
   message: string;
   closeable?: boolean;
   modal?: boolean;
   onAction: DialogActionHandler;
   buttons?: string[];
   children?: React.ReactNode;
-  fullWidth?: boolean;
+  fullWidth?: DialogProps["fullWidth"];
   disabledButtons?: string[];
   maxWidth?: DialogProps["maxWidth"];
 }
