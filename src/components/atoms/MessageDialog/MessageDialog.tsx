@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -21,16 +21,17 @@ export interface DialogActionResult {
 export type DialogActionHandler = (result: DialogActionResult) => void;
 
 export interface MessageDialogProps extends TestableProps {
-  open: boolean;
-  title: string;
+  open: DialogProps["open"];
+  title: DialogProps["title"];
   message: string;
   closeable?: boolean;
   modal?: boolean;
   onAction: DialogActionHandler;
   buttons?: string[];
   children?: React.ReactNode;
-  fullWidth?: boolean;
+  fullWidth?: DialogProps["fullWidth"];
   disabledButtons?: string[];
+  maxWidth?: DialogProps["maxWidth"];
 }
 
 const MessageDialog = ({
@@ -43,6 +44,7 @@ const MessageDialog = ({
   closeable = true,
   modal = true,
   fullWidth = true,
+  maxWidth = "xs",
   children,
   "data-testid": dataTestId,
 }: MessageDialogProps) => {
@@ -87,6 +89,7 @@ const MessageDialog = ({
           key={b}
           disabled={disabledButtons.includes(b)}
           onClick={buttonsClickHandlers[i]}
+          data-testid={`message-dialog-button-${b}`}
         >
           {b}
         </Button>
@@ -131,7 +134,7 @@ const MessageDialog = ({
     <Dialog
       open={open}
       fullWidth={fullWidth}
-      maxWidth="xs"
+      maxWidth={maxWidth}
       onClose={handleClose}
       data-testid={dataTestId}
     >
