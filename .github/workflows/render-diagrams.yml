@@ -7,12 +7,12 @@ on:
     branches:
       - main
     paths:
-      - design/**/*.{plantuml,puml}
+      - design/**/*.plantuml
   pull_request:
     branches:
       - main
     paths:
-      - design/**/*.{plantuml,puml}
+      - design/**/*.plantuml
   workflow_dispatch:
 jobs:
   diagrams:
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/plantuml
         with:
-          infiles: design/**/*.{plantuml,puml}
+          infiles: design/**/*.plantuml
           outdir: png
       - name: "Upload Diagrams"
         uses: actions/upload-artifact@v4
