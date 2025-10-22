@@ -60,7 +60,10 @@ export default function AddAssetDialog({
     onClose();
   }, [onClose]);
 
-  const formControlSx: SxProps<Theme> = (theme) => ({ my: 1, minWidth: theme.breakpoints.values.xs });
+  const formControlSx = useCallback(
+    (theme: Theme) => ({ my: 1, minWidth: theme.breakpoints.values.xs }),
+    []
+  );
   const autoGroupBy = (o: AssetOption): string => o.group;
   const autoOptLabel = (o: AssetOption): string => o.name;
   const optionsAreEqual = (o: AssetOption, v: AssetOption): boolean => o.group === v.group && o.name === v.name
