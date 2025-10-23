@@ -15,8 +15,8 @@ export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   useEffect(() => {
     firebaseAuth
       .setPersistence(AUTH, firebaseAuth.browserLocalPersistence)
-      .catch((reason) => {
-        console.error("Error setting auth persistence: ", reason);
+      .catch((error_) => {
+        console.error("Error setting auth persistence: ", error_);
       });
   }, [AUTH]);
 
