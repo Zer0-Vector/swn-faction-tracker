@@ -27,7 +27,7 @@ export function generateSlug(name: string, currentValues?: string[]): string {
   }
 
   const indexes = matches
-    .map((val) => val.match(`${baseName}-(\\d+)`)?.at(1))
+    .map((val) => (new RegExp(`${baseName}-(\\d+)`)).exec(val)?.at(1))
     .map((val) => (val ? Number.parseInt(val) : 0));
   if (indexes.includes(index)) {
     index = Math.max(...indexes) + 1;
