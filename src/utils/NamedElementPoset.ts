@@ -105,9 +105,9 @@ export class NamedElementPoset<
     super();
     this.factory = factory;
     this.set = new SluggedCopyOnWriteArrayPoset();
-    elements.forEach((e) => {
+    for (const e of elements) {
       this.set.add(factory(e));
-    });
+    }
     this.filterFunc = filterFunc;
   }
 
