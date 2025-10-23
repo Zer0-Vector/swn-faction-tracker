@@ -120,16 +120,16 @@ export class SluggedOrderedSet<T extends SluggedEntity>
   add(element: T): void {
     const { id, slug } = element;
     if (this.id2element.has(id)) {
-      throw Error(`Already have id=${element.id}`);
+      throw new Error(`Already have id=${element.id}`);
     }
     if (this.slug2id.has(slug)) {
-      throw Error(`Already have slug=${element.slug}`);
+      throw new Error(`Already have slug=${element.slug}`);
     }
     if (id.trim().length === 0) {
-      throw Error("Cannot add element with blank id");
+      throw new Error("Cannot add element with blank id");
     }
     if (slug.trim().length === 0) {
-      throw Error("Cannot add element with blank slug");
+      throw new Error("Cannot add element with blank slug");
     }
     this.id2element.set(id, element);
     this.slug2id.set(slug, id);
@@ -157,7 +157,7 @@ export class SluggedOrderedSet<T extends SluggedEntity>
     }
 
     if (updateInfo.slug.trim().length === 0) {
-      throw Error("Cannot rename slug to blank");
+      throw new Error("Cannot rename slug to blank");
     }
 
     if (this.slug2id.has(updateInfo.slug)) {
@@ -270,7 +270,7 @@ export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity>
     }
 
     if (updateInfo.slug.trim().length === 0) {
-      throw Error("Cannot rename slug to blank");
+      throw new Error("Cannot rename slug to blank");
     }
 
     if (this.slug2id.has(updateInfo.slug)) {
