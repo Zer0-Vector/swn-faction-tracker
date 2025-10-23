@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { ReadonlyPropsWithChildren } from "../../types/ReadonlyPropsWithChildren";
@@ -13,35 +13,34 @@ export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
     []
   );
 
-  const assets = useRef(new AssetPoset(storedAssets));
+  const assets = new AssetPoset(storedAssets);
 
   const locations = useLocations();
   const factions = useFactions();
 
   useEffect(() => {
-    const assetsUnsubscribe = assets.current.subscribe(() => {
-      setStoredAssets(assets.current.getAll());
+    const assetsUnsubscribe = assets.subscribe(() => {
+      setStoredAssets(assets.getAll());
       // TODO queue update for remote storage
     });
 
     const locationsUnsubscribe = locations.subscribe((action) => {
       if (action.type === "REMOVE") {
-        const filtered = assets.current
-          .getAll()
+        const filtered = assets.getAll()
           .filter((a) => a.locationId === action.id);
         for (const a of filtered) {
-          assets.current.update(a.id, "locationId", undefined);
+          assets.update(a.id, "locationId", undefined);
         }
       }
     });
 
     const factionsUnsubscribe = factions.subscribe((action) => {
       if (action.type === "REMOVE") {
-        const filtered = assets.current
+        const filtered = assets
           .getAll()
           .filter((a) => a.factionId === action.id);
         for (const a of filtered) {
-          assets.current.remove(a.id);
+          assets.remove(a.id);
         }
       }
     });
@@ -54,7 +53,7 @@ export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
   }, [assets, locations, factions]);
 
   const context = useMemo<AssetContextType>(
-    () => ({ assets: assets.current }),
+    () => ({ assets }),
     []
   );
 
