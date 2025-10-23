@@ -82,14 +82,13 @@ export type NamedElementPosetAction<T> = {
 type FilterFuncGenerator<X, Y> = (args: X) => (arg: Y) => boolean;
 
 export class NamedElementPoset<
-    T extends NamedSluggedEntity & A,
-    A = object,
-    N extends keyof Named<A> = never,
-    M extends keyof A = never,
-  >
+  T extends NamedSluggedEntity & A,
+  A = object,
+  N extends keyof Named<A> = never,
+  M extends keyof A = never,
+>
   extends Observable<NamedElementPosetAction<T>>
-  implements INamedElementPoset<T, A, N>
-{
+  implements INamedElementPoset<T, A, N> {
   private readonly factory: NamedElementFactoryFn<T, A>;
   private readonly set: ISluggedOrderedSet<T>;
   private readonly filterFunc?: FilterFuncGenerator<
@@ -189,14 +188,13 @@ export class NamedElementPoset<
     return this.set.getId(slug);
   }
 
-  private getNextSlug(args: Named<Pick<A, M>>) {
-    return this.filterFunc !== undefined
-      ? generateSlug(
-          args.name,
-          this.getAll()
-            .filter(this.filterFunc(args))
-            .map((e) => e.slug)
-        )
-      : generateSlug(args.name);
+  private getNextSlug(arg: Named<Pick<A, M>>) {
+    return this.filterFunc === undefined
+      ? generateSlug(arg.name)
+      : generateSlug(arg.name,
+        this.getAll()
+          .filter(this.filterFunc(arg))
+          .map((e) => e.slug)
+      );
   }
 }
