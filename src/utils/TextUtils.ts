@@ -1,6 +1,6 @@
 const TextUtils = {
   capitalize([first, ...rest]: string, locale = navigator.language) {
-    return !first ? "" : first.toLocaleUpperCase(locale) + rest.join("");
+    return first ? first.toLocaleUpperCase(locale) + rest.join("") : "";
   },
 
   titleCase(input: string, locale = navigator.language) {
