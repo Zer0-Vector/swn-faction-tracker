@@ -27,10 +27,12 @@ export function FactionContextProvider({
     action: NamedElementPosetAction<LocationInfo>
   ): void => {
     if (action.type === "REMOVE") {
-      factionsPoset
+      const filtered = factionsPoset
         .getAll()
-        .filter((f) => f.homeworldId === action.id)
-        .forEach((f) => factionsPoset.update(f.id, "homeworldId", undefined));
+        .filter((f) => f.homeworldId === action.id);
+      for (const f of filtered) {
+        factionsPoset.update(f.id, "homeworldId", undefined);
+      }
     }
   };
 
