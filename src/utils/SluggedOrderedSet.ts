@@ -119,7 +119,10 @@ abstract class ASluggedOrderedSet<T extends SluggedEntity, E> implements ISlugge
     this.slug2id.set(slug, id);
   }
 
-  protected abstract doRemove(id: string): boolean;
+  /**
+   * Removes an element. Assume checks for the element's existence are `true`, i.e. it exists.
+   */
+  protected abstract doRemove(id: string): void;
 
   remove(id: string): boolean {
     const element = this.get(id);
@@ -127,14 +130,11 @@ abstract class ASluggedOrderedSet<T extends SluggedEntity, E> implements ISlugge
       return false;
     }
 
-    const result = this.doRemove(id);
+    this.doRemove(id);
+    this.idMap.delete(id);
+    this.slug2id.delete(element.slug);
 
-    if (result) {
-      this.idMap.delete(id);
-      this.slug2id.delete(element.slug);
-    }
-
-    return result;
+    return true;
   }
 
   renameSlug(updateInfo: SluggedEntity): void {
@@ -217,16 +217,12 @@ export class SluggedOrderedSet<T extends SluggedEntity>
     this.order.push(element.id);
   }
 
-  protected doRemove(id: string): boolean {
-    const result = this.idMap.delete(id);
-    if (!result) {
-      return false;
-    }
+  protected doRemove(id: string): void {
+    this.idMap.delete(id);
     const index = this.order.indexOf(id);
     if (index !== -1) { // should always be true
       this.order.splice(index, 1);
     }
-    return true;
   }
 
   get(id: string): Maybe<T> {
@@ -282,15 +278,11 @@ export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity>
     this.idMap.set(element.id, nextIndex);
   }
 
-  protected doRemove(id: string): boolean {
-    const index = this.idMap.get(id);
-    if (index === undefined) {
-      return false;
-    }
-
+  protected doRemove(id: string): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- existence has already been checked.
+    const index = this.idMap.get(id)!;
     this.elements.splice(index, 1);
     this.elements = [...this.elements];
-    return true;
   }
 
   get(id: string): Maybe<T> {
