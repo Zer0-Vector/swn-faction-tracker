@@ -29,6 +29,7 @@ export default defineConfig({
         "src/types/**/*",
       ],
       reporter: [
+        ["text"],
         ["html"],
         ["lcov", { projectRoot: "./src" }]
       ],
