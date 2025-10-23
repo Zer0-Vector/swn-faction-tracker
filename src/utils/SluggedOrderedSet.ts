@@ -108,9 +108,9 @@ export class SluggedOrderedSet<T extends SluggedEntity>
     this.id2element = new Map<string, T>();
     this.slug2id = new Map<string, string>();
     this.order = [];
-    initialValues.forEach((value) => {
+    for (const value of initialValues) {
       this.add(value);
-    });
+    }
   }
 
   get size() {
