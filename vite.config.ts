@@ -1,6 +1,6 @@
 import { defineConfig, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
+import path from "node:path";
 
 export default defineConfig({
   plugins: [react()],
@@ -16,5 +16,23 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.d.ts",
+        "**/*.stories.{ts,tsx}",
+        "**/__mocks__/**/*.{ts,tsx}",
+        "src/firebase*",
+        "src/index.tsx",
+        "src/reportWebVitals.ts",
+        "src/types/**/*",
+      ],
+      reporter: [
+        ["text"],
+        ["html"],
+        ["lcov", { projectRoot: "./src" }]
+      ],
+    }
   },
 } as UserConfig);
