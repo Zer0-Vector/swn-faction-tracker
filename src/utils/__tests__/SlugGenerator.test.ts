@@ -46,7 +46,7 @@ describe('generateId("hw", [x, ...])', () => {
     [["hw-1", "hw-2", "hw-3"], 4],
     [["hw-1", "hw-3"], 4],
   ])(
-    'given "hw" with existing %p, expect "hw-%p"',
+    'given "hw" with existing %j, expect "hw-%j"',
     (currentValues: string[], expectedSuffix: number) => {
       expect(generateSlug("hw", currentValues)).toEqual(`hw-${expectedSuffix}`);
     }
