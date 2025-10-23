@@ -18,7 +18,7 @@ export function generateSlug(name: string, currentValues?: string[]): string {
   const inputMatches = /^(.+)-(\d+)?$/.exec(simple);
   const baseName = inputMatches?.at(1) || simple;
   const strIndex = inputMatches?.at(2);
-  let index = strIndex !== undefined ? parseInt(strIndex) : 1;
+  let index = strIndex === undefined ? 1 : parseInt(strIndex);
 
   console.assert(index > 0, "index is invalid: ", index);
   const matches = currentValues.filter((val) => val.startsWith(baseName));
