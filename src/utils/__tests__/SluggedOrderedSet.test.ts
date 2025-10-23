@@ -212,7 +212,7 @@ describe.each([
     expect(set.size).toBe(1);
   });
 
-  it("at returns the element at the given index", () => {
+  it("at(i) returns the element at the given index", () => {
     const e1 = { id: "a1", slug: "s1" };
     const e2 = { id: "a2", slug: "s2" };
     const e3 = { id: "a3", slug: "s3" };
@@ -224,12 +224,15 @@ describe.each([
     expect(set.at(2)).toBe(e3);
   });
 
-  it("at throws RangeError when called on an empty set", () => {
-    expect(() => set.at(0)).toThrowError(RangeError);
-    expect(() => set.at(0)).toThrowError("Index out of bounds");
+  it("at(i) throws RangeError when called on an empty set", () => {
+    const callAtOnEmptySet = () => {
+      set.at(0);
+    };
+    expect(callAtOnEmptySet).toThrowError(RangeError);
+    expect(callAtOnEmptySet).toThrowError("Index out of bounds");
   });
 
-  it("at throws RangeError for out-of-bounds indices", () => {
+  it("at(i) throws RangeError for out-of-bounds indices", () => {
     set.add({ id: "x1", slug: "xs1" });
     set.add({ id: "x2", slug: "xs2" });
     expect(() => set.at(-1)).toThrowError(RangeError);
