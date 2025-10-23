@@ -26,19 +26,23 @@ export function AssetContextProvider({ children }: ReadonlyPropsWithChildren) {
 
     const locationsUnsubscribe = locations.subscribe((action) => {
       if (action.type === "REMOVE") {
-        assets.current
+        const filtered = assets.current
           .getAll()
-          .filter((a) => a.locationId === action.id)
-          .forEach((a) => assets.current.update(a.id, "locationId", undefined));
+          .filter((a) => a.locationId === action.id);
+        for (const a of filtered) {
+          assets.current.update(a.id, "locationId", undefined);
+        }
       }
     });
 
     const factionsUnsubscribe = factions.subscribe((action) => {
       if (action.type === "REMOVE") {
-        assets.current
+        const filtered = assets.current
           .getAll()
-          .filter((a) => a.factionId === action.id)
-          .forEach((a) => assets.current.remove(a.id));
+          .filter((a) => a.factionId === action.id);
+        for (const a of filtered) {
+          assets.current.remove(a.id);
+        }
       }
     });
 
