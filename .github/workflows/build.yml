@@ -45,7 +45,7 @@ jobs:
       - run: npm install
       - run: npm run ci-test -- --coverage
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -65,6 +65,6 @@ jobs:
           cache: "npm"
       - run: npm install
       - name: Publish to Chromatic
-        uses: chromaui/action@v1
+        uses: chromaui/action@bc2d84ad2b60813a67d995c5582d696104a19383 # v13.3.2
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
