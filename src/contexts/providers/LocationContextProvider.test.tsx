@@ -11,6 +11,7 @@ describe("LocationContextProvider", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    localStorage.clear();
   });
 
   it("renders children without crashing", () => {
@@ -47,9 +48,6 @@ describe("LocationContextProvider", () => {
 
     const text = screen.getByTestId("items").textContent || "[]";
     expect(JSON.parse(text)).toEqual(stored);
-
-    localStorage.removeItem(storageKey);
-
   });
 
   it('persists poset changes to local storage using the key "swn-faction-tracker.locations"', async () => {
@@ -68,12 +66,8 @@ describe("LocationContextProvider", () => {
 
     function Consumer() {
       const { locations } = React.useContext(LocationContext);
-      React.useEffect(() => {
-        locations.update("loc-1", "name", "Alpha Updated");
-        console.log("Updated location:", locations.get("loc-1"));
-      }, [locations]);
       console.log("Rendering Consumer...");
-      return <input data-testid="done" onClick={() => locations.update("loc-1", "name", "Alpha Updated")} value="done" />;
+      return <button data-testid="done" onClick={() => locations.update("loc-1", "name", "Alpha Updated")}>done</button>;
     }
 
     const user = userEvent.setup();
