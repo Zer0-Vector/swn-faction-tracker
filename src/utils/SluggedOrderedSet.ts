@@ -186,7 +186,6 @@ abstract class ASluggedOrderedSet<T extends SluggedEntity, E> implements ISlugge
   getId(slug: string): Maybe<string> {
     return this.slug2id.get(slug);
   }
-
 }
 
 /**
