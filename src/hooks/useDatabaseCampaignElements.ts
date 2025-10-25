@@ -71,8 +71,8 @@ export const useDatabaseCampaignElements = (
         .then((ss) => {
           elements.campaign = ss.data() as CampaignInfo;
         })
-        .catch((reason) => {
-          console.error("Failed to fetch campaign info: ", reason);
+        .catch((error_) => {
+          console.error("Failed to fetch campaign info: ", error_);
         })
         .then(() =>
           getDocs(
@@ -98,8 +98,8 @@ export const useDatabaseCampaignElements = (
           });
           setCampaignData({ elements: elements as CampaignElements });
         })
-        .catch((reason) => {
-          console.error("Failed to fetch campaign elements: ", reason);
+        .catch((error_) => {
+          console.error("Failed to fetch campaign elements: ", error_);
         });
     }
 

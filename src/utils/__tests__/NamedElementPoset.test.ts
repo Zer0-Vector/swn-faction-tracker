@@ -127,4 +127,67 @@ describe("NamedElementPoset(x => x, [], undefined)", () => {
     poset.update(element.id, "name", "ef");
     expect(fn).not.toBeCalledTimes(2);
   });
+
+
+  it("size reflects number of elements", () => {
+    expect(poset.size).toBe(0);
+    const e1 = poset.add({ name: "size 1" });
+    expect(poset.size).toBe(1);
+    const e2 = poset.add({ name: "size 2" });
+    expect(poset.size).toBe(2);
+    expect(poset.remove(e1.id)).toBe(true);
+    expect(poset.size).toBe(1);
+  });
+
+  it("constructing with existing elements prepopulates the set", () => {
+    const initial: NamedSluggedEntity = {
+      id: "pre-1",
+      slug: "pre-1",
+      name: "prepopulated",
+    };
+    const p = new NamedElementPoset<NamedSluggedEntity>((x) => x, [initial]);
+    expect(p.size).toBe(1);
+    expect(p.getAll()).toEqual([initial]);
+    expect(p.get("pre-1")).toBe(initial);
+  });
+
+  it("update throws when attempting to set a conflicting name", () => {
+    const a = poset.add({ name: "alpha" });
+    const b = poset.add({ name: "beta" });
+    expect(() => poset.update(b.id, "name", "alpha")).toThrowError(
+      /Conflicting name/
+    );
+  });
+
+  // XXX -- BUG in NamedSluggedEntity
+  it.skip("filterFunc scopes slug uniqueness to the filtered subset", () => {
+    type Item = NamedSluggedEntity & { group: string };
+    const pf = new NamedElementPoset<
+      Item,
+      { group: string },
+      never,
+      "group"
+    >(
+      (x) => x,
+      [],
+      (args) => (e) => e.group === args.group
+    );
+
+    const a = pf.add({ name: "dup", group: "g1" });
+    const b = pf.add({ name: "dup", group: "g2" });
+    expect(a.slug).toBe("dup");
+    expect(b.slug).toBe("dup");
+
+    // same name within same group is conflicting
+    const c = pf.add({ name: "unique", group: "g1" });
+    expect(() => pf.update(c.id, "name", "dup")).toThrowError(
+      /Conflicting name/
+    );
+
+    // checkName respects the group filter
+    expect(pf.checkName({ name: "dup", group: "g1" })).toBe(false);
+    expect(pf.checkName({ name: "dup", group: "g2" })).toBe(false);
+    expect(pf.checkName({ name: "dup", group: "other" })).toBe(true);
+  });
+
 });

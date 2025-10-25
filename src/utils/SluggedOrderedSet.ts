@@ -88,76 +88,63 @@ export interface ISluggedOrderedSet<T extends SluggedEntity> {
   getId(slug: string): Maybe<string>;
 }
 
-/**
- * An ordered set with elements having two unique identifiers: `id` and `slug`.
- * The ordering is based on the order elements are added, however, elements can be reordered.
- */
-export class SluggedOrderedSet<T extends SluggedEntity>
-  implements ISluggedOrderedSet<T>
-{
-  private readonly id2element: Map<string, T>;
-  private readonly slug2id: Map<string, string>;
-  private readonly order: string[];
+abstract class ASluggedOrderedSet<T extends SluggedEntity, E> implements ISluggedOrderedSet<T> {
 
-  /**
-   * Constructs a set with the given contents.
-   * @param initialValues The initial contents of the set. Default is `[]`.
-   * @throws If there are any elements with conflicting ids or slugs. See the documentation for {@link add}.
-   */
-  constructor(initialValues: T[] = []) {
-    this.id2element = new Map<string, T>();
-    this.slug2id = new Map<string, string>();
-    this.order = [];
-    initialValues.forEach((value) => {
-      this.add(value);
-    });
-  }
+  protected readonly idMap: Map<string, E> = new Map<string, E>();
+  private readonly slug2id: Map<string, string> = new Map<string, string>();
 
   get size() {
-    return this.id2element.size;
+    return this.idMap.size;
   }
+
+  public abstract get(id: string): Maybe<T>;
+
+  protected abstract doAdd(element: T): void;
 
   add(element: T): void {
     const { id, slug } = element;
-    if (this.id2element.has(id)) {
-      throw Error(`Already have id=${element.id}`);
+    if (this.idMap.has(id)) {
+      throw new Error(`Already have id=${element.id}`);
     }
     if (this.slug2id.has(slug)) {
-      throw Error(`Already have slug=${element.slug}`);
+      throw new Error(`Already have slug=${element.slug}`);
     }
     if (id.trim().length === 0) {
-      throw Error("Cannot add element with blank id");
+      throw new Error("Cannot add element with blank id");
     }
     if (slug.trim().length === 0) {
-      throw Error("Cannot add element with blank slug");
+      throw new Error("Cannot add element with blank slug");
     }
-    this.id2element.set(id, element);
+    this.doAdd(element);
     this.slug2id.set(slug, id);
-    this.order.push(id);
   }
 
+  /**
+   * Removes an element. Assume checks for the element's existence are `true`, i.e. it exists.
+   */
+  protected abstract doRemove(id: string): void;
+
   remove(id: string): boolean {
-    const element = this.id2element.get(id);
+    const element = this.get(id);
     if (element === undefined) {
       return false;
     }
+
+    this.doRemove(id);
+    this.idMap.delete(id);
     this.slug2id.delete(element.slug);
-    const result = this.id2element.delete(id);
-    const index = this.order.indexOf(id);
-    if (index !== -1) {
-      this.order.splice(index, 1);
-    }
-    return result;
+
+    return true;
   }
 
   renameSlug(updateInfo: SluggedEntity): void {
-    const storedElement = this.id2element.get(updateInfo.id);
+    const storedElement = this.get(updateInfo.id);
     if (storedElement === undefined) {
       throw new Error(`Unknown element with id=${updateInfo.id}`);
     }
 
     if (updateInfo.slug.trim().length === 0) {
-      throw Error("Cannot rename slug to blank");
+      throw new Error("Cannot rename slug to blank");
     }
 
     if (this.slug2id.has(updateInfo.slug)) {
@@ -170,8 +157,76 @@ export class SluggedOrderedSet<T extends SluggedEntity>
     storedElement.slug = trimmed;
   }
 
+  abstract at(index: number): T;
+
+  slugGet(slug: string): Maybe<T> {
+    const id = this.slug2id.get(slug);
+    if (id === undefined) {
+      return undefined;
+    }
+    return this.get(id);
+  }
+
+  abstract getAll(): T[];
+
+  abstract reorder(source: number, target: number): void;
+
+  hasId(id: string) {
+    return this.idMap.has(id);
+  }
+
+  hasSlug(slug: string) {
+    return this.slug2id.has(slug);
+  }
+
+  noConflicts(entity: SluggedEntity) {
+    return !this.hasId(entity.id) && !this.hasSlug(entity.slug);
+  }
+
+  getId(slug: string): Maybe<string> {
+    return this.slug2id.get(slug);
+  }
+
+}
+
+/**
+ * An ordered set with elements having two unique identifiers: `id` and `slug`.
+ * The ordering is based on the order elements are added, however, elements can be reordered.
+ */
+export class SluggedOrderedSet<T extends SluggedEntity>
+  extends ASluggedOrderedSet<T, T>
+  implements ISluggedOrderedSet<T>
+{
+  private readonly order: string[];
+
+  /**
+   * Constructs a set with the given contents.
+   * @param initialValues The initial contents of the set. Default is `[]`.
+   * @throws If there are any elements with conflicting ids or slugs. See the documentation for {@link add}.
+   */
+  constructor(initialValues: T[] = []) {
+    super();
+    this.order = [];
+    for (const value of initialValues) {
+      this.add(value);
+    }
+  }
+
+  protected doAdd(element: T): void {
+    this.idMap.set(element.id, element);
+    this.order.push(element.id);
+  }
+
+  protected doRemove(id: string): void {
+    this.idMap.delete(id);
+    const index = this.order.indexOf(id);
+    if (index !== -1) { // should always be true
+      this.order.splice(index, 1);
+    }
+  }
+
   get(id: string): Maybe<T> {
-    return this.id2element.get(id);
+    return this.idMap.get(id);
   }
 
   at(index: number): T {
@@ -183,17 +238,9 @@ export class SluggedOrderedSet<T extends SluggedEntity>
     return this.get(this.order[index])!;
   }
 
-  slugGet(slug: string): Maybe<T> {
-    const id = this.slug2id.get(slug);
-    if (id === undefined) {
-      return undefined;
-    }
-    return this.id2element.get(id);
-  }
-
   getAll(): T[] {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.order.map((id) => this.id2element.get(id)!);
+    return this.order.map((id) => this.idMap.get(id)!);
   }
 
   reorder(source: number, target: number) {
@@ -208,34 +255,16 @@ export class SluggedOrderedSet<T extends SluggedEntity>
     const [removed] = this.order.splice(source, 1);
     this.order.splice(target, 0, removed);
   }
-
-  hasId(id: string) {
-    return this.id2element.has(id);
-  }
-
-  hasSlug(slug: string) {
-    return this.slug2id.has(slug);
-  }
-
-  noConflicts(entity: SluggedEntity) {
-    return !this.hasId(entity.id) && !this.hasSlug(entity.slug);
-  }
-
-  getId(slug: string): Maybe<string> {
-    return this.slug2id.get(slug);
-  }
 }
 
 export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity>
+  extends ASluggedOrderedSet<T, number>
   implements ISluggedOrderedSet<T>
 {
-  private readonly id2index: Map<string, number>;
-  private readonly slug2id: Map<string, string>;
   private elements: T[];
 
   constructor() {
-    this.id2index = new Map();
-    this.slug2id = new Map();
+    super();
     this.elements = [];
   }
 
@@ -243,64 +272,36 @@ export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity>
     return this.elements.length;
   }
 
-  add(element: T): void {
+  protected doAdd(element: T): void {
     const nextIndex = this.elements.length;
     this.elements = [...this.elements, element];
-    this.id2index.set(element.id, nextIndex);
-    this.slug2id.set(element.slug, element.id);
+    this.idMap.set(element.id, nextIndex);
   }
-  remove(id: string): boolean {
-    const index = this.id2index.get(id);
-    if (index === undefined) {
-      return false;
-    }
 
-    const [deleted] = this.elements.splice(index, 1);
-
-    this.id2index.delete(deleted.id);
-    this.slug2id.delete(deleted.slug);
+  protected doRemove(id: string): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- existence has already been checked.
+    const index = this.idMap.get(id)!;
+    this.elements.splice(index, 1);
     this.elements = [...this.elements];
-
-    return true;
   }
-  renameSlug(updateInfo: SluggedEntity): void {
-    const storedElement = this.get(updateInfo.id);
-    if (storedElement === undefined) {
-      throw new Error(`Unknown element with id=${updateInfo.id}`);
-    }
 
-    if (updateInfo.slug.trim().length === 0) {
-      throw Error("Cannot rename slug to blank");
-    }
-
-    if (this.slug2id.has(updateInfo.slug)) {
-      throw new Error(`Slug conflict: ${updateInfo.slug}`);
-    }
-
-    const trimmed = updateInfo.slug.trim();
-    this.slug2id.set(trimmed, updateInfo.id);
-    this.slug2id.delete(storedElement.slug);
-    storedElement.slug = trimmed;
-  }
   get(id: string): Maybe<T> {
-    const index = this.id2index.get(id);
+    const index = this.idMap.get(id);
     if (index === undefined) {
       return undefined;
     }
 
     return this.elements[index];
   }
-  slugGet(slug: string): Maybe<T> {
-    const id = this.slug2id.get(slug);
-    if (!id) {
-      return undefined;
-    }
-    return this.get(id);
-  }
+
   getAll(): T[] {
     return this.elements;
   }
+
   at(index: number): T {
+    if (index < 0 || index >= this.elements.length) {
+      throw new RangeError("Index out of bounds");
+    }
     return this.elements[index];
   }
   reorder(source: number, target: number): void {
@@ -315,17 +316,5 @@ export class SluggedCopyOnWriteArrayPoset<T extends SluggedEntity>
     const [removed] = this.elements.splice(source, 1);
     this.elements.splice(target, 0, removed);
     this.elements = [...this.elements];
-  }
-  hasId(id: string): boolean {
-    return this.id2index.has(id);
-  }
-  hasSlug(slug: string): boolean {
-    return this.slug2id.has(slug);
-  }
-  noConflicts(entity: SluggedEntity): boolean {
-    return !this.hasId(entity.id) && !this.hasSlug(entity.slug);
-  }
-  getId(slug: string): Maybe<string> {
-    return this.slug2id.get(slug);
   }
 }

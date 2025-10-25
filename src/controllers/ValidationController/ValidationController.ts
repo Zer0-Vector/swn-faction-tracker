@@ -8,9 +8,9 @@ export class ValidationController implements IValidationController {
     private readonly validators: { readonly [id: string]: ValidationFn }
   ) {
     this.valid = {} as { -readonly [P in keyof typeof validators]: boolean };
-    Object.keys(validators).forEach((k) => {
+    for (const k of Object.keys(validators)) {
       this.valid[k] = false;
-    });
+    }
   }
 
   isAllValid(): boolean {

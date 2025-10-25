@@ -17,6 +17,8 @@ export abstract class Observable<A> implements IObservable<A> {
   }
 
   protected notifyObservers(action: A) {
-    this.observers.forEach((cb) => cb(action));
+    for (const cb of this.observers) {
+      cb(action);
+    }
   }
 }
