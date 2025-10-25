@@ -1,5 +1,11 @@
 {
-  "cSpell.words": ["Appender", "homeworld", "maxhp", "NOSONAR", "STEALTHED"],
+  "cSpell.words": [
+    "Appender",
+    "homeworld",
+    "maxhp",
+    "NOSONAR",
+    "STEALTHED"
+  ],
   "sonarlint.connectedMode.project": {
     "connectionId": "zer0-vector",
     "projectKey": "Zer0-Vector_swn-faction-tracker"
@@ -29,5 +35,6 @@
     "firestore",
     "dtid",
     "thiz",
+    "unstub",
   ]
 }
