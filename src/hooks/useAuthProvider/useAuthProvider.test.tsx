@@ -24,6 +24,7 @@ import {
 import type { Auth, User, UserCredential } from "firebase/auth";
 
 vi.mock("firebase/app");
+vi.mock("firebase/app-check");
 
 const mocks = vi.hoisted(() => ({
   onAuthStateChanged: vi.fn(),
@@ -126,6 +127,10 @@ describe("useAuthProvider", () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
     vi.resetAllMocks();
     vi.resetModules();
   });
