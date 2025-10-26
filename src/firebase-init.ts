@@ -17,12 +17,12 @@ const firebaseConfig = {
 };
 // cSpell:enable
 
-console.log("Configured Firebase: ", firebaseConfig.projectId);
+console.log("Configuring Firebase: ", firebaseConfig.projectId);
+console.log(`===> ${import.meta.env.MODE} mode <===`);
 
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
-
-console.log(`===> ${import.meta.env.MODE} mode <===`);
+console.log("Firebase App initialized: ", !!FirebaseApp, FirebaseApp?.name || "");
 
 
 if (import.meta.env.DEV) {
