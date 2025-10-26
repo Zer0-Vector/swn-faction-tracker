@@ -115,3 +115,5 @@ firebase-debug.log
 
 # production config is generated
 .firebaserc
+
+*.tsbuildinfo
