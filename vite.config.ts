@@ -13,9 +13,10 @@ export default defineConfig({
     outDir: "build",
   },
   test: {
+    clearMocks: true,
     globals: true,
     environment: "jsdom",
-    setupFiles: "./src/setupTests.ts",
+    setupFiles: ["./src/setupTests.ts", "dotenv/config"],
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
