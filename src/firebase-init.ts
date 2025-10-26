@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import type { FirebaseOptions } from "firebase/app";
 import { initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -27,3 +28,8 @@ console.log("Configured Firebase: ", firebaseConfig.projectId);
 
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
+
+export const FirebaseAppCheck = initializeAppCheck(FirebaseApp, {
+  provider: new ReCaptchaV3Provider("6LdjtPcrAAAAACc3HDJNdK36XhFIyWPnWGcZ_Cep"),
+  isTokenAutoRefreshEnabled: true,
+});
