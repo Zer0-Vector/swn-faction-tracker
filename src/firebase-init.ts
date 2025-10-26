@@ -30,7 +30,9 @@ if (import.meta.env.DEV) {
   const debugToken = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN || process.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
   console.log(`App Check debug token from env: ${!!debugToken}`);
   self.FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken || true; // NOSONAR
-} else if (import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN || process.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN) {
+}
+
+if (import.meta.env.PROD && self.FIREBASE_APPCHECK_DEBUG_TOKEN) { // NOSONAR
   console.warn("App Check debug token should not be used in production!");
 }
 
