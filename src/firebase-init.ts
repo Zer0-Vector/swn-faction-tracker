@@ -29,7 +29,15 @@ console.log("Configured Firebase: ", firebaseConfig.projectId);
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
 
+console.log("===> MODE: ", import.meta.env.MODE, " <===");
+
+if (import.meta.env.DEV) {
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN || true; // NOSONAR
+}
+
 export const FirebaseAppCheck = initializeAppCheck(FirebaseApp, {
-  provider: new ReCaptchaV3Provider("6LdjtPcrAAAAACc3HDJNdK36XhFIyWPnWGcZ_Cep"),
+  provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
   isTokenAutoRefreshEnabled: true,
 });
+
+
