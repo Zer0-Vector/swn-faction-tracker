@@ -32,7 +32,7 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
           cache: "npm"
       - run: npm ci
-      - run: npm run build
+      - run: npm run build -- --mode preview
       - uses: FirebaseExtended/action-hosting-deploy@e2eda2e106cfa35cdbcf4ac9ddaf6c4756df2c8c # v0.10.0
         id: deploy
         with:
