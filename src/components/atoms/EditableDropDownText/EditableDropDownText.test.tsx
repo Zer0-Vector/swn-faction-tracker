@@ -1,4 +1,4 @@
-import React, { act } from "react";
+import React from "react";
 
 import { render, screen, waitFor, within } from "@testing-library/react";
 
@@ -32,7 +32,7 @@ function renderIt() {
   };
 }
 
-describe("default EditableDropDownText", { timeout: 20000 }, () => {
+describe("default EditableDropDownText", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -75,7 +75,7 @@ describe("default EditableDropDownText", { timeout: 20000 }, () => {
     ).toBeInTheDocument();
   });
 
-  it("calls onUpdate if option clicked", async () => {
+  it("calls onUpdate if option clicked", { timeout: 20000 }, async () => {
     const { user } = renderIt();
 
     const outer = screen.getByTestId("test-eddt");
@@ -84,29 +84,38 @@ describe("default EditableDropDownText", { timeout: 20000 }, () => {
     const setupDropdownForSelection = async () => {
       const button = within(outer).getByTestId("editable-dropdown-button");
       expect(button).toBeInTheDocument();
+
       await user.click(button);
 
-
-      await waitFor(() => expect(
-        within(outer).findByTestId("editable-dropdown-autocomplete")
-      ).toBeDefined(), { timeout: 5000 });
-
-      expect(within(outer).getByTestId("editable-dropdown-autocomplete")).toBeInTheDocument();
+      const autocompleteComponent = await within(outer).findByTestId("editable-dropdown-autocomplete", {}, { timeout: 5000 });
+      expect(autocompleteComponent).toBeInTheDocument();
     };
 
     await setupDropdownForSelection();
 
     let listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
+
     let optionItems = within(listbox).getAllByRole("option");
     expect(optionItems.length).toBe(options.length);
 
     const selectedIndex = Math.floor(Math.random() * optionItems.length);
-    const selection = optionItems[selectedIndex]; // NOSONAR
+    const selection = optionItems[selectedIndex];
+
     await user.click(selection);
 
-    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1), { timeout: 5000 });
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId("editable-dropdown-text")).toBeInTheDocument());
+
+    const logErrorOnTimeout = (label: string) => (error: Error): Error => {
+      console.error(label + ": Timeout waiting for onUpdate to be called.");
+      return error;
+    };
+
+    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1), {
+      timeout: 5000,
+      onTimeout: logErrorOnTimeout("First selection")
+    });
 
     expect(mockOnUpdate).toBeCalledWith(selection.textContent);
 
@@ -115,14 +124,18 @@ describe("default EditableDropDownText", { timeout: 20000 }, () => {
 
     listbox = within(outer).getByRole("listbox");
     expect(listbox).toBeInTheDocument();
+
     optionItems = within(listbox).getAllByRole("option");
     expect(optionItems.length).toBe(options.length);
 
     const selection2 = optionItems[(selectedIndex + 1) % optionItems.length];
+
     await user.click(selection2);
 
-    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1), { timeout: 5000 });
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId("editable-dropdown-text")).toBeInTheDocument());
+
+    await waitFor(() => expect(mockOnUpdate).toBeCalledTimes(1), { timeout: 5000, onTimeout: logErrorOnTimeout("Second selection") });
 
     expect(mockOnUpdate).toBeCalledWith(selection2.textContent);
   });
