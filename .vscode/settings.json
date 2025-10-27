@@ -36,5 +36,7 @@
     "dtid",
     "thiz",
     "unstub",
+    "APPCHECK",
+    "VITE",
   ]
 }

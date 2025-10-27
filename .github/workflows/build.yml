@@ -43,7 +43,9 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
           cache: "npm"
       - run: npm install
-      - run: npm run ci-test -- --coverage
+      - env:
+          VITE_FIREBASE_APPCHECK_DEBUG_TOKEN: ${{ secrets.APPCHECK_DEBUG_TOKEN_CI }}
+        run: npm run ci-test -- --coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6
         env:

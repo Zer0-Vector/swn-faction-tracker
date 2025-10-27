@@ -3,6 +3,7 @@
   "version": "0.4.1",
   "private": true,
   "dependencies": {
+    "-": "^0.0.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^5.10.9",
@@ -72,6 +73,7 @@
     "@vitest/coverage-v8": "^4.0.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.11.4",
+    "dotenv": "^17.2.3",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
