@@ -32,7 +32,7 @@ function renderIt() {
   };
 }
 
-describe("default EditableDropDownText", { timeout: 20000 }, () => {
+describe("default EditableDropDownText", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -75,7 +75,7 @@ describe("default EditableDropDownText", { timeout: 20000 }, () => {
     ).toBeInTheDocument();
   });
 
-  it("calls onUpdate if option clicked", async () => {
+  it("calls onUpdate if option clicked", { timeout: 20000 }, async () => {
     const { user } = renderIt();
 
     const outer = screen.getByTestId("test-eddt");
