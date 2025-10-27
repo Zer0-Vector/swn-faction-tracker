@@ -22,7 +22,11 @@ console.log(`===> ${import.meta.env.MODE} mode <===`);
 
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
-console.log("Firebase App initialized: ", !!FirebaseApp, FirebaseApp?.name || "");
+if (FirebaseApp) {
+  console.log("Firebase App initialized: ", FirebaseApp.name);
+} else {
+  console.error("Firebase App failed to initialize!");
+}
 
 
 if (import.meta.env.DEV) {
