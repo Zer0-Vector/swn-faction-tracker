@@ -29,7 +29,8 @@
     "chromatic": "npx chromatic",
     "preversion": "git switch main && git switch -c prepare/%npm_package_version% && npm run ci-test",
     "version": "npm run build",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "emulators": "firebase emulators:start --only auth,firestore"
   },
   "browserslist": {
     "production": [
