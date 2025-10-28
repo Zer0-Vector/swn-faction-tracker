@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { User } from "firebase/auth";
 import * as firebaseAuth from "firebase/auth";
 
@@ -10,7 +10,14 @@ import { ProvidedAuth } from "../../types/ProvidedAuth";
 export function useAuthProvider(controller: IUiStateController): ProvidedAuth {
   const [user, setUser] = useState<Nullable<User>>(null);
 
-  const AUTH = firebaseAuth.getAuth(FirebaseApp);
+  const AUTH = useMemo(() => {
+    const auth = firebaseAuth.getAuth(FirebaseApp)
+    const mode = import.meta.env.MODE;
+    if (mode === "development" || mode === "integration-test") {
+     firebaseAuth.connectAuthEmulator(auth, "http://127.0.0.1:9099");
+    }
+    return auth;
+  }, []);
 
   useEffect(() => {
     firebaseAuth

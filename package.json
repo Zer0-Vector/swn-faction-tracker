@@ -3,7 +3,6 @@
   "version": "0.4.1",
   "private": true,
   "dependencies": {
-    "-": "^0.0.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^5.10.9",
@@ -15,6 +14,9 @@
     "react-router-dom": "^6.4.2",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
+  },
+  "peerDependencies": {
+    "firebase-tools": "^14.22.0"
   },
   "scripts": {
     "dev": "vite",
@@ -30,7 +32,9 @@
     "chromatic": "npx chromatic",
     "preversion": "git switch main && git switch -c prepare/%npm_package_version% && npm run ci-test",
     "version": "npm run build",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "emulators": "firebase emulators:start --only auth,firestore",
+    "emulators:all": "firebase emulators:start"
   },
   "browserslist": {
     "production": [
