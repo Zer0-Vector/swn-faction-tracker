@@ -11,6 +11,18 @@ export default defineConfig({
   },
   build: {
     outDir: "build",
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return id
+              .split("node_modules/")[1] // get the path after node_modules
+              .split("/")[0]; // get the package name
+          }
+          return null;
+        }
+      }
+    }
   },
   test: {
     clearMocks: true,
