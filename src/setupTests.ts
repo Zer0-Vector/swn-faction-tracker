@@ -8,4 +8,4 @@ import "@testing-library/jest-dom/vitest";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-globalThis.yieldToEventLoop = async (timeout: number = 0) => await act(async () => await new Promise((r) => setTimeout(r, timeout)));
+globalThis.yieldToEventLoop = async (delay: number = 0) => await act(async () => await new Promise((r) => setTimeout(r, delay)));

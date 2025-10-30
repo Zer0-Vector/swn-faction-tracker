@@ -1,5 +1,5 @@
 declare global {
-  function yieldToEventLoop(timeout?: number): Promise<void>;
+  function yieldToEventLoop(delay?: number): Promise<void>;
 
   var IS_REACT_ACT_ENVIRONMENT: boolean;
 }
