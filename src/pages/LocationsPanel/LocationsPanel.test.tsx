@@ -46,7 +46,7 @@ async function renderIt(locations: LocationInfo[] = []) {
     )
   );
 
-  await yieldToEventLoop(1000);
+  await yieldToEventLoop(2000);
 
   return result;
 }
