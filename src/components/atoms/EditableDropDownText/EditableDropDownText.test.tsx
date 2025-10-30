@@ -1,4 +1,4 @@
-import React from "react";
+import React, { act } from "react";
 
 import { render, screen, waitFor, within } from "@testing-library/react";
 
@@ -85,7 +85,8 @@ describe("default EditableDropDownText", () => {
       const button = within(outer).getByTestId("editable-dropdown-button");
       expect(button).toBeInTheDocument();
 
-      await user.click(button);
+      await act(async () => await user.click(button));
+      await yieldToEventLoop();
 
       const autocompleteComponent = await within(outer).findByTestId("editable-dropdown-autocomplete", {}, { timeout: 5000 });
       expect(autocompleteComponent).toBeInTheDocument();
@@ -130,7 +131,7 @@ describe("default EditableDropDownText", () => {
 
     const selection2 = optionItems[(selectedIndex + 1) % optionItems.length];
 
-    await user.click(selection2);
+    await act(async () => await user.click(selection2));
 
     await waitFor(() => expect(listbox).not.toBeInTheDocument());
     await waitFor(() => expect(screen.getByTestId("editable-dropdown-text")).toBeInTheDocument());
@@ -141,13 +142,13 @@ describe("default EditableDropDownText", () => {
   });
 
   it("cancels update on Escape", async () => {
-    const { user } = renderIt();
+    const { user, debug: _debug } = renderIt();
     const outer = screen.getByTestId("test-eddt");
     expect(outer).toBeInTheDocument();
     const button = within(outer).getByTestId("editable-dropdown-button");
     expect(button).toBeInTheDocument();
     expect(button).not.toBeVisible();
-    await user.click(button);
+    await act(async () => await user.click(button));
 
     const autocomplete = within(outer).getByTestId(
       "editable-dropdown-autocomplete"
