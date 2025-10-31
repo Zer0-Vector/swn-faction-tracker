@@ -38,6 +38,7 @@
     "analyze_fdot": "npx depcruise -T fdot ./src | dot -T svg > dependency-graph.fdot.svg",
     "analyze_ddot": "npx depcruise -T ddot ./src | dot -T svg > dependency-graph.ddot.svg",
     "analyze_cdot": "npx depcruise -T cdot ./src | dot -T svg > dependency-graph.cdot.svg",
+    "fta": "npx fta-cli ./src"
   },
   "browserslist": {
     "production": [
@@ -87,6 +88,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-sonarjs": "^3.0.5",
+    "fta-cli": "^3.0.0",
     "globals": "^16.4.0",
     "gulp": "^5.0.1",
     "jsdom": "^27.0.0",
