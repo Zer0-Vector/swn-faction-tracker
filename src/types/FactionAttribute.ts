@@ -1,5 +1,4 @@
-type FactionAttributeTypes = "FORCE" | "CUNNING" | "WEALTH";
 
-export type FactionAttribute = FactionAttributeTypes;
+export type FactionAttribute = "FORCE" | "CUNNING" | "WEALTH";
 
-export type AssetAttribute = FactionAttributeTypes | "SPECIAL";
+export type AssetAttribute = FactionAttribute | "SPECIAL";
