@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 
 import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/material/styles";
 
-import LocationsActionToolbar from "../../components/organisms/LocationsActionToolbar";
-import LocationsList from "../../components/organisms/LocationsList";
+const LocationsActionToolbar = React.lazy(() => import("../../components/organisms/LocationsActionToolbar"));
+const LocationsList = React.lazy(() => import("../../components/organisms/LocationsList"));
 
 export default function LocationsPanel() {
   const boxSx = useMemo<SxProps<Theme>>(
@@ -21,8 +21,12 @@ export default function LocationsPanel() {
   console.debug("Rendering LocationsPanel...");
   return (
     <Box sx={boxSx}>
-      <LocationsActionToolbar />
-      <LocationsList />
+      <Suspense fallback={<div>Loading...</div>}>
+        <LocationsActionToolbar />
+      </Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+        <LocationsList />
+      </Suspense>
     </Box>
   );
 }

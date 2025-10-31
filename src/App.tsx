@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { Suspense, useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
@@ -15,11 +15,13 @@ import {
 } from "./controllers/UiStateController";
 import { useAuthProvider } from "./hooks/useAuthProvider";
 import { useLocalStorage } from "./hooks/useLocalStorage";
-import LocationsPanel from "./pages/LocationsPanel";
-import PrimaryPanel from "./pages/PrimaryPanel";
 import { THEME } from "./style/Theme";
 import PageContainer from "./templates/PageContainer";
 import UiState from "./types/UiState";
+
+const PrimaryPanel = React.lazy(() => import("./pages/PrimaryPanel"));
+const LocationsPanel = React.lazy(() => import("./pages/LocationsPanel"));
+
 
 function App() {
   const [uiState, setUiState] = useLocalStorage<UiState>("Faction-UiState", {
@@ -58,32 +60,34 @@ function App() {
                 <ConfirmationContextProvider>
                   <Router>
                     <PageContainer>
-                      <Routes>
-                        {/* XXX is there another way???? */}
-                        <Route path="/">
-                          <Route index element={<PrimaryPanel />} />
-                          <Route path="factions">
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <Routes>
+                          {/* XXX is there another way???? */}
+                          <Route path="/">
                             <Route index element={<PrimaryPanel />} />
-                            <Route path=":factionId">
+                            <Route path="factions">
                               <Route index element={<PrimaryPanel />} />
-                              <Route path="assets">
+                              <Route path=":factionId">
                                 <Route index element={<PrimaryPanel />} />
-                                <Route
-                                  path=":assetId"
-                                  element={<PrimaryPanel />}
-                                />
+                                <Route path="assets">
+                                  <Route index element={<PrimaryPanel />} />
+                                  <Route
+                                    path=":assetId"
+                                    element={<PrimaryPanel />}
+                                  />
+                                </Route>
                               </Route>
                             </Route>
+                            <Route path="locations">
+                              <Route index element={<LocationsPanel />} />
+                              <Route
+                                path=":locationId"
+                                element={<LocationsPanel />}
+                              />
+                            </Route>
                           </Route>
-                          <Route path="locations">
-                            <Route index element={<LocationsPanel />} />
-                            <Route
-                              path=":locationId"
-                              element={<LocationsPanel />}
-                            />
-                          </Route>
-                        </Route>
-                      </Routes>
+                        </Routes>
+                      </Suspense>
                     </PageContainer>
                   </Router>
                 </ConfirmationContextProvider>

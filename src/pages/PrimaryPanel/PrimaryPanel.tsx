@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 
 import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/material/styles";
 
-import FactionList from "../../components/organisms/FactionList";
-import FactionListActionToolbar from "../../components/organisms/FactionListActionToolbar";
+
+const FactionListActionToolbar = React.lazy(() => import("../../components/organisms/FactionListActionToolbar"));
+const FactionList = React.lazy(() => import("../../components/organisms/FactionList"));
 
 export default function PrimaryPanel() {
   console.debug("Rendering PrimaryPanel...");
@@ -14,8 +15,12 @@ export default function PrimaryPanel() {
   );
   return (
     <Box sx={boxSx}>
-      <FactionListActionToolbar />
-      <FactionList />
+      <Suspense fallback={<div>Loading...</div>}>
+        <FactionListActionToolbar />
+      </Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+        <FactionList />
+      </Suspense>
     </Box>
   );
 }
