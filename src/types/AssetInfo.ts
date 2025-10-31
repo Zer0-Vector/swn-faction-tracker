@@ -1,13 +1,9 @@
 import { AssetActionInfo } from "./AssetActions";
 import { AssetRestriction } from "./AssetRestrictions";
 import AssetType from "./AssetType";
+import type { DiceDefinition } from "./dice";
 import { AssetAttribute, FactionAttribute } from "./FactionAttribute";
 import Nullable from "./Nullable";
-
-export type DiceDefinition =
-  | `${number}d${number}`
-  | `${number}d${number}+${number}`
-  | `${number}d${number}-${number}`;
 
 export type AssetAttackResult =
   | { type: "REVEAL_STEALTHED" }

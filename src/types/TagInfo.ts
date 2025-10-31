@@ -1,4 +1,4 @@
-import { DiceDefinition } from "./AssetInfo";
+import { DiceDefinition } from "./dice";
 import { FactionAttribute } from "./FactionAttribute";
 
 interface DieTest {

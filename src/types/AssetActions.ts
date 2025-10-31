@@ -1,5 +1,5 @@
-import { DiceDefinition } from "./AssetInfo";
 import AssetType from "./AssetType";
+import { DiceDefinition } from "./dice";
 import { FactionAttribute } from "./FactionAttribute";
 import Nullable from "./Nullable";
 /* Basis */
