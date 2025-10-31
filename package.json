@@ -34,7 +34,10 @@
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "emulators": "firebase emulators:start --only auth,firestore",
-    "emulators:all": "firebase emulators:start"
+    "emulators_all": "firebase emulators:start",
+    "analyze_fdot": "npx depcruise -T fdot ./src | dot -T svg > dependency-graph.fdot.svg",
+    "analyze_ddot": "npx depcruise -T ddot ./src | dot -T svg > dependency-graph.ddot.svg",
+    "analyze_cdot": "npx depcruise -T cdot ./src | dot -T svg > dependency-graph.cdot.svg",
   },
   "browserslist": {
     "production": [
@@ -77,6 +80,7 @@
     "@vitest/coverage-v8": "^4.0.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.11.4",
+    "dependency-cruiser": "^17.2.0",
     "dotenv": "^17.2.3",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
