@@ -25,7 +25,9 @@
     ".gitignore",
     "firestore.*",
     "firebase.json",
-    ".env*"
+    ".env*",
+    "package.json",
+    "package-lock.json",
   ],
   "cSpell.ignoreWords": [
     "webfonts",
