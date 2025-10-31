@@ -133,7 +133,7 @@ export const TAGS: TagsMap = {
         type: "BONUS_DIE",
         details: {
           when: "ATTACKING",
-          during: "SIEZE_PLANET",
+          during: "SEIZE_PLANET",
           die: "1d10",
         },
       },

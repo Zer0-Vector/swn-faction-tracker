@@ -29,7 +29,7 @@ type TagEffect =
         with?: FactionAttribute | string;
         versus?: FactionAttribute | { tl: 5 };
         target?: "homeworld" | { tl: 0 };
-        during?: "SIEZE_PLANET";
+        during?: "SEIZE_PLANET";
         die: DiceDefinition | "*";
       };
     }
