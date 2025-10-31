@@ -8,6 +8,7 @@ import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import globals from "globals";
 import configPrettier from "eslint-config-prettier";
+import sonarjs from "eslint-plugin-sonarjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,6 +41,8 @@ export default defineConfig([
       react: reactPlugin,
       "@typescript-eslint": tseslint.plugin,
       "simple-import-sort": simpleImportSort,
+      // cSpell:ignore sonarjs
+      sonarjs: sonarjs,
     },
 
     languageOptions: {
@@ -82,6 +85,9 @@ export default defineConfig([
 
       "simple-import-sort/exports": "warn",
       "prefer-const": "warn",
+      "complexity": ["warn", { max: 10 }],
+      "max-lines-per-function": ["warn", { max: 128 }],
+      "sonarjs/cognitive-complexity": ["warn", 10],
     },
   },
 ]);
