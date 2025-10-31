@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "Appender",
+    "Gengineered",
     "homeworld",
     "maxhp",
     "NOSONAR",
@@ -24,7 +25,9 @@
     ".gitignore",
     "firestore.*",
     "firebase.json",
-    ".env*"
+    ".env*",
+    "package.json",
+    "package-lock.json",
   ],
   "cSpell.ignoreWords": [
     "webfonts",

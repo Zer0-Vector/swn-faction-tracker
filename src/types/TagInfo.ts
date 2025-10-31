@@ -1,4 +1,4 @@
-import { DiceDefinition } from "./AssetInfo";
+import { DiceDefinition } from "./dice";
 import { FactionAttribute } from "./FactionAttribute";
 
 interface DieTest {
@@ -26,10 +26,10 @@ type TagEffect =
       details: {
         limitPerTurn?: 1;
         when: "ATTACKING" | "DEFENDING" | "DETECT_STEALTH";
-        with?: FactionAttribute | string;
+        with?: FactionAttribute | (string & {});
         versus?: FactionAttribute | { tl: 5 };
         target?: "homeworld" | { tl: 0 };
-        during?: "SIEZE_PLANET";
+        during?: "SEIZE_PLANET";
         die: DiceDefinition | "*";
       };
     }
